@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Texas Instruments Incorporated
+ * Copyright (c) 2014-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -108,10 +108,10 @@ function module$static$init(mod, params)
 function viewInitModule(view, obj)
 {
     var Program = xdc.useModule('xdc.rov.Program');
-    var ClockFreqs = xdc.useModule('ti.sysbios.family.arm.msp432.ClockFreqs');
-    var modCfg = Program.getModuleConfig(ClockFreqs.$name);
+    var rawView =
+        Program.scanRawView('ti.sysbios.family.arm.msp432.ClockFreqs');
 
-    view.ACLK        = modCfg.ACLK
-    view.SMCLK       = modCfg.SMCLK
-    view.HSMCLK      = modCfg.HSMCLK
+    view.ACLK   = rawView.modState.ACLK
+    view.SMCLK  = rawView.modState.SMCLK
+    view.HSMCLK = rawView.modState.HSMCLK
 }

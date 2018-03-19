@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Texas Instruments Incorporated
+ * Copyright (c) 2014-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -204,21 +204,12 @@ module Timer inherits ti.sysbios.interfaces.ITimer
      */
     const Int MIN_SWEEP_PERIOD = 1;
 
-    /*! Timer Configuration struct.
-     *
-     *  @field(source)  Timer clock source.
-     */
-    struct Control {
-        UInt source;   /*! 0x100=ACLK, 0x200=SMCLK, 0=EXT, 0x300=EXT_INVERT */
-    };
-
     /*! @_nodoc */
     @XmlDtd
     metaonly struct BasicView {
         Ptr         halTimerHandle;
         String      label;
         UInt        id;
-        Control     configuration;
         String      startMode;
         String      runMode;
         UInt        period;
@@ -238,6 +229,7 @@ module Timer inherits ti.sysbios.interfaces.ITimer
         String      devAddr;
         UInt        intNum;
         String      runMode;
+        String      clockSource;
         UInt        period;
         UInt        currCount;
         UInt        remainingCount;

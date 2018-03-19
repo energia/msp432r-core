@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2016, Texas Instruments Incorporated
+ * Copyright (c) 2014-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -131,7 +131,6 @@ module ClockFreqs
 {
     metaonly struct ModuleView {
         UInt    ACLK;
-        UInt    MCLK;
         UInt    SMCLK;
         UInt    HSMCLK;
     }

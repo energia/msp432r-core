@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2016, Texas Instruments Incorporated
+ * Copyright (c) 2014-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,19 +37,15 @@
 
 #include <ti/sysbios/hal/Hwi.h>
 
-#ifdef DEVICE_FAMILY
-#define DEVICE_FAMILY_PREFIX(x) <ti/devices/DEVICE_FAMILY/x>
-#else
-#define DEVICE_FAMILY_PREFIX(x) <x>
-#endif
+#include <ti/devices/DeviceFamily.h>
 
-#include DEVICE_FAMILY_PREFIX(inc/hw_types.h)
-#include DEVICE_FAMILY_PREFIX(inc/hw_memmap.h)
-#include DEVICE_FAMILY_PREFIX(inc/hw_aon_rtc.h)
-#include DEVICE_FAMILY_PREFIX(inc/hw_ints.h)
-#include DEVICE_FAMILY_PREFIX(driverlib/aon_rtc.h)
-#include DEVICE_FAMILY_PREFIX(driverlib/aon_event.h)
-#include DEVICE_FAMILY_PREFIX(driverlib/interrupt.h)
+#include DeviceFamily_constructPath(inc/hw_types.h)
+#include DeviceFamily_constructPath(inc/hw_memmap.h)
+#include DeviceFamily_constructPath(inc/hw_aon_rtc.h)
+#include DeviceFamily_constructPath(inc/hw_ints.h)
+#include DeviceFamily_constructPath(driverlib/aon_rtc.h)
+#include DeviceFamily_constructPath(driverlib/aon_event.h)
+#include DeviceFamily_constructPath(driverlib/interrupt.h)
 
 #include "package/internal/Seconds.xdc.h"
 

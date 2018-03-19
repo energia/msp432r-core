@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -32,33 +32,23 @@
 
 #include <stdint.h>
 
-/*
- * By default disable both asserts and log for this module.
- * This must be done before DebugP.h is included.
- */
-#ifndef DebugP_ASSERT_ENABLED
-#define DebugP_ASSERT_ENABLED 0
-#endif
-#ifndef DebugP_LOG_ENABLED
-#define DebugP_LOG_ENABLED 0
-#endif
-#include <ti/drivers/dpl/DebugP.h>
-#include <ti/drivers/dpl/HwiP.h>
-#include <ti/drivers/dpl/SemaphoreP.h>
-
-#include <ti/drivers/Power.h>
-#include <ti/drivers/power/PowerMSP432.h>
-#include <ti/drivers/SPI.h>
-#include <ti/drivers/spi/SPIMSP432DMA.h>
-#include <ti/drivers/dma/UDMAMSP432.h>
-
-/* driverlib header files */
+#include <ti/devices/DeviceFamily.h>
 #include <ti/devices/msp432p4xx/driverlib/rom.h>
 #include <ti/devices/msp432p4xx/driverlib/rom_map.h>
 #include <ti/devices/msp432p4xx/driverlib/spi.h>
 #include <ti/devices/msp432p4xx/driverlib/dma.h>
 #include <ti/devices/msp432p4xx/driverlib/pmap.h>
 #include <ti/devices/msp432p4xx/driverlib/gpio.h>
+
+#include <ti/drivers/dma/UDMAMSP432.h>
+#include <ti/drivers/dpl/HwiP.h>
+#include <ti/drivers/dpl/SemaphoreP.h>
+#include <ti/drivers/Power.h>
+#include <ti/drivers/power/PowerMSP432.h>
+#include <ti/drivers/SPI.h>
+#include <ti/drivers/spi/SPIMSP432DMA.h>
+
+#define MAX_DMA_TRANSFER_AMOUNT (1024)
 
 #define PinConfigValue(config) (((config) >> 10) & 0x1F)
 #define PinConfigModuleFunction(config) (((config) >> 8) & 0x3)
@@ -72,16 +62,6 @@ void SPIMSP432DMA_init(SPI_Handle handle);
 SPI_Handle SPIMSP432DMA_open(SPI_Handle handle, SPI_Params *params);
 bool SPIMSP432DMA_transfer(SPI_Handle handle, SPI_Transaction *transaction);
 void SPIMSP432DMA_transferCancel(SPI_Handle handle);
-static void blockingTransferCallback(SPI_Handle handle,
-    SPI_Transaction *transaction);
-static void configDMA(SPIMSP432DMA_Object *object,
-    SPIMSP432DMA_HWAttrsV1 const *hwAttrs, SPI_Transaction *transaction);
-static void initHw(SPIMSP432DMA_Object *object,
-    SPIMSP432DMA_HWAttrsV1 const *hwAttrs, uint32_t inputClkFreq);
-static int perfChangeNotifyFxn(unsigned int eventType, uintptr_t eventArg,
-    uintptr_t clientArg);
-
-static void mapPin(uint8_t port, uint8_t pin, uint8_t value);
 
 /* SPI function table for SPIMSP432DMA implementation */
 const SPI_FxnTable SPIMSP432DMA_fxnTable = {
@@ -108,17 +88,11 @@ static const uint16_t frameFormat[] = {
 
     /* SPI_POL1_PHA1 */
     EUSCI_B_SPI_CLOCKPOLARITY_INACTIVITY_HIGH |
-        EUSCI_B_SPI_PHASE_DATA_CAPTURED_ONFIRST_CHANGED_ON_NEXT,
-
-    (0),    /* SPI_TI - Not supported */
-    (0)     /* SPI_MW - Not supported */
+        EUSCI_B_SPI_PHASE_DATA_CAPTURED_ONFIRST_CHANGED_ON_NEXT
 };
 
 /*
  *  ======== blockingTransferCallback ========
- *  Callback function for when the SPI is in SPI_MODE_BLOCKING
- *
- *  @pre    Function assumes that the handle is not NULL
  */
 static void blockingTransferCallback(SPI_Handle handle,
     SPI_Transaction *transaction)
@@ -126,17 +100,12 @@ static void blockingTransferCallback(SPI_Handle handle,
     SPIMSP432DMA_Object *object = handle->object;
 
     SemaphoreP_post(object->transferComplete);
-
-    DebugP_log1("SPI:(%p) posting transferComplete semaphore",
-        ((SPIMSP432DMA_HWAttrsV1 const *)(handle->hwAttrs))->baseAddr);
 }
 
 /*
  *  ======== configDMA ========
  *  This functions configures the transmit and receive DMA channels for a given
  *  SPI_Handle and SPI_Transaction
- *
- *  @pre    Function assumes that the handle and transaction is not NULL
  */
 static void configDMA(SPIMSP432DMA_Object *object,
     SPIMSP432DMA_HWAttrsV1 const *hwAttrs, SPI_Transaction *transaction)
@@ -145,10 +114,22 @@ static void configDMA(SPIMSP432DMA_Object *object,
     void     *buf;
     uint32_t  channelControlOptions;
 
+    /*
+     * The DMA has a max transfer amount of 1024.  If the transaction is
+     * greater; we must transfer it in chunks.  object->amtDataXferred has
+     * how much data has already been sent.
+     */
+    if ((transaction->count - object->amtDataXferred) > MAX_DMA_TRANSFER_AMOUNT) {
+        object->currentXferAmt = MAX_DMA_TRANSFER_AMOUNT;
+    }
+    else {
+        object->currentXferAmt = (transaction->count - object->amtDataXferred);
+    }
+
     if (transaction->txBuf) {
         channelControlOptions = UDMA_SIZE_8 | UDMA_SRC_INC_8 |
             UDMA_DST_INC_NONE | UDMA_ARB_1;
-        buf = transaction->txBuf;
+        buf = (void *) ((uint32_t) transaction->txBuf + object->amtDataXferred);
     }
     else {
         channelControlOptions = UDMA_SIZE_8 | UDMA_SRC_INC_NONE |
@@ -163,12 +144,12 @@ static void configDMA(SPIMSP432DMA_Object *object,
     MAP_DMA_setChannelTransfer(hwAttrs->txDMAChannelIndex | UDMA_PRI_SELECT,
         UDMA_MODE_BASIC, buf,
         (void *) MAP_SPI_getTransmitBufferAddressForDMA(hwAttrs->baseAddr),
-        transaction->count);
+        object->currentXferAmt);
 
     if (transaction->rxBuf) {
         channelControlOptions = UDMA_SIZE_8 | UDMA_SRC_INC_NONE |
             UDMA_DST_INC_8 | UDMA_ARB_1;
-        buf = transaction->rxBuf;
+        buf = (void *) ((uint32_t) transaction->rxBuf + object->amtDataXferred);
     }
     else {
         channelControlOptions = UDMA_SIZE_8 | UDMA_SRC_INC_NONE |
@@ -182,9 +163,9 @@ static void configDMA(SPIMSP432DMA_Object *object,
     MAP_DMA_setChannelTransfer(hwAttrs->rxDMAChannelIndex | UDMA_PRI_SELECT,
         UDMA_MODE_BASIC,
         (void *) MAP_SPI_getReceiveBufferAddressForDMA(hwAttrs->baseAddr),
-        buf, transaction->count);
+        buf, object->currentXferAmt);
 
-    /* A lock is needed because we are accessing shared uDMA registers.*/
+    /* A lock is needed because we are accessing shared DMA memory */
     key = HwiP_disable();
 
     MAP_DMA_assignChannel(hwAttrs->rxDMAChannelIndex);
@@ -199,16 +180,30 @@ static void configDMA(SPIMSP432DMA_Object *object,
     MAP_DMA_enableChannel(hwAttrs->txDMAChannelIndex & 0x0F);
 
     HwiP_restore(key);
+}
 
-    DebugP_log1("SPI:(%p) DMA transfer enabled", hwAttrs->baseAddr);
-    DebugP_log3("SPI:(%p) DMA transaction: %p, Count: %d", hwAttrs->baseAddr,
-        (uintptr_t) transaction, (uintptr_t) transaction->count);
+/*
+ *  ======== getDmaRemainingXfers ========
+ */
+static inline uint32_t getDmaRemainingXfers(SPIMSP432DMA_Object *object,
+    SPIMSP432DMA_HWAttrsV1 const *hwAttrs) {
+    uint32_t          remainingTransfers;
+    uint32_t          controlWord;
+    DMA_ControlTable *controlTable;
+
+    controlTable = MAP_DMA_getControlBase();
+    controlWord = controlTable[(hwAttrs->rxDMAChannelIndex & 0x3f)].control;
+    remainingTransfers = ((controlWord & UDMA_CHCTL_XFERSIZE_M) >> 4) + 1;
+
+    if (object->spiMode == SPI_SLAVE) {
+        remainingTransfers++;
+    }
+
+    return (remainingTransfers);
 }
 
 /*
  *  ======== initHW ========
- *
- *  Configures SPI peripheral
  */
 static void initHw(SPIMSP432DMA_Object *object,
     SPIMSP432DMA_HWAttrsV1 const *hwAttrs, uint32_t inputClkFreq)
@@ -217,6 +212,9 @@ static void initHw(SPIMSP432DMA_Object *object,
         eUSCI_SPI_MasterConfig masterCfg;
         eUSCI_SPI_SlaveConfig  slaveCfg;
     } cfgStructs;
+
+    /* Set SW reset bit before reconfiguring */
+    MAP_SPI_disableModule(hwAttrs->baseAddr);
 
     if (object->spiMode == SPI_MASTER) {
         cfgStructs.masterCfg.selectClockSource = hwAttrs->clockSource;
@@ -229,10 +227,11 @@ static void initHw(SPIMSP432DMA_Object *object,
         MAP_SPI_initMaster(hwAttrs->baseAddr, &(cfgStructs.masterCfg));
 
         if (hwAttrs->pinMode != EUSCI_SPI_3PIN) {
-            MAP_SPI_selectFourPinFunctionality(hwAttrs->baseAddr, EUSCI_SPI_ENABLE_SIGNAL_FOR_4WIRE_SLAVE);
+            MAP_SPI_selectFourPinFunctionality(hwAttrs->baseAddr,
+                EUSCI_SPI_ENABLE_SIGNAL_FOR_4WIRE_SLAVE);
         }
     }
-    else { /* SPI_SLAVE */
+    else {
         cfgStructs.slaveCfg.msbFirst = hwAttrs->bitOrder;
         cfgStructs.slaveCfg.clockPhase = object->clockPhase;
         cfgStructs.slaveCfg.clockPolarity = object->clockPolarity;
@@ -240,14 +239,35 @@ static void initHw(SPIMSP432DMA_Object *object,
         MAP_SPI_initSlave(hwAttrs->baseAddr, &(cfgStructs.slaveCfg));
     }
 
-    DebugP_log3("SPI:(%p) CPU freq: %d; SPI freq to %d", hwAttrs->baseAddr,
-        inputClkFreq, object->bitRate);
+    /* Clear SW reset bit to allow peripheral operation */
+    MAP_SPI_enableModule(hwAttrs->baseAddr);
+}
+
+/*
+ *  ======== mapPin ========
+ *  NOTE: This function may go away when DriverLib supports mapping
+ *  an individual pin.
+ */
+static void mapPin(uint8_t port, uint8_t pin, uint8_t value)
+{
+    volatile uint8_t pmap;
+
+    pmap = port * 0x8;  // 2 -> 0x10, 3 -> 0x18, 7 -> 0x38
+
+    /* Code from pmap.c: */
+    /* Get write-access to port mapping registers: */
+    PMAP->KEYID = PMAP_KEYID_VAL;
+
+    /* Enable/Disable reconfiguration during runtime */
+    PMAP->CTL = (PMAP->CTL & ~PMAP_CTL_PRECFG) | PMAP_ENABLE_RECONFIGURATION;
+    HWREG8((uint32_t)PMAP_BASE + pin + pmap) = value;
+
+    /* Disable write-access to port mapping registers: */
+    PMAP->KEYID = 0;
 }
 
 /*
  *  ======== perfChangeNotifyFxn ========
- *
- *  Called by Power module before and after performance level is changed.
  */
 static int perfChangeNotifyFxn(unsigned int eventType, uintptr_t eventArg,
     uintptr_t clientArg)
@@ -257,15 +277,107 @@ static int perfChangeNotifyFxn(unsigned int eventType, uintptr_t eventArg,
     SPIMSP432DMA_Object          *object = ((SPI_Handle) clientArg)->object;
     SPIMSP432DMA_HWAttrsV1 const *hwAttrs = ((SPI_Handle) clientArg)->hwAttrs;
 
-    /* Get new performance level clock frequencies */
     PowerMSP432_getFreqs((unsigned int) eventArg, &powerFreqs);
     clockFreq = (hwAttrs->clockSource == EUSCI_B_SPI_CLOCKSOURCE_SMCLK) ?
         powerFreqs.SMCLK : powerFreqs.ACLK;
 
-    /* Reconfigure SPI peripheral */
     initHw(object, hwAttrs, clockFreq);
 
     return (Power_NOTIFYDONE);
+}
+
+/*
+ *  ======== spiHwiFxn ========
+ */
+static void spiHwiFxn(uintptr_t arg)
+{
+    SPI_Transaction              *msg;
+    SPIMSP432DMA_Object          *object = ((SPI_Handle) arg)->object;
+    SPIMSP432DMA_HWAttrsV1 const *hwAttrs = ((SPI_Handle) arg)->hwAttrs;
+
+    /* RX DMA channel has completed */
+    MAP_DMA_disableInterrupt(hwAttrs->dmaIntNum);
+
+    if ((object->transaction->count - object->amtDataXferred) >
+        MAX_DMA_TRANSFER_AMOUNT) {
+        /* Data still remaining, configure another DMA transfer */
+        object->amtDataXferred += object->currentXferAmt;
+
+        configDMA(object, hwAttrs, object->transaction);
+    }
+    else {
+        /* All data sent; set status & perform callback */
+        object->transaction->status = SPI_TRANSFER_COMPLETED;
+
+        /*
+         * Use a temporary transaction pointer in case the callback function
+         * attempts to perform another SPI_transfer call
+         */
+        msg = object->transaction;
+
+        /* Indicate we are done with this transfer */
+        object->transaction = NULL;
+
+        /* Remove constraints set during transfer */
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
+        Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
+        Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+
+        /* Perform callback */
+        object->transferCallbackFxn((SPI_Handle) arg, msg);
+    }
+}
+
+/*
+ *  ======== spiPollingTransfer ========
+ */
+static inline void spiPollingTransfer(SPIMSP432DMA_Object *object,
+    SPIMSP432DMA_HWAttrsV1 const *hwAttrs, SPI_Transaction *transaction)
+{
+    uint8_t *rxBuf;
+    uint8_t *txBuf;
+    size_t   transferCount;
+
+    if (transaction->rxBuf) {
+        rxBuf = transaction->rxBuf;
+    }
+    else {
+        rxBuf = &(object->scratchBuffer);
+    }
+
+    if (transaction->txBuf) {
+        txBuf = transaction->txBuf;
+    }
+    else {
+        object->scratchBuffer = hwAttrs->defaultTxBufValue;
+        txBuf = &(object->scratchBuffer);
+    }
+
+    transferCount = transaction->count;
+
+    /* Start the polling transfer */
+    while (transferCount--) {
+        /* Wait until the transmit flag is set; SPI is ready to transfer */
+        while (!(SPI_getInterruptStatus(hwAttrs->baseAddr,
+            EUSCI_B_SPI_TRANSMIT_INTERRUPT))) {;}
+
+        MAP_SPI_transmitData(hwAttrs->baseAddr, *txBuf);
+
+        /* Wait until the receive flag is set; SPI has received data */
+        while (!(SPI_getInterruptStatus(hwAttrs->baseAddr,
+            EUSCI_B_SPI_RECEIVE_INTERRUPT))) {;}
+
+        *rxBuf = MAP_SPI_receiveData(hwAttrs->baseAddr);
+
+        /* Only increment source & destination only if buffers were provided */
+        if (transaction->rxBuf) {
+            rxBuf++;
+        }
+        if (transaction->txBuf) {
+            txBuf++;
+        }
+    }
 }
 
 /*
@@ -274,11 +386,8 @@ static int perfChangeNotifyFxn(unsigned int eventType, uintptr_t eventArg,
  */
 void SPIMSP432DMA_close(SPI_Handle handle)
 {
-    unsigned int                  i;
-    SPIMSP432DMA_Object          *object = handle->object;
-    SPIMSP432DMA_HWAttrsV1 const *hwAttrs = handle->hwAttrs;
-
-    MAP_SPI_disableModule(hwAttrs->baseAddr);
+    uint32_t             i;
+    SPIMSP432DMA_Object *object = handle->object;
 
     if (object->hwiHandle) {
         HwiP_delete(object->hwiHandle);
@@ -292,20 +401,16 @@ void SPIMSP432DMA_close(SPI_Handle handle)
         UDMAMSP432_close(object->dmaHandle);
     }
 
-    /* Remove power constraints */
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
     for (i = 0; object->perfConstraintMask; i++) {
         if (object->perfConstraintMask & 0x01) {
             Power_releaseConstraint(PowerMSP432_DISALLOW_PERFLEVEL_0 + i);
         }
         object->perfConstraintMask >>= 1;
     }
+
     Power_unregisterNotify(&object->perfChangeNotify);
 
     object->isOpen = false;
-
-    DebugP_log1("SPI:(%p) closed", hwAttrs->baseAddr);
 }
 
 /*
@@ -314,49 +419,7 @@ void SPIMSP432DMA_close(SPI_Handle handle)
  */
 int_fast16_t SPIMSP432DMA_control(SPI_Handle handle, uint_fast16_t cmd, void *arg)
 {
-    /* No implementation yet */
     return (SPI_STATUS_UNDEFINEDCMD);
-}
-
-/*
- *  ======== SPIMSP432DMA_hwiFxn ========
- *  ISR for the DMA Hwi
- */
-void SPIMSP432DMA_hwiFxn(uintptr_t arg)
-{
-    SPI_Transaction              *msg;
-    SPIMSP432DMA_Object          *object = ((SPI_Handle) arg)->object;
-    SPIMSP432DMA_HWAttrsV1 const *hwAttrs = ((SPI_Handle) arg)->hwAttrs;
-
-    DebugP_log1("SPI:(%p) interrupt context start", hwAttrs->baseAddr);
-
-    /* Determine if the RX DMA channels has completed */
-    if ((object->transaction) &&
-        !(MAP_DMA_isChannelEnabled(hwAttrs->rxDMAChannelIndex & 0x0F))) {
-        /*
-         * Use a temporary transaction pointer in case the callback function
-         * attempts to perform another SPI_transfer call
-         */
-        msg = object->transaction;
-
-        /* Indicate we are done with this transfer */
-        object->transaction = NULL;
-
-        /* Perform callback */
-        object->transferCallbackFxn((SPI_Handle) arg, msg);
-
-        /* Remove constraints set during transfer */
-        Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
-        Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
-
-        /* Disable peripheral to allow device to enter low power modes */
-        MAP_SPI_disableModule(hwAttrs->baseAddr);
-
-        DebugP_log2("SPI:(%p) DMA transaction: %p complete",
-            hwAttrs->baseAddr, (uintptr_t) msg);
-    }
-
-    DebugP_log1("SPI:(%p) interrupt context end", hwAttrs->baseAddr);
 }
 
 /*
@@ -372,48 +435,46 @@ void SPIMSP432DMA_init(SPI_Handle handle)
 
 /*
  *  ======== SPIMSP432DMA_open ========
- *  @pre    Function assumes that the handle is not NULL
  */
 SPI_Handle SPIMSP432DMA_open(SPI_Handle handle, SPI_Params *params)
 {
-    unsigned int                  i;
     uintptr_t                     key;
     uint32_t                      clockFreq;
+    uint8_t                       i;
     uint8_t                       numPerfLevels;
-    union {
-        SemaphoreP_Params         semParams;
-        HwiP_Params               hwiParams;
-    } portsParams;
-    PowerMSP432_Freqs             powerFreqs;
-    SPIMSP432DMA_Object          *object = handle->object;
-    SPIMSP432DMA_HWAttrsV1 const *hwAttrs = handle->hwAttrs;
     uint16_t                      pin;
     uint16_t                      port;
     uint16_t                      value;
     uint16_t                      moduleFunction;
+    HwiP_Params                   hwiParams;
+    PowerMSP432_Freqs             powerFreqs;
+    SPIMSP432DMA_Object          *object = handle->object;
+    SPIMSP432DMA_HWAttrsV1 const *hwAttrs = handle->hwAttrs;
 
-    /* Check for callback function if using async mode */
-    DebugP_assert(params->transferMode != SPI_MODE_CALLBACK ||
-        params->transferCallbackFxn != NULL);
-
-    /* Determine if the device index was already opened */
     key = HwiP_disable();
 
     if (object->isOpen) {
         HwiP_restore(key);
-        DebugP_log1("SPI:(%p) already open.", hwAttrs->baseAddr);
+
         return (NULL);
     }
     object->isOpen = true;
 
     HwiP_restore(key);
 
+    /* SPI_TI & SPI_MW are not supported */
+    if (params->frameFormat == SPI_TI || params->frameFormat == SPI_MW) {
+        object->isOpen = false;
+
+        return (NULL);
+    }
+
     /* Ensure a supported clock source is used */
     if (hwAttrs->clockSource != EUSCI_B_SPI_CLOCKSOURCE_ACLK &&
         hwAttrs->clockSource != EUSCI_B_SPI_CLOCKSOURCE_SMCLK) {
-        DebugP_log1("SPI:(%p) Error! Using unsupported clock source.",
-            hwAttrs->baseAddr);
+
         object->isOpen = false;
+
         return (NULL);
     }
 
@@ -421,7 +482,6 @@ SPI_Handle SPIMSP432DMA_open(SPI_Handle handle, SPI_Params *params)
     /* CLK */
     port = PinConfigPort(hwAttrs->clkPin);
     value = PinConfigValue(hwAttrs->clkPin);
-
     if (value != 0) {
         moduleFunction = GPIO_PRIMARY_MODULE_FUNCTION;
         pin = (hwAttrs->clkPin) & 0x7;
@@ -430,16 +490,13 @@ SPI_Handle SPIMSP432DMA_open(SPI_Handle handle, SPI_Params *params)
     else {
         moduleFunction = PinConfigModuleFunction(hwAttrs->clkPin);
     }
-
-    pin  = PinConfigPin(hwAttrs->clkPin);
-    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(port,
-            pin, moduleFunction);
+    pin = PinConfigPin(hwAttrs->clkPin);
+    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(port, pin, moduleFunction);
 
     /* STE */
     if (hwAttrs->pinMode != EUSCI_SPI_3PIN) {
         port = PinConfigPort(hwAttrs->stePin);
         value = PinConfigValue(hwAttrs->stePin);
-
         if (value != 0) {
             moduleFunction = GPIO_PRIMARY_MODULE_FUNCTION;
             pin = (hwAttrs->stePin) & 0x7;
@@ -448,16 +505,14 @@ SPI_Handle SPIMSP432DMA_open(SPI_Handle handle, SPI_Params *params)
         else {
             moduleFunction = PinConfigModuleFunction(hwAttrs->stePin);
         }
-
-        pin  = PinConfigPin(hwAttrs->stePin);
-        MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(port,
-                pin, moduleFunction);
+        pin = PinConfigPin(hwAttrs->stePin);
+        MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(port, pin,
+            moduleFunction);
     }
 
     /* SIMO */
     port = PinConfigPort(hwAttrs->simoPin);
     value = PinConfigValue(hwAttrs->simoPin);
-
     if (value != 0) {
         moduleFunction = GPIO_PRIMARY_MODULE_FUNCTION;
         pin = (hwAttrs->simoPin) & 0x7;
@@ -466,15 +521,12 @@ SPI_Handle SPIMSP432DMA_open(SPI_Handle handle, SPI_Params *params)
     else {
         moduleFunction = PinConfigModuleFunction(hwAttrs->simoPin);
     }
-
-    pin  = PinConfigPin(hwAttrs->simoPin);
-    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(port,
-            pin, moduleFunction);
+    pin = PinConfigPin(hwAttrs->simoPin);
+    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(port, pin, moduleFunction);
 
     /* SOMI */
     port = PinConfigPort(hwAttrs->somiPin);
     value = PinConfigValue(hwAttrs->somiPin);
-
     if (value != 0) {
         moduleFunction = GPIO_PRIMARY_MODULE_FUNCTION;
         pin = (hwAttrs->somiPin) & 0x7;
@@ -483,10 +535,9 @@ SPI_Handle SPIMSP432DMA_open(SPI_Handle handle, SPI_Params *params)
     else {
         moduleFunction = PinConfigModuleFunction(hwAttrs->somiPin);
     }
+    pin = PinConfigPin(hwAttrs->somiPin);
+    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(port, pin, moduleFunction);
 
-    pin  = PinConfigPin(hwAttrs->somiPin);
-    MAP_GPIO_setAsPeripheralModuleFunctionInputPin(port,
-            pin, moduleFunction);
     /*
      * Add power management support - Disable performance transitions while
      * opening the driver.
@@ -505,20 +556,20 @@ SPI_Handle SPIMSP432DMA_open(SPI_Handle handle, SPI_Params *params)
          * in any performance level.
          */
         if (params->bitRate >= powerFreqs.ACLK) {
-            DebugP_log3("SPI:(%p) ACLK input (%d) too low for bit rate (%d)",
-                hwAttrs->baseAddr, powerFreqs.ACLK, params->bitRate);
             Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+
             object->isOpen = false;
+
             return (NULL);
         }
         clockFreq = powerFreqs.ACLK;
     }
     else {    /* hwAttrs->clockSource == EUSCI_B_SPI_CLOCKSOURCE_SMCLK */
         if (params->bitRate >= powerFreqs.SMCLK) {
-            DebugP_log3("SPI:(%p) SMCLK input (%d) too low for bit rate (%d)",
-                hwAttrs->baseAddr, powerFreqs.SMCLK, params->bitRate);
             Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+
             object->isOpen = false;
+
             return (NULL);
         }
         clockFreq = powerFreqs.SMCLK;
@@ -537,84 +588,79 @@ SPI_Handle SPIMSP432DMA_open(SPI_Handle handle, SPI_Params *params)
         }
     }
 
-    /* Shutdown not supported while driver is open */
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
-
     /* Register function to reconfigure peripheral on perf level changes */
     Power_registerNotify(&object->perfChangeNotify,
         PowerMSP432_DONE_CHANGE_PERF_LEVEL, perfChangeNotifyFxn,
         (uintptr_t) handle);
 
-    object->transferComplete = NULL;
-    object->dmaHandle = NULL;
-
     /* Create the Hwi for this SPI peripheral */
-    HwiP_Params_init(&(portsParams.hwiParams));
-    portsParams.hwiParams.arg = (uintptr_t) handle;
-    portsParams.hwiParams.priority = hwAttrs->intPriority;
-    object->hwiHandle = HwiP_create(hwAttrs->dmaIntNum, SPIMSP432DMA_hwiFxn,
-        &(portsParams.hwiParams));
-    if (!object->hwiHandle) {
-        DebugP_log1("SPI:(%p) HwiP_create() failed", hwAttrs->baseAddr);
+    HwiP_Params_init(&hwiParams);
+    hwiParams.arg = (uintptr_t) handle;
+    hwiParams.priority = hwAttrs->intPriority;
+    object->hwiHandle = HwiP_create(hwAttrs->dmaIntNum, spiHwiFxn, &hwiParams);
+    if (object->hwiHandle == NULL) {
         Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
         SPIMSP432DMA_close(handle);
+
         return (NULL);
     }
 
     object->dmaHandle = UDMAMSP432_open();
     if (object->dmaHandle == NULL) {
-        DebugP_log1("SPI:(%p) UDMAMSP432_open() failed.", hwAttrs->baseAddr);
         Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
         SPIMSP432DMA_close(handle);
+
         return (NULL);
     }
 
-    /* Configure driver to Callback or Blocking operating mode */
     if (params->transferMode == SPI_MODE_CALLBACK) {
-        object->transferCallbackFxn = params->transferCallbackFxn;
-        DebugP_log1("SPI:(%p) in SPI_MODE_CALLBACK mode", hwAttrs->baseAddr);
-    }
-    else {
-        /* Semaphore to block task for the duration of the SPI transfer */
-        SemaphoreP_Params_init(&(portsParams.semParams));
-        portsParams.semParams.mode = SemaphoreP_Mode_BINARY;
-        object->transferComplete = SemaphoreP_create(0, &(portsParams.semParams));
-        if (!object->transferComplete) {
-            DebugP_log1("SPI:(%p) transfer SemaphoreP_create() failed.",
-                hwAttrs->baseAddr);
+        if (params->transferCallbackFxn == NULL) {
             Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
             SPIMSP432DMA_close(handle);
+
+            return (NULL);
+        }
+
+        object->transferCallbackFxn = params->transferCallbackFxn;
+    }
+    else {
+        /*
+         * Create a semaphore to block task execution for the duration of the
+         * SPI transfer
+         */
+        object->transferComplete = SemaphoreP_createBinary(0);
+        if (object->transferComplete == NULL) {
+            Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+            SPIMSP432DMA_close(handle);
+
             return (NULL);
         }
 
         object->transferCallbackFxn = blockingTransferCallback;
-        DebugP_log1("SPI:(%p) in SPI_MODE_BLOCKING mode", hwAttrs->baseAddr);
     }
 
     /*
      * Store SPI parameters & initialize peripheral.  These are used to
      * re/initialize the peripheral when opened or changing performance level.
      */
-    object->spiMode = params->mode;
     object->bitRate = params->bitRate;
-    object->clockPhase = frameFormat[params->frameFormat] & UCCKPH;
-    object->clockPolarity = frameFormat[params->frameFormat] & UCCKPL;
-    object->transferMode = params->transferMode;
+    object->clockPhase = frameFormat[params->frameFormat] & EUSCI_A_CTLW0_CKPH;
+    object->clockPolarity = frameFormat[params->frameFormat] & EUSCI_A_CTLW0_CKPL;
+    object->spiMode = params->mode;
     object->transaction = NULL;
+    object->transferMode = params->transferMode;
+    object->transferTimeout = params->transferTimeout;
+
     initHw(object, hwAttrs, clockFreq);
 
     /* Allow performance level changes */
     Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
-
-    DebugP_log1("SPI:(%p) opened", hwAttrs->baseAddr);
 
     return (handle);
 }
 
 /*
  *  ======== SPIMSP432DMA_transfer ========
- *  @pre    Function assumes that handle and transaction is not NULL
  */
 bool SPIMSP432DMA_transfer(SPI_Handle handle, SPI_Transaction *transaction)
 {
@@ -622,45 +668,70 @@ bool SPIMSP432DMA_transfer(SPI_Handle handle, SPI_Transaction *transaction)
     SPIMSP432DMA_Object          *object = handle->object;
     SPIMSP432DMA_HWAttrsV1 const *hwAttrs = handle->hwAttrs;
 
-    /* Check the transaction arguments */
     if ((transaction->count == 0) ||
-        !(transaction->rxBuf || transaction->txBuf)) {
+        ((transaction->rxBuf == NULL) && (transaction->txBuf == NULL))) {
         return (false);
     }
 
-    /* Check if a transfer is in progress */
     key = HwiP_disable();
 
     if (object->transaction) {
-        /* Transfer is in progress */
         HwiP_restore(key);
-        DebugP_log1("SPI:(%p) Error! Transaction still in progress",
-            hwAttrs->baseAddr);
+
         return (false);
     }
     else {
-        /* Save the pointer to the transaction */
         object->transaction = transaction;
+        object->transaction->status = SPI_TRANSFER_STARTED;
+        object->amtDataXferred = 0;
+        object->currentXferAmt = 0;
     }
 
     HwiP_restore(key);
 
-    /*
-     * Set power constraints to keep peripheral active during transfer and
-     * to prevent a performance level change
-     */
-    Power_setConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
-    Power_setConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
+        /*
+         * Set power constraints to keep peripheral active during transfer and
+         * to prevent a performance level change
+         */
+        Power_setConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
+        Power_setConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
 
-    MAP_SPI_enableModule(hwAttrs->baseAddr);
+    /* Polling transfer if BLOCKING mode & transaction->count < threshold */
+    if (object->transferMode == SPI_MODE_BLOCKING &&
+        transaction->count < hwAttrs->minDmaTransferSize) {
+        spiPollingTransfer(object, hwAttrs, transaction);
 
-    configDMA(object, hwAttrs, transaction);
+        /* Transaction completed; set status & mark SPI ready */
+        object->transaction->status = SPI_TRANSFER_COMPLETED;
+        object->transaction = NULL;
 
-    if (object->transferMode == SPI_MODE_BLOCKING) {
-        DebugP_log1("SPI:(%p) transfer pending on transferComplete semaphore",
-            hwAttrs->baseAddr);
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
+        Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
+        Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+    }
+    else {
+        /* Perform a DMA backed SPI transfer */
+        configDMA(object, hwAttrs, transaction);
 
-        SemaphoreP_pend(object->transferComplete, SemaphoreP_WAIT_FOREVER);
+        if (object->transferMode == SPI_MODE_BLOCKING) {
+            if (SemaphoreP_pend(object->transferComplete,
+                object->transferTimeout) != SemaphoreP_OK) {
+                /* Timeout occurred; cancel the transfer */
+                object->transaction->status = SPI_TRANSFER_FAILED;
+                SPIMSP432DMA_transferCancel(handle);
+
+                /*
+                 * TransferCancel() performs callback which posts
+                 * transferComplete semaphore. This call consumes this extra post.
+                 */
+                SemaphoreP_pend(object->transferComplete, SemaphoreP_NO_WAIT);
+
+                return (false);
+            }
+        }
     }
 
     return (true);
@@ -668,48 +739,82 @@ bool SPIMSP432DMA_transfer(SPI_Handle handle, SPI_Transaction *transaction)
 
 /*
  *  ======== SPIMSP432DMA_transferCancel ========
- *  A function to cancel a transaction (if one is in progress) when the driver
- *  is in SPI_MODE_CALLBACK.
- *
- *  @pre    Function assumes that the handle is not NULL
  */
 void SPIMSP432DMA_transferCancel(SPI_Handle handle)
 {
+    uintptr_t                     key;
+    SPI_Transaction              *msg;
+    uint32_t                      clockFreq;
+    PowerMSP432_Freqs             powerFreqs;
+    SPIMSP432DMA_Object          *object = handle->object;
     SPIMSP432DMA_HWAttrsV1 const *hwAttrs = handle->hwAttrs;
 
-    /* No implementation yet */
-    DebugP_assert(false);
+    /*
+     * There are 2 use cases in which to call transferCancel():
+     *   1.  The driver is in CALLBACK mode.
+     *   2.  The driver is in BLOCKING mode & there has been a transfer timeout.
+     */
+    if (object->transferMode == SPI_MODE_CALLBACK ||
+        object->transaction->status == SPI_TRANSFER_FAILED) {
 
-    /* Remove constraints set during transfer */
-    Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
-    Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+        key = HwiP_disable();
 
-    /* Disable peripheral to allow device to enter low power modes */
-    MAP_SPI_disableModule(hwAttrs->baseAddr);
-}
+        if (object->transaction == NULL || object->cancelInProgress) {
+            HwiP_restore(key);
 
-/*
- *  ======== mapPin ========
- *  NOTE: This function may go away when DriverLib supports mapping
- *  an individual pin.
- */
-static void mapPin(uint8_t port, uint8_t pin, uint8_t value)
-{
-    volatile uint8_t                     pmap;
+            return;
+        }
+        object->cancelInProgress = true;
 
-    pmap = port * 0x8;  // 2 -> 0x10, 3 -> 0x18, 7 -> 0x38
+        /* Prevent DMA interrupt from occurring while canceling the transfer */
+        HwiP_disableInterrupt(hwAttrs->dmaIntNum);
+        HwiP_clearInterrupt(hwAttrs->dmaIntNum);
 
-    //portMapReconfigure = PMAP_DISABLE_RECONFIGURATION; // ?
+        /* Clear DMA configuration */
+        MAP_DMA_disableInterrupt(hwAttrs->dmaIntNum);
+        MAP_DMA_disableChannel(hwAttrs->rxDMAChannelIndex & 0x0F);
+        MAP_DMA_disableChannel(hwAttrs->txDMAChannelIndex & 0x0F);
+        MAP_DMA_clearInterruptFlag(hwAttrs->rxDMAChannelIndex & 0x0F);
 
-    /*  Code from pmap.c: */
-    //Get write-access to port mapping registers:
-    PMAP->KEYID = PMAP_KEYID_VAL;
+        HwiP_restore(key);
 
-    //Enable/Disable reconfiguration during runtime
-//    PMAP->CTL = (PMAP->CTL & ~PMAP_CTL_PRECFG) | PMAP_DISABLE_RECONFIGURATION;
-    PMAP->CTL = (PMAP->CTL & ~PMAP_CTL_PRECFG) | PMAP_ENABLE_RECONFIGURATION;
-    HWREG8((uint32_t)PMAP_BASE + pin + pmap) = value;
-    //Disable write-access to port mapping registers:
+        /* Make sure performance level does not change while resetting SPI */
+        PowerMSP432_getFreqs(Power_getPerformanceLevel(), &powerFreqs);
+        clockFreq = (hwAttrs->clockSource == EUSCI_B_SPI_CLOCKSOURCE_SMCLK) ?
+            powerFreqs.SMCLK : powerFreqs.ACLK;
 
-    PMAP->KEYID = 0;
+        initHw(object, hwAttrs, clockFreq);
+
+        HwiP_enableInterrupt(hwAttrs->dmaIntNum);
+
+        /*
+         * Calculate amount of data which has already been sent & store
+         * it in transaction->count
+         */
+        object->transaction->count = object->amtDataXferred +
+            (object->currentXferAmt - getDmaRemainingXfers(object, hwAttrs));
+
+        /* Set status CANCELED if we did not cancel due to timeout  */
+        if (object->transaction->status == SPI_TRANSFER_STARTED) {
+            object->transaction->status = SPI_TRANSFER_CANCELED;
+        }
+
+        /* Remove constraints set during transfer */
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
+        Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
+        Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+
+        /*
+         * Use a temporary transaction pointer in case the callback function
+         * attempts to perform another SPI_transfer call
+         */
+        msg = object->transaction;
+
+        /* Indicate we are done with this transfer */
+        object->transaction = NULL;
+        object->cancelInProgress = false;
+        object->transferCallbackFxn(handle, msg);
+
+    }
 }

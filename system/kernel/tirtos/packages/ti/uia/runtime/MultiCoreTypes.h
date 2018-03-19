@@ -2,20 +2,20 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
  *     FUNCTION DECLARATIONS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -66,7 +66,7 @@
 typedef xdc_Char __T1_ti_uia_runtime_MultiCoreTypes_ServiceHdr__msgHdr;
 typedef xdc_Char __ARRAY1_ti_uia_runtime_MultiCoreTypes_ServiceHdr__msgHdr[32];
 typedef xdc_Char __CARRAY1_ti_uia_runtime_MultiCoreTypes_ServiceHdr__msgHdr[32];
-typedef __ARRAY1_ti_uia_runtime_MultiCoreTypes_ServiceHdr__msgHdr __TA_ti_uia_runtime_MultiCoreTypes_ServiceHdr__msgHdr;
+typedef __CARRAY1_ti_uia_runtime_MultiCoreTypes_ServiceHdr__msgHdr __TA_ti_uia_runtime_MultiCoreTypes_ServiceHdr__msgHdr;
 struct ti_uia_runtime_MultiCoreTypes_ServiceHdr {
     __TA_ti_uia_runtime_MultiCoreTypes_ServiceHdr__msgHdr msgHdr;
     ti_uia_runtime_UIAPacket_Hdr packet;
@@ -95,7 +95,7 @@ typedef enum ti_uia_runtime_MultiCoreTypes_Action ti_uia_runtime_MultiCoreTypes_
 typedef xdc_Char __T1_ti_uia_runtime_MultiCoreTypes_RegisterMsg__msgHdr;
 typedef xdc_Char __ARRAY1_ti_uia_runtime_MultiCoreTypes_RegisterMsg__msgHdr[32];
 typedef xdc_Char __CARRAY1_ti_uia_runtime_MultiCoreTypes_RegisterMsg__msgHdr[32];
-typedef __ARRAY1_ti_uia_runtime_MultiCoreTypes_RegisterMsg__msgHdr __TA_ti_uia_runtime_MultiCoreTypes_RegisterMsg__msgHdr;
+typedef __CARRAY1_ti_uia_runtime_MultiCoreTypes_RegisterMsg__msgHdr __TA_ti_uia_runtime_MultiCoreTypes_RegisterMsg__msgHdr;
 struct ti_uia_runtime_MultiCoreTypes_RegisterMsg {
     __TA_ti_uia_runtime_MultiCoreTypes_RegisterMsg__msgHdr msgHdr;
     xdc_UInt32 remoteMQ;
@@ -309,25 +309,29 @@ __extern xdc_Bool ti_uia_runtime_MultiCoreTypes_Module__startupDone__S( void );
 #define ti_uia_runtime_MultiCoreTypes_Module_heap() ti_uia_runtime_MultiCoreTypes_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_uia_runtime_MultiCoreTypes_Module__id ti_uia_runtime_MultiCoreTypes_Module_id(void);
 static inline CT__ti_uia_runtime_MultiCoreTypes_Module__id ti_uia_runtime_MultiCoreTypes_Module_id( void ) 
 {
     return ti_uia_runtime_MultiCoreTypes_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_uia_runtime_MultiCoreTypes_Module_hasMask( void ) 
+static inline xdc_Bool ti_uia_runtime_MultiCoreTypes_Module_hasMask(void);
+static inline xdc_Bool ti_uia_runtime_MultiCoreTypes_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_uia_runtime_MultiCoreTypes_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_uia_runtime_MultiCoreTypes_Module_getMask(void);
 static inline xdc_Bits16 ti_uia_runtime_MultiCoreTypes_Module_getMask( void ) 
 {
     return ti_uia_runtime_MultiCoreTypes_Module__diagsMask__C != NULL ? *ti_uia_runtime_MultiCoreTypes_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_uia_runtime_MultiCoreTypes_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_uia_runtime_MultiCoreTypes_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_uia_runtime_MultiCoreTypes_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_uia_runtime_MultiCoreTypes_Module__diagsMask__C != NULL) {
         *ti_uia_runtime_MultiCoreTypes_Module__diagsMask__C = mask;

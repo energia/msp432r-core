@@ -2,21 +2,21 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     MODULE-WIDE CONFIGS
  *     VIRTUAL FUNCTIONS
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -241,12 +241,12 @@ struct ti_sysbios_hal_Core_CoreProxy_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
     xdc_UInt (*getId)(void);
-    xdc_Void (*interruptCore)(xdc_UInt);
+    xdc_Void (*interruptCore)(xdc_UInt coreId);
     xdc_IArg (*lock)(void);
     xdc_Void (*unlock)(void);
     xdc_UInt (*hwiDisable)(void);
     xdc_UInt (*hwiEnable)(void);
-    xdc_Void (*hwiRestore)(xdc_UInt);
+    xdc_Void (*hwiRestore)(xdc_UInt key);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_hal_Core_CoreProxy_Module__FXNS__CR
@@ -338,7 +338,8 @@ __extern xdc_Void ti_sysbios_hal_Core_CoreProxy_hwiRestore__E( xdc_UInt key );
  */
 
 /* Module_upCast */
-static inline ti_sysbios_interfaces_ICore_Module ti_sysbios_hal_Core_CoreProxy_Module_upCast( void )
+static inline ti_sysbios_interfaces_ICore_Module ti_sysbios_hal_Core_CoreProxy_Module_upCast(void);
+static inline ti_sysbios_interfaces_ICore_Module ti_sysbios_hal_Core_CoreProxy_Module_upCast(void)
 {
     return (ti_sysbios_interfaces_ICore_Module)ti_sysbios_hal_Core_CoreProxy_Proxy__delegate__S();
 }
@@ -361,6 +362,7 @@ static inline ti_sysbios_interfaces_ICore_Module ti_sysbios_hal_Core_CoreProxy_M
 #define ti_sysbios_hal_Core_CoreProxy_Module_heap() ti_sysbios_hal_Core_CoreProxy_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_hal_Core_CoreProxy_Module__id ti_sysbios_hal_Core_CoreProxy_Module_id(void);
 static inline CT__ti_sysbios_hal_Core_CoreProxy_Module__id ti_sysbios_hal_Core_CoreProxy_Module_id( void ) 
 {
     return ti_sysbios_hal_Core_CoreProxy_Module__id__C;

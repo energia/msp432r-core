@@ -56,7 +56,7 @@ package/ti.uia.runtime.sch
 package/.vers_g200
 package/.vers_r200
 package/.vers_b200
-package/.xdc-D05
+package/.xdc-D20
 package/ti_uia_runtime.java
 package/ti_uia_runtime.class
 package/package_ti.uia.runtime.c

@@ -51,6 +51,7 @@
 #include "pthread.h"
 #include "mqueue.h"
 #include "errno.h"
+#include "pthread_util.h"
 
 /*
  *  ======== MQueueObj ========
@@ -105,14 +106,11 @@ int mq_getattr(mqd_t mqdes, struct mq_attr *mqstat)
 {
     MQueueDesc *mqd = (MQueueDesc *)mqdes;
     MQueueObj  *msgQueue = mqd->msgQueue;
-    UInt        key;
 
-    key = Task_disable();
     msgQueue->attrs.mq_curmsgs = Mailbox_getNumPendingMsgs(msgQueue->mailbox);
 
     *mqstat = msgQueue->attrs;
     mqstat->mq_flags = mqd->flags;
-    Task_restore(key);
 
     return (0);
 }
@@ -268,7 +266,7 @@ ssize_t mq_receive(mqd_t mqdes, char *msg_ptr, size_t msg_len,
      *  If msg_len is less than the message size attribute of the message
      *  queue, return an error.
      */
-    if (msg_len < (msgQueue->attrs).mq_msgsize) {
+    if (msg_len < (size_t)((msgQueue->attrs).mq_msgsize)) {
         return (-1);
     }
 
@@ -358,17 +356,14 @@ ssize_t mq_timedreceive(mqd_t mqdes, char *msg_ptr, size_t msg_len,
 {
     MQueueDesc         *mqd = (MQueueDesc *)mqdes;
     MQueueObj          *msgQueue = mqd->msgQueue;
-    struct timespec     curtime;
     UInt32              timeout;
-    long                usecs = 0;
-    time_t              secs = 0;
     int                 retVal = -1;
 
     /*
      *  If msg_len is less than the message size attribute of the message
      *  queue, return an error.
      */
-    if (msg_len < (msgQueue->attrs).mq_msgsize) {
+    if (msg_len < (size_t)((msgQueue->attrs).mq_msgsize)) {
         return (-1);
     }
 
@@ -376,26 +371,8 @@ ssize_t mq_timedreceive(mqd_t mqdes, char *msg_ptr, size_t msg_len,
         timeout = BIOS_NO_WAIT;
     }
     else {
-        if ((abstime->tv_nsec < 0) || (1000000000 < abstime->tv_nsec)) {
+        if (_pthread_abstime2ticks(CLOCK_REALTIME, abstime, &timeout) != 0) {
             return (-1);
-        }
-
-        clock_gettime(CLOCK_REALTIME, &curtime);
-        secs = abstime->tv_sec - curtime.tv_sec;
-
-        if ((abstime->tv_sec < curtime.tv_sec) ||
-                ((secs == 0) && (abstime->tv_nsec <= curtime.tv_nsec))) {
-            timeout = 0;
-        }
-        else {
-            usecs = (abstime->tv_nsec - curtime.tv_nsec) / 1000;
-
-            if (usecs < 0) {
-                usecs += 1000000;
-                secs--;
-            }
-            usecs += secs * 1000000;
-            timeout = usecs / Clock_tickPeriod;
         }
     }
 
@@ -415,36 +392,15 @@ int mq_timedsend(mqd_t mqdes, const char *msg_ptr, size_t msg_len,
 {
     MQueueDesc         *mqd = (MQueueDesc *)mqdes;
     MQueueObj          *msgQueue = mqd->msgQueue;
-    struct timespec     curtime;
     UInt32              timeout;
-    long                usecs = 0;
-    time_t              secs = 0;
     int                 retVal = 0;
 
     if (mqd->flags & O_NONBLOCK) {
         timeout = BIOS_NO_WAIT;
     }
     else {
-        if ((abstime->tv_nsec < 0) || (1000000000 < abstime->tv_nsec)) {
+        if (_pthread_abstime2ticks(CLOCK_REALTIME, abstime, &timeout) != 0) {
             return (-1);
-        }
-
-        clock_gettime(CLOCK_REALTIME, &curtime);
-        secs = abstime->tv_sec - curtime.tv_sec;
-
-        if ((abstime->tv_sec < curtime.tv_sec) ||
-                ((secs == 0) && (abstime->tv_nsec <= curtime.tv_nsec))) {
-            timeout = 0;
-        }
-        else {
-            usecs = (abstime->tv_nsec - curtime.tv_nsec) / 1000;
-
-            if (usecs < 0) {
-                usecs += 1000000;
-                secs--;
-            }
-            usecs += secs * 1000000;
-            timeout = usecs / Clock_tickPeriod;
         }
     }
 

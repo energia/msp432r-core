@@ -581,13 +581,13 @@ Int Swi_postInit (Swi_Object *swi, Error_Block *eb)
 {
 #ifndef ti_sysbios_knl_Swi_DISABLE_ALL_HOOKS
     Int i;
+    Error_Block localEB;
     Error_Block *leb;
 
     if (eb != Error_IGNORE) {
         leb = eb;
     }
     else {
-        Error_Block localEB;
         Error_init(&localEB);
         leb = &localEB;
     }
@@ -767,6 +767,48 @@ Void Swi_or(Swi_Object *swi, UInt mask)
     swi->trigger |= mask;
     Hwi_restore(hwiKey);
     Swi_post(swi);
+}
+
+/*!
+ *  ======== Swi_andn ========
+ */
+Void Swi_andn(Swi_Object *swi, UInt mask)
+{
+    UInt hwiKey;
+
+    hwiKey = Hwi_disable();
+
+    if (swi->trigger != 0) {
+        swi->trigger &= ~mask;
+        if (swi->trigger == 0) {
+            Hwi_restore(hwiKey);
+            Swi_post(swi);
+            return;
+        }
+    }
+
+    Hwi_restore(hwiKey);
+}
+
+/*
+ *  ======== Swi_dec ========
+ */
+Void Swi_dec(Swi_Object *swi)
+{
+    UInt hwiKey;
+
+    hwiKey = Hwi_disable();
+
+    if (swi->trigger != 0) {
+        swi->trigger -= 1;
+        if (swi->trigger == 0) {
+            Hwi_restore(hwiKey);
+            Swi_post(swi);
+            return;
+        }
+    }
+
+    Hwi_restore(hwiKey);
 }
 
 /*

@@ -2,19 +2,19 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     VIRTUAL FUNCTIONS
  *     FUNCTION STUBS
  *     FUNCTION SELECTORS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -83,7 +83,8 @@ __extern const xdc_runtime_Types_Base ti_uia_events_IUIAEvent_Interface__BASE__C
  */
 
 /* Module_id */
-static inline xdc_runtime_Types_ModuleId ti_uia_events_IUIAEvent_Module_id( ti_uia_events_IUIAEvent_Module mod )
+static inline xdc_runtime_Types_ModuleId ti_uia_events_IUIAEvent_Module_id(ti_uia_events_IUIAEvent_Module mod);
+static inline xdc_runtime_Types_ModuleId ti_uia_events_IUIAEvent_Module_id(ti_uia_events_IUIAEvent_Module mod)
 {
     return mod->__sysp->__mid;
 }

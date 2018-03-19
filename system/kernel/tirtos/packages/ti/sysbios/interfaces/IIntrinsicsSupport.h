@@ -2,19 +2,19 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     VIRTUAL FUNCTIONS
  *     FUNCTION STUBS
  *     FUNCTION SELECTORS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -67,7 +67,7 @@
 struct ti_sysbios_interfaces_IIntrinsicsSupport_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_UInt (*maxbit)(xdc_UInt);
+    xdc_UInt (*maxbit)(xdc_UInt bits);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_interfaces_IIntrinsicsSupport_Module__BASE__CR
@@ -84,12 +84,14 @@ __extern const xdc_runtime_Types_Base ti_sysbios_interfaces_IIntrinsicsSupport_I
  */
 
 /* Module_id */
-static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_IIntrinsicsSupport_Module_id( ti_sysbios_interfaces_IIntrinsicsSupport_Module mod )
+static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_IIntrinsicsSupport_Module_id(ti_sysbios_interfaces_IIntrinsicsSupport_Module mod);
+static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_IIntrinsicsSupport_Module_id(ti_sysbios_interfaces_IIntrinsicsSupport_Module mod)
 {
     return mod->__sysp->__mid;
 }
 
 /* maxbit */
+static inline xdc_UInt ti_sysbios_interfaces_IIntrinsicsSupport_maxbit(ti_sysbios_interfaces_IIntrinsicsSupport_Module __mod, xdc_UInt bits);
 static inline xdc_UInt ti_sysbios_interfaces_IIntrinsicsSupport_maxbit( ti_sysbios_interfaces_IIntrinsicsSupport_Module __mod, xdc_UInt bits )
 {
     return __mod->maxbit(bits);
@@ -108,8 +110,9 @@ static inline xdc_UInt ti_sysbios_interfaces_IIntrinsicsSupport_maxbit( ti_sysbi
  */
 
 /* maxbit_{FxnT,fxnP} */
-typedef xdc_UInt (*ti_sysbios_interfaces_IIntrinsicsSupport_maxbit_FxnT)(xdc_UInt);
-static inline ti_sysbios_interfaces_IIntrinsicsSupport_maxbit_FxnT ti_sysbios_interfaces_IIntrinsicsSupport_maxbit_fxnP( ti_sysbios_interfaces_IIntrinsicsSupport_Module __mod )
+typedef xdc_UInt (*ti_sysbios_interfaces_IIntrinsicsSupport_maxbit_FxnT)(xdc_UInt bits);
+static inline ti_sysbios_interfaces_IIntrinsicsSupport_maxbit_FxnT ti_sysbios_interfaces_IIntrinsicsSupport_maxbit_fxnP(ti_sysbios_interfaces_IIntrinsicsSupport_Module __mod);
+static inline ti_sysbios_interfaces_IIntrinsicsSupport_maxbit_FxnT ti_sysbios_interfaces_IIntrinsicsSupport_maxbit_fxnP(ti_sysbios_interfaces_IIntrinsicsSupport_Module __mod)
 {
     return (ti_sysbios_interfaces_IIntrinsicsSupport_maxbit_FxnT)__mod->maxbit;
 }

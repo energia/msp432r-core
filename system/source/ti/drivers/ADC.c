@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Texas Instruments Incorporated
+ * Copyright (c) 2016-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -76,11 +76,11 @@ int_fast16_t ADC_convert(ADC_Handle handle, uint16_t *value)
 }
 
 /*
- *  ======== ADC_convertRawToMicroVolts ========
+ *  ======== ADC_convertToMicroVolts ========
  */
-uint32_t ADC_convertRawToMicroVolts(ADC_Handle handle, uint16_t rawAdcValue)
+uint32_t ADC_convertToMicroVolts(ADC_Handle handle, uint16_t adcValue)
 {
-    return (handle->fxnTablePtr->convertRawToMicroVolts(handle, rawAdcValue));
+    return (handle->fxnTablePtr->convertToMicroVolts(handle, adcValue));
 }
 
 /*

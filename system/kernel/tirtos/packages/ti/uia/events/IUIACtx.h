@@ -2,20 +2,20 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     VIRTUAL FUNCTIONS
  *     FUNCTION STUBS
  *     FUNCTION SELECTORS
  *     CONVERTORS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -60,7 +60,7 @@
  */
 
 /* IsLoggingEnabledFxn */
-typedef xdc_Bool (*ti_uia_events_IUIACtx_IsLoggingEnabledFxn)(xdc_Int);
+typedef xdc_Bool (*ti_uia_events_IUIACtx_IsLoggingEnabledFxn)(xdc_Int __arg1);
 
 
 /*
@@ -87,7 +87,8 @@ __extern const xdc_runtime_Types_Base ti_uia_events_IUIACtx_Interface__BASE__C;
  */
 
 /* Module_id */
-static inline xdc_runtime_Types_ModuleId ti_uia_events_IUIACtx_Module_id( ti_uia_events_IUIACtx_Module mod )
+static inline xdc_runtime_Types_ModuleId ti_uia_events_IUIACtx_Module_id(ti_uia_events_IUIACtx_Module mod);
+static inline xdc_runtime_Types_ModuleId ti_uia_events_IUIACtx_Module_id(ti_uia_events_IUIACtx_Module mod)
 {
     return mod->__sysp->__mid;
 }
@@ -103,7 +104,8 @@ static inline xdc_runtime_Types_ModuleId ti_uia_events_IUIACtx_Module_id( ti_uia
  */
 
 /* Module_upCast */
-static inline ti_uia_events_IUIAEvent_Module ti_uia_events_IUIACtx_Module_upCast( ti_uia_events_IUIACtx_Module m )
+static inline ti_uia_events_IUIAEvent_Module ti_uia_events_IUIACtx_Module_upCast(ti_uia_events_IUIACtx_Module m);
+static inline ti_uia_events_IUIAEvent_Module ti_uia_events_IUIACtx_Module_upCast(ti_uia_events_IUIACtx_Module m)
 {
     return(ti_uia_events_IUIAEvent_Module)m;
 }
@@ -112,14 +114,16 @@ static inline ti_uia_events_IUIAEvent_Module ti_uia_events_IUIACtx_Module_upCast
 #define ti_uia_events_IUIACtx_Module_to_ti_uia_events_IUIAEvent ti_uia_events_IUIACtx_Module_upCast
 
 /* Module_downCast */
-static inline ti_uia_events_IUIACtx_Module ti_uia_events_IUIACtx_Module_downCast( ti_uia_events_IUIAEvent_Module m )
+static inline ti_uia_events_IUIACtx_Module ti_uia_events_IUIACtx_Module_downCast(ti_uia_events_IUIAEvent_Module m);
+static inline ti_uia_events_IUIACtx_Module ti_uia_events_IUIACtx_Module_downCast(ti_uia_events_IUIAEvent_Module m)
 {
     const xdc_runtime_Types_Base* b;
     for (b = m->__base; b; b = b->base) {
         if (b == &ti_uia_events_IUIACtx_Interface__BASE__C) {
             return (ti_uia_events_IUIACtx_Module)m;
         }
-    } return 0;
+    }
+    return 0;
 }
 
 /* Module_from_ti_uia_events_IUIAEvent */

@@ -46,6 +46,9 @@
 #ifndef DebugP_LOG_ENABLED
 #define DebugP_LOG_ENABLED 0
 #endif
+
+#include <ti/devices/DeviceFamily.h>
+
 #include <ti/drivers/dpl/DebugP.h>
 #include <ti/drivers/dpl/HwiP.h>
 
@@ -57,10 +60,41 @@
 /* driverlib header files */
 #include <ti/devices/msp432p4xx/driverlib/rom.h>
 #include <ti/devices/msp432p4xx/driverlib/rom_map.h>
-#include <ti/devices/msp432p4xx/driverlib/flash.h>
 #include <ti/devices/msp432p4xx/driverlib/wdt_a.h>
 #include <ti/devices/msp432p4xx/driverlib/rtc_c.h>
 #include <ti/devices/msp432p4xx/driverlib/pcm.h>
+
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
+/* MSP432P401xx devices */
+#include <ti/devices/msp432p4xx/driverlib/flash.h>
+#include <ti/devices/msp432p4xx/driverlib/sysctl.h>
+#define SET_WAIT_STATES MAP_FlashCtl_setWaitState
+#define ENABLE_READ_BUFFERING MAP_FlashCtl_enableReadBuffering
+#define DISABLE_READ_BUFFERING MAP_FlashCtl_disableReadBuffering
+#define GET_NMI_SOURCESTATUS MAP_SysCtl_getNMISourceStatus()
+#define DISABLE_NMI_SOURCE MAP_SysCtl_disableNMISource
+#define ENABLE_NMI_SOURCE MAP_SysCtl_enableNMISource
+#define FLASH_D_READ FLASH_DATA_READ
+#define FLASH_I_FETCH FLASH_INSTRUCTION_FETCH
+#define BANK0 FLASH_BANK0
+#define BANK1 FLASH_BANK1
+#define CSSRC 0x1
+#else
+/* MSP432P4x1xl devices */
+#include <ti/devices/msp432p4xx/driverlib/flash_a.h>
+#include <ti/devices/msp432p4xx/driverlib/sysctl_a.h>
+#define SET_WAIT_STATES MAP_FlashCtl_A_setWaitState
+#define ENABLE_READ_BUFFERING MAP_FlashCtl_A_enableReadBuffering
+#define DISABLE_READ_BUFFERING MAP_FlashCtl_A_disableReadBuffering
+#define GET_NMI_SOURCESTATUS MAP_SysCtl_A_getNMISourceStatus()
+#define DISABLE_NMI_SOURCE MAP_SysCtl_A_disableNMISource
+#define ENABLE_NMI_SOURCE MAP_SysCtl_A_enableNMISource
+#define FLASH_D_READ FLASH_A_DATA_READ
+#define FLASH_I_FETCH FLASH_A_INSTRUCTION_FETCH
+#define BANK0 FLASH_A_BANK0
+#define BANK1 FLASH_A_BANK1
+#define CSSRC 0x1
+#endif
 
 /* Active states */
 #define AM_DCDC_VCORE0    PCM_AM_DCDC_VCORE0
@@ -102,9 +136,11 @@ PowerMSP432_ModuleState PowerMSP432_module = {
 };
 
 /*
- * Notes for initial implementation of Power_setPerformanceLevel()
+ * Notes for the implementation of Power_setPerformanceLevel()
  *
- * 1) There are four performance levels supported:
+ * 1) Depending on the MSP432 device variant, there are three or four
+ *    predefined performance levels.  For example, on MSP432P401x devices
+ *    the following levels are predefined:
  *
  *    Level    MCLK (MHz)    HSMCLK (MHz)    SMCLK (MHz)    ACLK (Hz)
  *    -----    ----------    ------------    -----------    ---------
@@ -113,12 +149,8 @@ PowerMSP432_ModuleState PowerMSP432_module = {
  *      2         48             24             12           32768
  *      3         48             48             24           32768
  *
- *    Only four of the peformance level constraints are supported:
- *
- *        PowerMSP432_DISALLOW_PERFLEVEL_0
- *        PowerMSP432_DISALLOW_PERFLEVEL_1
- *        PowerMSP432_DISALLOW_PERFLEVEL_2
- *        PowerMSP432_DISALLOW_PERFLEVEL_3
+ *    The levels for all device variants are defined below, via
+ *    PowerMSP432_PerfLevel structures.
  *
  * 2) DCO is the only supported clock source (all clocks are derived from this;
  *    LF and HF XTALs are not used)
@@ -131,8 +163,10 @@ PowerMSP432_ModuleState PowerMSP432_module = {
  *
  */
 
-#define NUMPERFLEVELS    4
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
 
+/* MSP432P401xx devices */
+#define NUMPERFLEVELS    4
 PowerMSP432_PerfLevel PowerMSP432_perfLevels[NUMPERFLEVELS] = {
     { .activeState = AM_DCDC_VCORE0,
       .VCORE = 0,
@@ -192,15 +226,130 @@ PowerMSP432_PerfLevel PowerMSP432_perfLevels[NUMPERFLEVELS] = {
      },
 };
 
+#elif DeviceFamily_ID == DeviceFamily_ID_MSP432P4x1xT
+
+/* MSP432Px1xT devices */
+#define NUMPERFLEVELS    3
+PowerMSP432_PerfLevel PowerMSP432_perfLevels[NUMPERFLEVELS] = {
+    { .activeState = AM_DCDC_VCORE0,
+      .VCORE = 0,
+      .clockSource = CS_DCOCLK_SELECT,
+      .DCORESEL = CS_DCO_FREQUENCY_6,
+      .DIVM = CS_CLOCK_DIVIDER_1,
+      .DIVHS = CS_CLOCK_DIVIDER_2,
+      .DIVS = CS_CLOCK_DIVIDER_2,
+      .flashWaitStates = 0,
+      .enableFlashBuffer = false,
+      .MCLK = 6000000,
+      .HSMCLK = 3000000,
+      .SMCLK = 3000000,
+      .ACLK = 32768
+     },
+    { .activeState = AM_DCDC_VCORE0,
+      .VCORE = 0,
+      .clockSource = CS_DCOCLK_SELECT,
+      .DCORESEL = CS_DCO_FREQUENCY_12,
+      .DIVM = CS_CLOCK_DIVIDER_1,
+      .DIVHS = CS_CLOCK_DIVIDER_1,
+      .DIVS = CS_CLOCK_DIVIDER_2,
+      .flashWaitStates = 1,
+      .enableFlashBuffer = true,
+      .MCLK = 12000000,
+      .HSMCLK = 12000000,
+      .SMCLK = 6000000,
+      .ACLK = 32768
+     },
+    { .activeState = AM_DCDC_VCORE0,
+      .VCORE = 0,
+      .clockSource = CS_DCOCLK_SELECT,
+      .DCORESEL = CS_DCO_FREQUENCY_24,
+      .DIVM = CS_CLOCK_DIVIDER_1,
+      .DIVHS = CS_CLOCK_DIVIDER_1,
+      .DIVS = CS_CLOCK_DIVIDER_2,
+      .flashWaitStates = 2,
+      .enableFlashBuffer = true,
+      .MCLK = 24000000,
+      .HSMCLK = 24000000,
+      .SMCLK = 12000000,
+      .ACLK = 32768
+     },
+};
+
+#else
+
+/* MSP432P4x1xl devices */
+#define NUMPERFLEVELS    4
+PowerMSP432_PerfLevel PowerMSP432_perfLevels[NUMPERFLEVELS] = {
+    { .activeState = AM_DCDC_VCORE0,
+      .VCORE = 0,
+      .clockSource = CS_DCOCLK_SELECT,
+      .DCORESEL = CS_DCO_FREQUENCY_12,
+      .DIVM = CS_CLOCK_DIVIDER_1,
+      .DIVHS = CS_CLOCK_DIVIDER_4,
+      .DIVS = CS_CLOCK_DIVIDER_4,
+      .flashWaitStates = 1,
+      .enableFlashBuffer = false,
+      .MCLK = 12000000,
+      .HSMCLK = 3000000,
+      .SMCLK = 3000000,
+      .ACLK = 32768
+     },
+    { .activeState = AM_DCDC_VCORE0,
+      .VCORE = 0,
+      .clockSource = CS_DCOCLK_SELECT,
+      .DCORESEL = CS_DCO_FREQUENCY_24,
+      .DIVM = CS_CLOCK_DIVIDER_1,
+      .DIVHS = CS_CLOCK_DIVIDER_4,
+      .DIVS = CS_CLOCK_DIVIDER_4,
+      .flashWaitStates = 2,
+      .enableFlashBuffer = true,
+      .MCLK = 24000000,
+      .HSMCLK = 6000000,
+      .SMCLK = 6000000,
+      .ACLK = 32768
+     },
+    { .activeState = AM_DCDC_VCORE1,
+      .VCORE = 1,
+      .clockSource = CS_DCOCLK_SELECT,
+      .DCORESEL = CS_DCO_FREQUENCY_48,
+      .DIVM = CS_CLOCK_DIVIDER_1,
+      .DIVHS = CS_CLOCK_DIVIDER_2,
+      .DIVS = CS_CLOCK_DIVIDER_4,
+      .flashWaitStates = 3,
+      .enableFlashBuffer = true,
+      .MCLK = 48000000,
+      .HSMCLK = 24000000,
+      .SMCLK = 12000000,
+      .ACLK = 32768
+     },
+    { .activeState = AM_DCDC_VCORE1,
+      .VCORE = 1,
+      .clockSource = CS_DCOCLK_SELECT,
+      .DCORESEL = CS_DCO_FREQUENCY_48,
+      .DIVM = CS_CLOCK_DIVIDER_1,
+      .DIVHS = CS_CLOCK_DIVIDER_1,
+      .DIVS = CS_CLOCK_DIVIDER_2,
+      .flashWaitStates = 3,
+      .enableFlashBuffer = true,
+      .MCLK = 48000000,
+      .HSMCLK = 48000000,
+      .SMCLK = 24000000,
+      .ACLK = 32768
+     },
+};
+#endif
+
 /*
  *  ======== Power_disablePolicy ========
  *  Do not run the power policy on each pass through the idle loop
  */
-void Power_disablePolicy(void)
+bool Power_disablePolicy(void)
 {
+    bool enablePolicy = PowerMSP432_module.enablePolicy;
     PowerMSP432_module.enablePolicy = false;
 
     DebugP_log0("Power: disable policy");
+    return (enablePolicy);
 }
 
 /*
@@ -302,6 +451,19 @@ int_fast16_t Power_init()
     /* initialize the power manager state */
     if (!PowerMSP432_module.initialized) {
 
+        /* first, if device is resuming from a shutdown state ... */
+        if (RSTCTL->PCMRESET_STAT &
+               (RSTCTL_PCMRESET_STAT_LPM35 | RSTCTL_PCMRESET_STAT_LPM45)) {
+
+            /* if a shutdown resume hook has been configured, call it now ... */
+            if (PowerMSP432_config.resumeShutdownHookFxn != NULL) {
+                (*(PowerMSP432_config.resumeShutdownHookFxn))();
+            }
+
+            /* now, unlock I/Os and the Backup domain */
+            PCM->CTL1 = PCM_CTL1_KEY_VAL;
+        }
+
         /* set module state field 'initialized' to true */
         PowerMSP432_module.initialized = true;
 
@@ -328,8 +490,10 @@ int_fast16_t Power_init()
          */
         MAP_PCM_enableRudeMode();
 
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
         /* explicitly enable SRAM retention (for CS) */
         SYSCTL->SRAM_BANKRET |= 0xfe;
+#endif
     }
 
     return (Power_SOK);
@@ -569,50 +733,39 @@ int_fast16_t Power_setPerformanceLevel(uint_fast16_t level)
 
                 /* if new flash wait states are higher, set them now */
                 if (perfNew.flashWaitStates > perfNow.flashWaitStates) {
-                    MAP_FlashCtl_setWaitState(FLASH_BANK0,
-                        perfNew.flashWaitStates);
-                    MAP_FlashCtl_setWaitState(FLASH_BANK1,
-                        perfNew.flashWaitStates);
+                    SET_WAIT_STATES(BANK0, perfNew.flashWaitStates);
+                    SET_WAIT_STATES(BANK1, perfNew.flashWaitStates);
                     changedWaits = true;
                 }
 
                 /* now change clocks and dividers */
-                CS_setDCOCenteredFrequency(perfNew.DCORESEL);
-                CS_initClockSignal(CS_MCLK, perfNew.clockSource, perfNew.DIVM);
-                CS_initClockSignal(CS_HSMCLK, perfNew.clockSource,
+                MAP_CS_setDCOCenteredFrequency(perfNew.DCORESEL);
+                MAP_CS_initClockSignal(CS_MCLK, perfNew.clockSource,
+                    perfNew.DIVM);
+                MAP_CS_initClockSignal(CS_HSMCLK, perfNew.clockSource,
                     perfNew.DIVHS);
-                CS_initClockSignal(CS_SMCLK, perfNew.clockSource,
+                MAP_CS_initClockSignal(CS_SMCLK, perfNew.clockSource,
                     perfNew.DIVS);
 
                 /* if new flash waits not changed and different, set them now */
                 if ((changedWaits == false) &&
                     (perfNew.flashWaitStates != perfNow.flashWaitStates)) {
-                    MAP_FlashCtl_setWaitState(FLASH_BANK0,
-                        perfNew.flashWaitStates);
-                    MAP_FlashCtl_setWaitState(FLASH_BANK1,
-                        perfNew.flashWaitStates);
+                    SET_WAIT_STATES(BANK0, perfNew.flashWaitStates);
+                    SET_WAIT_STATES(BANK1, perfNew.flashWaitStates);
                 }
 
                 /* setup flash buffering */
                 if(perfNew.enableFlashBuffer) {
-                    MAP_FlashCtl_enableReadBuffering(FLASH_BANK0,
-                        FLASH_DATA_READ);
-                    MAP_FlashCtl_enableReadBuffering(FLASH_BANK0,
-                        FLASH_INSTRUCTION_FETCH);
-                    MAP_FlashCtl_enableReadBuffering(FLASH_BANK1,
-                        FLASH_DATA_READ);
-                    MAP_FlashCtl_enableReadBuffering(FLASH_BANK1,
-                        FLASH_INSTRUCTION_FETCH);
+                    ENABLE_READ_BUFFERING(BANK0, FLASH_D_READ);
+                    ENABLE_READ_BUFFERING(BANK0, FLASH_I_FETCH);
+                    ENABLE_READ_BUFFERING(BANK1, FLASH_D_READ);
+                    ENABLE_READ_BUFFERING(BANK1, FLASH_I_FETCH);
                 }
                 else {
-                    MAP_FlashCtl_disableReadBuffering(FLASH_BANK0,
-                        FLASH_DATA_READ);
-                    MAP_FlashCtl_disableReadBuffering(FLASH_BANK0,
-                        FLASH_INSTRUCTION_FETCH);
-                    MAP_FlashCtl_disableReadBuffering(FLASH_BANK1,
-                        FLASH_DATA_READ);
-                    MAP_FlashCtl_disableReadBuffering(FLASH_BANK1,
-                        FLASH_INSTRUCTION_FETCH);
+                    DISABLE_READ_BUFFERING(BANK0, FLASH_D_READ);
+                    DISABLE_READ_BUFFERING(BANK0, FLASH_I_FETCH);
+                    DISABLE_READ_BUFFERING(BANK1, FLASH_D_READ);
+                    DISABLE_READ_BUFFERING(BANK1, FLASH_I_FETCH);
                 }
 
                 /* if new state not changed and is different, change it now */
@@ -815,6 +968,9 @@ int_fast16_t Power_sleep(uint_fast16_t sleepState)
                 case PCM_AM_LF_VCORE1:
                     targetState = PCM_LPM0_LF_VCORE1;
                     break;
+                default:
+                    PowerMSP432_module.state = Power_ACTIVE;
+                    return (Power_EFAIL);
             }
         }
 
@@ -863,59 +1019,59 @@ int_fast16_t Power_sleep(uint_fast16_t sleepState)
             (sleepState == PowerMSP432_DEEPSLEEP_1)) &&
             (PowerMSP432_config.enableParking == true)) {
 
-            mask = PADIR;
-            mask |= PASEL0;
-            mask |= PASEL1;
-            currState = PAIN;
-            tempOut = mask & PAOUT;
-            PAOUT = tempOut | (~mask & currState);
-            savePAREN = PAREN;
-            PAREN = savePAREN | ~mask;
+            mask = PA->DIR;
+            mask |= PA->SEL0;
+            mask |= PA->SEL1;
+            currState = PA->IN;
+            tempOut = mask & PA->OUT;
+            PA->OUT = tempOut | (~mask & currState);
+            savePAREN = PA->REN;
+            PA->REN = savePAREN | ~mask;
 
-            mask = PBDIR;
-            mask |= PBSEL0;
-            mask |= PBSEL1;
-            currState = PBIN;
-            tempOut = mask & PBOUT;
-            PBOUT = tempOut | (~mask & currState);
-            savePBREN = PBREN;
-            PBREN = savePBREN | ~mask;
+            mask = PB->DIR;
+            mask |= PB->SEL0;
+            mask |= PB->SEL1;
+            currState = PB->IN;
+            tempOut = mask & PB->OUT;
+            PB->OUT = tempOut | (~mask & currState);
+            savePBREN = PB->REN;
+            PB->REN = savePBREN | ~mask;
 
-            mask = PCDIR;
-            mask |= PCSEL0;
-            mask |= PCSEL1;
-            currState = PCIN;
-            tempOut = mask & PCOUT;
-            PCOUT = tempOut | (~mask & currState);
-            savePCREN = PCREN;
-            PCREN = savePCREN | ~mask;
+            mask = PC->DIR;
+            mask |= PC->SEL0;
+            mask |= PC->SEL1;
+            currState = PC->IN;
+            tempOut = mask & PC->OUT;
+            PC->OUT = tempOut | (~mask & currState);
+            savePCREN = PC->REN;
+            PC->REN = savePCREN | ~mask;
 
-            mask = PDDIR;
-            mask |= PDSEL0;
-            mask |= PDSEL1;
-            currState = PDIN;
-            tempOut = mask & PDOUT;
-            PDOUT = tempOut | (~mask & currState);
-            savePDREN = PDREN;
-            PDREN = savePDREN | ~mask;
+            mask = PD->DIR;
+            mask |= PD->SEL0;
+            mask |= PD->SEL1;
+            currState = PD->IN;
+            tempOut = mask & PD->OUT;
+            PD->OUT = tempOut | (~mask & currState);
+            savePDREN = PD->REN;
+            PD->REN = savePDREN | ~mask;
 
-            mask = PEDIR;
-            mask |= PESEL0;
-            mask |= PESEL1;
-            currState = PEIN;
-            tempOut = mask & PEOUT;
-            PEOUT = tempOut | (~mask & currState);
-            savePEREN = PEREN;
-            PEREN = savePEREN | ~mask;
+            mask = PE->DIR;
+            mask |= PE->SEL0;
+            mask |= PE->SEL1;
+            currState = PE->IN;
+            tempOut = mask & PE->OUT;
+            PE->OUT = tempOut | (~mask & currState);
+            savePEREN = PE->REN;
+            PE->REN = savePEREN | ~mask;
 
-            mask = PJDIR;
-            mask |= PJSEL0;
-            mask |= PJSEL1;
-            currState = PJIN;
-            tempOut = mask & PJOUT;
-            PJOUT = tempOut | (~mask & currState);
-            savePJREN = PJREN;
-            PJREN = (savePJREN | ~mask) & 0xFF;
+            mask = PJ->DIR;
+            mask |= PJ->SEL0;
+            mask |= PJ->SEL1;
+            currState = PJ->IN;
+            tempOut = mask & PJ->OUT;
+            PJ->OUT = tempOut | (~mask & currState);
+            savePJREN = PJ->REN;
+            PJ->REN = (savePJREN | ~mask) & 0xFF;
         }
 
         /* sample HFXT enable status; if HFXT enabled, disable it now */
@@ -968,12 +1124,12 @@ int_fast16_t Power_sleep(uint_fast16_t sleepState)
         if (((sleepState == PowerMSP432_DEEPSLEEP_0) ||
             (sleepState == PowerMSP432_DEEPSLEEP_1)) &&
             (PowerMSP432_config.enableParking == true)) {
-            PAREN = savePAREN;
-            PBREN = savePBREN;
-            PCREN = savePCREN;
-            PDREN = savePDREN;
-            PEREN = savePEREN;
-            PJREN = savePJREN;
+            PA->REN = savePAREN;
+            PB->REN = savePBREN;
+            PC->REN = savePCREN;
+            PD->REN = savePDREN;
+            PE->REN = savePEREN;
+            PJ->REN = savePJREN;
         }
 
         /* if HFXT was disable during sleep restart it ... */
@@ -1105,13 +1261,13 @@ static bool initPerfControl(unsigned int initLevel)
         /*
          * since not sure of initial conditions, to be safe, first set a
          * DCO frequency compatible with VCORE0, and requiring no wait
-         * states (e.g. 12 MHz), and select this as the source for MCLK,
+         * states (e.g. 6 MHz), and select this as the source for MCLK,
          * HSMCLK and SMCLK
          */
-        CS_setDCOCenteredFrequency(CS_DCO_FREQUENCY_12);
-        CS_initClockSignal(CS_MCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
-        CS_initClockSignal(CS_HSMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_4);
-        CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_4);
+        MAP_CS_setDCOCenteredFrequency(CS_DCO_FREQUENCY_6);
+        MAP_CS_initClockSignal(CS_MCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_1);
+        MAP_CS_initClockSignal(CS_HSMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_2);
+        MAP_CS_initClockSignal(CS_SMCLK, CS_DCOCLK_SELECT, CS_CLOCK_DIVIDER_2);
 
         /* get perf level struct from either predefined or custom array */
         if (initLevel < NUMPERFLEVELS) {
@@ -1128,32 +1284,29 @@ static bool initPerfControl(unsigned int initLevel)
         if (changedStateOK) {
 
             /* setup flash wait states */
-            MAP_FlashCtl_setWaitState(FLASH_BANK0, perfNew.flashWaitStates);
-            MAP_FlashCtl_setWaitState(FLASH_BANK1, perfNew.flashWaitStates);
+            SET_WAIT_STATES(BANK0, perfNew.flashWaitStates);
+            SET_WAIT_STATES(BANK1, perfNew.flashWaitStates);
 
             /* setup flash buffering */
             if(perfNew.enableFlashBuffer) {
-                MAP_FlashCtl_enableReadBuffering(FLASH_BANK0, FLASH_DATA_READ);
-                MAP_FlashCtl_enableReadBuffering(FLASH_BANK0,
-                    FLASH_INSTRUCTION_FETCH);
-                MAP_FlashCtl_enableReadBuffering(FLASH_BANK1, FLASH_DATA_READ);
-                MAP_FlashCtl_enableReadBuffering(FLASH_BANK1,
-                    FLASH_INSTRUCTION_FETCH);
+                ENABLE_READ_BUFFERING(BANK0, FLASH_D_READ);
+                ENABLE_READ_BUFFERING(BANK0, FLASH_I_FETCH);
+                ENABLE_READ_BUFFERING(BANK1, FLASH_D_READ);
+                ENABLE_READ_BUFFERING(BANK1, FLASH_I_FETCH);
             }
             else {
-                MAP_FlashCtl_disableReadBuffering(FLASH_BANK0, FLASH_DATA_READ);
-                MAP_FlashCtl_disableReadBuffering(FLASH_BANK0,
-                    FLASH_INSTRUCTION_FETCH);
-                MAP_FlashCtl_disableReadBuffering(FLASH_BANK1, FLASH_DATA_READ);
-                MAP_FlashCtl_disableReadBuffering(FLASH_BANK1,
-                    FLASH_INSTRUCTION_FETCH);
+                DISABLE_READ_BUFFERING(BANK0, FLASH_D_READ);
+                DISABLE_READ_BUFFERING(BANK0, FLASH_I_FETCH);
+                DISABLE_READ_BUFFERING(BANK1, FLASH_D_READ);
+                DISABLE_READ_BUFFERING(BANK1, FLASH_I_FETCH);
             }
 
             /* now setup clocks */
-            CS_setDCOCenteredFrequency(perfNew.DCORESEL);
-            CS_initClockSignal(CS_MCLK, perfNew.clockSource, perfNew.DIVM);
-            CS_initClockSignal(CS_HSMCLK, perfNew.clockSource, perfNew.DIVHS);
-            CS_initClockSignal(CS_SMCLK, perfNew.clockSource, perfNew.DIVS);
+            MAP_CS_setDCOCenteredFrequency(perfNew.DCORESEL);
+            MAP_CS_initClockSignal(CS_MCLK, perfNew.clockSource, perfNew.DIVM);
+            MAP_CS_initClockSignal(CS_HSMCLK, perfNew.clockSource,
+                perfNew.DIVHS);
+            MAP_CS_initClockSignal(CS_SMCLK, perfNew.clockSource, perfNew.DIVS);
 
             /* do callout to update frequencies */
             freqs.MCLK = perfNew.MCLK;
@@ -1228,10 +1381,10 @@ static void restartHFXT(void)
     CSKEY = 0x695A;
 
     /* read and save the SYS_NMI_CTLSTAT:CS_SRC value */
-    enableNMI = SysCtl_getNMISourceStatus() & SYSCTL_CS_SRC;
+    enableNMI = GET_NMI_SOURCESTATUS & CSSRC;
 
     /* temporarily disable CS interrupts from triggering an NMI */
-    SysCtl_disableNMISource(SYSCTL_CS_SRC);
+    DISABLE_NMI_SOURCE(CSSRC);
 
     /* enable HFXT, wait for stabilization */
     BITBAND_PERI(CS->CTL2, CS_CTL2_HFXT_EN_OFS) = 1;
@@ -1244,7 +1397,7 @@ static void restartHFXT(void)
     CSKEY = 0;
 
     /* restore SYS_NMI_CTLSTAT enable bit */
-    SysCtl_enableNMISource(enableNMI);
+    ENABLE_NMI_SOURCE(enableNMI);
 
     return;
 }

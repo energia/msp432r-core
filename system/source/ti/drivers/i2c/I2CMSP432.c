@@ -44,6 +44,8 @@
 #define DebugP_LOG_ENABLED 0
 #endif
 
+#include <ti/devices/DeviceFamily.h>
+
 #include <ti/drivers/I2C.h>
 #include <ti/drivers/i2c/I2CMSP432.h>
 #include <ti/drivers/dpl/DebugP.h>
@@ -140,16 +142,34 @@ static void completeTransfer(I2C_Handle handle)
     if (object->headPtr == object->tailPtr) {
         /* No other transactions need to occur */
         object->currentTransaction = NULL;
+
+        /*
+         *  Set headPtr to NULL, but leave tailPtr non-NULL.  This will
+         *  prevent multiple releasing of Power constraints if a
+         *  spurious I2C interrupt occurs.
+         */
         object->headPtr = NULL;
 
         /* Remove constraints set during transfer */
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
         Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
         Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
 
         DebugP_log1("I2C:(%p) ISR No other I2C transaction in queue",
             hwAttrs->baseAddr);
     }
     else {
+        if (object->headPtr == NULL) {
+            /*
+             *  An I2C interrupt occurred (e.g., I2C error interrupt
+             *  or some other unprocessed interrupt) just after a call to
+             *  completeTransfer() completed the last transaction and
+             *  set headPtr to NULL.
+             */
+            return;
+        }
+
         /* This should never happen if you are in blocking mode */
         DebugP_assert(object->transferMode == I2C_MODE_CALLBACK);
 
@@ -317,7 +337,9 @@ void I2CMSP432_cancel(I2C_Handle handle)
     object->mode = I2CMSP432_IDLE_MODE;
 
     /* remove Power constraints set for I2C_transfer() */
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
     Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
     Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
 
     /* re-initialize the I2C peripheral */
@@ -358,8 +380,6 @@ void I2CMSP432_close(I2C_Handle handle)
     }
 
     /* Remove power constraints */
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
     for (i = 0; object->perfConstraintMask; i++) {
         if (object->perfConstraintMask & 0x01) {
             Power_releaseConstraint(PowerMSP432_DISALLOW_PERFLEVEL_0 + i);
@@ -694,10 +714,6 @@ I2C_Handle I2CMSP432_open(I2C_Handle handle, I2C_Params *params)
         }
     }
 
-    /* Shutdown not supported while driver is open */
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
-
     /* Register function to reconfigure peripheral on perf level changes */
     Power_registerNotify(&object->perfChangeNotify,
         PowerMSP432_START_CHANGE_PERF_LEVEL |PowerMSP432_DONE_CHANGE_PERF_LEVEL,
@@ -814,7 +830,9 @@ bool I2CMSP432_transfer(I2C_Handle handle, I2C_Transaction *transaction)
      * Set power constraints to keep peripheral active during transfer
      * and to prevent a performance level change
      */
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
     Power_setConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
     Power_setConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
 
     /*

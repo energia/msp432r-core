@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 import java.util.*;
 import org.mozilla.javascript.*;
@@ -11,7 +11,7 @@ import xdc.services.spec.Session;
 
 public class ti_sysbios_rts_gnu
 {
-    static final String VERS = "@(#) xdc-D05\n";
+    static final String VERS = "@(#) xdc-D20\n";
 
     static final Proto.Elm $$T_Bool = Proto.Elm.newBool();
     static final Proto.Elm $$T_Num = Proto.Elm.newNum();
@@ -102,6 +102,7 @@ public class ti_sysbios_rts_gnu
     {
         // module ReentSupport
         om.bind("ti.sysbios.rts.gnu.ReentSupport.getReent", new Extern("ti_sysbios_rts_gnu_ReentSupport_getReent__I", "xdc_Ptr(*)(xdc_Void)", true, false));
+        om.bind("ti.sysbios.rts.gnu.ReentSupport.initGlobalReent", new Extern("ti_sysbios_rts_gnu_ReentSupport_initGlobalReent__I", "xdc_Void(*)(xdc_Void)", true, false));
         om.bind("ti.sysbios.rts.gnu.ReentSupport.taskCreateHook", new Extern("ti_sysbios_rts_gnu_ReentSupport_taskCreateHook__I", "xdc_Void(*)(ti_sysbios_knl_Task_Handle,xdc_runtime_Error_Block*)", true, false));
         om.bind("ti.sysbios.rts.gnu.ReentSupport.taskDeleteHook", new Extern("ti_sysbios_rts_gnu_ReentSupport_taskDeleteHook__I", "xdc_Void(*)(ti_sysbios_knl_Task_Handle)", true, false));
         om.bind("ti.sysbios.rts.gnu.ReentSupport.taskRegHook", new Extern("ti_sysbios_rts_gnu_ReentSupport_taskRegHook__I", "xdc_Void(*)(xdc_Int)", true, false));
@@ -379,6 +380,7 @@ public class ti_sysbios_rts_gnu
             vo.bind("$$meta_iobj", 1);
         }//isCFG
         vo.bind("getReent", om.findStrict("ti.sysbios.rts.gnu.ReentSupport.getReent", "ti.sysbios.rts.gnu"));
+        vo.bind("initGlobalReent", om.findStrict("ti.sysbios.rts.gnu.ReentSupport.initGlobalReent", "ti.sysbios.rts.gnu"));
         vo.bind("taskCreateHook", om.findStrict("ti.sysbios.rts.gnu.ReentSupport.taskCreateHook", "ti.sysbios.rts.gnu"));
         vo.bind("taskDeleteHook", om.findStrict("ti.sysbios.rts.gnu.ReentSupport.taskDeleteHook", "ti.sysbios.rts.gnu"));
         vo.bind("taskRegHook", om.findStrict("ti.sysbios.rts.gnu.ReentSupport.taskRegHook", "ti.sysbios.rts.gnu"));

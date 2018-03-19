@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,13 +44,19 @@
  *  Refer to @ref SPI.h for a complete description of APIs & example of use.
  *
  *  This SPI driver implementation is designed to operate on a EUCSI controller
- *  in SPI mode.
+ *  in SPI mode using a micro DMA controller.
+ *
+ *  ## Frame Formats #
+ *  This SPI controller supports 4 phase & polarity formats. Refer to the device
+ *  specific data sheets & technical reference manuals for specifics on each
+ *  format.
  *
  *  ## SPI Chip Select #
  *
- *  The SPIMSP432DMA operates the controller in 3-pin mode; therefore it is not
- *  safe to use in a multi-master SPI bus environment. It is the application's
- *  responsibility to assert and de-assert a GPIO pin for chip select purposes.
+ *  The SPI driver can be used in 3-pin or 4-pin mode.  When in 4-pin mode the
+ *  hardware manages a pin as the chip select.  In 3-pin mode it is the
+ *  application's responsibility to assert and de-assert a GPIO pin for chip
+ *  select purposes.
  *
  *  <table>
  *  <tr>
@@ -60,7 +66,8 @@
  *  </tr>
  *  <tr>
  *  <td>Hardware chip select</td>
- *  <td>Not available on this peripheral.</td>
+ *  <td>No action is needed by the application to select the peripheral.</td>
+ *  <td>See the device documentation on it's chip select requirements.</td>
  *  </tr>
  *  <tr>
  *  <td>Software chip select</td>
@@ -70,21 +77,6 @@
  *  </tr>
  *  </table>
  *
- *  ## DMA Interrupts #
- *  The MSP432 DMA controller has 4 interrupt vectors to handle all DMA
- *  related IRQ. Due to the "shared" nature of the DMA interrupts, this driver
- *  implementation requires each SPI instance to explicitly use a single DMA
- *  interrupt.  It is up to the application to ensure no two peripherals are
- *  configured to respond to a given DMA interrupt at any moment.
- *
- *  ## Scratch Buffers #
- *  A uint32_t scratch buffer is used to allow SPI_transfers where txBuf or
- *  rxBuf are NULL. Rather than requiring txBuf or rxBuf to have a dummy buffer
- *  of size of the transfer count, a single DMA accessible uint32_t scratch
- *  buffer is used. When txBuf is NULL, an internal scratch buffer is
- *  initialized to the defaultTxBufValue so the DMA will send some known value.
- *  Each SPI driver instance should uses its own scratch buffer.
- *
  *  ## SPI data frames #
  *
  *  The EUSCI controller only supports 8-bit data frames.
@@ -93,16 +85,46 @@
  *  --------  | ------------------- |
  *  8 bits    | uint8_t             |
  *
- *  ## DMA transfer size limit #
+ *  ## DMA operation #
+ *  DMA use in this driver varies based on the SPI_TransferMode set when the
+ *  driver instance was opened.  If the driver was opened in SPI_MODE_CALLBACK,
+ *  all transfers make use of the DMA regardless of the amount of data.
  *
- *  The DMA contoller only supports data transfers of upto 1024
- *  data frames.  Each SPI driver instance requires 2 DMA channels (Tx and Rx)
+ *  If the driver was opened in SPI_MODE_BLOCKING, it verifies the amount of
+ *  data frames to be transfered exceeds the minDmaTransferSize before
+ *  performing a transfer using the DMA.  minDmaTransferSize (in the
+ *  SPIMSP432DMA_HWAttrs) allows users to set a minimum amount of data frames
+ *  a transfer must have to perform a transfer using the DMA.  If the amount of
+ *  data is less than minDmaTransferSize, the driver performs a polling
+ *  transfer.  This feature is provided for situations where there is little
+ *  data to be transfered & it is more efficient to simply perform a polling
+ *  transfer instead of configuring the DMA & waiting until the task is
+ *  unblocked.
+ *
+ *  ## DMA Interrupts #
+ *  The MSP432 DMA controller has 4 interrupt vectors to handle all DMA
+ *  related IRQ. Due to the "shared" nature of the DMA interrupts, this driver
+ *  implementation requires each SPI instance to explicitly use a single DMA
+ *  interrupt.  It is up to the application to ensure no two peripherals are
+ *  configured to respond to a given DMA interrupt at any moment.
+ *
+ *  ## DMA transfer size limit #
+ *  The DMA controller only supports data transfers of up to 1024
+ *  data frames, so large amounts of data will be split & transfered
+ *  accordingly.  Each SPI driver instance requires 2 DMA channels (Tx and Rx)
  *  to operate.
  *
  *  ## DMA accessible memory #
  *
  *  Ensure that the txBuf and rxBuf (in ::SPI_Transaction) point to memory that
  *  is accessible by the DMA.
+ *
+ *  ## Scratch Buffers #
+ *  A uint8_t scratch buffer is used to allow SPI_transfers where txBuf or
+ *  rxBuf are NULL. Rather than requiring txBuf or rxBuf to have a dummy buffer
+ *  of size of the transfer count, a single DMA accessible uint8_t scratch
+ *  buffer is used. When txBuf is NULL, an internal scratch buffer is
+ *  initialized to the defaultTxBufValue so the DMA will send some known value.
  *
  *  ============================================================================
  */
@@ -116,12 +138,13 @@ extern "C" {
 
 #include <stdint.h>
 
+#include <ti/devices/DeviceFamily.h>
+
 #include <ti/drivers/dpl/HwiP.h>
 #include <ti/drivers/dpl/SemaphoreP.h>
 #include <ti/drivers/Power.h>
 #include <ti/drivers/SPI.h>
 #include <ti/drivers/dma/UDMAMSP432.h>
-
 
 /*
  *  SPI port/pin defines for pin configuration.  Ports P2, P3, and P7 are
@@ -756,9 +779,8 @@ extern const SPI_FxnTable SPIMSP432DMA_fxnTable;
  *          .simoPin = SPIMSP432DMA_P1_6_UCB0SIMO,
  *          .somiPin = SPIMSP432DMA_P1_7_UCB0SOMI,
  *          .stePin  = SPIMSP432DMA_P1_4_UCB0STE,
- *          .pinMode  = EUSCI_SPI_3PIN
-
-
+ *          .pinMode  = EUSCI_SPI_3PIN,
+ *          .minDmaTransferSize = 10
  *      },
  *      {
  *          .baseAddr = EUSCI_B2_BASE,
@@ -775,8 +797,8 @@ extern const SPI_FxnTable SPIMSP432DMA_fxnTable;
  *          .simoPin = SPIMSP432DMA_P3_6_UCB2SIMO,
  *          .somiPin = SPIMSP432DMA_P3_7_UCB2SOMI,
  *          .stePin  = SPIMSP432DMA_P3_4_UCB2STE,
- *          .pinMode  = EUSCI_SPI_3PIN
-
+ *          .pinMode  = EUSCI_SPI_3PIN,
+ *          .minDmaTransferSize = 10
  *      }
  *  };
  *  @endcode
@@ -793,13 +815,13 @@ typedef struct SPIMSP432DMA_HWAttrsV1 {
     uint32_t rxDMAChannelIndex;  /*!< DMA rxDMAChannel for Rx data */
     uint32_t txDMAChannelIndex;  /*!< DMA txDMAChannel for Tx data */
 
-    uint16_t   simoPin;          /*!< Port/pin for SIMO (MOSI) */
-    uint16_t   somiPin;          /*!< Port/pin for SOMI (MISO) */
-    uint16_t   clkPin;           /*!< Port/pin for SPI CLK */
-    uint16_t   stePin;             /*!< Port/pin for STE */
-
+    uint16_t simoPin;            /*!< Port/pin for SIMO (MOSI) */
+    uint16_t somiPin;            /*!< Port/pin for SOMI (MISO) */
+    uint16_t clkPin;             /*!< Port/pin for SPI CLK */
+    uint16_t stePin;             /*!< Port/pin for STE */
     uint16_t pinMode;            /*!< 3-pin or 4-pin mode */
 
+    uint16_t minDmaTransferSize; /*!< Minimum amount of data for DMA transfer */
 } SPIMSP432DMA_HWAttrsV1;
 
 /*!
@@ -808,25 +830,27 @@ typedef struct SPIMSP432DMA_HWAttrsV1 {
  *  The application must not access any member variables of this structure!
  */
 typedef struct SPIMSP432DMA_Object {
-    SemaphoreP_Handle transferComplete;    /* Notify finished SPI transfer */
-    HwiP_Handle       hwiHandle;
+    HwiP_Handle        hwiHandle;
+    Power_NotifyObj    perfChangeNotify;
+    SemaphoreP_Handle  transferComplete;
+    SPI_CallbackFxn    transferCallbackFxn;
+    SPI_Transaction   *transaction;
+    UDMAMSP432_Handle  dmaHandle;
 
-    SPI_CallbackFxn   transferCallbackFxn; /* Callback fxn in CALLBACK mode */
-    SPI_Transaction  *transaction;         /* Ptr to the current transaction*/
+    size_t             amtDataXferred;
+    size_t             currentXferAmt;
+    uint32_t           bitRate;
+    uint32_t           perfConstraintMask;
+    uint32_t           transferTimeout;
+    uint16_t           clockPolarity;
+    uint16_t           clockPhase;
 
-    SPI_TransferMode  transferMode;        /* SPI transfer mode */
-    SPI_Mode          spiMode;             /* Master or Slave mode */
-    uint8_t           scratchBuffer;       /* Scratch buffer */
+    SPI_Mode           spiMode;
+    SPI_TransferMode   transferMode;
 
-    bool              isOpen;
-
-    uint32_t          bitRate;             /* SPI bit rate in Hz */
-    uint16_t          clockPhase;
-    uint16_t          clockPolarity;
-
-    Power_NotifyObj   perfChangeNotify;
-    uint32_t          perfConstraintMask;
-    UDMAMSP432_Handle dmaHandle;
+    bool               cancelInProgress;
+    bool               isOpen;
+    uint8_t            scratchBuffer;
 } SPIMSP432DMA_Object, *SPIMSP432DMA_Handle;
 
 #ifdef __cplusplus

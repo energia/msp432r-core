@@ -49,11 +49,13 @@ var customGnuArmM4FOpts = " ";
 var customGnuArmA9Opts = " ";
 var customGnuArmA8Opts = " ";
 var customGnuArmA15Opts = " ";
+var customGnuArmA53Opts = " ";
 var customIarArmOpts = " --silent ";
 
 var ccOptsList = {
     "ti.targets.C28_large"                      : custom28xOpts,
     "ti.targets.C28_float"                      : custom28xOpts,
+    "ti.targets.elf.C28_float"                  : custom28xOpts,
     "ti.targets.msp430.elf.MSP430"              : custom430xOpts,
     "ti.targets.msp430.elf.MSP430X"             : custom430xOpts,
     "ti.targets.msp430.elf.MSP430X_small"       : custom430xOpts,
@@ -73,6 +75,7 @@ var ccOptsList = {
     "ti.targets.arm.elf.M4"                     : customArmOpts,
     "ti.targets.arm.elf.M4F"                    : customArmOpts,
     "ti.targets.arm.elf.R4F"                    : customArmOpts,
+    "ti.targets.arm.elf.R4Ft"                   : customArmOpts,
     "ti.targets.arm.elf.R5F"                    : customArmOpts,
     "ti.targets.arm.elf.R5F_big_endian"         : customArmOpts,
     "gnu.targets.arm.M3"                        : customGnuArmM3Opts,
@@ -81,6 +84,7 @@ var ccOptsList = {
     "gnu.targets.arm.A8F"                       : customGnuArmA8Opts,
     "gnu.targets.arm.A9F"                       : customGnuArmA9Opts,
     "gnu.targets.arm.A15F"                      : customGnuArmA15Opts,
+    "gnu.targets.arm.A53F"                      : customGnuArmA53Opts,
     "iar.targets.arm.M3"                        : customIarArmOpts,
     "iar.targets.arm.M4"                        : customIarArmOpts,
     "iar.targets.arm.M4F"                       : customIarArmOpts,
@@ -269,6 +273,7 @@ var biosPackages = [
     "ti.sysbios.family.arm.a15.smp",
     "ti.sysbios.family.arm.a15.tci66xx",
     "ti.sysbios.family.arm.gic",
+    "ti.sysbios.family.arm.gicv3",
     "ti.sysbios.family.arm.systimer",
     "ti.sysbios.family.arm.arm9",
     "ti.sysbios.family.arm.cc26xx",
@@ -286,12 +291,16 @@ var biosPackages = [
     "ti.sysbios.family.arm.m3",
     "ti.sysbios.family.arm.msp432",
     "ti.sysbios.family.arm.msp432.init",
+    "ti.sysbios.family.arm.msp432e4.init",
+    "ti.sysbios.family.arm.pl192",
     "ti.sysbios.family.arm.v7r",
+    "ti.sysbios.family.arm.v7r.keystone3",
     "ti.sysbios.family.arm.v7r.tms570",
     "ti.sysbios.family.arm.v7r.vim",
     "ti.sysbios.family.arm.tms570",
     "ti.sysbios.family.arm.v7a",
     "ti.sysbios.family.arm.v7a.smp",
+    "ti.sysbios.family.arm.v8a",
     "ti.sysbios.family.c28",
     "ti.sysbios.family.c28.f28m35x",
     "ti.sysbios.family.c28.f2837x",
@@ -307,8 +316,10 @@ var biosPackages = [
     "ti.sysbios.family.c66.vayu",
     "ti.sysbios.family.c67p",
     "ti.sysbios.family.c674",
+    "ti.sysbios.family.c7x",
     "ti.sysbios.family.msp430",
     "ti.sysbios.family.arp32",
+    "ti.sysbios.family.shared.keystone3",
     "ti.sysbios.family.shared.vayu",
     "ti.sysbios.gates",
     "ti.sysbios.hal",
@@ -362,8 +373,12 @@ function getDefaultCustomCCOpts()
         else {
             customCCOpts += " -O3 ";
         }
-        customCCOpts += " -I" + Program.build.target.targetPkgPath +
-            "/libs/install-native/$(GCCTARG)/include ";
+        if (!Program.build.target.$name.match(/A53F/)) {
+            customCCOpts += " -I" + Program.build.target.targetPkgPath +
+                "/libs/install-native/$(GCCTARG)/include/newlib-nano " +
+                " -I" + Program.build.target.targetPkgPath +
+                "/libs/install-native/$(GCCTARG)/include ";
+        }
         customCCOpts = Program.build.target.ccOpts.prefix + " " + customCCOpts;
         customCCOpts += Program.build.target.ccOpts.suffix + " ";
 
@@ -1097,6 +1112,7 @@ function buildLibs(objList, relList, filter, xdcArgs, incs)
                 }
 
                 if ((targ.$name == "ti.targets.arm.elf.R4F") ||
+                    (targ.$name == "ti.targets.arm.elf.R4Ft") ||
                     (targ.$name == "ti.targets.arm.elf.R5F")) {
                     ccopts += " -Dti_sysbios_hal_Core_numCores__D=1 " +
                         "-Dti_sysbios_family_arm_v7r_vim_Hwi_lockstepDevice__D=FALSE";

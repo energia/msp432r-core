@@ -2,19 +2,19 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     VIRTUAL FUNCTIONS
  *     FUNCTION STUBS
  *     FUNCTION SELECTORS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -71,13 +71,13 @@ typedef xdc_Void (*ti_sysbios_interfaces_ITaskSupport_FuncPtr)(void);
 struct ti_sysbios_interfaces_ITaskSupport_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_Ptr (*start)(xdc_Ptr, ti_sysbios_interfaces_ITaskSupport_FuncPtr, ti_sysbios_interfaces_ITaskSupport_FuncPtr, xdc_runtime_Error_Block*);
-    xdc_Void (*swap)(xdc_Ptr*, xdc_Ptr*);
-    xdc_Bool (*checkStack)(xdc_Char*, xdc_SizeT);
-    xdc_SizeT (*stackUsed)(xdc_Char*, xdc_SizeT);
+    xdc_Ptr (*start)(xdc_Ptr curTask, ti_sysbios_interfaces_ITaskSupport_FuncPtr enter, ti_sysbios_interfaces_ITaskSupport_FuncPtr exit, xdc_runtime_Error_Block* eb);
+    xdc_Void (*swap)(xdc_Ptr* oldtskContext, xdc_Ptr* newtskContext);
+    xdc_Bool (*checkStack)(xdc_Char* stack, xdc_SizeT size);
+    xdc_SizeT (*stackUsed)(xdc_Char* stack, xdc_SizeT size);
     xdc_UInt (*getStackAlignment)(void);
     xdc_SizeT (*getDefaultStackSize)(void);
-    xdc_Ptr (*getCheckValueAddr)(xdc_Ptr);
+    xdc_Ptr (*getCheckValueAddr)(xdc_Ptr curTask);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_interfaces_ITaskSupport_Module__BASE__CR
@@ -94,48 +94,56 @@ __extern const xdc_runtime_Types_Base ti_sysbios_interfaces_ITaskSupport_Interfa
  */
 
 /* Module_id */
-static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ITaskSupport_Module_id( ti_sysbios_interfaces_ITaskSupport_Module mod )
+static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ITaskSupport_Module_id(ti_sysbios_interfaces_ITaskSupport_Module mod);
+static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ITaskSupport_Module_id(ti_sysbios_interfaces_ITaskSupport_Module mod)
 {
     return mod->__sysp->__mid;
 }
 
 /* start */
+static inline xdc_Ptr ti_sysbios_interfaces_ITaskSupport_start(ti_sysbios_interfaces_ITaskSupport_Module __mod, xdc_Ptr curTask, ti_sysbios_interfaces_ITaskSupport_FuncPtr enter, ti_sysbios_interfaces_ITaskSupport_FuncPtr exit, xdc_runtime_Error_Block *eb);
 static inline xdc_Ptr ti_sysbios_interfaces_ITaskSupport_start( ti_sysbios_interfaces_ITaskSupport_Module __mod, xdc_Ptr curTask, ti_sysbios_interfaces_ITaskSupport_FuncPtr enter, ti_sysbios_interfaces_ITaskSupport_FuncPtr exit, xdc_runtime_Error_Block *eb )
 {
     return __mod->start(curTask, enter, exit, eb);
 }
 
 /* swap */
+static inline xdc_Void ti_sysbios_interfaces_ITaskSupport_swap(ti_sysbios_interfaces_ITaskSupport_Module __mod, xdc_Ptr *oldtskContext, xdc_Ptr *newtskContext);
 static inline xdc_Void ti_sysbios_interfaces_ITaskSupport_swap( ti_sysbios_interfaces_ITaskSupport_Module __mod, xdc_Ptr *oldtskContext, xdc_Ptr *newtskContext )
 {
     __mod->swap(oldtskContext, newtskContext);
 }
 
 /* checkStack */
+static inline xdc_Bool ti_sysbios_interfaces_ITaskSupport_checkStack(ti_sysbios_interfaces_ITaskSupport_Module __mod, xdc_Char *stack, xdc_SizeT size);
 static inline xdc_Bool ti_sysbios_interfaces_ITaskSupport_checkStack( ti_sysbios_interfaces_ITaskSupport_Module __mod, xdc_Char *stack, xdc_SizeT size )
 {
     return __mod->checkStack(stack, size);
 }
 
 /* stackUsed */
+static inline xdc_SizeT ti_sysbios_interfaces_ITaskSupport_stackUsed(ti_sysbios_interfaces_ITaskSupport_Module __mod, xdc_Char *stack, xdc_SizeT size);
 static inline xdc_SizeT ti_sysbios_interfaces_ITaskSupport_stackUsed( ti_sysbios_interfaces_ITaskSupport_Module __mod, xdc_Char *stack, xdc_SizeT size )
 {
     return __mod->stackUsed(stack, size);
 }
 
 /* getStackAlignment */
+static inline xdc_UInt ti_sysbios_interfaces_ITaskSupport_getStackAlignment(ti_sysbios_interfaces_ITaskSupport_Module __mod);
 static inline xdc_UInt ti_sysbios_interfaces_ITaskSupport_getStackAlignment( ti_sysbios_interfaces_ITaskSupport_Module __mod )
 {
     return __mod->getStackAlignment();
 }
 
 /* getDefaultStackSize */
+static inline xdc_SizeT ti_sysbios_interfaces_ITaskSupport_getDefaultStackSize(ti_sysbios_interfaces_ITaskSupport_Module __mod);
 static inline xdc_SizeT ti_sysbios_interfaces_ITaskSupport_getDefaultStackSize( ti_sysbios_interfaces_ITaskSupport_Module __mod )
 {
     return __mod->getDefaultStackSize();
 }
 
 /* getCheckValueAddr */
+static inline xdc_Ptr ti_sysbios_interfaces_ITaskSupport_getCheckValueAddr(ti_sysbios_interfaces_ITaskSupport_Module __mod, xdc_Ptr curTask);
 static inline xdc_Ptr ti_sysbios_interfaces_ITaskSupport_getCheckValueAddr( ti_sysbios_interfaces_ITaskSupport_Module __mod, xdc_Ptr curTask )
 {
     return __mod->getCheckValueAddr(curTask);
@@ -154,50 +162,57 @@ static inline xdc_Ptr ti_sysbios_interfaces_ITaskSupport_getCheckValueAddr( ti_s
  */
 
 /* start_{FxnT,fxnP} */
-typedef xdc_Ptr (*ti_sysbios_interfaces_ITaskSupport_start_FxnT)(xdc_Ptr, ti_sysbios_interfaces_ITaskSupport_FuncPtr, ti_sysbios_interfaces_ITaskSupport_FuncPtr, xdc_runtime_Error_Block*);
-static inline ti_sysbios_interfaces_ITaskSupport_start_FxnT ti_sysbios_interfaces_ITaskSupport_start_fxnP( ti_sysbios_interfaces_ITaskSupport_Module __mod )
+typedef xdc_Ptr (*ti_sysbios_interfaces_ITaskSupport_start_FxnT)(xdc_Ptr curTask, ti_sysbios_interfaces_ITaskSupport_FuncPtr enter, ti_sysbios_interfaces_ITaskSupport_FuncPtr exit, xdc_runtime_Error_Block* eb);
+static inline ti_sysbios_interfaces_ITaskSupport_start_FxnT ti_sysbios_interfaces_ITaskSupport_start_fxnP(ti_sysbios_interfaces_ITaskSupport_Module __mod);
+static inline ti_sysbios_interfaces_ITaskSupport_start_FxnT ti_sysbios_interfaces_ITaskSupport_start_fxnP(ti_sysbios_interfaces_ITaskSupport_Module __mod)
 {
     return (ti_sysbios_interfaces_ITaskSupport_start_FxnT)__mod->start;
 }
 
 /* swap_{FxnT,fxnP} */
-typedef xdc_Void (*ti_sysbios_interfaces_ITaskSupport_swap_FxnT)(xdc_Ptr*, xdc_Ptr*);
-static inline ti_sysbios_interfaces_ITaskSupport_swap_FxnT ti_sysbios_interfaces_ITaskSupport_swap_fxnP( ti_sysbios_interfaces_ITaskSupport_Module __mod )
+typedef xdc_Void (*ti_sysbios_interfaces_ITaskSupport_swap_FxnT)(xdc_Ptr* oldtskContext, xdc_Ptr* newtskContext);
+static inline ti_sysbios_interfaces_ITaskSupport_swap_FxnT ti_sysbios_interfaces_ITaskSupport_swap_fxnP(ti_sysbios_interfaces_ITaskSupport_Module __mod);
+static inline ti_sysbios_interfaces_ITaskSupport_swap_FxnT ti_sysbios_interfaces_ITaskSupport_swap_fxnP(ti_sysbios_interfaces_ITaskSupport_Module __mod)
 {
     return (ti_sysbios_interfaces_ITaskSupport_swap_FxnT)__mod->swap;
 }
 
 /* checkStack_{FxnT,fxnP} */
-typedef xdc_Bool (*ti_sysbios_interfaces_ITaskSupport_checkStack_FxnT)(xdc_Char*, xdc_SizeT);
-static inline ti_sysbios_interfaces_ITaskSupport_checkStack_FxnT ti_sysbios_interfaces_ITaskSupport_checkStack_fxnP( ti_sysbios_interfaces_ITaskSupport_Module __mod )
+typedef xdc_Bool (*ti_sysbios_interfaces_ITaskSupport_checkStack_FxnT)(xdc_Char* stack, xdc_SizeT size);
+static inline ti_sysbios_interfaces_ITaskSupport_checkStack_FxnT ti_sysbios_interfaces_ITaskSupport_checkStack_fxnP(ti_sysbios_interfaces_ITaskSupport_Module __mod);
+static inline ti_sysbios_interfaces_ITaskSupport_checkStack_FxnT ti_sysbios_interfaces_ITaskSupport_checkStack_fxnP(ti_sysbios_interfaces_ITaskSupport_Module __mod)
 {
     return (ti_sysbios_interfaces_ITaskSupport_checkStack_FxnT)__mod->checkStack;
 }
 
 /* stackUsed_{FxnT,fxnP} */
-typedef xdc_SizeT (*ti_sysbios_interfaces_ITaskSupport_stackUsed_FxnT)(xdc_Char*, xdc_SizeT);
-static inline ti_sysbios_interfaces_ITaskSupport_stackUsed_FxnT ti_sysbios_interfaces_ITaskSupport_stackUsed_fxnP( ti_sysbios_interfaces_ITaskSupport_Module __mod )
+typedef xdc_SizeT (*ti_sysbios_interfaces_ITaskSupport_stackUsed_FxnT)(xdc_Char* stack, xdc_SizeT size);
+static inline ti_sysbios_interfaces_ITaskSupport_stackUsed_FxnT ti_sysbios_interfaces_ITaskSupport_stackUsed_fxnP(ti_sysbios_interfaces_ITaskSupport_Module __mod);
+static inline ti_sysbios_interfaces_ITaskSupport_stackUsed_FxnT ti_sysbios_interfaces_ITaskSupport_stackUsed_fxnP(ti_sysbios_interfaces_ITaskSupport_Module __mod)
 {
     return (ti_sysbios_interfaces_ITaskSupport_stackUsed_FxnT)__mod->stackUsed;
 }
 
 /* getStackAlignment_{FxnT,fxnP} */
 typedef xdc_UInt (*ti_sysbios_interfaces_ITaskSupport_getStackAlignment_FxnT)(void);
-static inline ti_sysbios_interfaces_ITaskSupport_getStackAlignment_FxnT ti_sysbios_interfaces_ITaskSupport_getStackAlignment_fxnP( ti_sysbios_interfaces_ITaskSupport_Module __mod )
+static inline ti_sysbios_interfaces_ITaskSupport_getStackAlignment_FxnT ti_sysbios_interfaces_ITaskSupport_getStackAlignment_fxnP(ti_sysbios_interfaces_ITaskSupport_Module __mod);
+static inline ti_sysbios_interfaces_ITaskSupport_getStackAlignment_FxnT ti_sysbios_interfaces_ITaskSupport_getStackAlignment_fxnP(ti_sysbios_interfaces_ITaskSupport_Module __mod)
 {
     return (ti_sysbios_interfaces_ITaskSupport_getStackAlignment_FxnT)__mod->getStackAlignment;
 }
 
 /* getDefaultStackSize_{FxnT,fxnP} */
 typedef xdc_SizeT (*ti_sysbios_interfaces_ITaskSupport_getDefaultStackSize_FxnT)(void);
-static inline ti_sysbios_interfaces_ITaskSupport_getDefaultStackSize_FxnT ti_sysbios_interfaces_ITaskSupport_getDefaultStackSize_fxnP( ti_sysbios_interfaces_ITaskSupport_Module __mod )
+static inline ti_sysbios_interfaces_ITaskSupport_getDefaultStackSize_FxnT ti_sysbios_interfaces_ITaskSupport_getDefaultStackSize_fxnP(ti_sysbios_interfaces_ITaskSupport_Module __mod);
+static inline ti_sysbios_interfaces_ITaskSupport_getDefaultStackSize_FxnT ti_sysbios_interfaces_ITaskSupport_getDefaultStackSize_fxnP(ti_sysbios_interfaces_ITaskSupport_Module __mod)
 {
     return (ti_sysbios_interfaces_ITaskSupport_getDefaultStackSize_FxnT)__mod->getDefaultStackSize;
 }
 
 /* getCheckValueAddr_{FxnT,fxnP} */
-typedef xdc_Ptr (*ti_sysbios_interfaces_ITaskSupport_getCheckValueAddr_FxnT)(xdc_Ptr);
-static inline ti_sysbios_interfaces_ITaskSupport_getCheckValueAddr_FxnT ti_sysbios_interfaces_ITaskSupport_getCheckValueAddr_fxnP( ti_sysbios_interfaces_ITaskSupport_Module __mod )
+typedef xdc_Ptr (*ti_sysbios_interfaces_ITaskSupport_getCheckValueAddr_FxnT)(xdc_Ptr curTask);
+static inline ti_sysbios_interfaces_ITaskSupport_getCheckValueAddr_FxnT ti_sysbios_interfaces_ITaskSupport_getCheckValueAddr_fxnP(ti_sysbios_interfaces_ITaskSupport_Module __mod);
+static inline ti_sysbios_interfaces_ITaskSupport_getCheckValueAddr_FxnT ti_sysbios_interfaces_ITaskSupport_getCheckValueAddr_fxnP(ti_sysbios_interfaces_ITaskSupport_Module __mod)
 {
     return (ti_sysbios_interfaces_ITaskSupport_getCheckValueAddr_FxnT)__mod->getCheckValueAddr;
 }

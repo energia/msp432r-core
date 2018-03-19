@@ -29,51 +29,92 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-#include <ti/devices/msp432p4xx/driverlib/timer_a.h>
-#include <ti/devices/msp432p4xx/driverlib/timer32.h>
-#include <ti/devices/msp432p4xx/driverlib/rom_map.h>
-#include <ti/drivers/dpl/HwiP.h>
-#include <ti/drivers/dpl/SemaphoreP.h>
-#include <ti/drivers/Timer.h>
-#include <ti/drivers/timer/TimerMSP432.h>
-#include <ti/drivers/power/PowerMSP432.h>
+
 #include <stdint.h>
 #include <stddef.h>
+#include <stdbool.h>
+
+#include <ti/drivers/dpl/HwiP.h>
+#include <ti/drivers/dpl/SemaphoreP.h>
+
+#include <ti/drivers/Power.h>
+#include <ti/drivers/Timer.h>
+#include <ti/drivers/power/PowerMSP432.h>
+#include <ti/drivers/timer/TimerMSP432.h>
+
+#include <ti/devices/DeviceFamily.h>
+#include <ti/devices/msp432p4xx/driverlib/rom.h>
+#include <ti/devices/msp432p4xx/driverlib/rom_map.h>
+#include <ti/devices/msp432p4xx/driverlib/timer_a.h>
+#include <ti/devices/msp432p4xx/driverlib/timer32.h>
+
+void TimerMSP432_close(Timer_Handle handle);
+int_fast16_t TimerMSP432_control(Timer_Handle handle,
+    uint_fast16_t cmd, void *arg);
+uint32_t TimerMSP432_getCount(Timer_Handle handle);
+void TimerMSP432_init(Timer_Handle handle);
+Timer_Handle TimerMSP432_open(Timer_Handle handle, Timer_Params *params);
+int32_t TimerMSP432_start(Timer_Handle handle);
+void TimerMSP432_stop(Timer_Handle handle);
+
+/* Internal static Functions */
+static bool initTimerHardware(Timer_Handle handle, PowerMSP432_Freqs powerFreqs);
+static inline uint32_t getT32DividerValue(uint32_t div);
+static inline uint32_t getTimerResourceMask(uint32_t baseAddress);
+static bool isTimer32Bit(uint32_t baseAddress);
+static int_fast16_t perfChangeNotifyFxn(uint_fast16_t eventType,
+    uintptr_t eventArg, uintptr_t clientArg);
+static bool setT32TickCount(Timer_Handle handle, uint32_t clockFreq);
+static bool setTATickCount(Timer_Handle handle, uint32_t clockFreq);
+static void TimerMSP432_hwiIntFunction(uintptr_t arg);
 
 /* Function table of function to handle Timer_A */
-Timer_FxnTable TimerMSP432_Timer_A_fxnTable =
-{
-    .closeFxn = TimerMSP432_close,
-    .openFxn =  TimerMSP432_open,
-    .startFxn = TimerMSP432_Timer_A_start,
-    .stopFxn = TimerMSP432_Timer_A_stop,
-    .initFxn = TimerMSP432_init,
-    .getCountFxn = TimerMSP432_Timer_A_getCount,
-    .controlFxn = TimerMSP432_Timer_A_control
+const Timer_FxnTable TimerMSP432_Timer_A_fxnTable = {
+    .closeFxn    = TimerMSP432_close,
+    .openFxn     = TimerMSP432_open,
+    .startFxn    = TimerMSP432_start,
+    .stopFxn     = TimerMSP432_stop,
+    .initFxn     = TimerMSP432_init,
+    .getCountFxn = TimerMSP432_getCount,
+    .controlFxn  = TimerMSP432_control
 };
 
 /* Function table of function to handle Timer32 */
-Timer_FxnTable TimerMSP432_Timer32_fxnTable =
-{
-    .closeFxn = TimerMSP432_close,
-    .openFxn = TimerMSP432_open,
-    .startFxn = TimerMSP432_Timer32_start,
-    .stopFxn = TimerMSP432_Timer32_stop,
-    .controlFxn = TimerMSP432_Timer32_control,
-    .getCountFxn = TimerMSP432_Timer32_getCount,
-    .initFxn = TimerMSP432_init
+const Timer_FxnTable TimerMSP432_Timer32_fxnTable= {
+    .closeFxn    = TimerMSP432_close,
+    .openFxn     = TimerMSP432_open,
+    .startFxn    = TimerMSP432_start,
+    .stopFxn     = TimerMSP432_stop,
+    .initFxn     = TimerMSP432_init,
+    .getCountFxn = TimerMSP432_getCount,
+    .controlFxn  = TimerMSP432_control
 };
 
-/* Divider arrays used for timer period calculation */
-static const uint32_t timer32Dividers[] =
-{
+/*
+ * Internal Timer status structure
+ *
+ * bitMask: Each timer peripheral occupies 1 bit in the bitMask. There are 2
+ * Timer32 peripherals available. The 0 bit represents the TIMER32_0_BASE and
+ * the 1 bit represents the TIMER32_1_BASE.
+ *
+ *     31 - 8       5         4         3        2       1 - 0
+ *  -------------------------------------------------------------
+ *  | Reserved | Timer_A3 | Timer_A2 | Timer_A1 |Timer_A0 | Timer32 |
+ *  -------------------------------------------------------------
+ */
+static struct {
+    uint32_t bitMask;
+} timerState;
+
+/* Timer32 Clock Dividers */
+static const uint32_t timer32Dividers[] = {
     TIMER32_PRESCALER_256,
     TIMER32_PRESCALER_16,
     TIMER32_PRESCALER_1
 };
 
-static const uint32_t timerADividers[] =
-{
+/* Timer_A Clock Dividers */
+static const uint32_t timerADividers[] = {
     TIMER_A_CLOCKSOURCE_DIVIDER_64,
     TIMER_A_CLOCKSOURCE_DIVIDER_56,
     TIMER_A_CLOCKSOURCE_DIVIDER_48,
@@ -96,22 +137,10 @@ static const uint32_t timerADividers[] =
     TIMER_A_CLOCKSOURCE_DIVIDER_1,
 };
 
-/* Internal/Static Functions */
-static bool configureTimerHardware(Timer_Handle handle, Timer_Params *params);
-static inline uint32_t getT32DividerValue(uint32_t div);
-static bool isTimer32Bit(uint32_t baseAddress);
-static bool setIdealT32TickCount(TimerMSP432_HWAttrs *attr, uint32_t period,
-        Timer_PeriodUnits units);
-static bool setIdealTATickCount(TimerMSP432_HWAttrs *attr, uint32_t period,
-        Timer_PeriodUnits units);
-static void TimerMSP432_Timer_A_hwiIntFunction(uintptr_t arg);
-static void TimerMSP432_Timer32_hwiIntFunction(uintptr_t arg);
-
 /* Structure used for Timer_A Configuration */
-static Timer_A_UpModeConfig upConfig =
-{
+static Timer_A_UpModeConfig upConfig = {
     TIMER_A_CLOCKSOURCE_SMCLK,           /* SMCLK Clock Source */
-    TIMER_A_CLOCKSOURCE_DIVIDER_1,       /*  Default to a 1 divider */
+    TIMER_A_CLOCKSOURCE_DIVIDER_1,       /* Default to a 1 divider */
     0xFFFF,                              /* Default to the max period */
     TIMER_A_TAIE_INTERRUPT_DISABLE,      /* Disable Timer interrupt */
     TIMER_A_CCIE_CCR0_INTERRUPT_ENABLE,  /* Enable CCR0 interrupt */
@@ -119,101 +148,57 @@ static Timer_A_UpModeConfig upConfig =
 };
 
 /*
- *  ======== configureTimerHardware ========
+ *  ======== initTimerHardware ========
  */
-static bool configureTimerHardware(Timer_Handle handle, Timer_Params *params)
+static bool initTimerHardware(Timer_Handle handle, PowerMSP432_Freqs powerFreqs)
 {
-    TimerMSP432_HWAttrs *hwAttr = (TimerMSP432_HWAttrs*) handle->hwAttrs;
-    TimerMSP432_Object *myObject;
-    uint32_t baseAddress;
+    TimerMSP432_HWAttrs const *hwAttrs = handle->hwAttrs;
+    TimerMSP432_Object        *object = handle->object;
 
-    /* Parsing out the assigned object */
-    myObject = (TimerMSP432_Object*) handle->object;
+    if (isTimer32Bit(hwAttrs->timerBaseAddress)) {
 
-    /* Storing the base address */
-    baseAddress = hwAttr->timerBaseAddress;
+        if (object->units == Timer_PERIOD_COUNTS) {
+            MAP_Timer32_initModule(hwAttrs->timerBaseAddress,
+            TIMER32_PRESCALER_1, TIMER32_32BIT, TIMER32_PERIODIC_MODE);
+            MAP_Timer32_setCount(hwAttrs->timerBaseAddress, object->rawPeriod);
 
-    /* Checking to see if it is Timer_A. Timer_A has a base address that is
-     * at a lower memory address than Timer32
-     */
-    if (!isTimer32Bit(baseAddress))
-    {
-        /* Creating the Hwi Handle if it is not already there */
-        if (myObject->hwiHandle == NULL)
-        {
-            HwiP_Params_init(&myObject->hwiParams);
-            myObject->hwiParams.arg = (uintptr_t) handle;
-            myObject->hwiParams.priority = hwAttr->intPriority;
-            myObject->hwiParams.name = "TA";
-            myObject->hwiHandle = HwiP_create(hwAttr->intNum,
-                    TimerMSP432_Timer_A_hwiIntFunction, &myObject->hwiParams);
+            return (true);
         }
+        else {
 
-        /* If the user specified timer counts, we can simply set the timer
-         * period to that of the user period. Otherwise we need to do some
-         * math to get the optimal divider.
-         */
-        if (params->periodUnits == Timer_PERIOD_COUNTS)
-        {
-            upConfig.clockSourceDivider = TIMER_A_CLOCKSOURCE_DIVIDER_1;
-
-            if (params->period > UINT16_MAX)
-            {
-                return false;
-            }
-
-            upConfig.timerPeriod = params->period;
-
-        } else
-        {
-            if (!setIdealTATickCount(hwAttr, params->period,
-                    params->periodUnits))
-            {
-                return false;
-            }
+            return (setT32TickCount(handle, powerFreqs.MCLK));
         }
+    }
+    else {
 
-        /* Configuring the timer in Up Mode with CCR0 interrupting */
-        upConfig.clockSource = hwAttr->clockSource;
+        upConfig.clockSource = hwAttrs->clockSource;
         upConfig.captureCompareInterruptEnable_CCR0_CCIE =
         TIMER_A_CCIE_CCR0_INTERRUPT_ENABLE;
-        MAP_Timer_A_configureUpMode(baseAddress, &upConfig);
 
-    }
-    /* Timer 32 is our sole 32-bit timer */
-    else
-    {
-        /* If the period unit is period counts, we can just set the timer period
-         * to the user period. Otherwise, we have to do math to figure out the
-         * optimal divider.
-         */
-        if (params->periodUnits == Timer_PERIOD_COUNTS)
-        {
-            MAP_Timer32_initModule(hwAttr->timerBaseAddress,
-            TIMER32_PRESCALER_1, TIMER32_32BIT, TIMER32_PERIODIC_MODE);
-            MAP_Timer32_setCount(baseAddress, params->period);
-        } else
-        {
-            if (!setIdealT32TickCount(hwAttr, params->period,
-                    params->periodUnits))
-            {
-                return false;
+        if (object->units == Timer_PERIOD_COUNTS) {
+
+            if (object->rawPeriod <= UINT16_MAX) {
+
+                upConfig.clockSourceDivider = TIMER_A_CLOCKSOURCE_DIVIDER_1;
+                upConfig.timerPeriod = object->rawPeriod;
+                MAP_Timer_A_configureUpMode(hwAttrs->timerBaseAddress, &upConfig);
+
+                return (true);
             }
         }
+        else {
+            if (hwAttrs->clockSource == TIMER_A_CLOCKSOURCE_SMCLK) {
 
-        /* Creating the Hwi Handle if it is not already there */
-        if (myObject->hwiHandle == NULL)
-        {
-            HwiP_Params_init(&myObject->hwiParams);
-            myObject->hwiParams.arg = (uintptr_t) handle;
-            myObject->hwiParams.priority = hwAttr->intPriority;
-            myObject->hwiParams.name = "T32";
-            myObject->hwiHandle = HwiP_create(hwAttr->intNum,
-                    TimerMSP432_Timer32_hwiIntFunction, &myObject->hwiParams);
+                return (setTATickCount(handle, powerFreqs.SMCLK));
+            }
+            else {
+
+                return (setTATickCount(handle, powerFreqs.ACLK));
+            }
         }
     }
 
-    return true;
+    return (false);
 }
 
 /*
@@ -221,175 +206,212 @@ static bool configureTimerHardware(Timer_Handle handle, Timer_Params *params)
  */
 static inline uint32_t getT32DividerValue(uint32_t div)
 {
-    switch (div)
-    {
-    case TIMER32_PRESCALER_256:
-        return 256;
-    case TIMER32_PRESCALER_16:
-        return 16;
-    case TIMER32_PRESCALER_1:
-        return 1;
-    default:
-        return 0;
+    return (1 << div);
+}
+
+/*
+ * ========= getTimerResourceMask =========
+ * This function returns the bit mask needed to allocate and free a timer
+ * resource. The bit value returned corresponds to a bit in the
+ * timerState.bitMask structure.
+ */
+static inline uint32_t getTimerResourceMask(uint32_t baseAddress)
+{
+    switch (baseAddress) {
+
+        case TIMER32_0_BASE:
+
+            return (0x01);
+
+        case TIMER32_1_BASE:
+
+            return (0x02);
+
+        case TIMER_A0_BASE:
+
+            return (0x04);
+
+        case TIMER_A1_BASE:
+
+            return (0x08);
+
+        case TIMER_A2_BASE:
+
+            return (0x10);
+
+        case TIMER_A3_BASE:
+
+            return (0x20);
+
+        default:
+
+            return (0x00);
     }
 }
 
 /*
  *  ======== isTimer32Bit ========
+ * This function is used to determine if a timer instance is using a
+ * Timer32 (32 bit) or Timer_A (16 bit) peripheral. The baseAddress is assumed
+ * to be valid due to the check made by getTimerResourceMask() during the
+ * TimerMSP432_allocateTimerResource() function.
  */
 static inline bool isTimer32Bit(uint32_t baseAddress)
 {
-    if (baseAddress < TIMER32_BASE)
-    {
-        return false;
+    if (baseAddress < TIMER32_BASE) {
+        return (false);
     }
-    else
-    {
-        return true;
-    }
+
+    return (true);
 }
 
 /*
- *  ======== setIdealT32TickCount ========
+ *  ======== perfChangeNotifyFxn ========
+ *
+ *  Called by Power module before and after performance level is changed.
  */
-static bool setIdealT32TickCount(TimerMSP432_HWAttrs *attr, uint32_t period,
-        Timer_PeriodUnits units)
+static int_fast16_t perfChangeNotifyFxn(uint_fast16_t eventType,
+    uintptr_t eventArg, uintptr_t clientArg)
 {
-    PowerMSP432_Freqs curFrequencies;
-    uint32_t ii;
-    uint32_t clockFreq, curCalClock;
-    uint32_t bestDifference, bestDivider, curDifference;
+    PowerMSP432_Freqs powerFreqs;
 
-    PowerMSP432_getFreqs(Power_getPerformanceLevel(), &curFrequencies);
-    clockFreq = curFrequencies.MCLK;
-    bestDifference = 0;
+    /* Get new performance level clock frequencies */
+    PowerMSP432_getFreqs((uint32_t) eventArg, &powerFreqs);
 
-    /* Finding what the idea "divider" would be for the given time. We
-     * start with the largest divider and go down to "stretch out" the
-     * number of ticks in the timer. */
-    for (ii = 0; ii < sizeof(timer32Dividers) / sizeof(uint32_t); ii++)
-    {
-        curCalClock = (clockFreq / getT32DividerValue(timer32Dividers[ii]));
+    /*
+     * Performance level constraints set at open allow only
+     * compatible performance level changes, therefore the
+     * initTimerHardware() call cannot fail.
+     */
+    initTimerHardware((Timer_Handle) clientArg, powerFreqs);
 
-        if (units == Timer_PERIOD_US)
-        {
-            curDifference = (uint32_t)((period / 1000000.0f) * (curCalClock));
-        } else
-        {
-            curDifference = curCalClock / period;
-        }
-
-        if (curDifference > bestDifference)
-        {
-            bestDifference = curDifference;
-            bestDivider = timer32Dividers[ii];
-        }
-    }
-
-    if (bestDifference == 0)
-    {
-        return false;
-    }
-
-    MAP_Timer32_initModule(attr->timerBaseAddress, bestDivider, TIMER32_32BIT,
-                            TIMER32_PERIODIC_MODE);
-    MAP_Timer32_setCount(attr->timerBaseAddress, bestDifference);
-
-    return true;
+    return (Power_NOTIFYDONE);
 }
 
 /*
- *  ======== setIdealTATickCount ========
+ *  ======== setT32TickCount ========
  */
-static bool setIdealTATickCount(TimerMSP432_HWAttrs *attr, uint32_t period,
-        Timer_PeriodUnits units)
+static bool setT32TickCount(Timer_Handle handle, uint32_t clockFreq)
 {
-    PowerMSP432_Freqs curFrequencies;
-    uint32_t ii;
-    uint32_t clockFreq, curCalClock;
-    uint32_t bestDifference, bestDivider, curDifference;
+    TimerMSP432_HWAttrs const *hwAttrs = handle->hwAttrs;
+    TimerMSP432_Object *object = handle->object;
+    uint32_t i, curClock, dividers;
+    uint32_t bestDiff, curDiff, bestDivider;
 
-    PowerMSP432_getFreqs(Power_getPerformanceLevel(), &curFrequencies);
+    dividers = sizeof(timer32Dividers) / sizeof(uint32_t);
+    bestDiff = 0;
 
-    if (attr->clockSource == TIMER_A_CLOCKSOURCE_SMCLK)
-    {
-        clockFreq = curFrequencies.SMCLK;
-    } else if (attr->clockSource == TIMER_A_CLOCKSOURCE_ACLK)
-    {
-        clockFreq = curFrequencies.ACLK;
-    }
+    for (i = 0; i < dividers; i++) {
 
-    bestDifference = 0;
+        curClock = (clockFreq / getT32DividerValue(timer32Dividers[i]));
 
-    /* Finding what the idea "divider" would be for the given time. We
-     * start with the largest divider and go down to "stretch out" the
-     * number of ticks in the timer. */
-    for (ii = 0; ii < sizeof(timerADividers) / sizeof(uint32_t); ii++)
-    {
-        curCalClock = (clockFreq / timerADividers[ii]);
-
-        if (units == Timer_PERIOD_US)
-        {
-            curDifference = (uint32_t)((period / 1000000.0f) * (curCalClock));
-        } else
-        {
-            curDifference = curCalClock / period;
+        if (object->units == Timer_PERIOD_US) {
+            curDiff = (uint32_t)((object->rawPeriod / 1000000.0f) * curClock);
+        }
+        else {
+            curDiff = curClock / object->rawPeriod;
         }
 
-        if (curDifference > UINT16_MAX)
-        {
+        if (curDiff > bestDiff) {
+            bestDiff = curDiff;
+            bestDivider = timer32Dividers[i];
+        }
+    }
+
+    if (bestDiff) {
+
+        MAP_Timer32_initModule(hwAttrs->timerBaseAddress, bestDivider,
+            TIMER32_32BIT, TIMER32_PERIODIC_MODE);
+        MAP_Timer32_setCount(hwAttrs->timerBaseAddress, bestDiff);
+        object->period = bestDiff;
+
+        return (true);
+    }
+
+    return (false);
+}
+
+/*
+ *  ======== setTATickCount ========
+ */
+static bool setTATickCount(Timer_Handle handle, uint32_t clockFreq)
+{
+    TimerMSP432_HWAttrs const *hwAttrs = handle->hwAttrs;
+    TimerMSP432_Object *object = handle->object;
+    uint32_t i, curClock, dividers;
+    uint32_t bestDiff, bestDivider, curDiff;
+
+    dividers = sizeof(timerADividers) / sizeof(uint32_t);
+    bestDiff = 0;
+
+    for (i = 0; i < dividers; i++) {
+
+        curClock = (clockFreq / timerADividers[i]);
+
+        if (object->units == Timer_PERIOD_US) {
+            curDiff = (uint32_t)((object->rawPeriod / 1000000.0f) * (curClock));
+        }
+        else {
+            curDiff = curClock / object->rawPeriod;
+        }
+
+        if (curDiff > UINT16_MAX) {
             continue;
         }
 
-        if (curDifference > bestDifference)
-        {
-            bestDifference = curDifference;
-            bestDivider = timerADividers[ii];
+        if (curDiff > bestDiff) {
+            bestDiff = curDiff;
+            bestDivider = timerADividers[i];
         }
     }
 
-    if (bestDifference == 0)
-    {
-        return false;
+    if (bestDiff) {
+        object->period = bestDiff;
+        upConfig.timerPeriod = bestDiff;
+        upConfig.clockSourceDivider = bestDivider;
+        MAP_Timer_A_configureUpMode(hwAttrs->timerBaseAddress, &upConfig);
+
+        return (true);
     }
 
-    upConfig.timerPeriod = bestDifference;
-    upConfig.clockSourceDivider = bestDivider;
-
-    return true;
+    return (false);
 }
-
 
 /*
  *  ======== TimerMSP432_allocateTimerResource ========
  */
-bool TimerMSP432_allocateTimerResource(uint32_t timerBase)
+bool TimerMSP432_allocateTimerResource(uint32_t baseAddress)
 {
-    uint32_t ii;
-    TimerMSP432_HWAttrs *curAttr;
+    uint32_t  mask;
+    uintptr_t key;
+    bool status = false;
 
-    for (ii = 0; ii < Timer_count; ii++)
-    {
-        curAttr = (TimerMSP432_HWAttrs*) timerMSP432Objects[ii].config->hwAttrs;
+    key = HwiP_disable();
 
-        if (curAttr->timerBaseAddress == timerBase)
-        {
-            if (timerMSP432Objects[ii].resourceAvailable)
-            {
-                timerMSP432Objects[ii].resourceAvailable = false;
-                return true;
-            } else
-            {
-                return false;
-            }
+    if (!isTimer32Bit(baseAddress)) {
+        /* If Timer_A already enabled */
+        if ((TIMER_A_CMSIS(baseAddress)->CTL & TIMER_A_CTL_MC_3) !=
+                 TIMER_A_STOP_MODE) {
 
+            HwiP_restore(key);
+
+            return (false);
         }
     }
 
-    /* If we cannot find the base address, the resource is not managed
-     * by the timer resource and the other module can use it
-     */
-    return true;
+    mask = getTimerResourceMask(baseAddress);
+
+    if (mask) {
+
+        if (!(timerState.bitMask & mask)) {
+            timerState.bitMask = timerState.bitMask | mask;
+            status = true;
+        }
+    }
+
+    HwiP_restore(key);
+
+    return (status);
 }
 
 /*
@@ -397,52 +419,81 @@ bool TimerMSP432_allocateTimerResource(uint32_t timerBase)
  */
 void TimerMSP432_close(Timer_Handle handle)
 {
-    TimerMSP432_Object *myObject;
-    uintptr_t key;
+    TimerMSP432_Object *object = handle->object;
+    TimerMSP432_HWAttrs const *hwAttrs = handle->hwAttrs;
+    uint32_t i;
 
-    key = HwiP_disable();
+    TimerMSP432_stop(handle);
 
-    /* Stopping the Timer before closing it */
-    handle->fxnTablePtr->stopFxn(handle);
-
-    /* Parsing out the assigned object */
-    myObject = (TimerMSP432_Object*) handle->object;
-
-    /* Closing out all of the parameters inside the driver object */
-    myObject->resourceAvailable = true;
-    myObject->callBack = NULL;
-
-    /* Deleting/Freeing the Semaphore if it is there */
-    if (myObject->timerSem != NULL)
-    {
-        SemaphoreP_delete(myObject->timerSem);
+    if (object->timerSem) {
+        SemaphoreP_delete(object->timerSem);
+        object->timerSem = NULL;
     }
 
-    HwiP_restore(key);
+    if (object->hwiHandle) {
+        HwiP_delete(object->hwiHandle);
+        object->hwiHandle = NULL;
+    }
 
-    /* Remove power constraints */
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
+    for (i = 0; object->perfConstraintMask; i++) {
+
+        if (object->perfConstraintMask & 0x01) {
+            Power_releaseConstraint(PowerMSP432_DISALLOW_PERFLEVEL_0 + i);
+        }
+
+        object->perfConstraintMask >>= 1;
+    }
+
+    Power_unregisterNotify(&object->perfChangeNotify);
+
+    TimerMSP432_freeTimerResource((uint32_t)hwAttrs->timerBaseAddress);
+}
+
+/*
+ *  ======== TimerMSP432_control ========
+ */
+int_fast16_t TimerMSP432_control(Timer_Handle handle,
+    uint_fast16_t cmd, void *arg)
+{
+    return (Timer_STATUS_UNDEFINEDCMD);
 }
 
 /*
  *  ======== TimerMSP432_freeTimerResource ========
  */
-void TimerMSP432_freeTimerResource(uint32_t timerBase)
+void TimerMSP432_freeTimerResource(uint32_t baseAddress)
 {
-    uint32_t ii;
-    TimerMSP432_HWAttrs *curAttr;
+    uintptr_t key;
+    uint32_t  mask;
 
-    for (ii = 0; ii < Timer_count; ii++)
-    {
-        curAttr = (TimerMSP432_HWAttrs*) timerMSP432Objects[ii].config->hwAttrs;
+    mask = getTimerResourceMask(baseAddress);
 
-        if (curAttr->timerBaseAddress == timerBase)
-        {
-            timerMSP432Objects[ii].resourceAvailable = true;
-            return;
-        }
+    key = HwiP_disable();
+
+    timerState.bitMask = (timerState.bitMask & ~mask);
+
+    HwiP_restore(key);
+}
+
+/*
+ *  ======== TimerMSP432_getCount ========
+ */
+uint32_t TimerMSP432_getCount(Timer_Handle handle)
+{
+    TimerMSP432_Object const *object = handle->object;
+    TimerMSP432_HWAttrs const *hwAttrs = handle->hwAttrs;
+    uint32_t count;
+
+    if (isTimer32Bit(hwAttrs->timerBaseAddress)) {
+        /* Virtual up counter */
+        count = MAP_Timer32_getValue(hwAttrs->timerBaseAddress);
+        count = object->period - count;
     }
+    else {
+        count = MAP_Timer_A_getCounterValue(hwAttrs->timerBaseAddress);
+    }
+
+    return (count);
 }
 
 /*
@@ -450,9 +501,33 @@ void TimerMSP432_freeTimerResource(uint32_t timerBase)
  */
 void TimerMSP432_init(Timer_Handle handle)
 {
-    TimerMSP432_Object *resource = (TimerMSP432_Object*) handle->object;
-    resource->resourceAvailable = true;
-    resource->config = handle;
+    return;
+}
+
+/*
+ *  ======== TimerMSP432_hwiIntFunction ========
+ */
+void TimerMSP432_hwiIntFunction(uintptr_t arg)
+{
+    Timer_Handle handle = (Timer_Handle) arg;
+    TimerMSP432_HWAttrs const *hwAttrs = handle->hwAttrs;
+    TimerMSP432_Object  const *object  = handle->object;
+
+    if (isTimer32Bit(hwAttrs->timerBaseAddress)) {
+        MAP_Timer32_clearInterruptFlag(hwAttrs->timerBaseAddress);
+    }
+    else {
+        MAP_Timer_A_clearCaptureCompareInterrupt(hwAttrs->timerBaseAddress,
+            TIMER_A_CAPTURECOMPARE_REGISTER_0);
+    }
+
+    if (object->mode != Timer_CONTINUOUS_CALLBACK) {
+        TimerMSP432_stop(handle);
+    }
+
+   if (object->mode != Timer_ONESHOT_BLOCKING) {
+        object->callBack(handle);
+    }
 }
 
 /*
@@ -460,345 +535,201 @@ void TimerMSP432_init(Timer_Handle handle)
  */
 Timer_Handle TimerMSP432_open(Timer_Handle handle, Timer_Params *params)
 {
-    TimerMSP432_Object *myObject = (TimerMSP432_Object*) handle->object;
+    TimerMSP432_Object *object = handle->object;
+    TimerMSP432_HWAttrs const *hwAttrs = handle->hwAttrs;
+    PowerMSP432_Freqs powerFreqs;
     SemaphoreP_Params semParams;
-    uintptr_t key;
-    Timer_Mode timerMode;
+    HwiP_Params hwiParams;
+    uint8_t numPerfLevels, perfLevel;
 
-    /* Checking to make sure that the given parameters don't have anything
-     * fundamentally wrong with them (ie no callback for callback modes).
-     */
-    if ((params->timerMode == Timer_ONESHOT_CALLBACK
-            || params->timerMode == Timer_CONTINUOUS_CALLBACK)
-            && !params->timerCallback)
-    {
-        return NULL;
+    /* Check for valid parameters */
+    if (((params->timerMode == Timer_ONESHOT_CALLBACK ||
+          params->timerMode == Timer_CONTINUOUS_CALLBACK) &&
+          params->timerCallback == NULL) ||
+          params->period == 0) {
+
+        return (NULL);
     }
 
-    /* Making sure the timer is not in use by another resource */
-    if (!myObject->resourceAvailable)
-    {
-        return NULL;
+    if (!TimerMSP432_allocateTimerResource(hwAttrs->timerBaseAddress)) {
+
+        return (NULL);
     }
 
-    /*
-     * Add power management support - Disable performance transitions while
-     * opening the driver.
-     */
-    Power_setConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+    object->isRunning = false;
+    object->period = params->period;
+    object->rawPeriod = params->period;
+    object->callBack = params->timerCallback;
+    object->mode = params->timerMode;
+    object->units = params->periodUnits;
 
-    /* Shutdown not supported while driver is open */
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
+    if (object->mode != Timer_FREE_RUNNING) {
 
-    key = HwiP_disable();
+        HwiP_Params_init(&hwiParams);
+        hwiParams.arg = (uintptr_t) handle;
+        hwiParams.priority = hwAttrs->intPriority;
+        object->hwiHandle = HwiP_create(hwAttrs->intNum,
+            TimerMSP432_hwiIntFunction, &hwiParams);
 
-    /* Grabbing and recording the timer mode (it is needed in the Hwi) */
-    timerMode = params->timerMode;
-    myObject->timerMode = timerMode;
+        if (object->hwiHandle == NULL) {
 
-    /* Creating the semaphore if mode is blocking */
-    if (timerMode == Timer_ONESHOT_BLOCKING)
-    {
-        SemaphoreP_Params_init(&semParams);
-        semParams.mode = SemaphoreP_Mode_BINARY;
-        myObject->timerSem = SemaphoreP_create(0, &semParams);
+            TimerMSP432_close(handle);
 
-        if (myObject->timerSem == NULL)
-        {
-            HwiP_restore(key);
-            Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
-            return NULL;
+            return (NULL);
         }
     }
-    /* For callback modes set the callback */
-    else if (timerMode == Timer_CONTINUOUS_CALLBACK ||
-             timerMode == Timer_ONESHOT_CALLBACK) {
-        myObject->callBack = params->timerCallback;
-    } else {
-        myObject->callBack = NULL;
+
+    /* Creating the semaphore if mode is blocking */
+    if (object->mode == Timer_ONESHOT_BLOCKING) {
+
+        SemaphoreP_Params_init(&semParams);
+        semParams.mode = SemaphoreP_Mode_BINARY;
+        object->timerSem = SemaphoreP_create(0, &semParams);
+
+        if (object->timerSem == NULL) {
+
+            TimerMSP432_close(handle);
+
+            return (NULL);
+        }
     }
 
-    /* Configuring the initial hardware settings */
-    if (!configureTimerHardware(handle, params))
-    {
-        HwiP_restore(key);
+    /* Disable performance transitions. */
+    Power_setConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+    PowerMSP432_getFreqs(Power_getPerformanceLevel(), &powerFreqs);
+
+    /* Initialize timer hardware */
+    if (!initTimerHardware(handle, powerFreqs)) {
+
         Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
-        return NULL;
+        TimerMSP432_close(handle);
+
+        return (NULL);
     }
-
-    /* Marking the resource as used */
-    myObject->resourceAvailable = false;
-
-    HwiP_restore(key);
-    Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
-    return handle;
-}
-
-/*
- *  ======== TimerMSP432_Timer_A_control ========
- */
-int_fast16_t TimerMSP432_Timer_A_control(Timer_Handle handle,
-    uint_fast16_t cmd, void *arg)
-{
-        return Timer_STATUS_UNDEFINEDCMD;
-}
-
-/*
- *  ======== TimerMSP432_Timer_A_getCount ========
- */
-uint32_t TimerMSP432_Timer_A_getCount(Timer_Handle handle)
-{
-    TimerMSP432_HWAttrs *attrs = (TimerMSP432_HWAttrs*) handle->hwAttrs;
-    uint32_t count;
-    uintptr_t key;
-
-    key = HwiP_disable();
-
-    count = MAP_Timer_A_getCounterValue(attrs->timerBaseAddress);
-
-    HwiP_restore(key);
-
-    return count;
-}
-
-/*
- *  ======== TimerMSP432_TimerA_hwiIntFunction ========
- */
-void TimerMSP432_Timer_A_hwiIntFunction(uintptr_t arg)
-{
-    Timer_Handle handle = (Timer_Handle) arg;
-    TimerMSP432_HWAttrs *hwAttrs = (TimerMSP432_HWAttrs*) handle->hwAttrs;
-    TimerMSP432_Object *myObject = (TimerMSP432_Object*) handle->object;
-    uint32_t baseAddress, mode;
-
-    /* Grabbing the base address and handling the interrupt */
-    baseAddress = hwAttrs->timerBaseAddress;
-    MAP_Timer_A_clearCaptureCompareInterrupt(baseAddress,
-    TIMER_A_CAPTURECOMPARE_REGISTER_0);
-
-    /* Restarting or halting the timer depending on the mode */
-    mode = myObject->timerMode;
-
-    if (mode == Timer_ONESHOT_CALLBACK || mode == Timer_ONESHOT_BLOCKING)
-    {
-        MAP_Timer_A_stopTimer(baseAddress);
-        HwiP_disableInterrupt(hwAttrs->intNum);
-        MAP_Timer_A_disableCaptureCompareInterrupt(baseAddress,
-        TIMER_A_CAPTURECOMPARE_REGISTER_0);
-    }
-
-    /* Invoking the callback if needed */
-    if (mode == Timer_ONESHOT_CALLBACK || mode == Timer_CONTINUOUS_CALLBACK)
-    {
-        myObject->callBack(handle);
-    } else if (mode == Timer_ONESHOT_BLOCKING)
-    {
-        SemaphoreP_post(myObject->timerSem);
-    }
-}
-
-/*
- *  ======== TimerMSP432_Timer_A_start ========
- */
-int32_t TimerMSP432_Timer_A_start(Timer_Handle handle)
-{
-    TimerMSP432_HWAttrs *hwAttrs = (TimerMSP432_HWAttrs*) handle->hwAttrs;
-    TimerMSP432_Object *myObj = (TimerMSP432_Object*) handle->object;
-    uint32_t baseAddress;
-    uintptr_t key;
-
-    key = HwiP_disable();
-
-    /* Grabbing the base address and starting the timer */
-    baseAddress = hwAttrs->timerBaseAddress;
-
-    MAP_Timer_A_clearTimer(baseAddress);
-
-    if (myObj->timerMode != Timer_FREE_RUNNING)
-    {
-        MAP_Timer_A_enableCaptureCompareInterrupt(baseAddress,
-        TIMER_A_CAPTURECOMPARE_REGISTER_0);
-        HwiP_enableInterrupt(hwAttrs->intNum);
-    }
-
-    MAP_Timer_A_startCounter(baseAddress, TIMER_A_UP_MODE);
-
-    HwiP_restore(key);
 
     /*
-     * Set power constraints to keep peripheral active during transfer and
-     * to prevent a performance level change
+     * Set constraints for other performance levels.
+     * Given the desired period and units, determine which performance
+     * levels with which this timer is compatible.
      */
-    Power_setConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
-    Power_setConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+    numPerfLevels = PowerMSP432_getNumPerfLevels();
 
-    return (Timer_STATUS_SUCCESS);
+    for (perfLevel = 0; perfLevel < numPerfLevels; perfLevel++) {
+
+        PowerMSP432_getFreqs(perfLevel, &powerFreqs);
+
+        if (!initTimerHardware(handle, powerFreqs)) {
+            /* Set constraint and keep track of it in perfConstraintMask */
+            object->perfConstraintMask |= (1 << perfLevel);
+            Power_setConstraint(PowerMSP432_DISALLOW_PERFLEVEL_0 + perfLevel);
+        }
+    }
+
+    /* Register function to reconfigure peripheral on perf level changes */
+    Power_registerNotify(&object->perfChangeNotify,
+        PowerMSP432_DONE_CHANGE_PERF_LEVEL, perfChangeNotifyFxn,
+        (uintptr_t) handle);
+
+    /* Restore original hardware settings */
+    PowerMSP432_getFreqs(Power_getPerformanceLevel(), &powerFreqs);
+    initTimerHardware(handle, powerFreqs);
+
+    return (handle);
 }
 
 /*
- *  ======== TimerMSP432_Timer_A_stop ========
+ *  ======== TimerMSP432_start ========
  */
-void TimerMSP432_Timer_A_stop(Timer_Handle handle)
+int32_t TimerMSP432_start(Timer_Handle handle)
 {
-    TimerMSP432_HWAttrs *hwAttrs = (TimerMSP432_HWAttrs*) handle->hwAttrs;
-    uint32_t baseAddress;
+    TimerMSP432_Object *object = handle->object;
+    TimerMSP432_HWAttrs const *hwAttrs = handle->hwAttrs;
+    const uint32_t baseAddress = hwAttrs->timerBaseAddress;
     uintptr_t key;
 
     key = HwiP_disable();
 
-    /* Remove constraints set during transfer */
-    Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
-    Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+    if (object->isRunning) {
 
-    /* Grabbing the base address and stopping the timer */
-    baseAddress = hwAttrs->timerBaseAddress;
-    MAP_Timer_A_stopTimer(baseAddress);
-    MAP_Timer_A_clearTimer(baseAddress);
-    MAP_Timer_A_disableCaptureCompareInterrupt(baseAddress,
-    TIMER_A_CAPTURECOMPARE_REGISTER_0);
-
-    HwiP_restore(key);
-}
-
-/*
- *  ======== TimerMSP432_Timer32_control ========
- */
-int_fast16_t TimerMSP432_Timer32_control(Timer_Handle handle,
-        uint_fast16_t cmd, void *arg)
-{
-    uintptr_t key;
-
-    key = HwiP_disable();
-
-    switch (cmd)
-    {
-    default:
         HwiP_restore(key);
-        return Timer_STATUS_UNDEFINEDCMD;
-    }
-}
 
-/*
- *  ======== TimerMSP432_Timer32_getCount ========
- */
-uint32_t TimerMSP432_Timer32_getCount(Timer_Handle handle)
-{
-    TimerMSP432_HWAttrs *attrs = (TimerMSP432_HWAttrs*) handle->hwAttrs;
-    uint32_t count;
-    uintptr_t key;
-
-    key = HwiP_disable();
-
-    count = MAP_Timer32_getValue(attrs->timerBaseAddress);
-
-    HwiP_restore(key);
-
-    return count;
-}
-
-/*
- *  ======== TimerMSP432_Timer32_hwiIntFunction ========
- */
-void TimerMSP432_Timer32_hwiIntFunction(uintptr_t arg)
-{
-    Timer_Handle handle = (Timer_Handle) arg;
-    TimerMSP432_HWAttrs *hwAttrs = (TimerMSP432_HWAttrs*) handle->hwAttrs;
-    TimerMSP432_Object *myObject = (TimerMSP432_Object*) handle->object;
-    uint32_t baseAddress;
-    Timer_Mode mode;
-
-    baseAddress = hwAttrs->timerBaseAddress;
-
-    MAP_Timer32_clearInterruptFlag(baseAddress);
-
-    /* Restarting or halting the timer depending on the mode */
-    mode = myObject->timerMode;
-
-    if (mode == Timer_ONESHOT_CALLBACK || mode == Timer_ONESHOT_BLOCKING)
-    {
-        MAP_Timer32_haltTimer(baseAddress);
-        HwiP_disableInterrupt(hwAttrs->intNum);
-        MAP_Timer32_disableInterrupt(baseAddress);
+        return (Timer_STATUS_ERROR);
     }
 
-    /* Invoking the callback if needed */
-    if (mode == Timer_ONESHOT_CALLBACK || mode == Timer_CONTINUOUS_CALLBACK)
-    {
-        myObject->callBack(handle);
-    } else if (mode == Timer_ONESHOT_BLOCKING)
-    {
-        SemaphoreP_post(myObject->timerSem);
-    }
-}
+    object->isRunning = true;
 
-/*
- *  ======== TimerMSP432_Timer32_start ========
- */
-int32_t TimerMSP432_Timer32_start(Timer_Handle handle)
-{
-    TimerMSP432_HWAttrs *hwAttrs = (TimerMSP432_HWAttrs*) handle->hwAttrs;
-    TimerMSP432_Object *object = (TimerMSP432_Object*) handle->object;
-    uint32_t baseAddress;
-    uintptr_t key;
+    if (isTimer32Bit(baseAddress)) {
 
-    key = HwiP_disable();
+        if (object->mode != Timer_FREE_RUNNING) {
+                MAP_Timer32_enableInterrupt(baseAddress);
+        }
 
-    baseAddress = hwAttrs->timerBaseAddress;
-
-    if (object->timerMode != Timer_FREE_RUNNING)
-    {
-        MAP_Timer32_enableInterrupt(baseAddress);
-        HwiP_enableInterrupt(hwAttrs->intNum);
-    }
-
-    if (object->timerMode == Timer_ONESHOT_BLOCKING
-            || object->timerMode == Timer_ONESHOT_CALLBACK)
-    {
-        MAP_Timer32_startTimer(baseAddress, true);
-    }
-    else
-    {
+        MAP_Timer32_setCount(baseAddress, object->period);
         MAP_Timer32_startTimer(baseAddress, false);
+
+    }
+    else {
+
+         MAP_Timer_A_clearTimer(baseAddress);
+
+        if (object->mode != Timer_FREE_RUNNING) {
+            MAP_Timer_A_enableCaptureCompareInterrupt(baseAddress,
+                TIMER_A_CAPTURECOMPARE_REGISTER_0);
+        }
+
+        MAP_Timer_A_startCounter(baseAddress, TIMER_A_UP_MODE);
     }
 
     HwiP_restore(key);
 
-    /*
-     * Set power constraints to keep peripheral active during transfer and
-     * to prevent a performance level change
-     */
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
     Power_setConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
     Power_setConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+
+    if (object->mode == Timer_ONESHOT_BLOCKING) {
+
+        /* Pend forever, ~0 */
+        SemaphoreP_pend(object->timerSem, ~0);
+    }
 
     return (Timer_STATUS_SUCCESS);
 }
 
 /*
- *  ======== TimerMSP432_Timer32_stop ========
+ *  ======== TimerMSP432_stop ========
  */
-void TimerMSP432_Timer32_stop(Timer_Handle handle)
+void TimerMSP432_stop(Timer_Handle handle)
 {
-    TimerMSP432_HWAttrs *hwAttrs = (TimerMSP432_HWAttrs*) handle->hwAttrs;
-    TimerMSP432_Object *object = (TimerMSP432_Object*) handle->object;
-    uint32_t baseAddress;
+    TimerMSP432_Object *object = handle->object;
+    TimerMSP432_HWAttrs const *hwAttrs = handle->hwAttrs;
+    const uint32_t baseAddress = hwAttrs->timerBaseAddress;
     uintptr_t key;
 
     key = HwiP_disable();
 
-    /* Remove constraints set during transfer */
-    Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
-    Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+    if (object->isRunning) {
 
-    /* Grabbing the base address and stopping the timer */
-    baseAddress = hwAttrs->timerBaseAddress;
+        object->isRunning = false;
 
-    MAP_Timer32_haltTimer(baseAddress);
-    MAP_Timer32_disableInterrupt(baseAddress);
+        if (isTimer32Bit(baseAddress)) {
+            MAP_Timer32_haltTimer(baseAddress);
+            MAP_Timer32_disableInterrupt(baseAddress);
+        }
+        else {
+           MAP_Timer_A_stopTimer(baseAddress);
+           MAP_Timer_A_disableCaptureCompareInterrupt(baseAddress,
+               TIMER_A_CAPTURECOMPARE_REGISTER_0);
+        }
 
-    if (object->timerMode != Timer_FREE_RUNNING)
-    {
-        HwiP_disableInterrupt(hwAttrs->intNum);
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
+        Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
+        Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+
+        if (object->mode == Timer_ONESHOT_BLOCKING) {
+            SemaphoreP_post(object->timerSem);
+        }
     }
 
     HwiP_restore(key);

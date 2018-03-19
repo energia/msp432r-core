@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Texas Instruments Incorporated
+ * Copyright (c) 2016-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -167,10 +167,7 @@ Display_Handle DisplayUartMin_open(Display_Handle hDisplay,
     uartParams.baudRate  = hwAttrs->baudRate;
     uartParams.writeMode = UART_MODE_BLOCKING;
 
-    SemaphoreP_Params semParams;
-    SemaphoreP_Params_init(&semParams);
-    semParams.mode = SemaphoreP_Mode_BINARY;
-    object->mutex = SemaphoreP_create(1, &semParams);
+    object->mutex = SemaphoreP_createBinary(1);
     if (object->mutex == NULL)
     {
         DebugP_log0("DisplayUart.c: Couldn't create semaphore");
@@ -215,10 +212,7 @@ Display_Handle DisplayUartAnsi_open(Display_Handle hDisplay,
     uartParams.baudRate  = hwAttrs->baudRate;
     uartParams.writeMode = UART_MODE_BLOCKING;
 
-    SemaphoreP_Params semParams;
-    SemaphoreP_Params_init(&semParams);
-    semParams.mode = SemaphoreP_Mode_BINARY;
-    object->mutex = SemaphoreP_create(1, &semParams);
+    object->mutex = SemaphoreP_createBinary(1);
     if (object->mutex == NULL)
     {
         DebugP_log0("DisplayUart.c: Couldn't create semaphore");

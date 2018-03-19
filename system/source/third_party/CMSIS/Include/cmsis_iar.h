@@ -6,7 +6,7 @@
  *
  * Copyright 2011 IAR Systems. All rights reserved.
  *
- * $Revision: 109259 $
+ * $Revision: 114409 $
  *
  **************************************************/
 
@@ -21,6 +21,59 @@
 
 #include <intrinsics.h>
 
+/* Define compiler macros for CPU architecture, used in CMSIS 5.
+ */
+#if __ARM_ARCH_6M__ || __ARM_ARCH_7M__ || __ARM_ARCH_7EM__ || __ARM_ARCH_8M_BASE__ || __ARM_ARCH_8M_BASE__
+/* Macros already defined */
+#else
+  #if defined(__ARM8M_MAINLINE__) || defined(__ARM8EM_MAINLINE__)
+    #define __ARM_ARCH_8M_MAIN__ 1
+  #elif defined(__ARM8M_BASELINE__)
+    #define __ARM_ARCH_8M_BASE__ 1
+  #elif defined(__ARM_ARCH_PROFILE) && __ARM_ARCH_PROFILE == 'M'
+    #if __ARM_ARCH == 6
+      #define __ARM_ARCH_6M__ 1
+    #elif __ARM_ARCH == 7
+      #if __ARM_FEATURE_DSP
+        #define __ARM_ARCH_7EM__ 1
+      #else
+        #define __ARM_ARCH_7M__ 1
+      #endif
+    #endif /* __ARM_ARCH */
+  #endif /* __ARM_ARCH_PROFILE == 'M' */
+#endif
+
+/* __NO_RETURN
+ * Override for compiler macro used in CMSIS 5.
+ */
+#ifndef __NO_RETURN
+#define __NO_RETURN __attribute__((noreturn))
+#endif
+
+/* __USED
+ * Override for compiler macro used in CMSIS 5,
+ * inform that a variable shall be retained in executable image. Code Example:
+ *
+ * __USED uint32_t const CMSIS_RTOS_API_Version = osCMSIS;
+ */
+#ifndef __USED
+#define __USED __attribute__((used))
+#endif
+
+/* __WEAK
+ * Override for compiler macro used in CMSIS 5,
+ * export a function or variable weakly to allow overwrites. Code Example:
+ *
+ * __WEAK void SystemInit(void)
+ * {
+ *   SystemCoreSetup();
+ *   SystemCoreClockSetup();
+ * }
+ */
+#ifndef __WEAK
+#define __WEAK __attribute__((weak))
+#endif
+
 /* __ALIGNED
  * Override for compiler macro used in CMSIS 5,
  * minimum alignment for a variable. Code example:
@@ -29,6 +82,20 @@
  */
 #ifndef __ALIGNED
 #define __ALIGNED(x) __attribute__((aligned(x)))
+#endif
+
+/* __PACKED
+ * Override for compiler macro used in CMSIS 5,
+ * request smallest possible alignment. Code Example:
+ *
+ * struct __PACKED {
+ *   uint8_t  len;
+ *   uint8_t  type;
+ *   uint16_t langid;
+ * } desc_langid;
+ */
+#ifndef __PACKED
+#define __PACKED __attribute__((packed, aligned(1)))
 #endif
 
 #if (__CORE__ == __ARM6M__)
@@ -80,7 +147,7 @@ static uint32_t __get_PSP(void)
 {
   __ASM("mrs r0, psp");
 }
- 
+
 static void __set_PSP(uint32_t topOfProcStack)
 {
   __ASM("msr psp, r0");
@@ -90,7 +157,7 @@ static uint32_t __get_MSP(void)
 {
   __ASM("mrs r0, msp");
 }
- 
+
 static void __set_MSP(uint32_t topOfMainStack)
 {
   __ASM("msr msp, r0");
@@ -197,7 +264,7 @@ static __INLINE void __CLREX(void)
 static uint32_t __get_FPSCR(void)
 {
 #if (__FPU_PRESENT == 1)   /* __FPU_PRESENT is defined in the device header file, if present in current device. */
-  __ASM("vmrs r0, fpscr"); 
+  __ASM("vmrs r0, fpscr");
 #else
   return(0);
 #endif

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -770,6 +770,22 @@ instance:
      *
      *  Replaces a Hwi object's hwiFxn function originally
      *  provided in {@link #create}.
+     *
+     *  @a(constraints)
+     *  Hwi_setFunc() is not thread safe. This means that the new value for
+     *  for 'fxn' may be temporarily paired with the previous value for 'arg'
+     *  if pre-emption occurs within the execution of Hwi_setFunc().
+     *
+     *  To guard against this condition, surround the Hwi_setFunc() call with
+     *  calls to Hwi_disable() and Hwi_restore():
+     *
+     *  @p(code)
+     *  key = Hwi_disable();
+     *
+     *  Hwi_setFunc(newFunc, newArg);
+     *
+     *  Hwi_restore(key);
+     *  @p
      *
      *  @param(fxn)     pointer to ISR function
      *  @param(arg)     argument to ISR function

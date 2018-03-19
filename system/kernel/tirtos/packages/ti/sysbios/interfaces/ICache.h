@@ -2,19 +2,19 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     VIRTUAL FUNCTIONS
  *     FUNCTION STUBS
  *     FUNCTION SELECTORS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -81,11 +81,11 @@ typedef enum ti_sysbios_interfaces_ICache_Type ti_sysbios_interfaces_ICache_Type
 struct ti_sysbios_interfaces_ICache_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_Void (*enable)(xdc_Bits16);
-    xdc_Void (*disable)(xdc_Bits16);
-    xdc_Void (*inv)(xdc_Ptr, xdc_SizeT, xdc_Bits16, xdc_Bool);
-    xdc_Void (*wb)(xdc_Ptr, xdc_SizeT, xdc_Bits16, xdc_Bool);
-    xdc_Void (*wbInv)(xdc_Ptr, xdc_SizeT, xdc_Bits16, xdc_Bool);
+    xdc_Void (*enable)(xdc_Bits16 type);
+    xdc_Void (*disable)(xdc_Bits16 type);
+    xdc_Void (*inv)(xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait);
+    xdc_Void (*wb)(xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait);
+    xdc_Void (*wbInv)(xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait);
     xdc_Void (*wbAll)(void);
     xdc_Void (*wbInvAll)(void);
     xdc_Void (*wait)(void);
@@ -105,54 +105,63 @@ __extern const xdc_runtime_Types_Base ti_sysbios_interfaces_ICache_Interface__BA
  */
 
 /* Module_id */
-static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ICache_Module_id( ti_sysbios_interfaces_ICache_Module mod )
+static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ICache_Module_id(ti_sysbios_interfaces_ICache_Module mod);
+static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ICache_Module_id(ti_sysbios_interfaces_ICache_Module mod)
 {
     return mod->__sysp->__mid;
 }
 
 /* enable */
+static inline xdc_Void ti_sysbios_interfaces_ICache_enable(ti_sysbios_interfaces_ICache_Module __mod, xdc_Bits16 type);
 static inline xdc_Void ti_sysbios_interfaces_ICache_enable( ti_sysbios_interfaces_ICache_Module __mod, xdc_Bits16 type )
 {
     __mod->enable(type);
 }
 
 /* disable */
+static inline xdc_Void ti_sysbios_interfaces_ICache_disable(ti_sysbios_interfaces_ICache_Module __mod, xdc_Bits16 type);
 static inline xdc_Void ti_sysbios_interfaces_ICache_disable( ti_sysbios_interfaces_ICache_Module __mod, xdc_Bits16 type )
 {
     __mod->disable(type);
 }
 
 /* inv */
+static inline xdc_Void ti_sysbios_interfaces_ICache_inv(ti_sysbios_interfaces_ICache_Module __mod, xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait);
 static inline xdc_Void ti_sysbios_interfaces_ICache_inv( ti_sysbios_interfaces_ICache_Module __mod, xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait )
 {
     __mod->inv(blockPtr, byteCnt, type, wait);
 }
 
 /* wb */
+static inline xdc_Void ti_sysbios_interfaces_ICache_wb(ti_sysbios_interfaces_ICache_Module __mod, xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait);
 static inline xdc_Void ti_sysbios_interfaces_ICache_wb( ti_sysbios_interfaces_ICache_Module __mod, xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait )
 {
     __mod->wb(blockPtr, byteCnt, type, wait);
 }
 
 /* wbInv */
+static inline xdc_Void ti_sysbios_interfaces_ICache_wbInv(ti_sysbios_interfaces_ICache_Module __mod, xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait);
 static inline xdc_Void ti_sysbios_interfaces_ICache_wbInv( ti_sysbios_interfaces_ICache_Module __mod, xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait )
 {
     __mod->wbInv(blockPtr, byteCnt, type, wait);
 }
 
 /* wbAll */
+static inline xdc_Void ti_sysbios_interfaces_ICache_wbAll(ti_sysbios_interfaces_ICache_Module __mod);
 static inline xdc_Void ti_sysbios_interfaces_ICache_wbAll( ti_sysbios_interfaces_ICache_Module __mod )
 {
     __mod->wbAll();
 }
 
 /* wbInvAll */
+static inline xdc_Void ti_sysbios_interfaces_ICache_wbInvAll(ti_sysbios_interfaces_ICache_Module __mod);
 static inline xdc_Void ti_sysbios_interfaces_ICache_wbInvAll( ti_sysbios_interfaces_ICache_Module __mod )
 {
     __mod->wbInvAll();
 }
 
 /* wait */
+static inline xdc_Void ti_sysbios_interfaces_ICache_wait(ti_sysbios_interfaces_ICache_Module __mod);
 static inline xdc_Void ti_sysbios_interfaces_ICache_wait( ti_sysbios_interfaces_ICache_Module __mod )
 {
     __mod->wait();
@@ -171,57 +180,65 @@ static inline xdc_Void ti_sysbios_interfaces_ICache_wait( ti_sysbios_interfaces_
  */
 
 /* enable_{FxnT,fxnP} */
-typedef xdc_Void (*ti_sysbios_interfaces_ICache_enable_FxnT)(xdc_Bits16);
-static inline ti_sysbios_interfaces_ICache_enable_FxnT ti_sysbios_interfaces_ICache_enable_fxnP( ti_sysbios_interfaces_ICache_Module __mod )
+typedef xdc_Void (*ti_sysbios_interfaces_ICache_enable_FxnT)(xdc_Bits16 type);
+static inline ti_sysbios_interfaces_ICache_enable_FxnT ti_sysbios_interfaces_ICache_enable_fxnP(ti_sysbios_interfaces_ICache_Module __mod);
+static inline ti_sysbios_interfaces_ICache_enable_FxnT ti_sysbios_interfaces_ICache_enable_fxnP(ti_sysbios_interfaces_ICache_Module __mod)
 {
     return (ti_sysbios_interfaces_ICache_enable_FxnT)__mod->enable;
 }
 
 /* disable_{FxnT,fxnP} */
-typedef xdc_Void (*ti_sysbios_interfaces_ICache_disable_FxnT)(xdc_Bits16);
-static inline ti_sysbios_interfaces_ICache_disable_FxnT ti_sysbios_interfaces_ICache_disable_fxnP( ti_sysbios_interfaces_ICache_Module __mod )
+typedef xdc_Void (*ti_sysbios_interfaces_ICache_disable_FxnT)(xdc_Bits16 type);
+static inline ti_sysbios_interfaces_ICache_disable_FxnT ti_sysbios_interfaces_ICache_disable_fxnP(ti_sysbios_interfaces_ICache_Module __mod);
+static inline ti_sysbios_interfaces_ICache_disable_FxnT ti_sysbios_interfaces_ICache_disable_fxnP(ti_sysbios_interfaces_ICache_Module __mod)
 {
     return (ti_sysbios_interfaces_ICache_disable_FxnT)__mod->disable;
 }
 
 /* inv_{FxnT,fxnP} */
-typedef xdc_Void (*ti_sysbios_interfaces_ICache_inv_FxnT)(xdc_Ptr, xdc_SizeT, xdc_Bits16, xdc_Bool);
-static inline ti_sysbios_interfaces_ICache_inv_FxnT ti_sysbios_interfaces_ICache_inv_fxnP( ti_sysbios_interfaces_ICache_Module __mod )
+typedef xdc_Void (*ti_sysbios_interfaces_ICache_inv_FxnT)(xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait);
+static inline ti_sysbios_interfaces_ICache_inv_FxnT ti_sysbios_interfaces_ICache_inv_fxnP(ti_sysbios_interfaces_ICache_Module __mod);
+static inline ti_sysbios_interfaces_ICache_inv_FxnT ti_sysbios_interfaces_ICache_inv_fxnP(ti_sysbios_interfaces_ICache_Module __mod)
 {
     return (ti_sysbios_interfaces_ICache_inv_FxnT)__mod->inv;
 }
 
 /* wb_{FxnT,fxnP} */
-typedef xdc_Void (*ti_sysbios_interfaces_ICache_wb_FxnT)(xdc_Ptr, xdc_SizeT, xdc_Bits16, xdc_Bool);
-static inline ti_sysbios_interfaces_ICache_wb_FxnT ti_sysbios_interfaces_ICache_wb_fxnP( ti_sysbios_interfaces_ICache_Module __mod )
+typedef xdc_Void (*ti_sysbios_interfaces_ICache_wb_FxnT)(xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait);
+static inline ti_sysbios_interfaces_ICache_wb_FxnT ti_sysbios_interfaces_ICache_wb_fxnP(ti_sysbios_interfaces_ICache_Module __mod);
+static inline ti_sysbios_interfaces_ICache_wb_FxnT ti_sysbios_interfaces_ICache_wb_fxnP(ti_sysbios_interfaces_ICache_Module __mod)
 {
     return (ti_sysbios_interfaces_ICache_wb_FxnT)__mod->wb;
 }
 
 /* wbInv_{FxnT,fxnP} */
-typedef xdc_Void (*ti_sysbios_interfaces_ICache_wbInv_FxnT)(xdc_Ptr, xdc_SizeT, xdc_Bits16, xdc_Bool);
-static inline ti_sysbios_interfaces_ICache_wbInv_FxnT ti_sysbios_interfaces_ICache_wbInv_fxnP( ti_sysbios_interfaces_ICache_Module __mod )
+typedef xdc_Void (*ti_sysbios_interfaces_ICache_wbInv_FxnT)(xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait);
+static inline ti_sysbios_interfaces_ICache_wbInv_FxnT ti_sysbios_interfaces_ICache_wbInv_fxnP(ti_sysbios_interfaces_ICache_Module __mod);
+static inline ti_sysbios_interfaces_ICache_wbInv_FxnT ti_sysbios_interfaces_ICache_wbInv_fxnP(ti_sysbios_interfaces_ICache_Module __mod)
 {
     return (ti_sysbios_interfaces_ICache_wbInv_FxnT)__mod->wbInv;
 }
 
 /* wbAll_{FxnT,fxnP} */
 typedef xdc_Void (*ti_sysbios_interfaces_ICache_wbAll_FxnT)(void);
-static inline ti_sysbios_interfaces_ICache_wbAll_FxnT ti_sysbios_interfaces_ICache_wbAll_fxnP( ti_sysbios_interfaces_ICache_Module __mod )
+static inline ti_sysbios_interfaces_ICache_wbAll_FxnT ti_sysbios_interfaces_ICache_wbAll_fxnP(ti_sysbios_interfaces_ICache_Module __mod);
+static inline ti_sysbios_interfaces_ICache_wbAll_FxnT ti_sysbios_interfaces_ICache_wbAll_fxnP(ti_sysbios_interfaces_ICache_Module __mod)
 {
     return (ti_sysbios_interfaces_ICache_wbAll_FxnT)__mod->wbAll;
 }
 
 /* wbInvAll_{FxnT,fxnP} */
 typedef xdc_Void (*ti_sysbios_interfaces_ICache_wbInvAll_FxnT)(void);
-static inline ti_sysbios_interfaces_ICache_wbInvAll_FxnT ti_sysbios_interfaces_ICache_wbInvAll_fxnP( ti_sysbios_interfaces_ICache_Module __mod )
+static inline ti_sysbios_interfaces_ICache_wbInvAll_FxnT ti_sysbios_interfaces_ICache_wbInvAll_fxnP(ti_sysbios_interfaces_ICache_Module __mod);
+static inline ti_sysbios_interfaces_ICache_wbInvAll_FxnT ti_sysbios_interfaces_ICache_wbInvAll_fxnP(ti_sysbios_interfaces_ICache_Module __mod)
 {
     return (ti_sysbios_interfaces_ICache_wbInvAll_FxnT)__mod->wbInvAll;
 }
 
 /* wait_{FxnT,fxnP} */
 typedef xdc_Void (*ti_sysbios_interfaces_ICache_wait_FxnT)(void);
-static inline ti_sysbios_interfaces_ICache_wait_FxnT ti_sysbios_interfaces_ICache_wait_fxnP( ti_sysbios_interfaces_ICache_Module __mod )
+static inline ti_sysbios_interfaces_ICache_wait_FxnT ti_sysbios_interfaces_ICache_wait_fxnP(ti_sysbios_interfaces_ICache_Module __mod);
+static inline ti_sysbios_interfaces_ICache_wait_FxnT ti_sysbios_interfaces_ICache_wait_fxnP(ti_sysbios_interfaces_ICache_Module __mod)
 {
     return (ti_sysbios_interfaces_ICache_wait_FxnT)__mod->wait;
 }

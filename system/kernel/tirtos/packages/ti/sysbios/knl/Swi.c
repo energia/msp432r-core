@@ -473,6 +473,23 @@ Void Swi_restorePri(UInt priority)
  */
 
 /*
+ *  ======== Swi_construct2 ========
+ */
+Swi_Handle Swi_construct2(Swi_Struct2 *swiStruct2, Swi_FuncPtr swiFxn,
+        const Swi_Params *prms)
+{
+    Swi_Handle   swi;
+
+    Swi_construct((Swi_Struct *)swiStruct2, swiFxn, prms, Error_IGNORE);
+    if (swiStruct2->fxn == NULL) {
+        return (NULL);
+    }
+
+    swi = Swi_handle((Swi_Struct *)swiStruct2);
+    return (swi);
+}
+
+/*
  *  ======== Swi_Instance_init ========
  */
 Int Swi_Instance_init(Swi_Object *swi, Swi_FuncPtr fxn,
@@ -508,6 +525,12 @@ Int Swi_Instance_init(Swi_Object *swi, Swi_FuncPtr fxn,
                 Swi_hooks.length * sizeof(Ptr), 0, eb);
 
         if (swi->hookEnv == NULL) {
+            /*
+             *  Set swi->fxn to NULL to allow Swi_construct2() to
+             *  determine that a failure occurred.
+             */
+            swi->fxn = NULL;
+
             return (1);   /* see 2 below */
         }
     }
@@ -539,13 +562,13 @@ Int Swi_postInit (Swi_Object *swi, Error_Block *eb)
 {
 #ifndef ti_sysbios_knl_Swi_DISABLE_ALL_HOOKS
     Int i;
+    Error_Block localEB;
     Error_Block *leb;
 
     if (eb != Error_IGNORE) {
         leb = eb;
     }
     else {
-        Error_Block localEB;
         Error_init(&localEB);
         leb = &localEB;
     }
@@ -556,6 +579,14 @@ Int Swi_postInit (Swi_Object *swi, Error_Block *eb)
             Swi_hooks.elem[i].createFxn(swi, leb);
 
             if (Error_check(leb)) {
+                /*
+                 *  Set swi->fxn to NULL to allow Swi_construct2() to
+                 *  determine that a failure occurred.  We do this inside
+                 *  the Swi_DISABLE_ALL_HOOKS block instead of Instance_init()
+                 *  since this code will not go in ROM.
+                 */
+                swi->fxn = NULL;
+
                 return (i + 1);
             }
         }
@@ -722,6 +753,48 @@ Void Swi_or(Swi_Object *swi, UInt mask)
     Swi_post(swi);
 }
 
+/*!
+ *  ======== Swi_andn ========
+ */
+Void Swi_andn(Swi_Object *swi, UInt mask)
+{
+    UInt hwiKey;
+
+    hwiKey = Hwi_disable();
+
+    if (swi->trigger != 0) {
+        swi->trigger &= ~mask;
+        if (swi->trigger == 0) {
+            Hwi_restore(hwiKey);
+            Swi_post(swi);
+            return;
+        }
+    }
+
+    Hwi_restore(hwiKey);
+}
+
+/*
+ *  ======== Swi_dec ========
+ */
+Void Swi_dec(Swi_Object *swi)
+{
+    UInt hwiKey;
+
+    hwiKey = Hwi_disable();
+
+    if (swi->trigger != 0) {
+        swi->trigger -= 1;
+        if (swi->trigger == 0) {
+            Hwi_restore(hwiKey);
+            Swi_post(swi);
+            return;
+        }
+    }
+
+    Hwi_restore(hwiKey);
+}
+
 /*
  *  ======== Swi_setAttrs ========
  */
@@ -762,6 +835,28 @@ Void Swi_setAttrs(Swi_Object *swi, Swi_FuncPtr fxn, Swi_Params *params)
     swi->mask = 1 << swi->priority;
     swi->initTrigger = swi->trigger = params->trigger;
     swi->readyQ = Queue_Object_get(Swi_module->readyQ, swi->priority);
+
+    Hwi_restore(hwiKey);
+}
+
+/*
+ *  ======== Swi_setPri ========
+ */
+Void Swi_setPri(Swi_Object *swi, UInt priority)
+{
+    UInt hwiKey;
+
+    if (priority == ~0) {
+        priority = Swi_numPriorities - 1;
+    }
+
+    Assert_isTrue(priority < Swi_numPriorities, Swi_A_badPriority);
+
+    hwiKey = Hwi_disable();
+
+    swi->priority = priority;
+    swi->mask = 1 << priority;
+    swi->readyQ = Queue_Object_get(Swi_module->readyQ, priority);
 
     Hwi_restore(hwiKey);
 }

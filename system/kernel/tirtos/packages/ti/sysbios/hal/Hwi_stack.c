@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Texas Instruments Incorporated
+ * Copyright (c) 2015-2016, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -60,6 +60,34 @@ Void ti_sysbios_hal_Hwi_initStack(Void)
 
     while (curStack < (UInt *)(&curStack)) {
         *((volatile UInt *)curStack) = 0xbebe;
+        curStack++;
+    }
+}
+
+#elif defined(xdc_target__isaCompatible_v8A)
+
+/*
+ *  ======== Hwi_initStack ========
+ *  Initialize the Common Interrupt Stack
+ */
+Void ti_sysbios_hal_Hwi_initStack(Void)
+{
+    Hwi_StackInfo stkInfo;
+    SizeT curStack;
+    register SizeT stackTop asm ("sp");
+
+    /* Get stack base and size */
+    if (BIOS_smpEnabled) {
+        Hwi_getCoreStackInfo(&stkInfo, FALSE, Core_getId());
+    }
+    else {
+        Hwi_getStackInfo(&stkInfo, FALSE);
+    }
+
+    curStack = (SizeT)(stkInfo.hwiStackBase);
+
+    while (curStack < stackTop) {
+        *((volatile UInt8 *)curStack) = 0xbe;
         curStack++;
     }
 }

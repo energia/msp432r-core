@@ -65,16 +65,24 @@ extern "C" {
 #include <stddef.h>
 
 /*!
- *  @brief    Status codes for SemaphoreP APIs
+ *  @brief    Number of bytes greater than or equal to the size of any RTOS
+ *            SemaphoreP object.
+ *
+ *  nortos:   16
+ *  SysBIOS:  28
  */
-typedef enum SemaphoreP_Status {
-    /*! API completed successfully */
-    SemaphoreP_OK = 0,
-    /*! API failed */
-    SemaphoreP_FAILURE = -1,
-    /*! API failed because of a timeout */
-    SemaphoreP_TIMEOUT = -2
-} SemaphoreP_Status;
+#define SemaphoreP_STRUCT_SIZE   (28)
+
+/*!
+ *  @brief    SemaphoreP structure.
+ *
+ *  Opaque structure that should be large enough to hold any of the
+ *  RTOS specific SemaphoreP objects.
+ */
+typedef union SemaphoreP_Struct {
+    uint32_t dummy;  /*!< Align object */
+    char     data[SemaphoreP_STRUCT_SIZE];
+} SemaphoreP_Struct;
 
 /*!
  *  @brief    Wait forever define
@@ -87,14 +95,16 @@ typedef enum SemaphoreP_Status {
 #define SemaphoreP_NO_WAIT       (0)
 
 /*!
- *  @brief    Number of bytes greater than or equal to the size of any RTOS
- *            SemaphoreP object.
- *
- *  nortos:   20
- *  FreeRTOS: 84
- *  SysBIOS:  28
+ *  @brief    Status codes for SemaphoreP APIs (for backwards compatibility)
  */
-#define SemaphoreP_STRUCT_SIZE   (84)
+typedef enum SemaphoreP_Status {
+    /*! API completed successfully */
+    SemaphoreP_OK = 0,
+    /*! API failed */
+    SemaphoreP_FAILURE = -1,
+    /*! API failed because of a timeout */
+    SemaphoreP_TIMEOUT = -2
+} SemaphoreP_Status;
 
 /*!
  *  @brief    Opaque client reference to an instance of a SemaphoreP
@@ -123,39 +133,40 @@ typedef enum SemaphoreP_Mode {
  *  noted in SemaphoreP_Params_init.
  */
 typedef struct SemaphoreP_Params {
-    char *name;           /*!< Name of the semaphore instance. Memory must
-                               persist for the life of the semaphore instance */
-    SemaphoreP_Mode mode; /*!< Mode for the semaphore */
-    uint32_t maxCount;    /*!< The max count allowed for counting semaphore */
+    SemaphoreP_Mode mode;   /*!< Mode for the semaphore */
     void (*callback)(void); /*!< Callback while pending for semaphore post */
 } SemaphoreP_Params;
 
 /*!
- *  @brief    SemaphoreP structure.
+ *  @brief    Default SemaphoreP instance parameters
  *
- *  Opaque structure that should be large enough to hold any of the
- *  RTOS specific SemaphoreP objects.
+ *  SemaphoreP_defaultParams represents the default parameters that are
+ *  used when creating or constructing a SemaphoreP instance.
+ *  SemaphoreP_Params_init() will use the contents of this structure for
+ *  initializing the SemaphoreP_Params instance.
+ *
+ *  SemaphoreP_defaultParams is exposed to the application for the purpose
+ *  of allowing the application to change the default parameters for all
+ *  SemaphoreP instances created thereafter.  The main intent for allowing
+ *  the default parameters to be changed is for setting a semaphore's
+ *  callback function to Power_idleFunc(), so that the SOC can enter low
+ *  power mode when pending on a semaphore.
  */
-typedef struct SemaphoreP_Struct {
-    union {
-        double d;  /*!< Align object */
-        char   data[SemaphoreP_STRUCT_SIZE];
-    } sem;
-} SemaphoreP_Struct;
+extern SemaphoreP_Params SemaphoreP_defaultParams;
 
-/*!
- *  @brief  Function to construct a semaphore.
- *
- *  @param  handle Pointer to a SemaphoreP_Struct object
- *
- *  @param  params  Pointer to the instance configuration parameters. NULL
- *                  denotes to use the default parameters (SemaphoreP default
- *                  parameters as noted in ::SemaphoreP_Params_init.
- *
- *  @return A SemaphoreP_Handle on success or a NULL on an error
+
+/*
+ *  SemaphoreP construct APIs can only be used if one of the OS's
+ *  is defined.  For FreeRTOS, configSUPPORT_STATIC_ALLOCATION also
+ *  has to be set to 1 in FreeRTOSConfig.h.
  */
 extern SemaphoreP_Handle SemaphoreP_construct(SemaphoreP_Struct *handle,
         unsigned int count, SemaphoreP_Params *params);
+
+extern SemaphoreP_Handle SemaphoreP_constructBinary(SemaphoreP_Struct *handle,
+        unsigned int count);
+
+extern void SemaphoreP_destruct(SemaphoreP_Struct *semP);
 
 /*!
  *  @brief  Function to create a semaphore.
@@ -170,28 +181,41 @@ extern SemaphoreP_Handle SemaphoreP_construct(SemaphoreP_Struct *handle,
  *  @return A SemaphoreP_Handle on success or a NULL on an error
  */
 extern SemaphoreP_Handle SemaphoreP_create(unsigned int count,
-                                           SemaphoreP_Params *params);
+        SemaphoreP_Params *params);
+
+/*!
+ *  @brief  Function to create a binary semaphore.
+ *
+ *  This can be used instead of SemaphoreP_create() to create a binary
+ *  semaphore.
+ *
+ *  @param  count  Initial count of the binary semaphore. Only values
+ *                 of 0 or 1 are valid.
+ *
+ *  @return A SemaphoreP_Handle on success or a NULL on an error
+ */
+extern SemaphoreP_Handle SemaphoreP_createBinary(unsigned int count);
+
+/*!
+ *  @brief  Function to create a binary semaphore.
+ *
+ *  This can be used instead of SemaphoreP_create() to create a binary
+ *  semaphore.
+ *
+ *  @param  count  Initial count of the binary semaphore. Only values
+ *                 of 0 or 1 are valid.
+ *
+ *  @return A SemaphoreP_Handle on success or a NULL on an error
+ */
+extern SemaphoreP_Handle SemaphoreP_createBinaryCallback(unsigned int count,
+        void (*callback)(void));
 
 /*!
  *  @brief  Function to delete a semaphore.
  *
  *  @param  handle  A SemaphoreP_Handle returned from ::SemaphoreP_create
- *
- *  @return Status of the functions
- *    - SemaphoreP_OK: Deleted the semaphore instance
- *    - SemaphoreP_FAILED: Failed to delete the semaphore instance
  */
-extern SemaphoreP_Status SemaphoreP_delete(SemaphoreP_Handle handle);
-
-/*!
- *  @brief  Function to destruct a semaphore object
- *
- *  @param  semP  Pointer to a SemaphoreP_Struct object that was passed to
- *                SemaphoreP_construct().
- *
- *  @return
- */
-extern void SemaphoreP_destruct(SemaphoreP_Struct *semP);
+extern void SemaphoreP_delete(SemaphoreP_Handle handle);
 
 /*!
  *  @brief  Initialize params structure to default values.
@@ -209,11 +233,11 @@ extern void SemaphoreP_Params_init(SemaphoreP_Params *params);
  *
  *  @param  handle  A SemaphoreP_Handle returned from ::SemaphoreP_create
  *
- *  @param  timeout Timeout (in milliseconds) to wait for the semaphore to
+ *  @param  timeout Timeout (in ClockP ticks) to wait for the semaphore to
  *                  be posted (signalled).
  *
  *  @return Status of the functions
- *    - SemaphoreP_OK: Obtain the semaphore
+ *    - SemaphoreP_OK: Obtained the semaphore
  *    - SemaphoreP_TIMEOUT: Timed out. Semaphore was not obtained.
  *    - SemaphoreP_FAILED: Non-time out failure.
  */
@@ -224,23 +248,8 @@ extern SemaphoreP_Status SemaphoreP_pend(SemaphoreP_Handle handle,
  *  @brief  Function to post (signal) a semaphore from task of ISR context.
  *
  *  @param  handle  A SemaphoreP_Handle returned from ::SemaphoreP_create
- *
- *  @return Status of the functions
- *    - SemaphoreP_OK: Released the semaphore
- *    - SemaphoreP_FAILED: Failed to post the semaphore
  */
-extern SemaphoreP_Status SemaphoreP_post(SemaphoreP_Handle handle);
-
-/*!
- *  @brief  Function to post (signal) a semaphore from an ClockP function.
- *
- *  @param  handle  A SemaphoreP_Handle returned from ::SemaphoreP_create
- *
- *  @return Status of the functions
- *    - SemaphoreP_OK: Released the semaphore
- *    - SemaphoreP_FAILED: Failed to post the semaphore
- */
-extern SemaphoreP_Status SemaphoreP_postFromClock(SemaphoreP_Handle handle);
+extern void SemaphoreP_post(SemaphoreP_Handle handle);
 
 #ifdef __cplusplus
 }

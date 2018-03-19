@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -45,85 +45,158 @@ extern "C" {
 #endif
 
 /*!
- *  @brief  Command to set the copy block for an NVS block.
+ *  @internal @brief NVS function pointer table
  *
- *  Passing NVSMSP432_CMD_SET_COPYBLOCK to NVS_control(), along with
- *  a block of memory, is used to set the copy block for an
- *  NVSMSP432_HWAttrs structure.
- *  The copy block is used as scratch when writing to a flash block.  Since
- *  the block must be erased before writing to it, the data in the block
- *  that is outside of the region to be modified, must be preserved.  It
- *  will be copied into the copy block, along with the buffer of data
- *  passed to NVS_write().  The block is then erased and the copy block
- *  copied back to the block.  If the copy block is not known at compile
- *  time, for example, if it is allocated from heap memory, it can be set
- *  through NVS_control() using the command NVSMSP432_CMD_SET_COPYBLOCK.
- *  The copy block is passed in the arg parameter of NVS_control().  The
- *  size of the copy block passed to NVS_control() must be at least
- *  as large as the block size, and it is up to the application to ensure
- *  this.
+ *  'NVSMSP432_fxnTable' is a fully populated function pointer table
+ *  that can be referenced in the NVS_config[] array entries.
  *
- *  @sa NVSMSP432_HWAttrs
+ *  Users can minimize their application code size by providing their
+ *  own custom NVS function pointer table that contains only those APIs
+ *  used by the application.
+ *
+ *  An example of a custom NVS function table is shown below:
+ *  @code
+ *  //
+ *  // Since the application does not use the
+ *  // NVS_control(), NVS_lock(), and NVS_unlock() APIs,
+ *  // these APIs are removed from the function
+ *  // pointer table and replaced with NULL
+ *  //
+ *  const NVS_FxnTable myNVS_fxnTable = {
+ *      NVSMSP432_close,
+ *      NULL,     // remove NVSMSP432_control(),
+ *      NVSMSP432_erase,
+ *      NVSMSP432_getAttrs,
+ *      NVSMSP432_init,
+ *      NULL,     // remove NVSMSP432_lock(),
+ *      NVSMSP432_open,
+ *      NVSMSP432_read,
+ *      NULL,     // remove NVSMSP432_unlock(),
+ *      NVSMSP432_write
+ *  };
+ *  @endcode
  */
-#define NVSMSP432_CMD_SET_COPYBLOCK      NVS_CMD_RESERVED + 0
-
-/*!
- *  @brief  Alignment error returned by NVSMSP432_control().
- *
- *  This error is returned if the copy block passed to NVSMSP432_control()
- *  is not aligned on a 4-byte boundary, or is NULL.
- *
- *  @sa NVSMSP432_HWAttrs
- */
-#define NVSMSP432_STATUS_ECOPYBLOCK      (NVS_STATUS_RESERVED - 1)
-
-/*!
- *  @brief      NVSMSP432 command structure for setting copy block.
- *
- *  This structure is used to hold the copy block information that is
- *  passed to NVS_control().  If copyBlock is a buffer in RAM, isRam
- *  should be set to TRUE.  If copyBlock is in Flash, set isRam to
- *  FALSE.
- */
-typedef struct NVSMSP432_CmdSetCopyBlockArgs
-{
-    void *copyBlock;     /*!< Address of the copy block */
-    bool isRam;          /*!< TRUE if copyBlock is a RAM buffer */
-} NVSMSP432_CmdSetCopyBlockArgs;
-
-/* NVS function table pointer */
 extern const NVS_FxnTable NVSMSP432_fxnTable;
 
 /*!
  *  @brief      NVSMSP432 attributes
  *
- *  The block is the address of a region in flash of size blockSize bytes.
+ *  The 'regionBase' field must point to the base address of the region
+ *  to be managed.
  *
- *  For MSP432 devices, the smallest erase page size is 4KB, so in most
- *  cases, blockSize should be set to 4KB for this device.  If the
- *  blockSize is less than the page size, care should be taken not to use
- *  the rest of the page.  A write to the block will cause the entire page
- *  to be erased!  A blockSize greater than the page size is not supported.
- *  The page size for the device can be obtained through NVS_getAttrs().
+ *  The regionSize must be an integer multiple of the flash sector size.
+ *  For most MSP432 devices, the flash sector size is 4096 bytes.
+ *  The NVSMSP432 driver will determine the device's actual sector size by
+ *  reading internal system configuration registers.
  *
- *  When the block is written to, a scratch region is needed to preserve
- *  the unmodified data in the block.  This scratch region, referred to as
- *  copyBlock, can be a page in flash or a buffer in RAM.  The application
- *  can set copyBlock in the HWAttrs directly, if it is known at compile
- *  time, or set copyBlock through NVS_control(), for example, if it is
- *  allocated on the heap.  The copyBlock can be shared accross multiple
- *  NVS instances.  It is up to the application to ensure that copyBlock
- *  is set before the first call to NVS_write().
- *  Using a blockSize less than the page size decreases RAM or heap only
- *  if copyBlock is not in flash.
+ *  Care must be taken to ensure that the linker does not unintentionally
+ *  place application content (e.g., code/data) in the flash regions.
+ *
+ *  For CCS and IAR tools, defining and reserving flash memory regions can
+ *  be done entirely within the Board.c file. For GCC, additional content is
+ *  required in the application's linker command file to achieve the same
+ *  result.
+ *
+ *  The example below defines a char array, 'flashBuf' and uses compiler
+ *  CCS and IAR compiler pragmas to place 'flashBuf' at a specific address
+ *  within the flash memory.
+ *
+ *  For GCC, the 'flashBuf' array is placed into a named linker section.
+ *  Corresponding linker commands are added to the application's linker
+ *  command file to place the section at a specific flash memory address.
+ *  The section placement command is carefully chosen to only RESERVE space
+ *  for the 'flashBuf' array, and not to actually initialize it during
+ *  the application load process, thus preserving the content of flash.
+ *
+ *  The 'regionBase' fields of the two HWAttrs region instances
+ *  are initialized to point to the base address of 'flashBuf' and to some
+ *  offset from the base of the char array.
+ *
+ *  The linker command syntax is carefully chosen to only RESERVE space
+ *  for the char array and not to actually initialize it during application
+ *  load.
+ *
+ *  @code
+ *  #define SECTORSIZE 0x1000
+ *  #define FLASH_REGION_BASE 0x3b000
+ *
+ *  //
+ *  // Reserve flash sectors for NVS driver use
+ *  // by placing an uninitialized byte array
+ *  // at the desired flash address.
+ *  //
+ *  #if defined(__TI_COMPILER_VERSION__)
+ *
+ *  //
+ *  //  Place uninitialized array at FLASH_REGION_BASE
+ *  //
+ *  #pragma LOCATION(flashBuf, FLASH_REGION_BASE);
+ *  #pragma NOINIT(flashBuf);
+ *  char flashBuf[SECTORSIZE * 4];
+ *
+ *  #elif defined(__IAR_SYSTEMS_ICC__)
+ *
+ *  //
+ *  //  Place uninitialized array at FLASH_REGION_BASE
+ *  //
+ *  __no_init char flashBuf[SECTORSIZE * 4] @ FLASH_REGION_BASE;
+ *
+ *  #elif defined(__GNUC__)
+ *
+ *  //
+ *  //  Place the flash buffers in the .nvs section created in the gcc linker file.
+ *  //  The .nvs section enforces alignment on a sector boundary but may
+ *  //  be placed anywhere in flash memory.  If desired the .nvs section can be set
+ *  //  to a fixed address by changing the following in the gcc linker file:
+ *
+ * .nvs (FIXED_FLASH_ADDR) (NOLOAD) : AT (FIXED_FLASH_ADDR) {
+ *      *(.nvs)
+ * } > REGION_TEXT
+ *
+ *  __attribute__ ((section (".nvs")))
+ *  char flashBuf[SECTORSIZE * 4];
+ *
+ *  #endif
+ *
+ *  NVSMSP432_HWAttrs nvsMSP432HWAttrs[2] = {
+ *      //
+ *      // region 0 is 1 flash sector in length.
+ *      //
+ *      {
+ *          .regionBase = (void *)flashBuf,
+ *          .regionSize = SECTORSIZE,
+ *      },
+ *      //
+ *      // region 1 is 3 flash sectors in length.
+ *      //
+ *      {
+ *          .regionBase = (void *)(flashBuf + SECTORSIZE),
+ *          .regionSize = SECTORSIZE*3,
+ *      }
+ *  };
+ *
+ *  Example GCC linker command file content reserves flash space
+ *  but does not initialize it:
+ *
+ *  MEMORY
+ *  {
+ *      MAIN_FLASH (RX) : ORIGIN = 0x00000000, LENGTH = 0x00040000
+ *      INFO_FLASH (RX) : ORIGIN = 0x00200000, LENGTH = 0x00004000
+ *      SRAM_CODE  (RWX): ORIGIN = 0x01000000, LENGTH = 0x00010000
+ *      SRAM_DATA  (RW) : ORIGIN = 0x20000000, LENGTH = 0x00010000
+ *  }
+ *
+ *  .nvs (0x3b000) (NOLOAD) : AT (0x3b000) {
+ *      KEEP (*(.nvs))
+ *  } > NVS
+ *
+ *
+ *  @endcode
  */
+
 typedef struct NVSMSP432_HWAttrs {
-    void         *block;      /*!< Address of flash block to manage */
-    size_t        blockSize;  /*!< The size of block */
-    void         *copyBlock;  /*!< A RAM buffer or flash block to use for
-                               *   scratch when writing to the block.
-                               */
-    bool          isRam;      /*!< TRUE if copyBlock is a RAM buffer */
+    void        *regionBase;        /*!< Base address of flash region */
+    size_t      regionSize;         /*!< The size of the region in bytes */
 } NVSMSP432_HWAttrs;
 
 /*
@@ -132,14 +205,29 @@ typedef struct NVSMSP432_HWAttrs {
  *  The application must not access any member variables of this structure!
  */
 typedef struct NVSMSP432_Object {
-    bool                 opened;      /* Has the obj been opened */
-    uint32_t             bank;        /* Flash memory bank, eg,
-                                       * FLASH_MAIN_MEMORY_SPACE_BANK1
-                                       */
-    uint32_t             sector;      /* Flash sector (0,...,31) */
-    uint32_t             copyBank;    /* Copy block bank */
-    uint32_t             copySector;  /* Copy block sector */
+    bool        opened;             /* Has this region been opened */
 } NVSMSP432_Object;
+
+/*
+ *  @cond NODOC
+ *  NVSMSP432 driver public APIs
+ */
+
+extern void         NVSMSP432_close(NVS_Handle handle);
+extern int_fast16_t NVSMSP432_control(NVS_Handle handle, uint_fast16_t cmd,
+                        uintptr_t arg);
+extern int_fast16_t NVSMSP432_erase(NVS_Handle handle, size_t offset,
+                        size_t size);
+extern void         NVSMSP432_getAttrs(NVS_Handle handle, NVS_Attrs *attrs);
+extern void         NVSMSP432_init();
+extern int_fast16_t NVSMSP432_lock(NVS_Handle handle, uint32_t timeout);
+extern NVS_Handle   NVSMSP432_open(uint_least8_t index, NVS_Params *params);
+extern int_fast16_t NVSMSP432_read(NVS_Handle handle, size_t offset,
+                        void *buffer, size_t bufferSize);
+extern void         NVSMSP432_unlock(NVS_Handle handle);
+extern int_fast16_t NVSMSP432_write(NVS_Handle handle, size_t offset,
+                        void *buffer, size_t bufferSize, uint_fast16_t flags);
+/*! @endcond */
 
 #if defined (__cplusplus)
 }

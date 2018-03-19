@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Texas Instruments Incorporated
+ * Copyright (c) 2014-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -42,6 +42,7 @@ import xdc.runtime.Error;
 import xdc.runtime.Assert;
 import xdc.runtime.Diags;
 import xdc.runtime.Log;
+import xdc.runtime.Types;
 
 import ti.sysbios.knl.Queue;
 
@@ -311,6 +312,26 @@ module Swi
     };
 
     /*!
+     *  ======== Struct2 ========
+     */
+    struct Struct2__ {
+        Queue.Elem      qElem;
+        FuncPtr         fxn;
+        UArg            arg0;
+        UArg            arg1;
+        UInt            priority;
+        UInt            mask;
+        Bool            posted;
+        UInt            initTrigger;
+        UInt            trigger;
+        Queue.Handle    readyQ;
+        Ptr             hookEnv[];
+        Types.CordAddr  name;
+    };
+
+    typedef Struct2__ Struct2;
+
+    /*!
      *  ======== BasicView ========
      *  @_nodoc
      */
@@ -442,6 +463,49 @@ module Swi
 
 
     // -------- Module Functions --------
+
+    /*!
+     *  ======== construct2 ========
+     *  Construct a software interrupt
+     *
+     *  Swi_construct2 constructs a Swi object.  This function is identical
+     *  to Swi_construct(), but does not take an Error_Block parameter, and
+     *  returns a Swi_Handle.
+     *
+     *  The following C code sets Swi parameters and
+     *  constructs a Swi object:
+     *
+     *  @p(code)
+     *
+     *  Swi_Struct2 swiStruct2;
+     *  Swi_Handle  swi;
+     *
+     *  Void main()
+     *  {
+     *      Swi_Params swiParams;
+     *
+     *      Swi_Params_init(&swiParams);
+     *      swiParams.arg0 = 1;
+     *      swiParams.arg1 = 0;
+     *      swiParams.priority = 2;
+     *      swiParams.trigger = 0;
+     *
+     *      swi = Swi_construct2(&swiStruct2,  swiFxn, &swiParams);
+     *      if (swi == NULL) {
+     *          // Failure
+     *      }
+     *
+     *      BIOS_start();
+     *  }
+     *  @p
+     *
+     *  @param(swi)        Pointer to Swi_Struct2 object.
+     *  @param(swiFxn)     Swi Function
+     *  @param(prms)       Pointer to Swi_Params structure
+     *
+     *  @b(returns)        A Swi handle
+     */
+    Handle construct2(Struct2 *swi, FuncPtr swiFxn, const Params *prms);
 
     /*!
      *  ======== addHookSet ========
@@ -1121,6 +1185,23 @@ instance:
      *  @param(params)     pointer for returning Swi's Params
      */
     Void setAttrs(FuncPtr swiFxn, Params *params);
+
+    /*!
+     *  ======== setPri ========
+     *  Set a Swi's priority
+     *
+     *  Swi_setPri sets the priority of the Swi passed in as the
+     *  argument.
+     *
+     *  @Constraints
+     *  Swi_setPri() must not be used on a Swi that is preempted
+     *  or is ready to run.
+     *
+     *  @related {@link #getPri Swi_setAttrs()}
+     *
+     *  @param(priority)     priority of Swi
+     */
+    Void setPri(UInt priority);
 
     /*!
      *  ======== inc ========

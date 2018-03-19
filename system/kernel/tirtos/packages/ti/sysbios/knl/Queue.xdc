@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015, Texas Instruments Incorporated
+ * Copyright (c) 2013-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -342,10 +342,13 @@ instance:
 
     /*!
      *  ======== dequeue ========
-     *  Remove the element from the front of queue and return elem.  If the
-     *  queue is empty, the return value of Queue_dequeue() will be non-NULL,
-     *  due to the Queue implementation.  Use Queue_empty() to determine
-     *  whether or not the Queue is empty before calling Queue_dequeue().
+     *  Remove the element from the front of queue and return elem.
+     *
+     *  This function removes an element from the front of queue and returns
+     *  it. If the queue is empty, the return value of Queue_dequeue() will
+     *  be non-NULL, due to the Queue implementation. Use Queue_empty() to
+     *  determine whether or not the Queue is empty before calling
+     *  Queue_dequeue().
      *
      *  @b(returns)             pointer to former first element
      */

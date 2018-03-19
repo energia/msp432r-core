@@ -41,8 +41,6 @@
 
 #include <xdc/std.h>
 #include <xdc/runtime/Error.h>
-#include <xdc/runtime/Memory.h>
-#include <ti/sysbios/hal/Hwi.h>
 #include <ti/sysbios/gates/GateMutex.h>
 
 
@@ -52,16 +50,8 @@
 MutexP_Handle MutexP_construct(MutexP_Struct *handle, MutexP_Params *params)
 {
     GateMutex_Handle gate;
-    GateMutex_Params gateParams;
 
-    if (params == NULL) {
-        GateMutex_construct((GateMutex_Struct *)handle, NULL);
-    }
-    else {
-        GateMutex_Params_init(&gateParams);
-        gateParams.instance->name = params->name;
-        GateMutex_construct((GateMutex_Struct *)handle, &gateParams);
-    }
+    GateMutex_construct((GateMutex_Struct *)handle, NULL);
 
     gate = GateMutex_handle((GateMutex_Struct *)handle);
 
@@ -74,16 +64,8 @@ MutexP_Handle MutexP_construct(MutexP_Struct *handle, MutexP_Params *params)
 MutexP_Handle MutexP_create(MutexP_Params *params)
 {
     GateMutex_Handle handle;
-    GateMutex_Params gateMutexParams;
 
-    if (params == NULL) {
-        handle = GateMutex_create(NULL, Error_IGNORE);
-    }
-    else {
-        GateMutex_Params_init(&gateMutexParams);
-        gateMutexParams.instance->name = params->name;
-        handle = GateMutex_create(&gateMutexParams, Error_IGNORE);
-    }
+    handle = GateMutex_create(NULL, Error_IGNORE);
 
     return ((MutexP_Handle)handle);
 }
@@ -91,13 +73,11 @@ MutexP_Handle MutexP_create(MutexP_Params *params)
 /*
  *  ======== MutexP_delete ========
  */
-MutexP_Status MutexP_delete(MutexP_Handle handle)
+void MutexP_delete(MutexP_Handle handle)
 {
     GateMutex_Handle gateMutex = (GateMutex_Handle)handle;
 
     GateMutex_delete(&gateMutex);
-
-    return (MutexP_OK);
 }
 
 /*
@@ -125,7 +105,6 @@ uintptr_t MutexP_lock(MutexP_Handle handle)
  */
 void MutexP_Params_init(MutexP_Params *params)
 {
-    params->name = NULL;
     params->callback = NULL;
 }
 

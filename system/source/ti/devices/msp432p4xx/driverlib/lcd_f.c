@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -36,7 +31,11 @@
  * --/COPYRIGHT--*/
 #include <stdint.h>
 #include <ti/devices/msp432p4xx/driverlib/lcd_f.h>
-#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
+#include <ti/devices/msp432p4xx/driverlib/interrupt.h>
+
+/* Define to ensure that our current MSP432 has the LCD_F module. This
+    definition is included in the device specific header file */
+#ifdef __MCU_HAS_LCD_F__
 
 /* Configuration functions */
 void LCD_F_initModule(LCD_F_Config *initParams)
@@ -174,7 +173,6 @@ void LCD_F_setPinsAsLCDFunction(uint_fast8_t startPin, uint8_t endPin)
 void LCD_F_setPinAsCOM(uint8_t pin, uint_fast8_t com)
 {
     uint32_t val = (pin & 0x1F);
-    uint8_t muxRate = LCD_F->CTL & LCD_F_CTL_MX_MASK;
 
     BITBAND_PERI(LCD_F->CTL, LCD_F_CTL_ON_OFS) = 0;
 
@@ -196,7 +194,6 @@ void LCD_F_setPinAsCOM(uint8_t pin, uint_fast8_t com)
 void LCD_F_setPinAsSEG(uint_fast8_t pin)
 {
     uint32_t val = (pin & 0x1F);
-    uint8_t muxRate = LCD_F->CTL | LCD_F_CTL_MX_MASK;
 
     BITBAND_PERI(LCD_F->CTL, LCD_F_CTL_ON_OFS) = 0;
 
@@ -261,3 +258,5 @@ void LCD_F_unregisterInterrupt(void)
     Interrupt_disableInterrupt(INT_LCD_F);
     Interrupt_unregisterInterrupt(INT_LCD_F);
 }
+
+#endif /* __MCU_HAS_LCD_F__ */

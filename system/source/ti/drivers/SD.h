@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Texas Instruments Incorporated
+ * Copyright (c) 2016-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -224,7 +224,7 @@ typedef uint_fast32_t (*SD_getNumSectorsFxn) (SD_Handle handle);
  *  @brief A function pointer to a driver specific implementation of
  *         SD_getSectorSizeFxn().
  */
-typedef uint_fast32_t (*SD_getSectorSizeFxn) (void);
+typedef uint_fast32_t (*SD_getSectorSizeFxn) (SD_Handle handle);
 
 /*!
  *  @brief A function pointer to a driver specific implementation of

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,16 +47,26 @@
 #define DebugP_LOG_ENABLED 0
 #endif
 
+#include <ti/devices/DeviceFamily.h>
+
 #include <ti/drivers/GPIO.h>
 #include <ti/drivers/gpio/GPIOMSP432.h>
 #include <ti/drivers/dpl/DebugP.h>
 #include <ti/drivers/dpl/HwiP.h>
+#include <ti/drivers/dpl/SemaphoreP.h>
 
 /* driverlib header files */
 #include <ti/devices/msp432p4xx/driverlib/rom.h>
 #include <ti/devices/msp432p4xx/driverlib/rom_map.h>
 #include <ti/devices/msp432p4xx/driverlib/gpio.h>
 #include <ti/devices/msp432p4xx/driverlib/interrupt.h>
+
+/*
+ * There are 11 8-bit ports total (1-10 and J)
+ * but only 6 ports support interrupts
+ */
+#define NUM_INTERRUPT_PORTS 6
+#define NUM_PINS_PER_PORT   8
 
 /*
  * Map GPIO_INT types to corresponding MSP432 interrupt options
@@ -74,19 +84,12 @@ static const uint8_t interruptType[] = {
 /*
  * Table of port interrupt vector numbers
  * Used by setCallback() to create Hwis.
- * Up to NUM_PORTS port interrupts must be supported
+ * Up to NUM_INTERRUPT_PORTS port interrupts must be supported
  */
-static const uint8_t portInterruptIds[] = {
+static const uint8_t portInterruptIds[NUM_INTERRUPT_PORTS] = {
     INT_PORT1, INT_PORT2, INT_PORT3,
     INT_PORT4, INT_PORT5, INT_PORT6
 };
-
-/*
- * There are 11 8-bit ports total (1-10 and J)
- * but only 6 ports support interrupts
- */
-#define NUM_PORTS           6
-#define NUM_PINS_PER_PORT   8
 
 /*
  * Extracts the GPIO interrupt type from the pinConfig.  Value to index into the
@@ -124,21 +127,19 @@ typedef struct PortCallbackInfo {
  * Table of portCallbackInfos.
  * One for each port.
  */
-static PortCallbackInfo gpioCallbackInfo[NUM_PORTS];
+static PortCallbackInfo gpioCallbackInfo[NUM_INTERRUPT_PORTS];
 
 /*
  * bit mask used to determine if a Hwi has been created/constructed
  * for a port already.
- * up to NUM_PORTS port interrupts must be supported
+ * up to NUM_INTERRUPT_PORTS port interrupts must be supported
  */
 static uint8_t portHwiCreatedBitMask = 0;
 
-#if DebugP_ASSERT_ENABLED
 /*
  * internal boolean to confirm that GPIO_init() has been called
  */
 static bool initCalled = false; /* Also used to check status for initialization */
-#endif
 
 extern const GPIOMSP432_Config GPIOMSP432_config;
 
@@ -147,18 +148,25 @@ extern const GPIOMSP432_Config GPIOMSP432_config;
  *
  *  Internal function to efficiently find the index of the right most set bit.
  */
-static inline uint32_t getPinNumber(uint32_t x) {
+static inline uint32_t getPinNumber(uint32_t x)
+{
+    uint32_t tmp;
+
 #if defined(__TI_COMPILER_VERSION__)
-    return __clz(__rbit(x));
+    tmp = __clz(__rbit(x));
 #elif defined(codered) || defined(__GNUC__) || defined(sourcerygxx)
-    return __builtin_ctz(x);
+    tmp = __builtin_ctz(x);
 #elif defined(__IAR_SYSTEMS_ICC__)
-    return __CLZ(__RBIT(x));
+    tmp = __CLZ(__RBIT(x));
 #elif defined(rvmdk) || defined(__ARMCC_VERSION)
-    return __clz(__rbit(x));
+    tmp = __clz(__rbit(x));
 #else
     #error "Unsupported compiler used"
 #endif
+
+    tmp = tmp & 0x7; /* force return to be 0..7 -- keep Klocwork happy */
+
+    return (tmp);
 }
 
 /*
@@ -170,6 +178,14 @@ void GPIO_clearInt(uint_least8_t index)
     PinConfig *config = (PinConfig *) &GPIOMSP432_config.pinConfigs[index];
 
     DebugP_assert(initCalled && index < GPIOMSP432_config.numberOfPinConfigs);
+
+    /*
+     * Only ports 1-6 are interrupt capable;
+     * return if (port > NUM_INTERRUPT_PORTS)
+     */
+    if (config->port > NUM_INTERRUPT_PORTS) {
+        return;
+    }
 
     /* Make atomic update */
     key = HwiP_disable();
@@ -193,6 +209,14 @@ void GPIO_disableInt(uint_least8_t index)
 
     DebugP_assert(initCalled && index < GPIOMSP432_config.numberOfPinConfigs);
 
+    /*
+     * Only ports 1-6 are interrupt capable;
+     * return if (port > NUM_INTERRUPT_PORTS)
+     */
+    if (config->port > NUM_INTERRUPT_PORTS) {
+        return;
+    }
+
     /* Make atomic update */
     key = HwiP_disable();
 
@@ -215,6 +239,14 @@ void GPIO_enableInt(uint_least8_t index)
 
     DebugP_assert(initCalled && index < GPIOMSP432_config.numberOfPinConfigs);
 
+    /*
+     * Only ports 1-6 are interrupt capable;
+     * return if (port > NUM_INTERRUPT_PORTS)
+     */
+    if (config->port > NUM_INTERRUPT_PORTS) {
+        return;
+    }
+
     /* Make atomic update */
     key = HwiP_disable();
 
@@ -226,7 +258,6 @@ void GPIO_enableInt(uint_least8_t index)
     DebugP_log2("GPIO: port 0x%x, pin 0x%x interrupts enabled", config->port,
         config->pin);
 }
-
 
 /*
  *  ======== GPIO_getConfig ========
@@ -277,12 +308,39 @@ void GPIO_hwiIntFxn(uintptr_t portIndex)
  */
 void GPIO_init()
 {
-    unsigned int i, j;
+    unsigned int i, j, hwiKey;
+    SemaphoreP_Handle sem;
+    static SemaphoreP_Handle initSem;
 
-#if DebugP_ASSERT_ENABLED
-    initCalled = true;
-#endif
-    for (i = 0; i < NUM_PORTS; i++) {
+    /* speculatively create a binary semaphore */
+    sem = SemaphoreP_createBinary(1);
+
+    /* There is no way to inform user of this fatal error. */
+    if (sem == NULL) return;
+
+    hwiKey = HwiP_disable();
+
+    if (initSem == NULL) {
+        initSem = sem;
+        HwiP_restore(hwiKey);
+    }
+    else {
+        /* init already called */
+        HwiP_restore(hwiKey);
+        /* delete unused Semaphore */
+        if (sem) SemaphoreP_delete(sem);
+    }
+
+    /* now use the semaphore to protect init code */
+    SemaphoreP_pend(initSem, SemaphoreP_WAIT_FOREVER);
+
+    /* Only perform init once */
+    if (initCalled) {
+        SemaphoreP_post(initSem);
+        return;
+    }
+
+    for (i = 0; i < NUM_INTERRUPT_PORTS; i++) {
         for (j = 0; j < NUM_PINS_PER_PORT; j++) {
             gpioCallbackInfo[i].pinIndex[j] = CALLBACK_INDEX_NOT_CONFIGURED;
         }
@@ -302,6 +360,10 @@ void GPIO_init()
             }
         }
     }
+
+    initCalled = true;
+
+    SemaphoreP_post(initSem);
 }
 
 /*
@@ -333,6 +395,14 @@ void GPIO_setCallback(uint_least8_t index, GPIO_CallbackFxn callback)
     PinConfig   *config = (PinConfig *) &GPIOMSP432_config.pinConfigs[index];
 
     DebugP_assert(initCalled && index < GPIOMSP432_config.numberOfCallbacks);
+
+    /*
+     * Only ports 1-6 are interrupt capable;
+     * return if (port > NUM_INTERRUPT_PORTS)
+     */
+    if (config->port > NUM_INTERRUPT_PORTS) {
+        return;
+    }
 
     /*
      * plug the pin index into the corresponding
@@ -407,14 +477,27 @@ int_fast16_t GPIO_setConfig(uint_least8_t index, GPIO_PinConfig pinConfig)
         else {
             /* configure output */
             MAP_GPIO_setAsOutputPin(port, pin);
-            if ((pinConfig & GPIO_CFG_OUT_STRENGTH_MASK) ==
-                GPIO_CFG_OUT_STR_LOW) {
-                MAP_GPIO_setDriveStrengthLow(port, pin);
+
+            /*
+             * Drive strength is only available on pins 2.0 - 2.3;
+             * return error if trying to configure high drive strength on
+             * other pins.
+             */
+            if (((port != 2) || (pin > 0x04)) &&
+                (pinConfig & GPIO_CFG_OUT_STRENGTH_MASK)) {
+                HwiP_restore(key);
+
+                return (GPIO_STATUS_ERROR);
             }
-            else {
+            else if ((port == 2) && (pin <= 0x04) &&
+                (pinConfig & GPIO_CFG_OUT_STRENGTH_MASK)) {
                 /* Map MED and HIGH to high */
                 MAP_GPIO_setDriveStrengthHigh(port, pin);
             }
+            else {
+                MAP_GPIO_setDriveStrengthLow(port, pin);
+            }
+
             if (pinConfig & GPIO_CFG_OUT_HIGH) {
                 MAP_GPIO_setOutputHighOnPin(port, pin);
             }
@@ -436,6 +519,14 @@ int_fast16_t GPIO_setConfig(uint_least8_t index, GPIO_PinConfig pinConfig)
     if (pinConfig & GPIO_CFG_INT_MASK) {
         portIndex = config->port - 1;
         portBitMask = 1 << portIndex;
+
+        /*
+         * Only GPIO Ports 1-6 are interrupt capable;
+         * return error if (port > NUM_INTERRUPT_PORTS)
+         */
+        if (port > NUM_INTERRUPT_PORTS) {
+            return (GPIO_STATUS_ERROR);
+        }
 
         /* if Hwi has not already been created, do so */
         if ((portHwiCreatedBitMask & portBitMask) == 0) {

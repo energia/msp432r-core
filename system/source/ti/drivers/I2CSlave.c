@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,11 +34,12 @@
  */
 
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
 
-#include <ti/drivers/I2CSlave.h>
 #include <ti/drivers/dpl/HwiP.h>
+#include <ti/drivers/I2CSlave.h>
 
 extern const I2CSlave_Config I2CSlave_config[];
 extern const uint_least8_t I2CSlave_count;

@@ -2,8 +2,8 @@
 * @file     system_msp432p4111.c
 * @brief    CMSIS Cortex-M4F Device Peripheral Access Layer Source File for
 *           MSP432P4111
-* @version  3.000
-* @date     01/16/17
+* @version  3.202
+* @date     08/03/17
 *
 * @note     View configuration instructions embedded in comments
 *

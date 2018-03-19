@@ -719,6 +719,35 @@ const I2C_Config I2C_config[] = {
 const uint_least8_t I2C_count = Board_I2CCOUNT;
 
 /*
+ *  =============================== NVS ===============================
+ *  Non-Volatile Storage configuration.
+ */
+#include <ti/drivers/NVS.h>
+#include <ti/drivers/nvs/NVSMSP432.h>
+
+NVSMSP432_Object nvsMSP432Objects[1];
+
+extern uint8_t __NVS_BASE__;
+extern uint8_t __NVS_SIZE__;
+
+NVSMSP432_HWAttrs nvsMSP432HWAttrs[1] = {
+    {
+        .regionBase = (void *)&__NVS_BASE__,   /* base of unused flash aligned on 4k boundary */
+        .regionSize = (size_t)(&__NVS_SIZE__) 
+    },
+};
+
+const NVS_Config NVS_config[] = {
+    {
+        &NVSMSP432_fxnTable,
+        &nvsMSP432Objects[0],
+        &nvsMSP432HWAttrs[0]
+    },
+};
+
+int NVS_count = 1;
+
+/*
  *  =============================== Power ===============================
  */
 
@@ -993,7 +1022,8 @@ const SPIMSP432DMA_HWAttrsV1 spiMSP432DMAHWAttrs[Board_SPICOUNT] = {
         .simoPin = SPIMSP432DMA_P1_6_UCB0SIMO,
         .somiPin = SPIMSP432DMA_P1_7_UCB0SOMI,
         .stePin  = SPIMSP432DMA_P1_4_UCB0STE,
-        .pinMode  = EUSCI_SPI_3PIN
+        .pinMode  = EUSCI_SPI_3PIN,
+        .minDmaTransferSize = 16
     },
     {
         .baseAddr = EUSCI_B2_BASE,
@@ -1008,7 +1038,8 @@ const SPIMSP432DMA_HWAttrsV1 spiMSP432DMAHWAttrs[Board_SPICOUNT] = {
         .simoPin = SPIMSP432DMA_P3_6_UCB2SIMO,
         .somiPin = SPIMSP432DMA_P3_7_UCB2SOMI,
         .stePin  = SPIMSP432DMA_P3_4_UCB2STE,
-        .pinMode  = EUSCI_SPI_3PIN
+        .pinMode  = EUSCI_SPI_3PIN,
+        .minDmaTransferSize = 16
     }
 };
 
@@ -1140,8 +1171,8 @@ const UART_FxnTable myUARTMSP432_fxnTable = {
 
 /* UART objects */
 UARTMSP432_Object uartMSP432Objects[Board_UARTCOUNT];
-unsigned char uartMSP432RingBuffer0[32];
-unsigned char uartMSP432RingBuffer1[32];
+unsigned char uartMSP432RingBuffer0[128];
+unsigned char uartMSP432RingBuffer1[128];
 
 
 /*

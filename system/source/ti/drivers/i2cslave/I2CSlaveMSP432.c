@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,11 +44,13 @@
 #define DebugP_LOG_ENABLED 0
 #endif
 
-#include <ti/drivers/I2CSlave.h>
-#include <ti/drivers/i2cslave/I2CSlaveMSP432.h>
+#include <ti/devices/DeviceFamily.h>
+
 #include <ti/drivers/dpl/DebugP.h>
 #include <ti/drivers/dpl/HwiP.h>
 #include <ti/drivers/dpl/SemaphoreP.h>
+#include <ti/drivers/I2CSlave.h>
+#include <ti/drivers/i2cslave/I2CSlaveMSP432.h>
 #include <ti/drivers/Power.h>
 #include <ti/drivers/power/PowerMSP432.h>
 
@@ -143,7 +145,9 @@ static void completeTransfer(I2CSlave_Handle handle)
     object->transferCallbackFxn(handle, (object->mode == I2CSLAVE_IDLE_MODE));
 
     /* Remove constraints set during transfer */
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
     Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
 }
 /*
  *  ======== initHW ========
@@ -194,10 +198,6 @@ void I2CSlaveMSP432_close(I2CSlave_Handle handle)
     if (object->transferComplete) {
         SemaphoreP_delete(object->transferComplete);
     }
-
-    /* Remove power constraints */
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
 
     object->isOpen = false;
 
@@ -263,7 +263,10 @@ void I2CSlaveMSP432_hwiIntFxn(uintptr_t arg)
             break;
         case I2CSLAVE_START_MODE:
             if(object->transferInProgress)
+            {
                 completeTransfer((I2CSlave_Handle) arg);
+                object->mode = I2CSLAVE_IDLE_MODE;
+            }
                 break;
 
         case I2CSLAVE_WRITE_MODE:
@@ -296,6 +299,7 @@ void I2CSlaveMSP432_hwiIntFxn(uintptr_t arg)
             break; /* I2CSLAVE_WRITE_MODE */
 
         case I2CSLAVE_READ_MODE:
+            object->transferInProgress = true;
             /* Data read from RXBUF and next byte has already been shifted */
             if(object->countIdx) {
                 *(object->readBufferIdx) =
@@ -404,10 +408,6 @@ I2CSlave_Handle I2CSlaveMSP432_open(I2CSlave_Handle handle,
     MAP_GPIO_setAsPeripheralModuleFunctionInputPin(port,
             pin, moduleFunction);
 
-    /* Shutdown not supported      driver is open */
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
-
     /* Create Hwi object for this I2CSlave peripheral */
     HwiP_Params_init(&(portsParams.hwiParams));
     portsParams.hwiParams.arg = (uintptr_t) handle;
@@ -486,10 +486,12 @@ static bool primeTransfer(I2CSlave_Handle handle, const void *writeBuffer,
     /* Acquire the lock for this particular I2CSlave handle */
     SemaphoreP_pend(object->mutex, SemaphoreP_WAIT_FOREVER);
 
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
     /*
      * Set power constraints to keep peripheral active during transfer
      */
     Power_setConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
 
     /*
      * The buffer and flag are being updated and

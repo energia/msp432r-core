@@ -2,15 +2,15 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     CREATE ARGS
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
@@ -19,7 +19,7 @@
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -102,35 +102,35 @@ typedef enum ti_sysbios_family_arm_v7r_vim_Hwi_Type ti_sysbios_family_arm_v7r_vi
 typedef xdc_UInt32 __T1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__RES00;
 typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__RES00[2];
 typedef xdc_UInt32 __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__RES00[2];
-typedef __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__RES00 __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__RES00;
+typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__RES00 __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__RES00;
 typedef xdc_UInt32 __T1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__FIRQPR;
 typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__FIRQPR[4];
 typedef xdc_UInt32 __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__FIRQPR[4];
-typedef __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__FIRQPR __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__FIRQPR;
+typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__FIRQPR __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__FIRQPR;
 typedef xdc_UInt32 __T1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__INTREQ;
 typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__INTREQ[4];
 typedef xdc_UInt32 __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__INTREQ[4];
-typedef __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__INTREQ __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__INTREQ;
+typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__INTREQ __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__INTREQ;
 typedef xdc_UInt32 __T1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__REQENASET;
 typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__REQENASET[4];
 typedef xdc_UInt32 __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__REQENASET[4];
-typedef __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__REQENASET __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__REQENASET;
+typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__REQENASET __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__REQENASET;
 typedef xdc_UInt32 __T1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__REQENACLR;
 typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__REQENACLR[4];
 typedef xdc_UInt32 __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__REQENACLR[4];
-typedef __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__REQENACLR __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__REQENACLR;
+typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__REQENACLR __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__REQENACLR;
 typedef xdc_UInt32 __T1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__WAKEENASET;
 typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__WAKEENASET[4];
 typedef xdc_UInt32 __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__WAKEENASET[4];
-typedef __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__WAKEENASET __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__WAKEENASET;
+typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__WAKEENASET __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__WAKEENASET;
 typedef xdc_UInt32 __T1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__WAKEENACLR;
 typedef xdc_UInt32 __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__WAKEENACLR[4];
 typedef xdc_UInt32 __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__WAKEENACLR[4];
-typedef __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__WAKEENACLR __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__WAKEENACLR;
+typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__WAKEENACLR __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__WAKEENACLR;
 typedef xdc_UInt8 __T1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__CHANCTRL;
 typedef xdc_UInt8 __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__CHANCTRL[128];
 typedef xdc_UInt8 __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__CHANCTRL[128];
-typedef __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__CHANCTRL __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__CHANCTRL;
+typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__CHANCTRL __TA_ti_sysbios_family_arm_v7r_vim_Hwi_VIM__CHANCTRL;
 struct ti_sysbios_family_arm_v7r_vim_Hwi_VIM {
     xdc_UInt32 ECCSTAT;
     xdc_UInt32 ECCCTL;
@@ -572,7 +572,7 @@ __extern __FAR__ const CT__ti_sysbios_family_arm_v7r_vim_Hwi_LD_end ti_sysbios_f
 typedef xdc_UInt8 __T1_ti_sysbios_family_arm_v7r_vim_Hwi_channelMap;
 typedef xdc_UInt8 *__ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_channelMap;
 typedef const xdc_UInt8 *__CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_channelMap;
-typedef __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_channelMap __TA_ti_sysbios_family_arm_v7r_vim_Hwi_channelMap;
+typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_channelMap __TA_ti_sysbios_family_arm_v7r_vim_Hwi_channelMap;
 typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_channelMap CT__ti_sysbios_family_arm_v7r_vim_Hwi_channelMap;
 __extern __FAR__ const CT__ti_sysbios_family_arm_v7r_vim_Hwi_channelMap ti_sysbios_family_arm_v7r_vim_Hwi_channelMap__C;
 #ifdef ti_sysbios_family_arm_v7r_vim_Hwi_channelMap__CR
@@ -585,7 +585,7 @@ __extern __FAR__ const CT__ti_sysbios_family_arm_v7r_vim_Hwi_channelMap ti_sysbi
 typedef xdc_UInt32 __T1_ti_sysbios_family_arm_v7r_vim_Hwi_intReqEnaSet;
 typedef xdc_UInt32 *__ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_intReqEnaSet;
 typedef const xdc_UInt32 *__CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_intReqEnaSet;
-typedef __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_intReqEnaSet __TA_ti_sysbios_family_arm_v7r_vim_Hwi_intReqEnaSet;
+typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_intReqEnaSet __TA_ti_sysbios_family_arm_v7r_vim_Hwi_intReqEnaSet;
 typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_intReqEnaSet CT__ti_sysbios_family_arm_v7r_vim_Hwi_intReqEnaSet;
 __extern __FAR__ const CT__ti_sysbios_family_arm_v7r_vim_Hwi_intReqEnaSet ti_sysbios_family_arm_v7r_vim_Hwi_intReqEnaSet__C;
 #ifdef ti_sysbios_family_arm_v7r_vim_Hwi_intReqEnaSet__CR
@@ -598,7 +598,7 @@ __extern __FAR__ const CT__ti_sysbios_family_arm_v7r_vim_Hwi_intReqEnaSet ti_sys
 typedef xdc_UInt32 __T1_ti_sysbios_family_arm_v7r_vim_Hwi_wakeEnaSet;
 typedef xdc_UInt32 *__ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_wakeEnaSet;
 typedef const xdc_UInt32 *__CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_wakeEnaSet;
-typedef __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_wakeEnaSet __TA_ti_sysbios_family_arm_v7r_vim_Hwi_wakeEnaSet;
+typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_wakeEnaSet __TA_ti_sysbios_family_arm_v7r_vim_Hwi_wakeEnaSet;
 typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_wakeEnaSet CT__ti_sysbios_family_arm_v7r_vim_Hwi_wakeEnaSet;
 __extern __FAR__ const CT__ti_sysbios_family_arm_v7r_vim_Hwi_wakeEnaSet ti_sysbios_family_arm_v7r_vim_Hwi_wakeEnaSet__C;
 #ifdef ti_sysbios_family_arm_v7r_vim_Hwi_wakeEnaSet__CR
@@ -617,7 +617,7 @@ __extern __FAR__ const CT__ti_sysbios_family_arm_v7r_vim_Hwi_swiDisable ti_sysbi
 #endif
 
 /* swiRestoreHwi */
-typedef xdc_Void (*CT__ti_sysbios_family_arm_v7r_vim_Hwi_swiRestoreHwi)(xdc_UInt);
+typedef xdc_Void (*CT__ti_sysbios_family_arm_v7r_vim_Hwi_swiRestoreHwi)(xdc_UInt __arg1);
 __extern __FAR__ const CT__ti_sysbios_family_arm_v7r_vim_Hwi_swiRestoreHwi ti_sysbios_family_arm_v7r_vim_Hwi_swiRestoreHwi__C;
 #ifdef ti_sysbios_family_arm_v7r_vim_Hwi_swiRestoreHwi__CR
 #define ti_sysbios_family_arm_v7r_vim_Hwi_swiRestoreHwi (*((CT__ti_sysbios_family_arm_v7r_vim_Hwi_swiRestoreHwi*)(xdcRomConstPtr + ti_sysbios_family_arm_v7r_vim_Hwi_swiRestoreHwi__C_offset)))
@@ -635,7 +635,7 @@ __extern __FAR__ const CT__ti_sysbios_family_arm_v7r_vim_Hwi_taskDisable ti_sysb
 #endif
 
 /* taskRestoreHwi */
-typedef xdc_Void (*CT__ti_sysbios_family_arm_v7r_vim_Hwi_taskRestoreHwi)(xdc_UInt);
+typedef xdc_Void (*CT__ti_sysbios_family_arm_v7r_vim_Hwi_taskRestoreHwi)(xdc_UInt __arg1);
 __extern __FAR__ const CT__ti_sysbios_family_arm_v7r_vim_Hwi_taskRestoreHwi ti_sysbios_family_arm_v7r_vim_Hwi_taskRestoreHwi__C;
 #ifdef ti_sysbios_family_arm_v7r_vim_Hwi_taskRestoreHwi__CR
 #define ti_sysbios_family_arm_v7r_vim_Hwi_taskRestoreHwi (*((CT__ti_sysbios_family_arm_v7r_vim_Hwi_taskRestoreHwi*)(xdcRomConstPtr + ti_sysbios_family_arm_v7r_vim_Hwi_taskRestoreHwi__C_offset)))
@@ -645,9 +645,9 @@ __extern __FAR__ const CT__ti_sysbios_family_arm_v7r_vim_Hwi_taskRestoreHwi ti_s
 
 /* hooks */
 typedef ti_sysbios_family_arm_v7r_vim_Hwi_HookSet __T1_ti_sysbios_family_arm_v7r_vim_Hwi_hooks;
-typedef struct { int length; ti_sysbios_family_arm_v7r_vim_Hwi_HookSet const *elem; } __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_hooks;
+typedef struct { int length; ti_sysbios_family_arm_v7r_vim_Hwi_HookSet *elem; } __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_hooks;
 typedef struct { int length; ti_sysbios_family_arm_v7r_vim_Hwi_HookSet const *elem; } __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_hooks;
-typedef __ARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_hooks __TA_ti_sysbios_family_arm_v7r_vim_Hwi_hooks;
+typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_hooks __TA_ti_sysbios_family_arm_v7r_vim_Hwi_hooks;
 typedef __CARRAY1_ti_sysbios_family_arm_v7r_vim_Hwi_hooks CT__ti_sysbios_family_arm_v7r_vim_Hwi_hooks;
 __extern __FAR__ const CT__ti_sysbios_family_arm_v7r_vim_Hwi_hooks ti_sysbios_family_arm_v7r_vim_Hwi_hooks__C;
 #ifdef ti_sysbios_family_arm_v7r_vim_Hwi_hooks__CR
@@ -698,24 +698,24 @@ struct ti_sysbios_family_arm_v7r_vim_Hwi_Struct {
 struct ti_sysbios_family_arm_v7r_vim_Hwi_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_Bool (*getStackInfo)(ti_sysbios_interfaces_IHwi_StackInfo*, xdc_Bool);
-    xdc_Bool (*getCoreStackInfo)(ti_sysbios_interfaces_IHwi_StackInfo*, xdc_Bool, xdc_UInt);
+    xdc_Bool (*getStackInfo)(ti_sysbios_interfaces_IHwi_StackInfo* stkInfo, xdc_Bool computeStackDepth);
+    xdc_Bool (*getCoreStackInfo)(ti_sysbios_interfaces_IHwi_StackInfo* stkInfo, xdc_Bool computeStackDepth, xdc_UInt coreId);
     xdc_Void (*startup)(void);
     xdc_UInt (*disable)(void);
     xdc_UInt (*enable)(void);
-    xdc_Void (*restore)(xdc_UInt);
+    xdc_Void (*restore)(xdc_UInt key);
     xdc_Void (*switchFromBootStack)(void);
-    xdc_Void (*post)(xdc_UInt);
+    xdc_Void (*post)(xdc_UInt intNum);
     xdc_Char *(*getTaskSP)(void);
-    xdc_UInt (*disableInterrupt)(xdc_UInt);
-    xdc_UInt (*enableInterrupt)(xdc_UInt);
-    xdc_Void (*restoreInterrupt)(xdc_UInt, xdc_UInt);
-    xdc_Void (*clearInterrupt)(xdc_UInt);
-    ti_sysbios_interfaces_IHwi_FuncPtr (*getFunc)(ti_sysbios_family_arm_v7r_vim_Hwi_Handle, xdc_UArg*);
-    xdc_Void (*setFunc)(ti_sysbios_family_arm_v7r_vim_Hwi_Handle, ti_sysbios_interfaces_IHwi_FuncPtr, xdc_UArg);
-    xdc_Ptr (*getHookContext)(ti_sysbios_family_arm_v7r_vim_Hwi_Handle, xdc_Int);
-    xdc_Void (*setHookContext)(ti_sysbios_family_arm_v7r_vim_Hwi_Handle, xdc_Int, xdc_Ptr);
-    ti_sysbios_interfaces_IHwi_Irp (*getIrp)(ti_sysbios_family_arm_v7r_vim_Hwi_Handle);
+    xdc_UInt (*disableInterrupt)(xdc_UInt intNum);
+    xdc_UInt (*enableInterrupt)(xdc_UInt intNum);
+    xdc_Void (*restoreInterrupt)(xdc_UInt intNum, xdc_UInt key);
+    xdc_Void (*clearInterrupt)(xdc_UInt intNum);
+    ti_sysbios_interfaces_IHwi_FuncPtr (*getFunc)(ti_sysbios_family_arm_v7r_vim_Hwi_Handle __inst, xdc_UArg* arg);
+    xdc_Void (*setFunc)(ti_sysbios_family_arm_v7r_vim_Hwi_Handle __inst, ti_sysbios_interfaces_IHwi_FuncPtr fxn, xdc_UArg arg);
+    xdc_Ptr (*getHookContext)(ti_sysbios_family_arm_v7r_vim_Hwi_Handle __inst, xdc_Int id);
+    xdc_Void (*setHookContext)(ti_sysbios_family_arm_v7r_vim_Hwi_Handle __inst, xdc_Int id, xdc_Ptr hookContext);
+    ti_sysbios_interfaces_IHwi_Irp (*getIrp)(ti_sysbios_family_arm_v7r_vim_Hwi_Handle __inst);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_family_arm_v7r_vim_Hwi_Module__FXNS__CR
@@ -740,11 +740,11 @@ __extern xdc_Int ti_sysbios_family_arm_v7r_vim_Hwi_Module_startup__F( xdc_Int st
 
 /* Instance_init__E */
 xdc__CODESECT(ti_sysbios_family_arm_v7r_vim_Hwi_Instance_init__E, "ti_sysbios_family_arm_v7r_vim_Hwi_Instance_init")
-__extern xdc_Int ti_sysbios_family_arm_v7r_vim_Hwi_Instance_init__E(ti_sysbios_family_arm_v7r_vim_Hwi_Object *, xdc_Int intNum, ti_sysbios_interfaces_IHwi_FuncPtr hwiFxn, const ti_sysbios_family_arm_v7r_vim_Hwi_Params *, xdc_runtime_Error_Block *);
+__extern xdc_Int ti_sysbios_family_arm_v7r_vim_Hwi_Instance_init__E(ti_sysbios_family_arm_v7r_vim_Hwi_Object *__obj, xdc_Int intNum, ti_sysbios_interfaces_IHwi_FuncPtr hwiFxn, const ti_sysbios_family_arm_v7r_vim_Hwi_Params *__prms, xdc_runtime_Error_Block *__eb);
 
 /* Instance_finalize__E */
 xdc__CODESECT(ti_sysbios_family_arm_v7r_vim_Hwi_Instance_finalize__E, "ti_sysbios_family_arm_v7r_vim_Hwi_Instance_finalize")
-__extern void ti_sysbios_family_arm_v7r_vim_Hwi_Instance_finalize__E( ti_sysbios_family_arm_v7r_vim_Hwi_Object* , int );
+__extern void ti_sysbios_family_arm_v7r_vim_Hwi_Instance_finalize__E(ti_sysbios_family_arm_v7r_vim_Hwi_Object *__obj, int __ec);
 
 /* create */
 xdc__CODESECT(ti_sysbios_family_arm_v7r_vim_Hwi_create, "ti_sysbios_family_arm_v7r_vim_Hwi_create")
@@ -955,7 +955,8 @@ __extern xdc_Void ti_sysbios_family_arm_v7r_vim_Hwi_plug__I( xdc_UInt intNum, ti
  */
 
 /* Module_upCast */
-static inline ti_sysbios_interfaces_IHwi_Module ti_sysbios_family_arm_v7r_vim_Hwi_Module_upCast( void )
+static inline ti_sysbios_interfaces_IHwi_Module ti_sysbios_family_arm_v7r_vim_Hwi_Module_upCast(void);
+static inline ti_sysbios_interfaces_IHwi_Module ti_sysbios_family_arm_v7r_vim_Hwi_Module_upCast(void)
 {
     return (ti_sysbios_interfaces_IHwi_Module)&ti_sysbios_family_arm_v7r_vim_Hwi_Module__FXNS__C;
 }
@@ -964,7 +965,8 @@ static inline ti_sysbios_interfaces_IHwi_Module ti_sysbios_family_arm_v7r_vim_Hw
 #define ti_sysbios_family_arm_v7r_vim_Hwi_Module_to_ti_sysbios_interfaces_IHwi ti_sysbios_family_arm_v7r_vim_Hwi_Module_upCast
 
 /* Handle_upCast */
-static inline ti_sysbios_interfaces_IHwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_Handle_upCast( ti_sysbios_family_arm_v7r_vim_Hwi_Handle i )
+static inline ti_sysbios_interfaces_IHwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_Handle_upCast(ti_sysbios_family_arm_v7r_vim_Hwi_Handle i);
+static inline ti_sysbios_interfaces_IHwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_Handle_upCast(ti_sysbios_family_arm_v7r_vim_Hwi_Handle i)
 {
     return (ti_sysbios_interfaces_IHwi_Handle)i;
 }
@@ -973,7 +975,8 @@ static inline ti_sysbios_interfaces_IHwi_Handle ti_sysbios_family_arm_v7r_vim_Hw
 #define ti_sysbios_family_arm_v7r_vim_Hwi_Handle_to_ti_sysbios_interfaces_IHwi ti_sysbios_family_arm_v7r_vim_Hwi_Handle_upCast
 
 /* Handle_downCast */
-static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_Handle_downCast( ti_sysbios_interfaces_IHwi_Handle i )
+static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_Handle_downCast(ti_sysbios_interfaces_IHwi_Handle i);
+static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_Handle_downCast(ti_sysbios_interfaces_IHwi_Handle i)
 {
     ti_sysbios_interfaces_IHwi_Handle i2 = (ti_sysbios_interfaces_IHwi_Handle)i;
     return (const void*)i2->__fxns == (const void*)&ti_sysbios_family_arm_v7r_vim_Hwi_Module__FXNS__C ? (ti_sysbios_family_arm_v7r_vim_Hwi_Handle)i : (ti_sysbios_family_arm_v7r_vim_Hwi_Handle)0;
@@ -997,25 +1000,29 @@ static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r
 #define ti_sysbios_family_arm_v7r_vim_Hwi_Module_heap() ti_sysbios_family_arm_v7r_vim_Hwi_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_family_arm_v7r_vim_Hwi_Module__id ti_sysbios_family_arm_v7r_vim_Hwi_Module_id(void);
 static inline CT__ti_sysbios_family_arm_v7r_vim_Hwi_Module__id ti_sysbios_family_arm_v7r_vim_Hwi_Module_id( void ) 
 {
     return ti_sysbios_family_arm_v7r_vim_Hwi_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_sysbios_family_arm_v7r_vim_Hwi_Module_hasMask( void ) 
+static inline xdc_Bool ti_sysbios_family_arm_v7r_vim_Hwi_Module_hasMask(void);
+static inline xdc_Bool ti_sysbios_family_arm_v7r_vim_Hwi_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_sysbios_family_arm_v7r_vim_Hwi_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_sysbios_family_arm_v7r_vim_Hwi_Module_getMask(void);
 static inline xdc_Bits16 ti_sysbios_family_arm_v7r_vim_Hwi_Module_getMask( void ) 
 {
     return ti_sysbios_family_arm_v7r_vim_Hwi_Module__diagsMask__C != NULL ? *ti_sysbios_family_arm_v7r_vim_Hwi_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_sysbios_family_arm_v7r_vim_Hwi_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_sysbios_family_arm_v7r_vim_Hwi_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_sysbios_family_arm_v7r_vim_Hwi_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_sysbios_family_arm_v7r_vim_Hwi_Module__diagsMask__C != NULL) {
         *ti_sysbios_family_arm_v7r_vim_Hwi_Module__diagsMask__C = mask;
@@ -1023,6 +1030,7 @@ static inline xdc_Void ti_sysbios_family_arm_v7r_vim_Hwi_Module_setMask( xdc_Bit
 }
 
 /* Params_init */
+static inline void ti_sysbios_family_arm_v7r_vim_Hwi_Params_init(ti_sysbios_family_arm_v7r_vim_Hwi_Params *prms);
 static inline void ti_sysbios_family_arm_v7r_vim_Hwi_Params_init( ti_sysbios_family_arm_v7r_vim_Hwi_Params *prms ) 
 {
     if (prms) {
@@ -1031,6 +1039,7 @@ static inline void ti_sysbios_family_arm_v7r_vim_Hwi_Params_init( ti_sysbios_fam
 }
 
 /* Params_copy */
+static inline void ti_sysbios_family_arm_v7r_vim_Hwi_Params_copy(ti_sysbios_family_arm_v7r_vim_Hwi_Params *dst, const ti_sysbios_family_arm_v7r_vim_Hwi_Params *src);
 static inline void ti_sysbios_family_arm_v7r_vim_Hwi_Params_copy(ti_sysbios_family_arm_v7r_vim_Hwi_Params *dst, const ti_sysbios_family_arm_v7r_vim_Hwi_Params *src) 
 {
     if (dst) {
@@ -1045,44 +1054,51 @@ static inline void ti_sysbios_family_arm_v7r_vim_Hwi_Params_copy(ti_sysbios_fami
 #define ti_sysbios_family_arm_v7r_vim_Hwi_Object_sizeof() ti_sysbios_family_arm_v7r_vim_Hwi_Object__sizeof__C
 
 /* Object_get */
+static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_Object_get(ti_sysbios_family_arm_v7r_vim_Hwi_Instance_State *oarr, int i);
 static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_Object_get(ti_sysbios_family_arm_v7r_vim_Hwi_Instance_State *oarr, int i) 
 {
     return (ti_sysbios_family_arm_v7r_vim_Hwi_Handle)ti_sysbios_family_arm_v7r_vim_Hwi_Object__get__S(oarr, i);
 }
 
 /* Object_first */
-static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_Object_first( void )
+static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_Object_first(void);
+static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_Object_first(void)
 {
     return (ti_sysbios_family_arm_v7r_vim_Hwi_Handle)ti_sysbios_family_arm_v7r_vim_Hwi_Object__first__S();
 }
 
 /* Object_next */
-static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_Object_next( ti_sysbios_family_arm_v7r_vim_Hwi_Object *obj )
+static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_Object_next(ti_sysbios_family_arm_v7r_vim_Hwi_Object *obj);
+static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_Object_next(ti_sysbios_family_arm_v7r_vim_Hwi_Object *obj)
 {
     return (ti_sysbios_family_arm_v7r_vim_Hwi_Handle)ti_sysbios_family_arm_v7r_vim_Hwi_Object__next__S(obj);
 }
 
 /* Handle_label */
-static inline xdc_runtime_Types_Label *ti_sysbios_family_arm_v7r_vim_Hwi_Handle_label( ti_sysbios_family_arm_v7r_vim_Hwi_Handle inst, xdc_runtime_Types_Label *lab )
+static inline xdc_runtime_Types_Label *ti_sysbios_family_arm_v7r_vim_Hwi_Handle_label(ti_sysbios_family_arm_v7r_vim_Hwi_Handle inst, xdc_runtime_Types_Label *lab);
+static inline xdc_runtime_Types_Label *ti_sysbios_family_arm_v7r_vim_Hwi_Handle_label(ti_sysbios_family_arm_v7r_vim_Hwi_Handle inst, xdc_runtime_Types_Label *lab)
 {
     return ti_sysbios_family_arm_v7r_vim_Hwi_Handle__label__S(inst, lab);
 }
 
 /* Handle_name */
-static inline xdc_String ti_sysbios_family_arm_v7r_vim_Hwi_Handle_name( ti_sysbios_family_arm_v7r_vim_Hwi_Handle inst )
+static inline xdc_String ti_sysbios_family_arm_v7r_vim_Hwi_Handle_name(ti_sysbios_family_arm_v7r_vim_Hwi_Handle inst);
+static inline xdc_String ti_sysbios_family_arm_v7r_vim_Hwi_Handle_name(ti_sysbios_family_arm_v7r_vim_Hwi_Handle inst)
 {
     xdc_runtime_Types_Label lab;
     return ti_sysbios_family_arm_v7r_vim_Hwi_Handle__label__S(inst, &lab)->iname;
 }
 
 /* handle */
-static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_handle( ti_sysbios_family_arm_v7r_vim_Hwi_Struct *str )
+static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_handle(ti_sysbios_family_arm_v7r_vim_Hwi_Struct *str);
+static inline ti_sysbios_family_arm_v7r_vim_Hwi_Handle ti_sysbios_family_arm_v7r_vim_Hwi_handle(ti_sysbios_family_arm_v7r_vim_Hwi_Struct *str)
 {
     return (ti_sysbios_family_arm_v7r_vim_Hwi_Handle)str;
 }
 
 /* struct */
-static inline ti_sysbios_family_arm_v7r_vim_Hwi_Struct *ti_sysbios_family_arm_v7r_vim_Hwi_struct( ti_sysbios_family_arm_v7r_vim_Hwi_Handle inst )
+static inline ti_sysbios_family_arm_v7r_vim_Hwi_Struct *ti_sysbios_family_arm_v7r_vim_Hwi_struct(ti_sysbios_family_arm_v7r_vim_Hwi_Handle inst);
+static inline ti_sysbios_family_arm_v7r_vim_Hwi_Struct *ti_sysbios_family_arm_v7r_vim_Hwi_struct(ti_sysbios_family_arm_v7r_vim_Hwi_Handle inst)
 {
     return (ti_sysbios_family_arm_v7r_vim_Hwi_Struct*)inst;
 }

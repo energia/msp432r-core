@@ -11,7 +11,7 @@ var makeAssembly = false;
 var Executable = xdc.module('xdc.bld.Executable');
 
 var exeOpts = new Executable.Attrs({
-        cfgScript: '/db/ztree/library/trees/emt/emt-d09/src/bundles/energia/msp432/energia.cfg',
+        cfgScript: '/db/ztree/library/trees/emt/emt-e06/src/bundles/energia/msp432/energia.cfg',
         profile: 'release',
         cfgHome: 'configPkg',
 });
@@ -41,7 +41,7 @@ else {
 
 var thisObj = {
     cfg:        'energia.cfg',
-    outputPath: '/db/ztree/library/trees/emt/emt-d09/src/bundles/energia/msp432/configPkg',
+    outputPath: '/db/ztree/library/trees/emt/emt-e06/src/bundles/energia/msp432/configPkg',
     exeName:    'energia' + suffix,
     exeIntName: 'energia' + suffix.replace('.', '_'),
     targ:       targ,

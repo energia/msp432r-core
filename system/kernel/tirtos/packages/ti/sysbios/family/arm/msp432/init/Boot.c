@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2016, Texas Instruments Incorporated
+ * Copyright (c) 2014-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -38,7 +38,9 @@
 #include <stdbool.h>
 #include "package/internal/Boot.xdc.h"
 
-#define REG16(x)  (*(volatile UInt16 *)(x))
+#include <ti/devices/DeviceFamily.h>
+#include DeviceFamily_constructPath(driverlib/pcm.h)
+
 #define REG32(x)  (*(volatile UInt32 *)(x))
 
 /* CS defines */
@@ -46,44 +48,26 @@
 #define CSCTL0        (REG32(0x40010404))
 #define CSCTL1        (REG32(0x40010408))
 #define CSCTL2        (REG32(0x4001040C))
-#define CSIFG         (REG32(0x40010448))
-#define CSCLRIFG      (REG32(0x40010450))
 #define LFXT_EN       (0x00000100)
+#define CSIFG         (REG32(0x40010448))
 #define LFXTIFG       (0x00000001)
-#define LFXTBYPASS    (0x00000200)
+#define CSCLRIFG      (REG32(0x40010450))
 #define CLR_LFXTIFG   (0x00000001)
+#define LFXTBYPASS    (0x00000200)
 #define HFXT_EN       (0x01000000)
 #define HFXTIFG       (0x00000002)
 #define HFXTBYPASS    (0x02000000)
 #define CLR_HFXTIFG   (0x00000002)
 #define HFXTFREQDRIVE (0x00410000)  /* HFXTFREQ and HFXTDRIVE for 48MHz */
 
-/* WDT defines */
-#define WDTCTL   0x4000480C
-#define WDTPW    0x5a00
-#define WDTHOLD  0x0080
-
 /* FLCTL defines */
 #define FLCTL_RDCTL_BNK0_REG  0x40011010
 #define FLCTL_RDCTL_BNK1_REG  0x40011014
 #define WAIT_MASK             0x0000F000
-#define WAIT_0_BITS           0x00000000  /* 0 wait states up to 16MHz */
-#define WAIT_1_BITS           0x00001000  /* 1 wait states up to 32MHz */
-#define WAIT_2_BITS           0x00002000  /* 2 wait states for 48MHz */
-
-/* PCM defines */
-#define PCM_AM1_LDO  0x01
-#define ROM_APITABLE ((unsigned long *)0x02000800)
-#define ROM_PCMTABLE ((unsigned long *)(ROM_APITABLE[13]))
-#define ROM_PCM_setPowerState ((UInt8 (*)(UInt8 state))ROM_PCMTABLE[6])
-
-/* DIO defines */
-#define PJSEL0                REG16(0x40004D2A)
-#define PJSEL1                REG16(0x40004D2C)
-#define BIT0                  0x0001
-#define BIT1                  0x0002
-#define BIT2                  0x0004
-#define BIT3                  0x0008
+#define WAIT_0_BITS           0x00000000  /* 0 wait states */
+#define WAIT_1_BITS           0x00001000  /* 1 wait states */
+#define WAIT_2_BITS           0x00002000  /* 2 wait states */
+#define WAIT_3_BITS           0x00003000  /* 3 wait states */
 
 #define Boot_configureClocksLow ti_sysbios_family_arm_msp432_init_Boot_configureClocksLow
 #define Boot_configureClocksMed ti_sysbios_family_arm_msp432_init_Boot_configureClocksMed
@@ -104,8 +88,8 @@ Void ti_sysbios_family_arm_msp432_init_Boot_setupCS(UInt32 regCSTCL0,
     if (Boot_enableLFXT) {
 
         /* configure pins for LFXT function */
-        PJSEL0 |= BIT0;
-        PJSEL1 &= ~BIT0;
+        PJ->SEL0 |= BIT0;
+        PJ->SEL1 &= ~BIT0;
 
         /* if not bypassing LFXT, start and wait for LF osc stabilization */
         if (!Boot_bypassLFXT) {
@@ -124,8 +108,8 @@ Void ti_sysbios_family_arm_msp432_init_Boot_setupCS(UInt32 regCSTCL0,
     if (Boot_enableHFXT) {
 
         /* configure pins for HFXT function */
-        PJSEL0 |= BIT3;
-        PJSEL1 &= ~BIT3;
+        PJ->SEL0 |= BIT3;
+        PJ->SEL1 &= ~BIT3;
 
         /* if not bypassing HFXT, start and wait for HF osc stabilization */
         if (!Boot_bypassHFXT) {
@@ -157,13 +141,14 @@ Void ti_sysbios_family_arm_msp432_init_Boot_setupCS(UInt32 regCSTCL0,
 Void ti_sysbios_family_arm_msp432_init_Boot_configureClocksLow(UInt32 CTL0,
     UInt32 CTL1)
 {
+    UInt32 waitbits = WAIT_0_BITS;
     UInt32 temp;
 
     /* setup Flash wait states (MCLK = 12MHz requires no wait states) */
     temp = REG32(FLCTL_RDCTL_BNK0_REG) & ~WAIT_MASK;
-    REG32(FLCTL_RDCTL_BNK0_REG) = temp | WAIT_0_BITS;
+    REG32(FLCTL_RDCTL_BNK0_REG) = temp | waitbits;
     temp = REG32(FLCTL_RDCTL_BNK1_REG) & ~WAIT_MASK;
-    REG32(FLCTL_RDCTL_BNK1_REG) = temp | WAIT_0_BITS;
+    REG32(FLCTL_RDCTL_BNK1_REG) = temp | waitbits;
 
     /* setup Clock System registers */
     Boot_setupCS(CTL0, CTL1);
@@ -177,10 +162,10 @@ Void ti_sysbios_family_arm_msp432_init_Boot_configureClocksMed(UInt32 CTL0,
 {
     UInt32 temp;
 
-    /* switch to AM1_LDO mode (MCLK = 24MHz requires VCORE = 1) */
-    ROM_PCM_setPowerState(PCM_AM1_LDO);
+    /* switch to AM_LDO_VCORE1 (MCLK = 24MHz requires VCORE = 1) */
+    PCM_setPowerState(PCM_AM_LDO_VCORE1);
 
-    /* setup Flash wait states (MCLK = 24MHz requires 1 wait state) */
+    /* setup Flash wait states (1 wait state for all devices when VCORE=1) */
     temp = REG32(FLCTL_RDCTL_BNK0_REG) & ~WAIT_MASK;
     REG32(FLCTL_RDCTL_BNK0_REG) = temp | WAIT_1_BITS;
     temp = REG32(FLCTL_RDCTL_BNK1_REG) & ~WAIT_MASK;
@@ -196,16 +181,17 @@ Void ti_sysbios_family_arm_msp432_init_Boot_configureClocksMed(UInt32 CTL0,
 Void ti_sysbios_family_arm_msp432_init_Boot_configureClocksHigh(UInt32 CTL0,
     UInt32 CTL1)
 {
+    UInt32 waitbits = WAIT_1_BITS;
     UInt32 temp;
 
-    /* switch to AM1_LDO mode (MCLK = 48MHz requires VCORE = 1) */
-    ROM_PCM_setPowerState(PCM_AM1_LDO);
+    /* switch to AM_LDO_VCORE1 (MCLK = 48MHz requires VCORE = 1) */
+    PCM_setPowerState(PCM_AM_LDO_VCORE1);
 
     /* setup Flash wait states (MCLK = 48MHz requires 2 wait states */
     temp = REG32(FLCTL_RDCTL_BNK0_REG) & ~WAIT_MASK;
-    REG32(FLCTL_RDCTL_BNK0_REG) = temp | WAIT_2_BITS;
+    REG32(FLCTL_RDCTL_BNK0_REG) = temp | waitbits;
     temp = REG32(FLCTL_RDCTL_BNK1_REG) & ~WAIT_MASK;
-    REG32(FLCTL_RDCTL_BNK1_REG) = temp | WAIT_2_BITS;
+    REG32(FLCTL_RDCTL_BNK1_REG) = temp | waitbits;
 
     /* setup Clock System registers */
     Boot_setupCS(CTL0, CTL1);
@@ -216,5 +202,5 @@ Void ti_sysbios_family_arm_msp432_init_Boot_configureClocksHigh(UInt32 CTL0,
  */
 Void ti_sysbios_family_arm_msp432_init_Boot_disableWatchdog()
 {
-    REG16(WDTCTL) = WDTPW + WDTHOLD;
+    WDT_A->CTL = WDT_A_CTL_PW + WDT_A_CTL_HOLD;
 }

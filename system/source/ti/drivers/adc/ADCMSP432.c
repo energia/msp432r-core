@@ -33,6 +33,8 @@
 #include <stdint.h>
 #include <stdbool.h>
 
+#include <ti/devices/DeviceFamily.h>
+
 #include <ti/drivers/ADC.h>
 #include <ti/drivers/adc/ADCMSP432.h>
 #include <ti/drivers/dpl/DebugP.h>
@@ -59,8 +61,8 @@
 void ADCMSP432_close(ADC_Handle handle);
 int_fast16_t ADCMSP432_control(ADC_Handle handle, uint_fast16_t cmd, void *arg);
 int_fast16_t ADCMSP432_convert(ADC_Handle handle, uint16_t *value);
-uint32_t ADCMSP432_convertRawToMicroVolts(ADC_Handle handle,
-    uint16_t rawAdcValue);
+uint32_t ADCMSP432_convertToMicroVolts(ADC_Handle handle,
+    uint16_t adcValue);
 void ADCMSP432_init(ADC_Handle handle);
 ADC_Handle ADCMSP432_open(ADC_Handle handle, ADC_Params *params);
 
@@ -75,7 +77,7 @@ const ADC_FxnTable ADCMSP432_fxnTable = {
     ADCMSP432_close,
     ADCMSP432_control,
     ADCMSP432_convert,
-    ADCMSP432_convertRawToMicroVolts,
+    ADCMSP432_convertToMicroVolts,
     ADCMSP432_init,
     ADCMSP432_open
 };
@@ -88,16 +90,16 @@ const ADC_FxnTable ADCMSP432_fxnTable = {
 static void initHw(ADCMSP432_Object *object,
         ADCMSP432_HWAttrsV1 const *hwAttrs)
 {
-    /* Initializing ADC (MCLK/1/1) */
+    /* Initializing ADC (MODCLK/1/1) */
     MAP_ADC14_enableModule();
-    MAP_ADC14_initModule(ADC_CLOCKSOURCE_MCLK, ADC_PREDIVIDER_1,
+    MAP_ADC14_initModule(ADC_CLOCKSOURCE_ADCOSC, ADC_PREDIVIDER_1,
         ADC_DIVIDER_1, 0);
 
     /* Set trigger source */
     MAP_ADC14_setSampleHoldTrigger(ADC_TRIGGER_ADCSC, false);
 
     /* Set sample/hold time */
-    MAP_ADC14_setSampleHoldTime(ADC_PULSE_WIDTH_4, ADC_PULSE_WIDTH_4);
+    MAP_ADC14_setSampleHoldTime(ADC_PULSE_WIDTH_64, ADC_PULSE_WIDTH_64);
 
     /* No repeat mode */
     MAP_ADC14_configureSingleSampleMode(ADC_MEM0, false);
@@ -126,10 +128,6 @@ void ADCMSP432_close(ADC_Handle handle)
             SemaphoreP_delete(globalMutex);
             globalMutex = NULL;
         }
-
-        /* Remove power constraints */
-        Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-        Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
     }
     object->isOpen = false;
 
@@ -240,10 +238,10 @@ int_fast16_t ADCMSP432_convert(ADC_Handle handle, uint16_t *value)
 }
 
 /*
- *  ======== ADCMSP432_convertRawToMicroVolts ========
+ *  ======== ADCMSP432_convertToMicroVolts ========
  */
-uint32_t ADCMSP432_convertRawToMicroVolts(ADC_Handle handle,
-    uint16_t rawAdcValue)
+uint32_t ADCMSP432_convertToMicroVolts(ADC_Handle handle,
+    uint16_t adcValue)
 {
     uint32_t                   refMicroVolts;
     ADCMSP432_HWAttrsV1 const *hwAttrs = handle->hwAttrs;
@@ -263,27 +261,33 @@ uint32_t ADCMSP432_convertRawToMicroVolts(ADC_Handle handle,
             refMicroVolts = 2500000;
     }
 
-    if (rawAdcValue == 0x3FFF) {
+    if (adcValue == 0x3FFF) {
         retVal = refMicroVolts;
     }
-    else if (rawAdcValue == 0) {
-        retVal = rawAdcValue;
+    else if (adcValue == 0) {
+        retVal = adcValue;
     }
     else {
+
+        /* To keep decimal resolution during division */
+        refMicroVolts = refMicroVolts * 10;
+
         switch (hwAttrs->resolution) {
             case ADC14_CTL1_RES_0:
-                retVal = (rawAdcValue * (refMicroVolts / 0x100));
+                retVal = (adcValue * (refMicroVolts / 0x100));
                 break;
             case ADC14_CTL1_RES_1:
-                retVal = (rawAdcValue * (refMicroVolts / 0x400));
+                retVal = (adcValue * (refMicroVolts / 0x400));
                 break;
             case ADC14_CTL1_RES_2:
-                retVal = (rawAdcValue * (refMicroVolts / 0x1000));
+                retVal = (adcValue * (refMicroVolts / 0x1000));
                 break;
             default:
-                retVal = (rawAdcValue * (refMicroVolts / 0x4000));
+                retVal = (adcValue * (refMicroVolts / 0x4000));
                 break;
         }
+
+        retVal = retVal / 10;
     }
 
     return retVal;
@@ -326,10 +330,6 @@ ADC_Handle ADCMSP432_open(ADC_Handle handle, ADC_Params *params)
             DebugP_log0("ADC: SemaphoreP_create() failed.");
             return (NULL);
         }
-
-        /* Power management support - Disable shutdown while driver is open */
-        Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-        Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
 
         /* Initialize peripheral */
         initHw(object, hwAttrs);

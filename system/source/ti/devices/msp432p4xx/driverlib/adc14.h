@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -57,8 +52,8 @@ extern "C"
 #endif
 
 #include <stdint.h>
-#include <ti/devices/msp432p4xx/inc/msp.h>
 #include <stdbool.h>
+#include <ti/devices/msp432p4xx/inc/msp.h>
 
 //*****************************************************************************
 //

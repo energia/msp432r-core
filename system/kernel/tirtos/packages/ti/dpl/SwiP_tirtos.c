@@ -42,17 +42,14 @@
 
 #include <xdc/std.h>
 #include <xdc/runtime/Error.h>
-#include <xdc/runtime/Memory.h>
-#include <ti/sysbios/hal/Hwi.h>
-#include <ti/sysbios/knl/Swi.h>
 
+#include <ti/sysbios/knl/Swi.h>
 
 /*
  *  ======== SwiP_Params_init ========
  */
 void SwiP_Params_init(SwiP_Params *params)
 {
-    params->name = NULL;
     params->arg0 = NULL;
     params->arg1 = NULL;
     params->trigger = 0;
@@ -67,34 +64,19 @@ SwiP_Handle SwiP_construct(SwiP_Struct *handle, SwiP_Fxn swiFxn,
 {
     Swi_Handle   swi;
     Swi_Params   swiParams;
-    Error_Block  eb;
-
-    /*
-     *  Swi_construct() can fail if hooks are enabled and
-     *  memory allocation of the Swi's hookEnv fails.
-     */
-    Error_init(&eb);
 
     if (params == NULL) {
-        Swi_construct((Swi_Struct *)handle, swiFxn, NULL,
-                &eb);
+        swi = Swi_construct2((Swi_Struct2 *)handle, swiFxn, NULL);
     }
     else {
         Swi_Params_init(&swiParams);
 
-        swiParams.instance->name = params->name;
         swiParams.arg0 = params->arg0;
         swiParams.arg1 = params->arg1;
         swiParams.trigger = params->trigger;
         swiParams.priority = params->priority;
-        Swi_construct((Swi_Struct *)handle, swiFxn, &swiParams, &eb);
+        swi = Swi_construct2((Swi_Struct2 *)handle, swiFxn, &swiParams);
     }
-
-    if (Error_check(&eb)) {
-        return (NULL);
-    }
-
-    swi = Swi_handle((Swi_Struct *)handle);
 
     return ((SwiP_Handle)swi);
 }
@@ -106,25 +88,17 @@ SwiP_Handle SwiP_create(SwiP_Fxn swiFxn, SwiP_Params *params)
 {
     Swi_Handle   handle;
     Swi_Params   swiParams;
-    Error_Block  eb;
-
-    /*
-     *  Swi_create() can fail if hooks are enabled and
-     *  memory allocation of the Swi's hookEnv fails.
-     */
-    Error_init(&eb);
 
     if (params == NULL) {
-        handle = Swi_create(swiFxn, NULL, &eb);
+        handle = Swi_create(swiFxn, NULL, Error_IGNORE);
     }
     else {
         Swi_Params_init(&swiParams);
-        swiParams.instance->name = params->name;
         swiParams.arg0 = params->arg0;
         swiParams.arg1 = params->arg1;
         swiParams.trigger = params->trigger;
         swiParams.priority = params->priority;
-        handle = Swi_create(swiFxn, &swiParams, &eb);
+        handle = Swi_create(swiFxn, &swiParams, Error_IGNORE);
     }
 
     return ((SwiP_Handle)handle);
@@ -133,13 +107,11 @@ SwiP_Handle SwiP_create(SwiP_Fxn swiFxn, SwiP_Params *params)
 /*
  *  ======== SwiP_delete ========
  */
-SwiP_Status SwiP_delete(SwiP_Handle handle)
+void SwiP_delete(SwiP_Handle handle)
 {
     Swi_Handle swi = (Swi_Handle)handle;
 
     Swi_delete(&swi);
-
-    return (SwiP_OK);
 }
 
 /*
@@ -219,6 +191,14 @@ void SwiP_post(SwiP_Handle handle)
 void SwiP_restore(uintptr_t key)
 {
     Swi_restore(key);
+}
+
+/*
+ *  ======== SwiP_setPriority ========
+ */
+void SwiP_setPriority(SwiP_Handle handle, uint32_t priority)
+{
+    Swi_setPri((Swi_Handle)handle, priority);
 }
 
 /*

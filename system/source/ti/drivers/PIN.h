@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -383,7 +383,7 @@
  *
  *    static void taskStartFxn(UArg a0, UArg a1) {
  *        // Define pins used by Human user interface and initial configuration
- *        const PIN_Config aPinListHui[] = {
+ *        const PIN_Config pinListHui[] = {
  *            HUI_LED_A    | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL | PIN_DRVSTR_MAX,
  *            HUI_LED_B    | PIN_GPIO_OUTPUT_EN | PIN_GPIO_LOW | PIN_PUSHPULL | PIN_DRVSTR_MAX,
  *            HUI_BUTTON_A | PIN_INPUT_EN  | PIN_PULLUP | PIN_HYSTERESIS,
@@ -392,7 +392,7 @@
  *        };
  *
  *        // Get handle to this collection of pins
- *        if (!PIN_open(&hStateHui, aPinListHui)) {
+ *        if (!PIN_open(&hStateHui, pinListHui)) {
  *            // Handle allocation error
  *        }
  *
@@ -533,15 +533,8 @@
 extern "C" {
 #endif
 
-#include <xdc/std.h>
-#include <stdint.h>
 #include <stdbool.h>
-#include <stddef.h>
-//#include <inc/hw_types.h>
-
-typedef unsigned int uint_t;
-typedef int int_t;
-
+#include <stdint.h>
 
 /** @brief  Pin identifier data type
  *
@@ -605,53 +598,53 @@ typedef uint32_t PIN_Config;
  *  supplied.
  *  \{
  */
-#define PIN_GEN             (((uint32_t)1)<<31) ///< Flags that generic options are used
+#define PIN_GEN             (((uint32_t)1) << 31)   ///< Flags that generic options are used
 
-#define PIN_INPUT_EN        (PIN_GEN|(0<<29))   ///< (*) Enable input buffer
-#define PIN_INPUT_DIS       (PIN_GEN|(1<<29))   ///< Disable input buffer
-#define PIN_HYSTERESIS      (PIN_GEN|(1<<30))   ///< Enable input buffer hysteresis
-#define PIN_NOPULL          (PIN_GEN|(0<<13))   ///< (*) No pull-up or pull-down resistor
-#define PIN_PULLUP          (PIN_GEN|(1<<13))   ///< Pull-up resistor enabled
-#define PIN_PULLDOWN        (PIN_GEN|(2<<13))   ///< Pull-down resistor enabled
-#define PIN_BM_INPUT_EN     (1<<29)             ///< Bitmask for input enable option
-#define PIN_BM_HYSTERESIS   (1<<30)             ///< Bitmask input hysteresis option
-#define PIN_BM_PULLING      (0x3<<13)           ///< Bitmask for pull-up/pull-down options
+#define PIN_INPUT_EN        (PIN_GEN | (0 << 29))   ///< (*) Enable input buffer
+#define PIN_INPUT_DIS       (PIN_GEN | (1 << 29))   ///< Disable input buffer
+#define PIN_HYSTERESIS      (PIN_GEN | (1 << 30))   ///< Enable input buffer hysteresis
+#define PIN_NOPULL          (PIN_GEN | (0 << 13))   ///< (*) No pull-up or pull-down resistor
+#define PIN_PULLUP          (PIN_GEN | (1 << 13))   ///< Pull-up resistor enabled
+#define PIN_PULLDOWN        (PIN_GEN | (2 << 13))   ///< Pull-down resistor enabled
+#define PIN_BM_INPUT_EN     (1 << 29)               ///< Bitmask for input enable option
+#define PIN_BM_HYSTERESIS   (1 << 30)               ///< Bitmask input hysteresis option
+#define PIN_BM_PULLING      (0x3 << 13)             ///< Bitmask for pull-up/pull-down options
 
 /// Bitmask for all input mode options
 #define PIN_BM_INPUT_MODE   (PIN_BM_INPUT_EN|PIN_BM_HYSTERESIS|PIN_BM_PULLING)
 
-#define PIN_GPIO_OUTPUT_DIS (PIN_GEN|(0<<23))   ///< (*) Disable output buffer when GPIO
-#define PIN_GPIO_OUTPUT_EN  (PIN_GEN|(1<<23))   ///< Enable output buffer when GPIO
-#define PIN_GPIO_LOW        (PIN_GEN|(0<<22))   ///< Output buffer drives to VSS when GPIO
-#define PIN_GPIO_HIGH       (PIN_GEN|(1<<22))   ///< Output buffer drives to VDD when GPIO
-#define PIN_PUSHPULL        (PIN_GEN|(0<<25))   ///< (*) Output buffer mode: push/pull
-#define PIN_OPENDRAIN       (PIN_GEN|(2<<25))   ///< Output buffer mode: open drain
-#define PIN_OPENSOURCE      (PIN_GEN|(3<<25))   ///< Output buffer mode: open source
-#define PIN_SLEWCTRL        (PIN_GEN|(1<<12))   ///< Enable output buffer slew control
-#define PIN_DRVSTR_MIN      (PIN_GEN|(0x0<<8))  ///< (*) Lowest drive strength
-#define PIN_DRVSTR_MED      (PIN_GEN|(0x4<<8))  ///< Medium drive strength
-#define PIN_DRVSTR_MAX      (PIN_GEN|(0x8<<8))  ///< Highest drive strength
-#define PIN_BM_GPIO_OUTPUT_EN  (1<<23)          ///< Bitmask for output enable option
-#define PIN_BM_GPIO_OUTPUT_VAL (1<<22)          ///< Bitmask for output value option
-#define PIN_BM_OUTPUT_BUF   (0x3<<25)           ///< Bitmask for output buffer options
-#define PIN_BM_SLEWCTRL     (0x1<<12)           ///< Bitmask for slew control options
-#define PIN_BM_DRVSTR       (0xF<<8)            ///< Bitmask for drive strength options
+#define PIN_GPIO_OUTPUT_DIS (PIN_GEN | (0 << 23))   ///< (*) Disable output buffer when GPIO
+#define PIN_GPIO_OUTPUT_EN  (PIN_GEN | (1 << 23))   ///< Enable output buffer when GPIO
+#define PIN_GPIO_LOW        (PIN_GEN | (0 << 22))   ///< Output buffer drives to VSS when GPIO
+#define PIN_GPIO_HIGH       (PIN_GEN | (1 << 22))   ///< Output buffer drives to VDD when GPIO
+#define PIN_PUSHPULL        (PIN_GEN | (0 << 25))   ///< (*) Output buffer mode: push/pull
+#define PIN_OPENDRAIN       (PIN_GEN | (2 << 25))   ///< Output buffer mode: open drain
+#define PIN_OPENSOURCE      (PIN_GEN | (3 << 25))   ///< Output buffer mode: open source
+#define PIN_SLEWCTRL        (PIN_GEN | (1 << 12))   ///< Enable output buffer slew control
+#define PIN_DRVSTR_MIN      (PIN_GEN | (0x0 << 8))  ///< (*) Lowest drive strength
+#define PIN_DRVSTR_MED      (PIN_GEN | (0x4 << 8))  ///< Medium drive strength
+#define PIN_DRVSTR_MAX      (PIN_GEN | (0x8 << 8))  ///< Highest drive strength
+#define PIN_BM_GPIO_OUTPUT_EN  (1 << 23)            ///< Bitmask for output enable option
+#define PIN_BM_GPIO_OUTPUT_VAL (1 << 22)            ///< Bitmask for output value option
+#define PIN_BM_OUTPUT_BUF   (0x3 << 25)             ///< Bitmask for output buffer options
+#define PIN_BM_SLEWCTRL     (0x1 << 12)             ///< Bitmask for slew control options
+#define PIN_BM_DRVSTR       (0xF << 8)              ///< Bitmask for drive strength options
 
 /// Bitmask for all output mode options
-#define PIN_BM_OUTPUT_MODE  (PIN_BM_GPIO_OUTPUT_VAL|PIN_BM_GPIO_OUTPUT_EN| \
-                             PIN_BM_OUTPUT_BUF|PIN_BM_SLEWCTRL|PIN_BM_DRVSTR)
+#define PIN_BM_OUTPUT_MODE  (PIN_BM_GPIO_OUTPUT_VAL | PIN_BM_GPIO_OUTPUT_EN | \
+                             PIN_BM_OUTPUT_BUF | PIN_BM_SLEWCTRL | PIN_BM_DRVSTR)
 
-#define PIN_INV_INOUT       (PIN_GEN|(1<<24))   ///< Logically invert input and output
-#define PIN_BM_INV_INOUT    (1<<24)             ///< Bitmask for input/output inversion option
+#define PIN_INV_INOUT       (PIN_GEN | (1 << 24))   ///< Logically invert input and output
+#define PIN_BM_INV_INOUT    (1 << 24)               ///< Bitmask for input/output inversion option
 
-#define PIN_IRQ_DIS         (PIN_GEN|(0x0<<16)) ///< (*) Disable IRQ on pin
-#define PIN_IRQ_NEGEDGE     (PIN_GEN|(0x5<<16)) ///< Enable IRQ on negative edge
-#define PIN_IRQ_POSEDGE     (PIN_GEN|(0x6<<16)) ///< Enable IRQ on positive edge
-#define PIN_IRQ_BOTHEDGES   (PIN_GEN|(0x7<<16)) ///< Enable IRQ on both edges
-#define PIN_BM_IRQ          (0x7<<16)           ///< Bitmask for pin interrupt option
+#define PIN_IRQ_DIS         (PIN_GEN | (0x0 << 16)) ///< (*) Disable IRQ on pin
+#define PIN_IRQ_NEGEDGE     (PIN_GEN | (0x5 << 16)) ///< Enable IRQ on negative edge
+#define PIN_IRQ_POSEDGE     (PIN_GEN | (0x6 << 16)) ///< Enable IRQ on positive edge
+#define PIN_IRQ_BOTHEDGES   (PIN_GEN | (0x7 << 16)) ///< Enable IRQ on both edges
+#define PIN_BM_IRQ          (0x7 << 16)             ///< Bitmask for pin interrupt option
 
 /// Bitmask for all options at once
-#define PIN_BM_ALL        (PIN_BM_INPUT_MODE|PIN_BM_OUTPUT_MODE|PIN_BM_INV_INOUT|PIN_BM_IRQ)
+#define PIN_BM_ALL        (PIN_BM_INPUT_MODE | PIN_BM_OUTPUT_MODE | PIN_BM_INV_INOUT | PIN_BM_IRQ)
 /** \} (PIN_GENERIC_FLAGS)
  */
 
@@ -668,7 +661,7 @@ typedef struct PIN_State_s PIN_State;
 /** @brief A handle that is returned from a PIN_open() call
  *  Used for further PIN client interaction with the PIN driver
  */
-typedef PIN_State* PIN_Handle;
+typedef PIN_State *PIN_Handle;
 
 
 /** @brief I/O Interrupt callback function pointer type
@@ -686,9 +679,9 @@ typedef void (*PIN_IntCb)(PIN_Handle handle, PIN_Id pinId);
 /** @brief underlying data structure for type #PIN_State
  */
 struct PIN_State_s {
-    PIN_IntCb   pCbFunc;            ///< Pointer to interrupt callback function
-    uint_t      bmPort;             ///< Bitmask for pins allocated in port
-    UArg        userArg;            ///< User argument for whole handle
+    PIN_IntCb   callbackFxn;        ///< Pointer to interrupt callback function
+    uint32_t    portMask;           ///< Bitmask for pins allocated in port
+    uintptr_t   userArg;            ///< User argument for whole handle
     // TODO: add driver-specific field for extensions?
 };
 
@@ -724,17 +717,17 @@ extern PIN_Status PIN_init(const PIN_Config aPinCfg[]);
  *  Allows a PIN client (driver or application) to allocate a set of pins, thus
  *  ensuring that they cannot be reconfigured/controlled by anyone else. The
  *  pins are identified by and reconfigured according to the #PIN_Config
- *  entries in aPinList.
+ *  entries in pinList.
  *
- *  @param pState     Pointer to a PIN_State object that will hold the state for
+ *  @param state     Pointer to a PIN_State object that will hold the state for
  *                    this IO client. The object must be in persistent memory
- *  @param aPinList[] Pointer to array of #PIN_Config entries, one per pin to
+ *  @param pinList[] Pointer to array of #PIN_Config entries, one per pin to
  *                    allocate. List terminates when #PIN_TERMINATE entry is
  *                    encountered.
  *  @return A handle for further PIN driver calls or NULL if an error occurred
- *          (already allocated pin in aPinList or non-existent pin in aPinList)
+ *          (already allocated pin in pinList or non-existent pin in pinList)
  */
-extern PIN_Handle PIN_open(PIN_State* pState, const PIN_Config aPinList[]);
+extern PIN_Handle PIN_open(PIN_State *state, const PIN_Config pinList[]);
 
 
 /** @brief  Add pin to pin set for open PIN handle
@@ -776,7 +769,7 @@ extern void PIN_close(PIN_Handle handle);
  *  @param handle   handle retrieved through an earlier call to PIN_open().
  *  @param arg      User argument
  */
-static inline void PIN_setUserArg(PIN_Handle handle, UArg arg) {
+static inline void PIN_setUserArg(PIN_Handle handle, uintptr_t arg) {
     if (handle) {
         handle->userArg = arg;
     }
@@ -790,7 +783,7 @@ static inline void PIN_setUserArg(PIN_Handle handle, UArg arg) {
  *  @param handle   handle retrieved through an earlier call to PIN_open().
  *  @return User argument. Has the value 0 if never initialized
  */
-static inline UArg PIN_getUserArg(PIN_Handle handle) {
+static inline uintptr_t PIN_getUserArg(PIN_Handle handle) {
     return handle->userArg;
 }
 
@@ -813,14 +806,14 @@ static inline UArg PIN_getUserArg(PIN_Handle handle) {
  *       myPin = PIN_getInputValue(PIN_ID(5));
  *       @endcode
  */
-extern uint_t PIN_getInputValue(PIN_Id pinId);
+extern uint32_t PIN_getInputValue(PIN_Id pinId);
 
 
 /** @brief Control output enable for GPIO pin
  *
  *  @param handle  Handle provided by previous call to PIN_open()
  *  @param pinId   #PIN_Id entry identifying pin
- *  @param bOutEn  Enable output buffer when true, else disable
+ *  @param outputEnable  Enable output buffer when true, else disable
  *  @return #PIN_SUCCESS if successful, else error code
  *  @remark This function is included for consistency with the corresponding
  *          port function and to provide a more efficient/directed approach.
@@ -832,7 +825,7 @@ extern uint_t PIN_getInputValue(PIN_Id pinId);
  *       PIN_setOutputEnable(hPins, PIN_ID(11), 0);
  *       @endcode
  */
-extern PIN_Status PIN_setOutputEnable(PIN_Handle handle, PIN_Id pinId, bool bOutEn);
+extern PIN_Status PIN_setOutputEnable(PIN_Handle handle, PIN_Id pinId, bool outputEnable);
 
 
 /** @brief Control output value for GPIO pin
@@ -848,7 +841,7 @@ extern PIN_Status PIN_setOutputEnable(PIN_Handle handle, PIN_Id pinId, bool bOut
  *       PIN_setOutputValue(hPins, PIN_ID(4), 1);
  *       @endcode
  */
-extern PIN_Status PIN_setOutputValue(PIN_Handle handle, PIN_Id pinId, uint_t val);
+extern PIN_Status PIN_setOutputValue(PIN_Handle handle, PIN_Id pinId, uint32_t val);
 
 
 /** @brief Get value of GPIO pin output buffer
@@ -863,7 +856,7 @@ extern PIN_Status PIN_setOutputValue(PIN_Handle handle, PIN_Id pinId, uint_t val
  *       PIN_setOutputValue(hpins, PIN_ID(4), PIN_getOutputValue(PIN_ID(6)));
  *       @endcode
  */
-extern uint_t PIN_getOutputValue(PIN_Id pinId);
+extern uint32_t PIN_getOutputValue(PIN_Id pinId);
 
 
 /** @brief Control interrupt enable and edge for pin
@@ -905,7 +898,7 @@ extern PIN_Status PIN_clrPendInterrupt(PIN_Handle handle, PIN_Id pinId);
  *  identified by handle that will be called from HWI context upon an interrupt
  *  event on one or more of the allocated pins that have interrupts enabled
  *  @param handle  Handle provided by previous call to PIN_open()
- *  @param pCb     Function pointer to a #PIN_IntCb function.
+ *  @param callbackFxn     Function pointer to a #PIN_IntCb function.
  *  @return #PIN_SUCCESS if successful, else error code
  *  @note Pin interrupts are serviced one at a time in pin order when
  *        simultaneous. Pin hardware interrupt flags are automatically cleared
@@ -919,7 +912,7 @@ extern PIN_Status PIN_clrPendInterrupt(PIN_Handle handle, PIN_Id pinId);
  *       PIN_registerIntCb(hPins, pinIntHandler);
  *       @endcode
  */
-extern PIN_Status PIN_registerIntCb(PIN_Handle handle, PIN_IntCb pCb);
+extern PIN_Status PIN_registerIntCb(PIN_Handle handle, PIN_IntCb callbackFxn);
 
 
 
@@ -947,7 +940,7 @@ extern PIN_Config PIN_getConfig(PIN_Id pinId);
 /** @brief Sets complete pin configuration
  *
  *  @param handle  Handle provided by previous call to PIN_open()
- *  @param bmMask  Bitmask specifying which fields in cfg that should take
+ *  @param updateMask  Bitmask specifying which fields in cfg that should take
  *                 effect, the rest keep their current value.
  *  @param pinCfg  #PIN_Config entry with pin ID and pin configuration
  *  @return #PIN_SUCCESS if successful, else error code
@@ -957,7 +950,7 @@ extern PIN_Config PIN_getConfig(PIN_Id pinId);
  *       PIN_setConfig(hPins, PIN_BM_DRVSTR, PIN_ID(15)|PIN_DRVSTR_MAX);
  *       @endcode
  */
-extern PIN_Status PIN_setConfig(PIN_Handle handle, PIN_Config bmMask, PIN_Config pinCfg);
+extern PIN_Status PIN_setConfig(PIN_Handle handle, PIN_Config updateMask, PIN_Config pinCfg);
 
 
 /** \} (IO Manipulation/Configuration Functions)
@@ -982,7 +975,7 @@ extern PIN_Status PIN_setConfig(PIN_Handle handle, PIN_Config bmMask, PIN_Config
  *          supported or the allocated pins span multiple I/O ports. The bitmask
  *          maps lowest pin index to the rightmost mask bit
  */
-extern uint_t PIN_getPortMask(PIN_Handle handle);
+extern uint32_t PIN_getPortMask(PIN_Handle handle);
 
 
 /** @brief Read input value of whole GPIO port
@@ -994,7 +987,7 @@ extern uint_t PIN_getPortMask(PIN_Handle handle);
  *  @remark This function typically has an inlined sibling function in the
  *          device-specific driver that may be used for higher efficiency
  */
-extern uint_t PIN_getPortInputValue(PIN_Handle handle);
+extern uint32_t PIN_getPortInputValue(PIN_Handle handle);
 
 
 /** @brief Returns value of whole GPIO port's output buffers
@@ -1007,13 +1000,13 @@ extern uint_t PIN_getPortInputValue(PIN_Handle handle);
  *  @remark This function typically has an inlined sibling function in the
  *          device-specific driver that may be used for higher efficiency
  */
-extern uint_t PIN_getPortOutputValue(PIN_Handle handle);
+extern uint32_t PIN_getPortOutputValue(PIN_Handle handle);
 
 
 /** @brief Simultaneous write output buffer values of all allocated pins in GPIO port
  *
  *  @param handle    Handle provided by previous call to PIN_open()
- *  @param bmOutVal  Bitmask indicating the desired output value for the whole
+ *  @param outputValueMask  Bitmask indicating the desired output value for the whole
  *                   port, only the pins allocated to the client will be
  *                   affected
  *  @return #PIN_SUCCESS if successful, else error code
@@ -1026,13 +1019,13 @@ extern uint_t PIN_getPortOutputValue(PIN_Handle handle);
  *       PIN_setPortOutputVal(hPins, ~PIN_getPortOutputVals(hPins));
  *       @endcode
  */
-extern PIN_Status PIN_setPortOutputValue(PIN_Handle handle, uint_t bmOutVal);
+extern PIN_Status PIN_setPortOutputValue(PIN_Handle handle, uint32_t outputValueMask);
 
 
 /** @brief Set output enable for all pins allocated to client in GPIO port
  *
  *  @param handle   Handle provided by previous call to PIN_open()
- *  @param bmOutEn  Bitmask indicating the desired output enable configuration
+ *  @param outputEnableMask  Bitmask indicating the desired output enable configuration
  *                  for the whole port, only the pins allocated to the client
  *                  will be affected
  *  @return #PIN_SUCCESS if successful, else error code
@@ -1046,7 +1039,7 @@ extern PIN_Status PIN_setPortOutputValue(PIN_Handle handle, uint_t bmOutVal);
  *       pin_setPortOutputEnable(hPins, PIN_getPortMask());
  *       @endcode
  */
-extern PIN_Status PIN_setPortOutputEnable(PIN_Handle handle, uint_t bmOutEn);
+extern PIN_Status PIN_setPortOutputEnable(PIN_Handle handle, uint32_t outputEnableMask);
 
 
 /** \} (IO Port Functions)

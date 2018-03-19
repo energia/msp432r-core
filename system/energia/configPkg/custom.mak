@@ -7,5 +7,5 @@
 #       or equal to the generated config header
 #
 linker.cmd: package/cfg/energia_pm4fg.xdl
-	$(SED) 's"^\"\(package/cfg/energia_pm4fgcfg.cmd\)\"$""\"/db/ztree/library/trees/emt/emt-d09/src/bundles/energia/msp432/configPkg/\1\""' package/cfg/energia_pm4fg.xdl > $@
+	$(SED) 's"^\"\(package/cfg/energia_pm4fgcfg.cmd\)\"$""\"/db/ztree/library/trees/emt/emt-e06/src/bundles/energia/msp432/configPkg/\1\""' package/cfg/energia_pm4fg.xdl > $@
 	-$(SETDATE) -r:max package/cfg/energia_pm4fg.h compiler.opt compiler.opt.defs

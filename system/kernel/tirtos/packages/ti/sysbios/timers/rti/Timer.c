@@ -89,7 +89,7 @@ UInt Timer_getNumTimers()
  */
 Timer_Status Timer_getStatus(UInt timerId)
 {
-    Assert_isTrue(timerId < Timer_numTimerDevices, Timer_A_invalidTimer);
+    Assert_isTrue(timerId < (UInt)Timer_numTimerDevices, Timer_A_invalidTimer);
 
     if (Timer_module->availMask & (0x1 << timerId)) {
         return (Timer_Status_FREE);
@@ -184,7 +184,7 @@ Void Timer_startup()
  */
 Timer_Handle Timer_getHandle(UInt id)
 {
-    Assert_isTrue((id < Timer_numTimerDevices), NULL);
+    Assert_isTrue((id < (UInt)Timer_numTimerDevices), NULL);
     return (Timer_module->handles[id]);
 }
 
@@ -485,6 +485,7 @@ Void Timer_start(Timer_Object *obj)
     if (obj->id & 0x1) {
         deviceRegs->RTIUC1 = 0;
         deviceRegs->RTIFRC1 = 0;
+        deviceRegs->RTICOMP1 = obj->period;
         if (obj->hwi) {
             deviceRegs->RTIINTFLAG = TIMER_INTFLAG_INT1;
             Hwi_enableInterrupt(obj->intNum);
@@ -494,6 +495,7 @@ Void Timer_start(Timer_Object *obj)
     else {
         deviceRegs->RTIUC0 = 0;
         deviceRegs->RTIFRC0 = 0;
+        deviceRegs->RTICOMP0 = obj->period;
         if (obj->hwi) {
             deviceRegs->RTIINTFLAG = TIMER_INTFLAG_INT0;
             Hwi_enableInterrupt(obj->intNum);
@@ -575,14 +577,14 @@ Void Timer_setPeriod(Timer_Object *obj, UInt32 period)
 
     Timer_stop(obj);
 
+    obj->period = period;
+
     key = Hwi_disable();
     if (obj->id & 0x1) {
         deviceRegs->RTIUDCP1 = period;
-        deviceRegs->RTICOMP1 = period;
     }
     else {
         deviceRegs->RTIUDCP0 = period;
-        deviceRegs->RTICOMP0 = period;
     }
     Hwi_restore(key);
 }

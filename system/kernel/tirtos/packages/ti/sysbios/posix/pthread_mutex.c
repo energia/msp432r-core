@@ -60,6 +60,7 @@
 
 #include "_pthread.h"
 #include "errno.h"
+#include "pthread_util.h"
 
 #include "Settings.h"
 
@@ -446,32 +447,11 @@ int pthread_mutex_timedlock(pthread_mutex_t *mutex,
         const struct timespec *abstime)
 {
     pthread_mutex_Obj *mutexObj = (pthread_mutex_Obj *)*mutex;
-    struct timespec    curtime;
     UInt32             timeout;
-    long               usecs = 0;
-    time_t             secs = 0;
     int                retc;
 
-    if ((abstime->tv_nsec < 0) || (1000000000 <= abstime->tv_nsec)) {
+    if (_pthread_abstime2ticks(CLOCK_REALTIME, abstime, &timeout) != 0) {
         return (EINVAL);
-    }
-
-    clock_gettime(CLOCK_REALTIME, &curtime);
-    secs = abstime->tv_sec - curtime.tv_sec;
-
-    if ((abstime->tv_sec < curtime.tv_sec) ||
-            ((secs == 0) && (abstime->tv_nsec <= curtime.tv_nsec))) {
-        timeout = 0;
-    }
-    else {
-        usecs = (abstime->tv_nsec - curtime.tv_nsec) / 1000;
-
-        if (usecs < 0) {
-            usecs += 1000000;
-            secs--;
-        }
-        usecs += (long)secs * 1000000;
-        timeout = (UInt32)(usecs / Clock_tickPeriod);
     }
 
     retc = acquireMutex(mutexObj, timeout);

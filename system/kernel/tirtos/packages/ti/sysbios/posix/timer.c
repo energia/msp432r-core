@@ -223,16 +223,10 @@ int timer_gettime(timer_t timerid, struct itimerspec *its)
     long         timeoutUs;
     long         periodUs;
 
-    if (Clock_isActive(Clock_handle(&(timer->clock)))) {
-        /*
-         *  Clock_getTimeout() returns number of clock ticks until
-         *  timer expires.
-         */
-        timeout = Clock_getTimeout(Clock_handle(&(timer->clock)));
-    }
-    else {
-        timeout = 0;
-    }
+    /*
+     *  Clock_getTimeout() returns number of clock ticks until timer expires.
+     */
+    timeout = Clock_getTimeout(Clock_handle(&(timer->clock)));
 
     timeoutUs = timeout * Clock_tickPeriod;
     periodUs = Clock_getPeriod(Clock_handle(&timer->clock)) * Clock_tickPeriod;

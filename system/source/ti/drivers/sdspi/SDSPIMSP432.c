@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -47,6 +47,8 @@
 #ifndef DebugP_LOG_ENABLED
 #define DebugP_LOG_ENABLED 0
 #endif
+
+#include <ti/devices/DeviceFamily.h>
 
 #include <ti/drivers/dpl/ClockP.h>
 #include <ti/drivers/dpl/DebugP.h>
@@ -577,8 +579,6 @@ void SDSPIMSP432_close(SDSPI_Handle handle)
     MAP_SPI_disableModule(hwAttrs->baseAddr);
 
     /* Remove power constraints */
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
     for (i = 0; object->perfConstraintMask; ++i) {
         if (object->perfConstraintMask & 0x01) {
             Power_releaseConstraint(PowerMSP432_DISALLOW_PERFLEVEL_0 + i);
@@ -1191,10 +1191,6 @@ SDSPI_Handle SDSPIMSP432_open(SDSPI_Handle handle, uint_least8_t drv,
             }
         }
     }
-
-    /* Shutdown not supported while driver is open */
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
 
     /* Register function to reconfigure peripheral on perf level changes */
     Power_registerNotify(&object->perfChangeNotify,

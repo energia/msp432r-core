@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-* Copyright (C) 2012 - 16 Texas Instruments Incorporated - http://www.ti.com/
+* Copyright (C) 2012 - 17 Texas Instruments Incorporated - http://www.ti.com/
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions
@@ -45,7 +45,7 @@
 *  - ADC14->CTL0 |= ADC14_CTL0_ENC;
 *  - BITBAND_PERI(ADC14->CTL0, ADC14_CTL0_ENC_OFS) = 1;
 *
-* File creation date: 2016-12-05
+* File creation date: 2017-08-03
 *
 ******************************************************************************/
 
@@ -59,21 +59,12 @@
  extern "C" {
 #endif
 
-#define __MSP432_HEADER_VERSION__ 3000_BETA
-/* Remap MSP432 intrinsics to ARM equivalents */
-#include "msp_compatibility.h"
+#define __MSP432_HEADER_VERSION__ 3.202
 
 /* WARNING: The msp432p4xx.h file is indented to be used to rebuild TI Drivers for MSP432 MCUs. Do not use this file to build target code.*/
 
-/******************************************************************************
-* include MSP430 legacy definitions to make porting of code from MSP430       *
-* code base easier                                                            *
-* With fully CMSIS compliant code, NO_MSP_CLASSIC_DEFINES may be defined in   *
-* your project to omit including the classic defines                          *
-******************************************************************************/
-#ifndef NO_MSP_CLASSIC_DEFINES
-#include "msp432p401r_classic.h"
-#endif
+/* Remap MSP432 intrinsics to ARM equivalents */
+#include "msp_compatibility.h"
 
 #ifndef __CMSIS_CONFIG__
 #define __CMSIS_CONFIG__
@@ -111,50 +102,49 @@ typedef enum IRQn
   PendSV_IRQn                 = -2,     /* 14 Pend SV Interrupt */
   SysTick_IRQn                = -1,     /* 15 System Tick Interrupt */
   /*  Peripheral Exceptions Numbers */
-  PSS_IRQn                    =  0,     /* 16 PSS Interrupt */
-  CS_IRQn                     =  1,     /* 17 CS Interrupt */
-  PCM_IRQn                    =  2,     /* 18 PCM Interrupt */
-  WDT_A_IRQn                  =  3,     /* 19 WDT_A Interrupt */
-  FPU_IRQn                    =  4,     /* 20 FPU Interrupt */
-  FLCTL_IRQn                  =  5,     /* 21 FLCTL Interrupt */
-  COMP_E0_IRQn                =  6,     /* 22 COMP_E0 Interrupt */
-  COMP_E1_IRQn                =  7,     /* 23 COMP_E1 Interrupt */
-  TA0_0_IRQn                  =  8,     /* 24 TA0_0 Interrupt */
-  TA0_N_IRQn                  =  9,     /* 25 TA0_N Interrupt */
-  TA1_0_IRQn                  = 10,     /* 26 TA1_0 Interrupt */
-  TA1_N_IRQn                  = 11,     /* 27 TA1_N Interrupt */
-  TA2_0_IRQn                  = 12,     /* 28 TA2_0 Interrupt */
-  TA2_N_IRQn                  = 13,     /* 29 TA2_N Interrupt */
-  TA3_0_IRQn                  = 14,     /* 30 TA3_0 Interrupt */
-  TA3_N_IRQn                  = 15,     /* 31 TA3_N Interrupt */
-  EUSCIA0_IRQn                = 16,     /* 32 EUSCIA0 Interrupt */
-  EUSCIA1_IRQn                = 17,     /* 33 EUSCIA1 Interrupt */
-  EUSCIA2_IRQn                = 18,     /* 34 EUSCIA2 Interrupt */
-  EUSCIA3_IRQn                = 19,     /* 35 EUSCIA3 Interrupt */
-  EUSCIB0_IRQn                = 20,     /* 36 EUSCIB0 Interrupt */
-  EUSCIB1_IRQn                = 21,     /* 37 EUSCIB1 Interrupt */
-  EUSCIB2_IRQn                = 22,     /* 38 EUSCIB2 Interrupt */
-  EUSCIB3_IRQn                = 23,     /* 39 EUSCIB3 Interrupt */
-  ADC14_IRQn                  = 24,     /* 40 ADC14 Interrupt */
-  T32_INT1_IRQn               = 25,     /* 41 T32_INT1 Interrupt */
-  T32_INT2_IRQn               = 26,     /* 42 T32_INT2 Interrupt */
-  T32_INTC_IRQn               = 27,     /* 43 T32_INTC Interrupt */
-  AES256_IRQn                 = 28,     /* 44 AES256 Interrupt */
-  RTC_C_IRQn                  = 29,     /* 45 RTC_C Interrupt */
-  DMA_ERR_IRQn                = 30,     /* 46 DMA_ERR Interrupt */
-  DMA_INT3_IRQn               = 31,     /* 47 DMA_INT3 Interrupt */
-  DMA_INT2_IRQn               = 32,     /* 48 DMA_INT2 Interrupt */
-  DMA_INT1_IRQn               = 33,     /* 49 DMA_INT1 Interrupt */
-  DMA_INT0_IRQn               = 34,     /* 50 DMA_INT0 Interrupt */
-  PORT1_IRQn                  = 35,     /* 51 PORT1 Interrupt */
-  PORT2_IRQn                  = 36,     /* 52 PORT2 Interrupt */
-  PORT3_IRQn                  = 37,     /* 53 PORT3 Interrupt */
-  PORT4_IRQn                  = 38,     /* 54 PORT4 Interrupt */
-  PORT5_IRQn                  = 39,     /* 55 PORT5 Interrupt */
-
-  FLCTL_A_IRQn                =  5,     /* 21 FLCTL_A Interrupt */
-  PORT6_IRQn                  = 40,     /* 56 PORT6 Interrupt */
-  LCD_F_IRQn                  = 41      /* 57 LCD_F Interrupt */
+  PSS_IRQn                    = 0,     /* 16 PSS Interrupt             */
+  CS_IRQn                     = 1,     /* 17 CS Interrupt              */
+  PCM_IRQn                    = 2,     /* 18 PCM Interrupt             */
+  WDT_A_IRQn                  = 3,     /* 19 WDT_A Interrupt           */
+  FPU_IRQn                    = 4,     /* 20 FPU Interrupt             */
+  FLCTL_IRQn                  = 5,     /* 21 Flash Controller Interrupt*/
+  COMP_E0_IRQn                = 6,     /* 22 COMP_E0 Interrupt         */
+  COMP_E1_IRQn                = 7,     /* 23 COMP_E1 Interrupt         */
+  TA0_0_IRQn                  = 8,     /* 24 TA0_0 Interrupt           */
+  TA0_N_IRQn                  = 9,     /* 25 TA0_N Interrupt           */
+  TA1_0_IRQn                  = 10,     /* 26 TA1_0 Interrupt           */
+  TA1_N_IRQn                  = 11,     /* 27 TA1_N Interrupt           */
+  TA2_0_IRQn                  = 12,     /* 28 TA2_0 Interrupt           */
+  TA2_N_IRQn                  = 13,     /* 29 TA2_N Interrupt           */
+  TA3_0_IRQn                  = 14,     /* 30 TA3_0 Interrupt           */
+  TA3_N_IRQn                  = 15,     /* 31 TA3_N Interrupt           */
+  EUSCIA0_IRQn                = 16,     /* 32 EUSCIA0 Interrupt         */
+  EUSCIA1_IRQn                = 17,     /* 33 EUSCIA1 Interrupt         */
+  EUSCIA2_IRQn                = 18,     /* 34 EUSCIA2 Interrupt         */
+  EUSCIA3_IRQn                = 19,     /* 35 EUSCIA3 Interrupt         */
+  EUSCIB0_IRQn                = 20,     /* 36 EUSCIB0 Interrupt         */
+  EUSCIB1_IRQn                = 21,     /* 37 EUSCIB1 Interrupt         */
+  EUSCIB2_IRQn                = 22,     /* 38 EUSCIB2 Interrupt         */
+  EUSCIB3_IRQn                = 23,     /* 39 EUSCIB3 Interrupt         */
+  ADC14_IRQn                  = 24,     /* 40 ADC14 Interrupt           */
+  T32_INT1_IRQn               = 25,     /* 41 T32_INT1 Interrupt        */
+  T32_INT2_IRQn               = 26,     /* 42 T32_INT2 Interrupt        */
+  T32_INTC_IRQn               = 27,     /* 43 T32_INTC Interrupt        */
+  AES256_IRQn                 = 28,     /* 44 AES256 Interrupt          */
+  RTC_C_IRQn                  = 29,     /* 45 RTC_C Interrupt           */
+  DMA_ERR_IRQn                = 30,     /* 46 DMA_ERR Interrupt         */
+  DMA_INT3_IRQn               = 31,     /* 47 DMA_INT3 Interrupt        */
+  DMA_INT2_IRQn               = 32,     /* 48 DMA_INT2 Interrupt        */
+  DMA_INT1_IRQn               = 33,     /* 49 DMA_INT1 Interrupt        */
+  DMA_INT0_IRQn               = 34,     /* 50 DMA_INT0 Interrupt        */
+  PORT1_IRQn                  = 35,     /* 51 Port1 Interrupt           */
+  PORT2_IRQn                  = 36,     /* 52 Port2 Interrupt           */
+  PORT3_IRQn                  = 37,     /* 53 Port3 Interrupt           */
+  PORT4_IRQn                  = 38,     /* 54 Port4 Interrupt           */
+  PORT5_IRQn                  = 39,     /* 55 Port5 Interrupt           */
+  FLCTL_A_IRQn                = 5,     /* 21 Flash Controller Interrupt*/
+  PORT6_IRQn                  = 40,     /* 56 Port6 Interrupt           */
+  LCD_F_IRQn                  = 41      /* 57 LCD_F Interrupt           */
 } IRQn_Type;
 
 /******************************************************************************
@@ -332,9 +322,9 @@ typedef enum IRQn
 #define BITBAND_PERI_BASE                     ((uint32_t)(0x42000000))
 
 /* SRAM allows 32 bit bit band access */
-#define BITBAND_SRAM(x, b)  (*((__IO uint32_t *) (BITBAND_SRAM_BASE +  (((uint32_t)(uint32_t *)&x) - SRAM_BASE  )*32 + b*4)))
+#define BITBAND_SRAM(x, b)  (*((__IO uint32_t *) (BITBAND_SRAM_BASE +  (((uint32_t)(uint32_t *)&(x)) - SRAM_BASE  )*32 + (b)*4)))
 /* peripherals with 8 bit or 16 bit register access allow only 8 bit or 16 bit bit band access, so cast to 8 bit always */
-#define BITBAND_PERI(x, b)  (*((__IO  uint8_t *) (BITBAND_PERI_BASE +  (((uint32_t)(uint32_t *)&x) - PERIPH_BASE)*32 + b*4)))
+#define BITBAND_PERI(x, b)  (*((__IO  uint8_t *) (BITBAND_PERI_BASE +  (((uint32_t)(uint32_t *)&(x)) - PERIPH_BASE)*32 + (b)*4)))
 
 /******************************************************************************
 * Peripheral register definitions                                             *
@@ -648,7 +638,7 @@ typedef struct {
   __I  uint32_t STAT;                                                            /*!< Status Register */
   __O  uint32_t CFG;                                                             /*!< Configuration Register */
   __IO uint32_t CTLBASE;                                                         /*!< Channel Control Data Base Pointer Register */
-  __I  uint32_t ATLBASE;                                                         /*!< Channel Alternate Control Data Base Pointer Register */
+  __I  uint32_t ALTBASE;                                                         /*!< Channel Alternate Control Data Base Pointer Register */
   __I  uint32_t WAITSTAT;                                                        /*!< Channel Wait on Request Status Register */
   __O  uint32_t SWREQ;                                                           /*!< Channel Software Request Register */
   __IO uint32_t USEBURSTSET;                                                     /*!< Channel Useburst Set Register */
@@ -670,7 +660,7 @@ typedef struct {
        uint16_t RESERVED0[2];
   __IO uint16_t BRW;                                                             /*!< eUSCI_Ax Bit Rate Control Register 1 */
        uint16_t RESERVED1;
-  __IO uint16_t STATW;
+  __IO uint16_t STATW; 
   __I  uint16_t RXBUF;                                                           /*!< eUSCI_Ax Receive Buffer Register */
   __IO uint16_t TXBUF;                                                           /*!< eUSCI_Ax Transmit Buffer Register */
        uint16_t RESERVED2[5];
@@ -700,7 +690,7 @@ typedef struct {
   __IO uint16_t CTLW0;                                                           /*!< eUSCI_Bx Control Word Register 0 */
        uint16_t RESERVED0[2];
   __IO uint16_t BRW;                                                             /*!< eUSCI_Bx Bit Rate Control Register 1 */
-  __IO uint16_t STATW;
+  __IO uint16_t STATW; 
        uint16_t RESERVED1;
   __I  uint16_t RXBUF;                                                           /*!< eUSCI_Bx Receive Buffer Register */
   __IO uint16_t TXBUF;                                                           /*!< eUSCI_Bx Transmit Buffer Register */
@@ -889,6 +879,11 @@ typedef struct {
   __I  uint32_t IFG;                                                             /*!< LCD_F interrupt flag register */
   __O  uint32_t SETIFG;                                                          /*!< LCD_F set interrupt flag register */
   __O  uint32_t CLRIFG;                                                          /*!< LCD_F clear interrupt flag register */
+  __IO uint8_t M[48];                                                           /*!< LCD memory registers */
+       uint8_t  RESERVED1[16];
+  __IO uint8_t BM[48];                                                          /*!< LCD Blinking memory registers */
+       uint8_t  RESERVED2[16];
+  __IO uint8_t ANM[8];                                                          /*!< LCD Animation memory registers */
 } LCD_F_Type;
 
 typedef struct {
@@ -956,12 +951,12 @@ typedef struct {
 
 typedef struct {
        uint16_t RESERVED0[8];
-  __IO uint16_t TIM0;                                                            /*!< RTCTIM0 Register ? BCD Format */
-  __IO uint16_t TIM1;                                                            /*!< RTCTIM1 Register ? BCD Format */
+  __IO uint16_t TIM0;                                                            /*!< Real-Time Clock Seconds, Minutes Register - BCD Format */
+  __IO uint16_t TIM1;                                                            /*!< Real-Time Clock Hour, Day of Week - BCD Format */
   __IO uint16_t DATE;                                                            /*!< Real-Time Clock Date - BCD Format */
-  __IO uint16_t YEAR;                                                            /*!< RTCYEAR Register ? BCD Format */
-  __IO uint16_t AMINHR;                                                          /*!< RTCMINHR - BCD Format */
-  __IO uint16_t ADOWDAY;                                                         /*!< RTCADOWDAY - BCD Format */
+  __IO uint16_t YEAR;                                                            /*!< Real-Time Clock Year Register - BCD Format */
+  __IO uint16_t AMINHR;                                                          /*!< Real-Time Clock Minutes, Hour Alarm - BCD Format */
+  __IO uint16_t ADOWDAY;                                                         /*!< Real-Time Clock Day of Week, Day of Month Alarm - BCD Format */
 } RTC_C_BCD_Type;
 
 typedef struct {
@@ -973,10 +968,10 @@ typedef struct {
   __IO uint16_t PS1CTL;                                                          /*!< Real-Time Clock Prescale Timer 1 Control Register */
   __IO uint16_t PS;                                                              /*!< Real-Time Clock Prescale Timer Counter Register */
   __I  uint16_t IV;                                                              /*!< Real-Time Clock Interrupt Vector Register */
-  __IO uint16_t TIM0;                                                            /*!< RTCTIM0 Register ? Hexadecimal Format */
+  __IO uint16_t TIM0;                                                            /*!< RTCTIM0 Register  Hexadecimal Format */
   __IO uint16_t TIM1;                                                            /*!< Real-Time Clock Hour, Day of Week */
   __IO uint16_t DATE;                                                            /*!< RTCDATE - Hexadecimal Format */
-  __IO uint16_t YEAR;                                                            /*!< RTCYEAR Register ? Hexadecimal Format */
+  __IO uint16_t YEAR;                                                            /*!< RTCYEAR Register  Hexadecimal Format */
   __IO uint16_t AMINHR;                                                          /*!< RTCMINHR - Hexadecimal Format */
   __IO uint16_t ADOWDAY;                                                         /*!< RTCADOWDAY - Hexadecimal Format */
   __IO uint16_t BIN2BCD;                                                         /*!< Binary-to-BCD Conversion Register */
@@ -1124,12 +1119,12 @@ typedef struct {
   __I  uint32_t RESERVED24;                                                      /*!< Reserved */
   __I  uint32_t RESERVED25;                                                      /*!< Reserved */
   __I  uint32_t RESERVED26;                                                      /*!< Reserved */
-  __I  uint32_t ADC14_REF1P2V_TS30C;                                             /*!< ADC14 1.2V Reference Temp. Sensor 30°C */
-  __I  uint32_t ADC14_REF1P2V_TS85C;                                             /*!< ADC14 1.2V Reference Temp. Sensor 85°C */
-  __I  uint32_t ADC14_REF1P45V_TS30C;                                            /*!< ADC14 1.45V Reference Temp. Sensor 30°C */
-  __I  uint32_t ADC14_REF1P45V_TS85C;                                            /*!< ADC14 1.45V Reference Temp. Sensor 85°C */
-  __I  uint32_t ADC14_REF2P5V_TS30C;                                             /*!< ADC14 2.5V Reference Temp. Sensor 30°C */
-  __I  uint32_t ADC14_REF2P5V_TS85C;                                             /*!< ADC14 2.5V Reference Temp. Sensor 85°C */
+  __I  uint32_t ADC14_REF1P2V_TS30C;                                             /*!< ADC14 1.2V Reference Temp. Sensor 30C */
+  __I  uint32_t ADC14_REF1P2V_TS85C;                                             /*!< ADC14 1.2V Reference Temp. Sensor 85C */
+  __I  uint32_t ADC14_REF1P45V_TS30C;                                            /*!< ADC14 1.45V Reference Temp. Sensor 30C */
+  __I  uint32_t ADC14_REF1P45V_TS85C;                                            /*!< ADC14 1.45V Reference Temp. Sensor 85C */
+  __I  uint32_t ADC14_REF2P5V_TS30C;                                             /*!< ADC14 2.5V Reference Temp. Sensor 30C */
+  __I  uint32_t ADC14_REF2P5V_TS85C;                                             /*!< ADC14 2.5V Reference Temp. Sensor 85C */
   __I  uint32_t REF_CAL_TAG;                                                     /*!< REF Calibration Tag */
   __I  uint32_t REF_CAL_LEN;                                                     /*!< REF Calibration Length */
   __I  uint32_t REF_1P2V;                                                        /*!< REF 1.2V Reference */
@@ -1166,11 +1161,13 @@ typedef struct {
 
 typedef struct {
   __IO uint16_t CTL;                                                             /*!< TimerAx Control Register */
-  __IO uint16_t CCTL[7];                                                         /*!< Timer_A Capture/Compare Control Register */
+  __IO uint16_t CCTL[5];                                                         /*!< Timer_A Capture/Compare Control Register */
+       uint16_t RESERVED0[2];
   __IO uint16_t R;                                                               /*!< TimerA register */
-  __IO uint16_t CCR[7];                                                          /*!< Timer_A Capture/Compare  Register */
+  __IO uint16_t CCR[5];                                                          /*!< Timer_A Capture/Compare  Register */
+       uint16_t RESERVED1[2];
   __IO uint16_t EX0;                                                             /*!< TimerAx Expansion 0 Register */
-       uint16_t RESERVED0[6];
+       uint16_t RESERVED2[6];
   __I  uint16_t IV;                                                              /*!< TimerAx Interrupt Vector Register */
 } Timer_A_Type;
 
@@ -1189,7 +1186,7 @@ typedef struct {
   __IO uint32_t JTAG_SWD_LOCK_UNENC_PWD[4];                                      /*!< JTAG and SWD lock unencrypted password */
   __IO uint32_t JTAG_SWD_LOCK_ACK;                                               /*!< Acknowledgment for JTAG and SWD Lock command */
        uint32_t RESERVED1[2];
-  SEC_ZONE_PARAMS_Type SEC_ZONE_PARAMS[4];
+  SEC_ZONE_PARAMS_Type SEC_ZONE_PARAMS[4];                                              
   __IO uint32_t BSL_ENABLE;                                                      /*!< BSL Enable. */
   __IO uint32_t BSL_START_ADDRESS;                                               /*!< Contains the pointer to the BSL function. */
   __IO uint32_t BSL_PARAMETERS;                                                  /*!< BSL hardware invoke conifguration field. */
@@ -1200,7 +1197,7 @@ typedef struct {
   __IO uint32_t JTAG_SWD_LOCK_DST_ADDR;                                          /*!< Destination address where the final data needs to be stored into the device. */
   __IO uint32_t ENC_UPDATE_ACK;                                                  /*!< Acknowledgment for JTAG and SWD Lock Encrypted Update Command */
        uint32_t RESERVED3;
-  SEC_ZONE_UPDATE_Type SEC_ZONE_UPDATE[4];                                       /*!< IP Protection Secure Zone Update */
+  SEC_ZONE_UPDATE_Type SEC_ZONE_UPDATE[4];                                              
        uint32_t RESERVED4;
   __IO uint32_t FACTORY_RESET_ENABLE;                                            /*!< Enable/Disable Factory Reset */
   __IO uint32_t FACTORY_RESET_PWDEN;                                             /*!< Factory reset password enable */
@@ -1442,8 +1439,8 @@ typedef struct {
 #define ADC14_CTL1_PWRMD_MASK                    ((uint32_t)0x00000003)          /*!< ADC14PWRMD Bit Mask */
 #define ADC14_CTL1_PWRMD0                        ((uint32_t)0x00000001)          /*!< PWRMD Bit 0 */
 #define ADC14_CTL1_PWRMD1                        ((uint32_t)0x00000002)          /*!< PWRMD Bit 1 */
-#define ADC14_CTL1_PWRMD_0                       ((uint32_t)0x00000000)          /*!< Regular power mode for use with any resolution setting. Sample rate can be up  */
-#define ADC14_CTL1_PWRMD_2                       ((uint32_t)0x00000002)          /*!< Low-power mode for 12-bit, 10-bit, and 8-bit resolution settings. Sample rate  */
+#define ADC14_CTL1_PWRMD_0                       ((uint32_t)0x00000000)          /*!< Regular power mode for use with any resolution setting. Sample rate can be  */
+#define ADC14_CTL1_PWRMD_2                       ((uint32_t)0x00000002)          /*!< Low-power mode for 12-bit, 10-bit, and 8-bit resolution settings. Sample  */
 #define ADC14_CTL1_REFBURST_OFS                  ( 2)                            /*!< ADC14REFBURST Bit Offset */
 #define ADC14_CTL1_REFBURST                      ((uint32_t)0x00000004)          /*!< ADC14 reference buffer burst */
 #define ADC14_CTL1_DF_OFS                        ( 3)                            /*!< ADC14DF Bit Offset */
@@ -2080,7 +2077,7 @@ typedef struct {
 #define COMP_E_CTL1_MRVL_OFS                     (11)                            /*!< CEMRVL Bit Offset */
 #define COMP_E_CTL1_MRVL                         ((uint16_t)0x0800)              /*!< This bit is valid of CEMRVS is set to 1 */
 #define COMP_E_CTL1_MRVS_OFS                     (12)                            /*!< CEMRVS Bit Offset */
-#define COMP_E_CTL1_MRVS                         ((uint16_t)0x1000)
+#define COMP_E_CTL1_MRVS                         ((uint16_t)0x1000)              
 #define COMP_E_CTL2_REF0_OFS                     ( 0)                            /*!< CEREF0 Bit Offset */
 #define COMP_E_CTL2_REF0_MASK                    ((uint16_t)0x001F)              /*!< CEREF0 Bit Mask */
 #define COMP_E_CTL2_REF00                        ((uint16_t)0x0001)              /*!< REF0 Bit 0 */
@@ -2252,56 +2249,49 @@ typedef struct {
 #define CS_CTL1_SELM1                            ((uint32_t)0x00000002)          /*!< SELM Bit 1 */
 #define CS_CTL1_SELM2                            ((uint32_t)0x00000004)          /*!< SELM Bit 2 */
 #define CS_CTL1_SELM_0                           ((uint32_t)0x00000000)          /*!< when LFXT available, otherwise REFOCLK */
-#define CS_CTL1_SELM_1                           ((uint32_t)0x00000001)
-#define CS_CTL1_SELM_2                           ((uint32_t)0x00000002)
-#define CS_CTL1_SELM_3                           ((uint32_t)0x00000003)
-#define CS_CTL1_SELM_4                           ((uint32_t)0x00000004)
+#define CS_CTL1_SELM_1                           ((uint32_t)0x00000001)          
+#define CS_CTL1_SELM_2                           ((uint32_t)0x00000002)          
+#define CS_CTL1_SELM_3                           ((uint32_t)0x00000003)          
+#define CS_CTL1_SELM_4                           ((uint32_t)0x00000004)          
 #define CS_CTL1_SELM_5                           ((uint32_t)0x00000005)          /*!< when HFXT available, otherwise DCOCLK */
 #define CS_CTL1_SELM_6                           ((uint32_t)0x00000006)          /*!< when HFXT2 available, otherwise DCOCLK */
 #define CS_CTL1_SELM__LFXTCLK                    ((uint32_t)0x00000000)          /*!< when LFXT available, otherwise REFOCLK */
-#define CS_CTL1_SELM__VLOCLK                     ((uint32_t)0x00000001)
-#define CS_CTL1_SELM__REFOCLK                    ((uint32_t)0x00000002)
-#define CS_CTL1_SELM__DCOCLK                     ((uint32_t)0x00000003)
-#define CS_CTL1_SELM__MODOSC                     ((uint32_t)0x00000004)
+#define CS_CTL1_SELM__VLOCLK                     ((uint32_t)0x00000001)          
+#define CS_CTL1_SELM__REFOCLK                    ((uint32_t)0x00000002)          
+#define CS_CTL1_SELM__DCOCLK                     ((uint32_t)0x00000003)          
+#define CS_CTL1_SELM__MODOSC                     ((uint32_t)0x00000004)          
 #define CS_CTL1_SELM__HFXTCLK                    ((uint32_t)0x00000005)          /*!< when HFXT available, otherwise DCOCLK */
 #define CS_CTL1_SELM__HFXT2CLK                   ((uint32_t)0x00000006)          /*!< when HFXT2 available, otherwise DCOCLK */
-#define CS_CTL1_SELM_7                           ((uint32_t)0x00000007)          /*!< for future use. Defaults to DCOCLK. Not recommended for use to ensure future  */
 #define CS_CTL1_SELS_OFS                         ( 4)                            /*!< SELS Bit Offset */
 #define CS_CTL1_SELS_MASK                        ((uint32_t)0x00000070)          /*!< SELS Bit Mask */
 #define CS_CTL1_SELS0                            ((uint32_t)0x00000010)          /*!< SELS Bit 0 */
 #define CS_CTL1_SELS1                            ((uint32_t)0x00000020)          /*!< SELS Bit 1 */
 #define CS_CTL1_SELS2                            ((uint32_t)0x00000040)          /*!< SELS Bit 2 */
 #define CS_CTL1_SELS_0                           ((uint32_t)0x00000000)          /*!< when LFXT available, otherwise REFOCLK */
-#define CS_CTL1_SELS_1                           ((uint32_t)0x00000010)
-#define CS_CTL1_SELS_2                           ((uint32_t)0x00000020)
-#define CS_CTL1_SELS_3                           ((uint32_t)0x00000030)
-#define CS_CTL1_SELS_4                           ((uint32_t)0x00000040)
+#define CS_CTL1_SELS_1                           ((uint32_t)0x00000010)          
+#define CS_CTL1_SELS_2                           ((uint32_t)0x00000020)          
+#define CS_CTL1_SELS_3                           ((uint32_t)0x00000030)          
+#define CS_CTL1_SELS_4                           ((uint32_t)0x00000040)          
 #define CS_CTL1_SELS_5                           ((uint32_t)0x00000050)          /*!< when HFXT available, otherwise DCOCLK */
 #define CS_CTL1_SELS_6                           ((uint32_t)0x00000060)          /*!< when HFXT2 available, otherwise DCOCLK */
 #define CS_CTL1_SELS__LFXTCLK                    ((uint32_t)0x00000000)          /*!< when LFXT available, otherwise REFOCLK */
-#define CS_CTL1_SELS__VLOCLK                     ((uint32_t)0x00000010)
-#define CS_CTL1_SELS__REFOCLK                    ((uint32_t)0x00000020)
-#define CS_CTL1_SELS__DCOCLK                     ((uint32_t)0x00000030)
-#define CS_CTL1_SELS__MODOSC                     ((uint32_t)0x00000040)
+#define CS_CTL1_SELS__VLOCLK                     ((uint32_t)0x00000010)          
+#define CS_CTL1_SELS__REFOCLK                    ((uint32_t)0x00000020)          
+#define CS_CTL1_SELS__DCOCLK                     ((uint32_t)0x00000030)          
+#define CS_CTL1_SELS__MODOSC                     ((uint32_t)0x00000040)          
 #define CS_CTL1_SELS__HFXTCLK                    ((uint32_t)0x00000050)          /*!< when HFXT available, otherwise DCOCLK */
 #define CS_CTL1_SELS__HFXT2CLK                   ((uint32_t)0x00000060)          /*!< when HFXT2 available, otherwise DCOCLK */
-#define CS_CTL1_SELS_7                           ((uint32_t)0x00000070)          /*!< for furture use. Defaults to DCOCLK. Do not use to ensure future  */
 #define CS_CTL1_SELA_OFS                         ( 8)                            /*!< SELA Bit Offset */
 #define CS_CTL1_SELA_MASK                        ((uint32_t)0x00000700)          /*!< SELA Bit Mask */
 #define CS_CTL1_SELA0                            ((uint32_t)0x00000100)          /*!< SELA Bit 0 */
 #define CS_CTL1_SELA1                            ((uint32_t)0x00000200)          /*!< SELA Bit 1 */
 #define CS_CTL1_SELA2                            ((uint32_t)0x00000400)          /*!< SELA Bit 2 */
 #define CS_CTL1_SELA_0                           ((uint32_t)0x00000000)          /*!< when LFXT available, otherwise REFOCLK */
-#define CS_CTL1_SELA_1                           ((uint32_t)0x00000100)
-#define CS_CTL1_SELA_2                           ((uint32_t)0x00000200)
+#define CS_CTL1_SELA_1                           ((uint32_t)0x00000100)          
+#define CS_CTL1_SELA_2                           ((uint32_t)0x00000200)          
 #define CS_CTL1_SELA__LFXTCLK                    ((uint32_t)0x00000000)          /*!< when LFXT available, otherwise REFOCLK */
-#define CS_CTL1_SELA__VLOCLK                     ((uint32_t)0x00000100)
-#define CS_CTL1_SELA__REFOCLK                    ((uint32_t)0x00000200)
-#define CS_CTL1_SELA_3                           ((uint32_t)0x00000300)          /*!< for future use. Defaults to REFOCLK. Not recommended for use to ensure future  */
-#define CS_CTL1_SELA_4                           ((uint32_t)0x00000400)          /*!< for future use. Defaults to REFOCLK. Not recommended for use to ensure future  */
-#define CS_CTL1_SELA_5                           ((uint32_t)0x00000500)          /*!< for future use. Defaults to REFOCLK. Not recommended for use to ensure future  */
-#define CS_CTL1_SELA_6                           ((uint32_t)0x00000600)          /*!< for future use. Defaults to REFOCLK. Not recommended for use to ensure future  */
-#define CS_CTL1_SELA_7                           ((uint32_t)0x00000700)          /*!< for future use. Defaults to REFOCLK. Not recommended for use to ensure future  */
+#define CS_CTL1_SELA__VLOCLK                     ((uint32_t)0x00000100)          
+#define CS_CTL1_SELA__REFOCLK                    ((uint32_t)0x00000200)          
 #define CS_CTL1_SELB_OFS                         (12)                            /*!< SELB Bit Offset */
 #define CS_CTL1_SELB                             ((uint32_t)0x00001000)          /*!< Selects the BCLK source */
 #define CS_CTL1_DIVM_OFS                         (16)                            /*!< DIVM Bit Offset */
@@ -2396,8 +2386,6 @@ typedef struct {
 #define CS_CTL2_LFXTDRIVE_1                      ((uint32_t)0x00000001)          /*!< Increased drive strength LFXT oscillator. */
 #define CS_CTL2_LFXTDRIVE_2                      ((uint32_t)0x00000002)          /*!< Increased drive strength LFXT oscillator. */
 #define CS_CTL2_LFXTDRIVE_3                      ((uint32_t)0x00000003)          /*!< Maximum drive strength and maximum current consumption LFXT oscillator. */
-#define CS_CTL2_LFXTAGCOFF_OFS                   ( 7)                            /*!< LFXTAGCOFF Bit Offset */
-#define CS_CTL2_LFXTAGCOFF                       ((uint32_t)0x00000080)          /*!< Disables the automatic gain control of the LFXT crystal */
 #define CS_CTL2_LFXT_EN_OFS                      ( 8)                            /*!< LFXT_EN Bit Offset */
 #define CS_CTL2_LFXT_EN                          ((uint32_t)0x00000100)          /*!< Turns on the LFXT oscillator regardless if used as a clock resource */
 #define CS_CTL2_LFXTBYPASS_OFS                   ( 9)                            /*!< LFXTBYPASS Bit Offset */
@@ -2453,22 +2441,6 @@ typedef struct {
 #define CS_CTL3_RFCNTHF                          ((uint32_t)0x00000040)          /*!< Reset start fault counter for HFXT */
 #define CS_CTL3_FCNTHF_EN_OFS                    ( 7)                            /*!< FCNTHF_EN Bit Offset */
 #define CS_CTL3_FCNTHF_EN                        ((uint32_t)0x00000080)          /*!< Enable start fault counter for HFXT */
-#define CS_CTL3_FCNTHF2_OFS                      ( 8)                            /*!< FCNTHF2 Bit Offset */
-#define CS_CTL3_FCNTHF2_MASK                     ((uint32_t)0x00000300)          /*!< FCNTHF2 Bit Mask */
-#define CS_CTL3_FCNTHF20                         ((uint32_t)0x00000100)          /*!< FCNTHF2 Bit 0 */
-#define CS_CTL3_FCNTHF21                         ((uint32_t)0x00000200)          /*!< FCNTHF2 Bit 1 */
-#define CS_CTL3_FCNTHF2_0                        ((uint32_t)0x00000000)          /*!< 2048 cycles */
-#define CS_CTL3_FCNTHF2_1                        ((uint32_t)0x00000100)          /*!< 4096 cycles */
-#define CS_CTL3_FCNTHF2_2                        ((uint32_t)0x00000200)          /*!< 8192 cycles */
-#define CS_CTL3_FCNTHF2_3                        ((uint32_t)0x00000300)          /*!< 16384 cycles */
-#define CS_CTL3_FCNTHF2__2048                    ((uint32_t)0x00000000)          /*!< 2048 cycles */
-#define CS_CTL3_FCNTHF2__4096                    ((uint32_t)0x00000100)          /*!< 4096 cycles */
-#define CS_CTL3_FCNTHF2__8192                    ((uint32_t)0x00000200)          /*!< 8192 cycles */
-#define CS_CTL3_FCNTHF2__16384                   ((uint32_t)0x00000300)          /*!< 16384 cycles */
-#define CS_CTL3_RFCNTHF2_OFS                     (10)                            /*!< RFCNTHF2 Bit Offset */
-#define CS_CTL3_RFCNTHF2                         ((uint32_t)0x00000400)          /*!< Reset start fault counter for HFXT2 */
-#define CS_CTL3_FCNTHF2_EN_OFS                   (11)                            /*!< FCNTHF2_EN Bit Offset */
-#define CS_CTL3_FCNTHF2_EN                       ((uint32_t)0x00000800)          /*!< Enable start fault counter for HFXT2 */
 #define CS_CLKEN_ACLK_EN_OFS                     ( 0)                            /*!< ACLK_EN Bit Offset */
 #define CS_CLKEN_ACLK_EN                         ((uint32_t)0x00000001)          /*!< ACLK system clock conditional request enable */
 #define CS_CLKEN_MCLK_EN_OFS                     ( 1)                            /*!< MCLK_EN Bit Offset */
@@ -2491,8 +2463,6 @@ typedef struct {
 #define CS_STAT_DCOBIAS_ON                       ((uint32_t)0x00000002)          /*!< DCO bias status */
 #define CS_STAT_HFXT_ON_OFS                      ( 2)                            /*!< HFXT_ON Bit Offset */
 #define CS_STAT_HFXT_ON                          ((uint32_t)0x00000004)          /*!< HFXT status */
-#define CS_STAT_HFXT2_ON_OFS                     ( 3)                            /*!< HFXT2_ON Bit Offset */
-#define CS_STAT_HFXT2_ON                         ((uint32_t)0x00000008)          /*!< HFXT2 status */
 #define CS_STAT_MODOSC_ON_OFS                    ( 4)                            /*!< MODOSC_ON Bit Offset */
 #define CS_STAT_MODOSC_ON                        ((uint32_t)0x00000010)          /*!< MODOSC status */
 #define CS_STAT_VLO_ON_OFS                       ( 5)                            /*!< VLO_ON Bit Offset */
@@ -2531,30 +2501,16 @@ typedef struct {
 #define CS_IE_LFXTIE                             ((uint32_t)0x00000001)          /*!< LFXT oscillator fault flag interrupt enable */
 #define CS_IE_HFXTIE_OFS                         ( 1)                            /*!< HFXTIE Bit Offset */
 #define CS_IE_HFXTIE                             ((uint32_t)0x00000002)          /*!< HFXT oscillator fault flag interrupt enable */
-#define CS_IE_HFXT2IE_OFS                        ( 2)                            /*!< HFXT2IE Bit Offset */
-#define CS_IE_HFXT2IE                            ((uint32_t)0x00000004)          /*!< HFXT2 oscillator fault flag interrupt enable */
 #define CS_IE_DCOR_OPNIE_OFS                     ( 6)                            /*!< DCOR_OPNIE Bit Offset */
 #define CS_IE_DCOR_OPNIE                         ((uint32_t)0x00000040)          /*!< DCO external resistor open circuit fault flag interrupt enable. */
 #define CS_IE_FCNTLFIE_OFS                       ( 8)                            /*!< FCNTLFIE Bit Offset */
 #define CS_IE_FCNTLFIE                           ((uint32_t)0x00000100)          /*!< Start fault counter interrupt enable LFXT */
 #define CS_IE_FCNTHFIE_OFS                       ( 9)                            /*!< FCNTHFIE Bit Offset */
 #define CS_IE_FCNTHFIE                           ((uint32_t)0x00000200)          /*!< Start fault counter interrupt enable HFXT */
-#define CS_IE_FCNTHF2IE_OFS                      (10)                            /*!< FCNTHF2IE Bit Offset */
-#define CS_IE_FCNTHF2IE                          ((uint32_t)0x00000400)          /*!< Start fault counter interrupt enable HFXT2 */
-#define CS_IE_PLLOOLIE_OFS                       (12)                            /*!< PLLOOLIE Bit Offset */
-#define CS_IE_PLLOOLIE                           ((uint32_t)0x00001000)          /*!< PLL out-of-lock interrupt enable */
-#define CS_IE_PLLLOSIE_OFS                       (13)                            /*!< PLLLOSIE Bit Offset */
-#define CS_IE_PLLLOSIE                           ((uint32_t)0x00002000)          /*!< PLL loss-of-signal interrupt enable */
-#define CS_IE_PLLOORIE_OFS                       (14)                            /*!< PLLOORIE Bit Offset */
-#define CS_IE_PLLOORIE                           ((uint32_t)0x00004000)          /*!< PLL out-of-range interrupt enable */
-#define CS_IE_CALIE_OFS                          (15)                            /*!< CALIE Bit Offset */
-#define CS_IE_CALIE                              ((uint32_t)0x00008000)          /*!< REFCNT period counter interrupt enable */
 #define CS_IFG_LFXTIFG_OFS                       ( 0)                            /*!< LFXTIFG Bit Offset */
 #define CS_IFG_LFXTIFG                           ((uint32_t)0x00000001)          /*!< LFXT oscillator fault flag */
 #define CS_IFG_HFXTIFG_OFS                       ( 1)                            /*!< HFXTIFG Bit Offset */
 #define CS_IFG_HFXTIFG                           ((uint32_t)0x00000002)          /*!< HFXT oscillator fault flag */
-#define CS_IFG_HFXT2IFG_OFS                      ( 2)                            /*!< HFXT2IFG Bit Offset */
-#define CS_IFG_HFXT2IFG                          ((uint32_t)0x00000004)          /*!< HFXT2 oscillator fault flag */
 #define CS_IFG_DCOR_SHTIFG_OFS                   ( 5)                            /*!< DCOR_SHTIFG Bit Offset */
 #define CS_IFG_DCOR_SHTIFG                       ((uint32_t)0x00000020)          /*!< DCO external resistor short circuit fault flag. */
 #define CS_IFG_DCOR_OPNIFG_OFS                   ( 6)                            /*!< DCOR_OPNIFG Bit Offset */
@@ -2563,60 +2519,26 @@ typedef struct {
 #define CS_IFG_FCNTLFIFG                         ((uint32_t)0x00000100)          /*!< Start fault counter interrupt flag LFXT */
 #define CS_IFG_FCNTHFIFG_OFS                     ( 9)                            /*!< FCNTHFIFG Bit Offset */
 #define CS_IFG_FCNTHFIFG                         ((uint32_t)0x00000200)          /*!< Start fault counter interrupt flag HFXT */
-#define CS_IFG_FCNTHF2IFG_OFS                    (11)                            /*!< FCNTHF2IFG Bit Offset */
-#define CS_IFG_FCNTHF2IFG                        ((uint32_t)0x00000800)          /*!< Start fault counter interrupt flag HFXT2 */
-#define CS_IFG_PLLOOLIFG_OFS                     (12)                            /*!< PLLOOLIFG Bit Offset */
-#define CS_IFG_PLLOOLIFG                         ((uint32_t)0x00001000)          /*!< PLL out-of-lock interrupt flag */
-#define CS_IFG_PLLLOSIFG_OFS                     (13)                            /*!< PLLLOSIFG Bit Offset */
-#define CS_IFG_PLLLOSIFG                         ((uint32_t)0x00002000)          /*!< PLL loss-of-signal interrupt flag */
-#define CS_IFG_PLLOORIFG_OFS                     (14)                            /*!< PLLOORIFG Bit Offset */
-#define CS_IFG_PLLOORIFG                         ((uint32_t)0x00004000)          /*!< PLL out-of-range interrupt flag */
-#define CS_IFG_CALIFG_OFS                        (15)                            /*!< CALIFG Bit Offset */
-#define CS_IFG_CALIFG                            ((uint32_t)0x00008000)          /*!< REFCNT period counter expired */
 #define CS_CLRIFG_CLR_LFXTIFG_OFS                ( 0)                            /*!< CLR_LFXTIFG Bit Offset */
 #define CS_CLRIFG_CLR_LFXTIFG                    ((uint32_t)0x00000001)          /*!< Clear LFXT oscillator fault interrupt flag */
 #define CS_CLRIFG_CLR_HFXTIFG_OFS                ( 1)                            /*!< CLR_HFXTIFG Bit Offset */
 #define CS_CLRIFG_CLR_HFXTIFG                    ((uint32_t)0x00000002)          /*!< Clear HFXT oscillator fault interrupt flag */
-#define CS_CLRIFG_CLR_HFXT2IFG_OFS               ( 2)                            /*!< CLR_HFXT2IFG Bit Offset */
-#define CS_CLRIFG_CLR_HFXT2IFG                   ((uint32_t)0x00000004)          /*!< Clear HFXT2 oscillator fault interrupt flag */
 #define CS_CLRIFG_CLR_DCOR_OPNIFG_OFS            ( 6)                            /*!< CLR_DCOR_OPNIFG Bit Offset */
 #define CS_CLRIFG_CLR_DCOR_OPNIFG                ((uint32_t)0x00000040)          /*!< Clear DCO external resistor open circuit fault interrupt flag. */
-#define CS_CLRIFG_CLR_CALIFG_OFS                 (15)                            /*!< CLR_CALIFG Bit Offset */
-#define CS_CLRIFG_CLR_CALIFG                     ((uint32_t)0x00008000)          /*!< REFCNT period counter clear interrupt flag */
 #define CS_CLRIFG_CLR_FCNTLFIFG_OFS              ( 8)                            /*!< CLR_FCNTLFIFG Bit Offset */
 #define CS_CLRIFG_CLR_FCNTLFIFG                  ((uint32_t)0x00000100)          /*!< Start fault counter clear interrupt flag LFXT */
 #define CS_CLRIFG_CLR_FCNTHFIFG_OFS              ( 9)                            /*!< CLR_FCNTHFIFG Bit Offset */
 #define CS_CLRIFG_CLR_FCNTHFIFG                  ((uint32_t)0x00000200)          /*!< Start fault counter clear interrupt flag HFXT */
-#define CS_CLRIFG_CLR_FCNTHF2IFG_OFS             (10)                            /*!< CLR_FCNTHF2IFG Bit Offset */
-#define CS_CLRIFG_CLR_FCNTHF2IFG                 ((uint32_t)0x00000400)          /*!< Start fault counter clear interrupt flag HFXT2 */
-#define CS_CLRIFG_CLR_PLLOOLIFG_OFS              (12)                            /*!< CLR_PLLOOLIFG Bit Offset */
-#define CS_CLRIFG_CLR_PLLOOLIFG                  ((uint32_t)0x00001000)          /*!< PLL out-of-lock clear interrupt flag */
-#define CS_CLRIFG_CLR_PLLLOSIFG_OFS              (13)                            /*!< CLR_PLLLOSIFG Bit Offset */
-#define CS_CLRIFG_CLR_PLLLOSIFG                  ((uint32_t)0x00002000)          /*!< PLL loss-of-signal clear interrupt flag */
-#define CS_CLRIFG_CLR_PLLOORIFG_OFS              (14)                            /*!< CLR_PLLOORIFG Bit Offset */
-#define CS_CLRIFG_CLR_PLLOORIFG                  ((uint32_t)0x00004000)          /*!< PLL out-of-range clear interrupt flag */
 #define CS_SETIFG_SET_LFXTIFG_OFS                ( 0)                            /*!< SET_LFXTIFG Bit Offset */
 #define CS_SETIFG_SET_LFXTIFG                    ((uint32_t)0x00000001)          /*!< Set LFXT oscillator fault interrupt flag */
 #define CS_SETIFG_SET_HFXTIFG_OFS                ( 1)                            /*!< SET_HFXTIFG Bit Offset */
 #define CS_SETIFG_SET_HFXTIFG                    ((uint32_t)0x00000002)          /*!< Set HFXT oscillator fault interrupt flag */
-#define CS_SETIFG_SET_HFXT2IFG_OFS               ( 2)                            /*!< SET_HFXT2IFG Bit Offset */
-#define CS_SETIFG_SET_HFXT2IFG                   ((uint32_t)0x00000004)          /*!< Set HFXT2 oscillator fault interrupt flag */
 #define CS_SETIFG_SET_DCOR_OPNIFG_OFS            ( 6)                            /*!< SET_DCOR_OPNIFG Bit Offset */
 #define CS_SETIFG_SET_DCOR_OPNIFG                ((uint32_t)0x00000040)          /*!< Set DCO external resistor open circuit fault interrupt flag. */
-#define CS_SETIFG_SET_CALIFG_OFS                 (15)                            /*!< SET_CALIFG Bit Offset */
-#define CS_SETIFG_SET_CALIFG                     ((uint32_t)0x00008000)          /*!< REFCNT period counter set interrupt flag */
 #define CS_SETIFG_SET_FCNTHFIFG_OFS              ( 9)                            /*!< SET_FCNTHFIFG Bit Offset */
 #define CS_SETIFG_SET_FCNTHFIFG                  ((uint32_t)0x00000200)          /*!< Start fault counter set interrupt flag HFXT */
-#define CS_SETIFG_SET_FCNTHF2IFG_OFS             (10)                            /*!< SET_FCNTHF2IFG Bit Offset */
-#define CS_SETIFG_SET_FCNTHF2IFG                 ((uint32_t)0x00000400)          /*!< Start fault counter set interrupt flag HFXT2 */
 #define CS_SETIFG_SET_FCNTLFIFG_OFS              ( 8)                            /*!< SET_FCNTLFIFG Bit Offset */
 #define CS_SETIFG_SET_FCNTLFIFG                  ((uint32_t)0x00000100)          /*!< Start fault counter set interrupt flag LFXT */
-#define CS_SETIFG_SET_PLLOOLIFG_OFS              (12)                            /*!< SET_PLLOOLIFG Bit Offset */
-#define CS_SETIFG_SET_PLLOOLIFG                  ((uint32_t)0x00001000)          /*!< PLL out-of-lock set interrupt flag */
-#define CS_SETIFG_SET_PLLLOSIFG_OFS              (13)                            /*!< SET_PLLLOSIFG Bit Offset */
-#define CS_SETIFG_SET_PLLLOSIFG                  ((uint32_t)0x00002000)          /*!< PLL loss-of-signal set interrupt flag */
-#define CS_SETIFG_SET_PLLOORIFG_OFS              (14)                            /*!< SET_PLLOORIFG Bit Offset */
-#define CS_SETIFG_SET_PLLOORIFG                  ((uint32_t)0x00004000)          /*!< PLL out-of-range set interrupt flag */
 #define CS_DCOERCAL0_DCO_TCCAL_OFS               ( 0)                            /*!< DCO_TCCAL Bit Offset */
 #define CS_DCOERCAL0_DCO_TCCAL_MASK              ((uint32_t)0x00000003)          /*!< DCO_TCCAL Bit Mask */
 #define CS_DCOERCAL0_DCO_FCAL_RSEL04_OFS         (16)                            /*!< DCO_FCAL_RSEL04 Bit Offset */
@@ -2860,7 +2782,7 @@ typedef struct {
 #define DMA_INT0_CLRFLG_CH31_OFS                 (31)                            /*!< CH31 Bit Offset */
 #define DMA_INT0_CLRFLG_CH31                     ((uint32_t)0x80000000)          /*!< Clear corresponding DMA_INT0_SRCFLG_REG */
 #define DMA_STAT_MASTEN_OFS                      ( 0)                            /*!< MASTEN Bit Offset */
-#define DMA_STAT_MASTEN                          ((uint32_t)0x00000001)
+#define DMA_STAT_MASTEN                          ((uint32_t)0x00000001)          
 #define DMA_STAT_STATE_OFS                       ( 4)                            /*!< STATE Bit Offset */
 #define DMA_STAT_STATE_MASK                      ((uint32_t)0x000000F0)          /*!< STATE Bit Mask */
 #define DMA_STAT_STATE0                          ((uint32_t)0x00000010)          /*!< STATE Bit 0 */
@@ -2903,13 +2825,13 @@ typedef struct {
 #define DMA_STAT_TESTSTAT_0                      ((uint32_t)0x00000000)          /*!< Controller does not include the integration test logic */
 #define DMA_STAT_TESTSTAT_1                      ((uint32_t)0x10000000)          /*!< Controller includes the integration test logic */
 #define DMA_CFG_MASTEN_OFS                       ( 0)                            /*!< MASTEN Bit Offset */
-#define DMA_CFG_MASTEN                           ((uint32_t)0x00000001)
+#define DMA_CFG_MASTEN                           ((uint32_t)0x00000001)          
 #define DMA_CFG_CHPROTCTRL_OFS                   ( 5)                            /*!< CHPROTCTRL Bit Offset */
 #define DMA_CFG_CHPROTCTRL_MASK                  ((uint32_t)0x000000E0)          /*!< CHPROTCTRL Bit Mask */
 #define DMA_CTLBASE_ADDR_OFS                     ( 5)                            /*!< ADDR Bit Offset */
 #define DMA_CTLBASE_ADDR_MASK                    ((uint32_t)0xFFFFFFE0)          /*!< ADDR Bit Mask */
 #define DMA_ERRCLR_ERRCLR_OFS                    ( 0)                            /*!< ERRCLR Bit Offset */
-#define DMA_ERRCLR_ERRCLR                        ((uint32_t)0x00000001)
+#define DMA_ERRCLR_ERRCLR                        ((uint32_t)0x00000001)          
 #define __MCU_NUM_DMA_CHANNELS__                8
 #define DMA_CHANNEL_CONTROL_STRUCT_SIZE         0x10
 #define DMA_CONTROL_MEMORY_ALIGNMENT            (__MCU_NUM_DMA_CHANNELS__ * DMA_CHANNEL_CONTROL_STRUCT_SIZE)
@@ -3042,7 +2964,6 @@ typedef struct {
 #define EUSCI_A_CTLW0_PEN                        ((uint16_t)0x8000)              /*!< Parity enable */
 #define EUSCI_A_CTLW0_STEM_OFS                   ( 1)                            /*!< UCSTEM Bit Offset */
 #define EUSCI_A_CTLW0_STEM                       ((uint16_t)0x0002)              /*!< STE mode select in master mode. */
-#define EUSCI_A_CTLW0_SSEL_0                     ((uint16_t)0x0000)              /*!< Reserved */
 #define EUSCI_A_CTLW0_MST_OFS                    (11)                            /*!< UCMST Bit Offset */
 #define EUSCI_A_CTLW0_MST                        ((uint16_t)0x0800)              /*!< Master mode select */
 #define EUSCI_A_CTLW0_CKPL_OFS                   (14)                            /*!< UCCKPL Bit Offset */
@@ -3072,13 +2993,15 @@ typedef struct {
 #define EUSCI_A_STATW_BRK_OFS                    ( 3)                            /*!< UCBRK Bit Offset */
 #define EUSCI_A_STATW_BRK                        ((uint16_t)0x0008)              /*!< Break detect flag */
 #define EUSCI_A_STATW_PE_OFS                     ( 4)                            /*!< UCPE Bit Offset */
-#define EUSCI_A_STATW_PE                         ((uint16_t)0x0010)
+#define EUSCI_A_STATW_PE                         ((uint16_t)0x0010)              
 #define EUSCI_A_STATW_OE_OFS                     ( 5)                            /*!< UCOE Bit Offset */
 #define EUSCI_A_STATW_OE                         ((uint16_t)0x0020)              /*!< Overrun error flag */
 #define EUSCI_A_STATW_FE_OFS                     ( 6)                            /*!< UCFE Bit Offset */
 #define EUSCI_A_STATW_FE                         ((uint16_t)0x0040)              /*!< Framing error flag */
 #define EUSCI_A_STATW_LISTEN_OFS                 ( 7)                            /*!< UCLISTEN Bit Offset */
 #define EUSCI_A_STATW_LISTEN                     ((uint16_t)0x0080)              /*!< Listen enable */
+#define EUSCI_A_STATW_SPI_BUSY_OFS               ( 0)                            /*!< UCBUSY Bit Offset */
+#define EUSCI_A_STATW_SPI_BUSY                   ((uint16_t)0x0001)              /*!< eUSCI_A busy */
 #define EUSCI_A_RXBUF_RXBUF_OFS                  ( 0)                            /*!< UCRXBUF Bit Offset */
 #define EUSCI_A_RXBUF_RXBUF_MASK                 ((uint16_t)0x00FF)              /*!< UCRXBUF Bit Mask */
 #define EUSCI_A_TXBUF_TXBUF_OFS                  ( 0)                            /*!< UCTXBUF Bit Offset */
@@ -3148,10 +3071,10 @@ typedef struct {
 #define EUSCI_B_CTLW0_UCSSEL_0                   ((uint16_t)0x0000)              /*!< UCLKI */
 #define EUSCI_B_CTLW0_UCSSEL_1                   ((uint16_t)0x0040)              /*!< ACLK */
 #define EUSCI_B_CTLW0_UCSSEL_2                   ((uint16_t)0x0080)              /*!< SMCLK */
+#define EUSCI_B_CTLW0_UCSSEL_3                   ((uint16_t)0x00C0)              /*!< SMCLK */
 #define EUSCI_B_CTLW0_SSEL__UCLKI                ((uint16_t)0x0000)              /*!< UCLKI */
 #define EUSCI_B_CTLW0_SSEL__ACLK                 ((uint16_t)0x0040)              /*!< ACLK */
 #define EUSCI_B_CTLW0_SSEL__SMCLK                ((uint16_t)0x0080)              /*!< SMCLK */
-#define EUSCI_B_CTLW0_SSEL_3                     ((uint16_t)0x00C0)              /*!< SMCLK */
 #define EUSCI_B_CTLW0_SYNC_OFS                   ( 8)                            /*!< UCSYNC Bit Offset */
 #define EUSCI_B_CTLW0_SYNC                       ((uint16_t)0x0100)              /*!< Synchronous mode enable */
 #define EUSCI_B_CTLW0_MODE_OFS                   ( 9)                            /*!< UCMODE Bit Offset */
@@ -3172,7 +3095,6 @@ typedef struct {
 #define EUSCI_B_CTLW0_A10                        ((uint16_t)0x8000)              /*!< Own addressing mode select */
 #define EUSCI_B_CTLW0_STEM_OFS                   ( 1)                            /*!< UCSTEM Bit Offset */
 #define EUSCI_B_CTLW0_STEM                       ((uint16_t)0x0002)              /*!< STE mode select in master mode. */
-#define EUSCI_B_CTLW0_SSEL_0                     ((uint16_t)0x0000)              /*!< Reserved */
 #define EUSCI_B_CTLW0_SEVENBIT_OFS               (12)                            /*!< UC7BIT Bit Offset */
 #define EUSCI_B_CTLW0_SEVENBIT                   ((uint16_t)0x1000)              /*!< Character length */
 #define EUSCI_B_CTLW0_MSB_OFS                    (13)                            /*!< UCMSB Bit Offset */
@@ -3218,8 +3140,8 @@ typedef struct {
 #define EUSCI_B_STATW_SCLLOW                     ((uint16_t)0x0040)              /*!< SCL low */
 #define EUSCI_B_STATW_BCNT_OFS                   ( 8)                            /*!< UCBCNT Bit Offset */
 #define EUSCI_B_STATW_BCNT_MASK                  ((uint16_t)0xFF00)              /*!< UCBCNT Bit Mask */
-#define EUSCI_B_STATW_BUSY_OFS                   ( 0)                            /*!< UCBUSY Bit Offset */
-#define EUSCI_B_STATW_BUSY                       ((uint16_t)0x0001)              /*!< eUSCI_B busy */
+#define EUSCI_B_STATW_SPI_BUSY_OFS               ( 0)                            /*!< UCBUSY Bit Offset */
+#define EUSCI_B_STATW_SPI_BUSY                   ((uint16_t)0x0001)              /*!< eUSCI_B busy */
 #define EUSCI_B_STATW_OE_OFS                     ( 5)                            /*!< UCOE Bit Offset */
 #define EUSCI_B_STATW_OE                         ((uint16_t)0x0020)              /*!< Overrun error flag */
 #define EUSCI_B_STATW_FE_OFS                     ( 6)                            /*!< UCFE Bit Offset */
@@ -3252,6 +3174,16 @@ typedef struct {
 #define EUSCI_B_I2COA3_OAEN                      ((uint16_t)0x0400)              /*!< Own Address enable register */
 #define EUSCI_B_ADDRX_ADDRX_OFS                  ( 0)                            /*!< ADDRX Bit Offset */
 #define EUSCI_B_ADDRX_ADDRX_MASK                 ((uint16_t)0x03FF)              /*!< ADDRX Bit Mask */
+#define EUSCI_B_ADDRX_ADDRX0                     ((uint16_t)0x0001)              /*!< ADDRX Bit 0 */
+#define EUSCI_B_ADDRX_ADDRX1                     ((uint16_t)0x0002)              /*!< ADDRX Bit 1 */
+#define EUSCI_B_ADDRX_ADDRX2                     ((uint16_t)0x0004)              /*!< ADDRX Bit 2 */
+#define EUSCI_B_ADDRX_ADDRX3                     ((uint16_t)0x0008)              /*!< ADDRX Bit 3 */
+#define EUSCI_B_ADDRX_ADDRX4                     ((uint16_t)0x0010)              /*!< ADDRX Bit 4 */
+#define EUSCI_B_ADDRX_ADDRX5                     ((uint16_t)0x0020)              /*!< ADDRX Bit 5 */
+#define EUSCI_B_ADDRX_ADDRX6                     ((uint16_t)0x0040)              /*!< ADDRX Bit 6 */
+#define EUSCI_B_ADDRX_ADDRX7                     ((uint16_t)0x0080)              /*!< ADDRX Bit 7 */
+#define EUSCI_B_ADDRX_ADDRX8                     ((uint16_t)0x0100)              /*!< ADDRX Bit 8 */
+#define EUSCI_B_ADDRX_ADDRX9                     ((uint16_t)0x0200)              /*!< ADDRX Bit 9 */
 #define EUSCI_B_ADDMASK_ADDMASK_OFS              ( 0)                            /*!< ADDMASK Bit Offset */
 #define EUSCI_B_ADDMASK_ADDMASK_MASK             ((uint16_t)0x03FF)              /*!< ADDMASK Bit Mask */
 #define EUSCI_B_I2CSA_I2CSA_OFS                  ( 0)                            /*!< I2CSA Bit Offset */
@@ -3531,7 +3463,7 @@ typedef struct {
 #define FLCTL_PRGBRST_CTLSTAT_LEN1               ((uint32_t)0x00000010)          /*!< LEN Bit 1 */
 #define FLCTL_PRGBRST_CTLSTAT_LEN2               ((uint32_t)0x00000020)          /*!< LEN Bit 2 */
 #define FLCTL_PRGBRST_CTLSTAT_LEN_0              ((uint32_t)0x00000000)          /*!< No burst operation */
-#define FLCTL_PRGBRST_CTLSTAT_LEN_1              ((uint32_t)0x00000008)          /*!< 1 word burst of 128 bits, starting with address in the FLCTL_PRGBRST_STARTADDR */
+#define FLCTL_PRGBRST_CTLSTAT_LEN_1              ((uint32_t)0x00000008)          /*!< 1 word burst of 128 bits, starting with address in the  */
 #define FLCTL_PRGBRST_CTLSTAT_LEN_2              ((uint32_t)0x00000010)          /*!< 2*128 bits burst write, starting with address in the FLCTL_PRGBRST_STARTADDR  */
 #define FLCTL_PRGBRST_CTLSTAT_LEN_3              ((uint32_t)0x00000018)          /*!< 3*128 bits burst write, starting with address in the FLCTL_PRGBRST_STARTADDR  */
 #define FLCTL_PRGBRST_CTLSTAT_LEN_4              ((uint32_t)0x00000020)          /*!< 4*128 bits burst write, starting with address in the FLCTL_PRGBRST_STARTADDR  */
@@ -3725,77 +3657,77 @@ typedef struct {
 #define FLCTL_BANK1_MAIN_WEPROT_PROT31_OFS       (31)                            /*!< PROT31 Bit Offset */
 #define FLCTL_BANK1_MAIN_WEPROT_PROT31           ((uint32_t)0x80000000)          /*!< Protects Sector 31 from program or erase operations */
 #define FLCTL_BMRK_CTLSTAT_I_BMRK_OFS            ( 0)                            /*!< I_BMRK Bit Offset */
-#define FLCTL_BMRK_CTLSTAT_I_BMRK                ((uint32_t)0x00000001)
+#define FLCTL_BMRK_CTLSTAT_I_BMRK                ((uint32_t)0x00000001)          
 #define FLCTL_BMRK_CTLSTAT_D_BMRK_OFS            ( 1)                            /*!< D_BMRK Bit Offset */
-#define FLCTL_BMRK_CTLSTAT_D_BMRK                ((uint32_t)0x00000002)
+#define FLCTL_BMRK_CTLSTAT_D_BMRK                ((uint32_t)0x00000002)          
 #define FLCTL_BMRK_CTLSTAT_CMP_EN_OFS            ( 2)                            /*!< CMP_EN Bit Offset */
-#define FLCTL_BMRK_CTLSTAT_CMP_EN                ((uint32_t)0x00000004)
+#define FLCTL_BMRK_CTLSTAT_CMP_EN                ((uint32_t)0x00000004)          
 #define FLCTL_BMRK_CTLSTAT_CMP_SEL_OFS           ( 3)                            /*!< CMP_SEL Bit Offset */
-#define FLCTL_BMRK_CTLSTAT_CMP_SEL               ((uint32_t)0x00000008)
+#define FLCTL_BMRK_CTLSTAT_CMP_SEL               ((uint32_t)0x00000008)          
 #define FLCTL_IFG_RDBRST_OFS                     ( 0)                            /*!< RDBRST Bit Offset */
-#define FLCTL_IFG_RDBRST                         ((uint32_t)0x00000001)
+#define FLCTL_IFG_RDBRST                         ((uint32_t)0x00000001)          
 #define FLCTL_IFG_AVPRE_OFS                      ( 1)                            /*!< AVPRE Bit Offset */
-#define FLCTL_IFG_AVPRE                          ((uint32_t)0x00000002)
+#define FLCTL_IFG_AVPRE                          ((uint32_t)0x00000002)          
 #define FLCTL_IFG_AVPST_OFS                      ( 2)                            /*!< AVPST Bit Offset */
-#define FLCTL_IFG_AVPST                          ((uint32_t)0x00000004)
+#define FLCTL_IFG_AVPST                          ((uint32_t)0x00000004)          
 #define FLCTL_IFG_PRG_OFS                        ( 3)                            /*!< PRG Bit Offset */
-#define FLCTL_IFG_PRG                            ((uint32_t)0x00000008)
+#define FLCTL_IFG_PRG                            ((uint32_t)0x00000008)          
 #define FLCTL_IFG_PRGB_OFS                       ( 4)                            /*!< PRGB Bit Offset */
-#define FLCTL_IFG_PRGB                           ((uint32_t)0x00000010)
+#define FLCTL_IFG_PRGB                           ((uint32_t)0x00000010)          
 #define FLCTL_IFG_ERASE_OFS                      ( 5)                            /*!< ERASE Bit Offset */
-#define FLCTL_IFG_ERASE                          ((uint32_t)0x00000020)
+#define FLCTL_IFG_ERASE                          ((uint32_t)0x00000020)          
 #define FLCTL_IFG_BMRK_OFS                       ( 8)                            /*!< BMRK Bit Offset */
-#define FLCTL_IFG_BMRK                           ((uint32_t)0x00000100)
+#define FLCTL_IFG_BMRK                           ((uint32_t)0x00000100)          
 #define FLCTL_IFG_PRG_ERR_OFS                    ( 9)                            /*!< PRG_ERR Bit Offset */
-#define FLCTL_IFG_PRG_ERR                        ((uint32_t)0x00000200)
+#define FLCTL_IFG_PRG_ERR                        ((uint32_t)0x00000200)          
 #define FLCTL_IE_RDBRST_OFS                      ( 0)                            /*!< RDBRST Bit Offset */
-#define FLCTL_IE_RDBRST                          ((uint32_t)0x00000001)
+#define FLCTL_IE_RDBRST                          ((uint32_t)0x00000001)          
 #define FLCTL_IE_AVPRE_OFS                       ( 1)                            /*!< AVPRE Bit Offset */
-#define FLCTL_IE_AVPRE                           ((uint32_t)0x00000002)
+#define FLCTL_IE_AVPRE                           ((uint32_t)0x00000002)          
 #define FLCTL_IE_AVPST_OFS                       ( 2)                            /*!< AVPST Bit Offset */
-#define FLCTL_IE_AVPST                           ((uint32_t)0x00000004)
+#define FLCTL_IE_AVPST                           ((uint32_t)0x00000004)          
 #define FLCTL_IE_PRG_OFS                         ( 3)                            /*!< PRG Bit Offset */
-#define FLCTL_IE_PRG                             ((uint32_t)0x00000008)
+#define FLCTL_IE_PRG                             ((uint32_t)0x00000008)          
 #define FLCTL_IE_PRGB_OFS                        ( 4)                            /*!< PRGB Bit Offset */
-#define FLCTL_IE_PRGB                            ((uint32_t)0x00000010)
+#define FLCTL_IE_PRGB                            ((uint32_t)0x00000010)          
 #define FLCTL_IE_ERASE_OFS                       ( 5)                            /*!< ERASE Bit Offset */
-#define FLCTL_IE_ERASE                           ((uint32_t)0x00000020)
+#define FLCTL_IE_ERASE                           ((uint32_t)0x00000020)          
 #define FLCTL_IE_BMRK_OFS                        ( 8)                            /*!< BMRK Bit Offset */
-#define FLCTL_IE_BMRK                            ((uint32_t)0x00000100)
+#define FLCTL_IE_BMRK                            ((uint32_t)0x00000100)          
 #define FLCTL_IE_PRG_ERR_OFS                     ( 9)                            /*!< PRG_ERR Bit Offset */
-#define FLCTL_IE_PRG_ERR                         ((uint32_t)0x00000200)
+#define FLCTL_IE_PRG_ERR                         ((uint32_t)0x00000200)          
 #define FLCTL_CLRIFG_RDBRST_OFS                  ( 0)                            /*!< RDBRST Bit Offset */
-#define FLCTL_CLRIFG_RDBRST                      ((uint32_t)0x00000001)
+#define FLCTL_CLRIFG_RDBRST                      ((uint32_t)0x00000001)          
 #define FLCTL_CLRIFG_AVPRE_OFS                   ( 1)                            /*!< AVPRE Bit Offset */
-#define FLCTL_CLRIFG_AVPRE                       ((uint32_t)0x00000002)
+#define FLCTL_CLRIFG_AVPRE                       ((uint32_t)0x00000002)          
 #define FLCTL_CLRIFG_AVPST_OFS                   ( 2)                            /*!< AVPST Bit Offset */
-#define FLCTL_CLRIFG_AVPST                       ((uint32_t)0x00000004)
+#define FLCTL_CLRIFG_AVPST                       ((uint32_t)0x00000004)          
 #define FLCTL_CLRIFG_PRG_OFS                     ( 3)                            /*!< PRG Bit Offset */
-#define FLCTL_CLRIFG_PRG                         ((uint32_t)0x00000008)
+#define FLCTL_CLRIFG_PRG                         ((uint32_t)0x00000008)          
 #define FLCTL_CLRIFG_PRGB_OFS                    ( 4)                            /*!< PRGB Bit Offset */
-#define FLCTL_CLRIFG_PRGB                        ((uint32_t)0x00000010)
+#define FLCTL_CLRIFG_PRGB                        ((uint32_t)0x00000010)          
 #define FLCTL_CLRIFG_ERASE_OFS                   ( 5)                            /*!< ERASE Bit Offset */
-#define FLCTL_CLRIFG_ERASE                       ((uint32_t)0x00000020)
+#define FLCTL_CLRIFG_ERASE                       ((uint32_t)0x00000020)          
 #define FLCTL_CLRIFG_BMRK_OFS                    ( 8)                            /*!< BMRK Bit Offset */
-#define FLCTL_CLRIFG_BMRK                        ((uint32_t)0x00000100)
+#define FLCTL_CLRIFG_BMRK                        ((uint32_t)0x00000100)          
 #define FLCTL_CLRIFG_PRG_ERR_OFS                 ( 9)                            /*!< PRG_ERR Bit Offset */
-#define FLCTL_CLRIFG_PRG_ERR                     ((uint32_t)0x00000200)
+#define FLCTL_CLRIFG_PRG_ERR                     ((uint32_t)0x00000200)          
 #define FLCTL_SETIFG_RDBRST_OFS                  ( 0)                            /*!< RDBRST Bit Offset */
-#define FLCTL_SETIFG_RDBRST                      ((uint32_t)0x00000001)
+#define FLCTL_SETIFG_RDBRST                      ((uint32_t)0x00000001)          
 #define FLCTL_SETIFG_AVPRE_OFS                   ( 1)                            /*!< AVPRE Bit Offset */
-#define FLCTL_SETIFG_AVPRE                       ((uint32_t)0x00000002)
+#define FLCTL_SETIFG_AVPRE                       ((uint32_t)0x00000002)          
 #define FLCTL_SETIFG_AVPST_OFS                   ( 2)                            /*!< AVPST Bit Offset */
-#define FLCTL_SETIFG_AVPST                       ((uint32_t)0x00000004)
+#define FLCTL_SETIFG_AVPST                       ((uint32_t)0x00000004)          
 #define FLCTL_SETIFG_PRG_OFS                     ( 3)                            /*!< PRG Bit Offset */
-#define FLCTL_SETIFG_PRG                         ((uint32_t)0x00000008)
+#define FLCTL_SETIFG_PRG                         ((uint32_t)0x00000008)          
 #define FLCTL_SETIFG_PRGB_OFS                    ( 4)                            /*!< PRGB Bit Offset */
-#define FLCTL_SETIFG_PRGB                        ((uint32_t)0x00000010)
+#define FLCTL_SETIFG_PRGB                        ((uint32_t)0x00000010)          
 #define FLCTL_SETIFG_ERASE_OFS                   ( 5)                            /*!< ERASE Bit Offset */
-#define FLCTL_SETIFG_ERASE                       ((uint32_t)0x00000020)
+#define FLCTL_SETIFG_ERASE                       ((uint32_t)0x00000020)          
 #define FLCTL_SETIFG_BMRK_OFS                    ( 8)                            /*!< BMRK Bit Offset */
-#define FLCTL_SETIFG_BMRK                        ((uint32_t)0x00000100)
+#define FLCTL_SETIFG_BMRK                        ((uint32_t)0x00000100)          
 #define FLCTL_SETIFG_PRG_ERR_OFS                 ( 9)                            /*!< PRG_ERR Bit Offset */
-#define FLCTL_SETIFG_PRG_ERR                     ((uint32_t)0x00000200)
+#define FLCTL_SETIFG_PRG_ERR                     ((uint32_t)0x00000200)          
 #define FLCTL_READ_TIMCTL_SETUP_OFS              ( 0)                            /*!< SETUP Bit Offset */
 #define FLCTL_READ_TIMCTL_SETUP_MASK             ((uint32_t)0x000000FF)          /*!< SETUP Bit Mask */
 #define FLCTL_READ_TIMCTL_IREF_BOOST1_OFS        (12)                            /*!< IREF_BOOST1 Bit Offset */
@@ -4020,10 +3952,10 @@ typedef struct {
 #define PCM_CTL0_LPMR1                           ((uint32_t)0x00000020)          /*!< LPMR Bit 1 */
 #define PCM_CTL0_LPMR2                           ((uint32_t)0x00000040)          /*!< LPMR Bit 2 */
 #define PCM_CTL0_LPMR3                           ((uint32_t)0x00000080)          /*!< LPMR Bit 3 */
-#define PCM_CTL0_LPMR_0                          ((uint32_t)0x00000000)          /*!< LPM3. Core voltage setting is similar to the mode from which LPM3 is entered. */
+#define PCM_CTL0_LPMR_0                          ((uint32_t)0x00000000)          /*!< LPM3. Core voltage setting is similar to the mode from which LPM3 is  */
 #define PCM_CTL0_LPMR_10                         ((uint32_t)0x000000A0)          /*!< LPM3.5. Core voltage setting 0. */
 #define PCM_CTL0_LPMR_12                         ((uint32_t)0x000000C0)          /*!< LPM4.5 */
-#define PCM_CTL0_LPMR__LPM3                      ((uint32_t)0x00000000)          /*!< LPM3. Core voltage setting is similar to the mode from which LPM3 is entered. */
+#define PCM_CTL0_LPMR__LPM3                      ((uint32_t)0x00000000)          /*!< LPM3. Core voltage setting is similar to the mode from which LPM3 is  */
 #define PCM_CTL0_LPMR__LPM35                     ((uint32_t)0x000000A0)          /*!< LPM3.5. Core voltage setting 0. */
 #define PCM_CTL0_LPMR__LPM45                     ((uint32_t)0x000000C0)          /*!< LPM4.5 */
 #define PCM_CTL0_CPM_OFS                         ( 8)                            /*!< CPM Bit Offset */
@@ -4168,14 +4100,14 @@ typedef struct {
 #define PSS_CTL0_VCORETRAN_MASK                  ((uint32_t)0x00003000)          /*!< VCORETRAN Bit Mask */
 #define PSS_CTL0_VCORETRAN0                      ((uint32_t)0x00001000)          /*!< VCORETRAN Bit 0 */
 #define PSS_CTL0_VCORETRAN1                      ((uint32_t)0x00002000)          /*!< VCORETRAN Bit 1 */
-#define PSS_CTL0_VCORETRAN_0                     ((uint32_t)0x00000000)          /*!< 32 ?s / 100 mV */
-#define PSS_CTL0_VCORETRAN_1                     ((uint32_t)0x00001000)          /*!< 64 ?s / 100 mV */
-#define PSS_CTL0_VCORETRAN_2                     ((uint32_t)0x00002000)          /*!< 128 ?s / 100 mV (default) */
-#define PSS_CTL0_VCORETRAN_3                     ((uint32_t)0x00003000)          /*!< 256 ?s / 100 mV */
-#define PSS_CTL0_VCORETRAN__32                   ((uint32_t)0x00000000)          /*!< 32 ?s / 100 mV */
-#define PSS_CTL0_VCORETRAN__64                   ((uint32_t)0x00001000)          /*!< 64 ?s / 100 mV */
-#define PSS_CTL0_VCORETRAN__128                  ((uint32_t)0x00002000)          /*!< 128 ?s / 100 mV (default) */
-#define PSS_CTL0_VCORETRAN__256                  ((uint32_t)0x00003000)          /*!< 256 ?s / 100 mV */
+#define PSS_CTL0_VCORETRAN_0                     ((uint32_t)0x00000000)          /*!< 32 s / 100 mV */
+#define PSS_CTL0_VCORETRAN_1                     ((uint32_t)0x00001000)          /*!< 64 s / 100 mV */
+#define PSS_CTL0_VCORETRAN_2                     ((uint32_t)0x00002000)          /*!< 128 s / 100 mV (default) */
+#define PSS_CTL0_VCORETRAN_3                     ((uint32_t)0x00003000)          /*!< 256 s / 100 mV */
+#define PSS_CTL0_VCORETRAN__32                   ((uint32_t)0x00000000)          /*!< 32 s / 100 mV */
+#define PSS_CTL0_VCORETRAN__64                   ((uint32_t)0x00001000)          /*!< 64 s / 100 mV */
+#define PSS_CTL0_VCORETRAN__128                  ((uint32_t)0x00002000)          /*!< 128 s / 100 mV (default) */
+#define PSS_CTL0_VCORETRAN__256                  ((uint32_t)0x00003000)          /*!< 256 s / 100 mV */
 #define PSS_IE_SVSMHIE_OFS                       ( 1)                            /*!< SVSMHIE Bit Offset */
 #define PSS_IE_SVSMHIE                           ((uint32_t)0x00000002)          /*!< High-side SVSM interrupt enable */
 #define PSS_IFG_SVSMHIFG_OFS                     ( 1)                            /*!< SVSMHIFG Bit Offset */
@@ -4283,37 +4215,37 @@ typedef struct {
 #define RSTCTL_HARDRESET_CLR_SRC15_OFS           (15)                            /*!< SRC15 Bit Offset */
 #define RSTCTL_HARDRESET_CLR_SRC15               ((uint32_t)0x00008000)          /*!< Write 1 clears the corresponding bit in the RSTCTL_HRDRESETSTAT_REG */
 #define RSTCTL_HARDRESET_SET_SRC0_OFS            ( 0)                            /*!< SRC0 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC0                ((uint32_t)0x00000001)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC0                ((uint32_t)0x00000001)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC1_OFS            ( 1)                            /*!< SRC1 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC1                ((uint32_t)0x00000002)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC1                ((uint32_t)0x00000002)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC2_OFS            ( 2)                            /*!< SRC2 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC2                ((uint32_t)0x00000004)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC2                ((uint32_t)0x00000004)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC3_OFS            ( 3)                            /*!< SRC3 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC3                ((uint32_t)0x00000008)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC3                ((uint32_t)0x00000008)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC4_OFS            ( 4)                            /*!< SRC4 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC4                ((uint32_t)0x00000010)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC4                ((uint32_t)0x00000010)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC5_OFS            ( 5)                            /*!< SRC5 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC5                ((uint32_t)0x00000020)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC5                ((uint32_t)0x00000020)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC6_OFS            ( 6)                            /*!< SRC6 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC6                ((uint32_t)0x00000040)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC6                ((uint32_t)0x00000040)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC7_OFS            ( 7)                            /*!< SRC7 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC7                ((uint32_t)0x00000080)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC7                ((uint32_t)0x00000080)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC8_OFS            ( 8)                            /*!< SRC8 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC8                ((uint32_t)0x00000100)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC8                ((uint32_t)0x00000100)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC9_OFS            ( 9)                            /*!< SRC9 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC9                ((uint32_t)0x00000200)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC9                ((uint32_t)0x00000200)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC10_OFS           (10)                            /*!< SRC10 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC10               ((uint32_t)0x00000400)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC10               ((uint32_t)0x00000400)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC11_OFS           (11)                            /*!< SRC11 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC11               ((uint32_t)0x00000800)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC11               ((uint32_t)0x00000800)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC12_OFS           (12)                            /*!< SRC12 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC12               ((uint32_t)0x00001000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC12               ((uint32_t)0x00001000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC13_OFS           (13)                            /*!< SRC13 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC13               ((uint32_t)0x00002000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC13               ((uint32_t)0x00002000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC14_OFS           (14)                            /*!< SRC14 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC14               ((uint32_t)0x00004000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC14               ((uint32_t)0x00004000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_HARDRESET_SET_SRC15_OFS           (15)                            /*!< SRC15 Bit Offset */
-#define RSTCTL_HARDRESET_SET_SRC15               ((uint32_t)0x00008000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and initiates */
+#define RSTCTL_HARDRESET_SET_SRC15               ((uint32_t)0x00008000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_HARDRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_STAT_SRC0_OFS           ( 0)                            /*!< SRC0 Bit Offset */
 #define RSTCTL_SOFTRESET_STAT_SRC0               ((uint32_t)0x00000001)          /*!< If 1, indicates that SRC0 was the source of the Soft Reset */
 #define RSTCTL_SOFTRESET_STAT_SRC1_OFS           ( 1)                            /*!< SRC1 Bit Offset */
@@ -4379,45 +4311,43 @@ typedef struct {
 #define RSTCTL_SOFTRESET_CLR_SRC15_OFS           (15)                            /*!< SRC15 Bit Offset */
 #define RSTCTL_SOFTRESET_CLR_SRC15               ((uint32_t)0x00008000)          /*!< Write 1 clears the corresponding bit in the RSTCTL_SOFTRESET_STAT */
 #define RSTCTL_SOFTRESET_SET_SRC0_OFS            ( 0)                            /*!< SRC0 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC0                ((uint32_t)0x00000001)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC0                ((uint32_t)0x00000001)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC1_OFS            ( 1)                            /*!< SRC1 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC1                ((uint32_t)0x00000002)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC1                ((uint32_t)0x00000002)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC2_OFS            ( 2)                            /*!< SRC2 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC2                ((uint32_t)0x00000004)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC2                ((uint32_t)0x00000004)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC3_OFS            ( 3)                            /*!< SRC3 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC3                ((uint32_t)0x00000008)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC3                ((uint32_t)0x00000008)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC4_OFS            ( 4)                            /*!< SRC4 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC4                ((uint32_t)0x00000010)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC4                ((uint32_t)0x00000010)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC5_OFS            ( 5)                            /*!< SRC5 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC5                ((uint32_t)0x00000020)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC5                ((uint32_t)0x00000020)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC6_OFS            ( 6)                            /*!< SRC6 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC6                ((uint32_t)0x00000040)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC6                ((uint32_t)0x00000040)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC7_OFS            ( 7)                            /*!< SRC7 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC7                ((uint32_t)0x00000080)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC7                ((uint32_t)0x00000080)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC8_OFS            ( 8)                            /*!< SRC8 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC8                ((uint32_t)0x00000100)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC8                ((uint32_t)0x00000100)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC9_OFS            ( 9)                            /*!< SRC9 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC9                ((uint32_t)0x00000200)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC9                ((uint32_t)0x00000200)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC10_OFS           (10)                            /*!< SRC10 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC10               ((uint32_t)0x00000400)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC10               ((uint32_t)0x00000400)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC11_OFS           (11)                            /*!< SRC11 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC11               ((uint32_t)0x00000800)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC11               ((uint32_t)0x00000800)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC12_OFS           (12)                            /*!< SRC12 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC12               ((uint32_t)0x00001000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC12               ((uint32_t)0x00001000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC13_OFS           (13)                            /*!< SRC13 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC13               ((uint32_t)0x00002000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC13               ((uint32_t)0x00002000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC14_OFS           (14)                            /*!< SRC14 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC14               ((uint32_t)0x00004000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC14               ((uint32_t)0x00004000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_SOFTRESET_SET_SRC15_OFS           (15)                            /*!< SRC15 Bit Offset */
-#define RSTCTL_SOFTRESET_SET_SRC15               ((uint32_t)0x00008000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and initiates */
+#define RSTCTL_SOFTRESET_SET_SRC15               ((uint32_t)0x00008000)          /*!< Write 1 sets the corresponding bit in the RSTCTL_SOFTRESET_STAT (and  */
 #define RSTCTL_PSSRESET_STAT_SVSMH_OFS           ( 1)                            /*!< SVSMH Bit Offset */
 #define RSTCTL_PSSRESET_STAT_SVSMH               ((uint32_t)0x00000002)          /*!< Indicates if POR was caused by an SVSMH trip condition int the PSS */
 #define RSTCTL_PSSRESET_STAT_BGREF_OFS           ( 2)                            /*!< BGREF Bit Offset */
 #define RSTCTL_PSSRESET_STAT_BGREF               ((uint32_t)0x00000004)          /*!< Indicates if POR was caused by a BGREF not okay condition in the PSS */
 #define RSTCTL_PSSRESET_STAT_VCCDET_OFS          ( 3)                            /*!< VCCDET Bit Offset */
 #define RSTCTL_PSSRESET_STAT_VCCDET              ((uint32_t)0x00000008)          /*!< Indicates if POR was caused by a VCCDET trip condition in the PSS */
-#define RSTCTL_PSSRESET_STAT_SVSL_OFS            ( 0)                            /*!< SVSL Bit Offset */
-#define RSTCTL_PSSRESET_STAT_SVSL                ((uint32_t)0x00000001)          /*!< Indicates if POR was caused by an SVSL trip condition in the PSS */
 #define RSTCTL_PSSRESET_CLR_CLR_OFS              ( 0)                            /*!< CLR Bit Offset */
 #define RSTCTL_PSSRESET_CLR_CLR                  ((uint32_t)0x00000001)          /*!< Write 1 clears all PSS Reset Flags in the RSTCTL_PSSRESET_STAT */
 #define RSTCTL_PCMRESET_STAT_LPM35_OFS           ( 0)                            /*!< LPM35 Bit Offset */
@@ -4437,7 +4367,7 @@ typedef struct {
 #define RSTCTL_CSRESET_STAT_DCOR_SHT_OFS         ( 0)                            /*!< DCOR_SHT Bit Offset */
 #define RSTCTL_CSRESET_STAT_DCOR_SHT             ((uint32_t)0x00000001)          /*!< Indicates if POR was caused by DCO short circuit fault in the external  */
 #define RSTCTL_CSRESET_CLR_CLR_OFS               ( 0)                            /*!< CLR Bit Offset */
-#define RSTCTL_CSRESET_CLR_CLR                   ((uint32_t)0x00000001)          /*!< Write 1 clears the DCOR_SHT Flag in RSTCTL_CSRESET_STAT as well as DCOR_SHTIFG */
+#define RSTCTL_CSRESET_CLR_CLR                   ((uint32_t)0x00000001)          /*!< Write 1 clears the DCOR_SHT Flag in RSTCTL_CSRESET_STAT as well as  */
 #define RSTCTL_RESETREQ_RSTKEY_VAL                 ((uint32_t)0x00006900)          /*!< Key value to enable writes to bits 1-0 */
 #define RTC_C_CTL0_RDYIFG_OFS                    ( 0)                            /*!< RTCRDYIFG Bit Offset */
 #define RTC_C_CTL0_RDYIFG                        ((uint16_t)0x0001)              /*!< Real-time clock ready interrupt flag */
@@ -4474,7 +4404,7 @@ typedef struct {
 #define RTC_C_CTL13_RDY_OFS                      ( 4)                            /*!< RTCRDY Bit Offset */
 #define RTC_C_CTL13_RDY                          ((uint16_t)0x0010)              /*!< Real-time clock ready */
 #define RTC_C_CTL13_MODE_OFS                     ( 5)                            /*!< RTCMODE Bit Offset */
-#define RTC_C_CTL13_MODE                         ((uint16_t)0x0020)
+#define RTC_C_CTL13_MODE                         ((uint16_t)0x0020)              
 #define RTC_C_CTL13_HOLD_OFS                     ( 6)                            /*!< RTCHOLD Bit Offset */
 #define RTC_C_CTL13_HOLD                         ((uint16_t)0x0040)              /*!< Real-time clock hold */
 #define RTC_C_CTL13_BCD_OFS                      ( 7)                            /*!< RTCBCD Bit Offset */
@@ -4588,7 +4518,7 @@ typedef struct {
 #define RTC_C_DATE_MON_LD_OFS                    ( 8)                            /*!< MonthLowDigit Bit Offset */
 #define RTC_C_DATE_MON_LD_MASK                   ((uint16_t)0x0F00)              /*!< MonthLowDigit Bit Mask */
 #define RTC_C_DATE_MON_HD_OFS                    (12)                            /*!< MonthHighDigit Bit Offset */
-#define RTC_C_DATE_MON_HD                        ((uint16_t)0x1000)              /*!< Month ? high digit (0 or 1) */
+#define RTC_C_DATE_MON_HD                        ((uint16_t)0x1000)              /*!< Month  high digit (0 or 1) */
 #define RTC_C_YEAR_YEAR_LB_OFS                   ( 0)                            /*!< YearLowByte Bit Offset */
 #define RTC_C_YEAR_YEAR_LB_MASK                  ((uint16_t)0x00FF)              /*!< YearLowByte Bit Mask */
 #define RTC_C_YEAR_YEAR_HB_OFS                   ( 8)                            /*!< YearHighByte Bit Offset */
@@ -4648,7 +4578,7 @@ typedef struct {
 #define SCB_PFR0_STATE13                         ((uint32_t)0x00000080)          /*!< STATE1 Bit 3 */
 #define SCB_PFR0_STATE1_0                        ((uint32_t)0x00000000)          /*!< N/A */
 #define SCB_PFR0_STATE1_1                        ((uint32_t)0x00000010)          /*!< N/A */
-#define SCB_PFR0_STATE1_2                        ((uint32_t)0x00000020)          /*!< Thumb-2 encoding with the 16-bit basic instructions plus 32-bit Buncond/BL but */
+#define SCB_PFR0_STATE1_2                        ((uint32_t)0x00000020)          /*!< Thumb-2 encoding with the 16-bit basic instructions plus 32-bit Buncond/BL  */
 #define SCB_PFR0_STATE1_3                        ((uint32_t)0x00000030)          /*!< Thumb-2 encoding with all Thumb-2 basic instructions */
 #define SCB_PFR1_MICROCONTROLLER_PROGRAMMERS_MODEL_OFS ( 8)                            /*!< MICROCONTROLLER_PROGRAMMERS_MODEL Bit Offset */
 #define SCB_PFR1_MICROCONTROLLER_PROGRAMMERS_MODEL_MASK ((uint32_t)0x00000F00)          /*!< MICROCONTROLLER_PROGRAMMERS_MODEL Bit Mask */
@@ -4683,7 +4613,7 @@ typedef struct {
 #define SCB_MMFR0_CACHE_COHERENCE_SUPPORT2       ((uint32_t)0x00000400)          /*!< CACHE_COHERENCE_SUPPORT Bit 2 */
 #define SCB_MMFR0_CACHE_COHERENCE_SUPPORT3       ((uint32_t)0x00000800)          /*!< CACHE_COHERENCE_SUPPORT Bit 3 */
 #define SCB_MMFR0_CACHE_COHERENCE_SUPPORT_0      ((uint32_t)0x00000000)          /*!< no shared support */
-#define SCB_MMFR0_CACHE_COHERENCE_SUPPORT_1      ((uint32_t)0x00000100)          /*!< partial-inner-shared coherency (coherency amongst some - but not all - of the  */
+#define SCB_MMFR0_CACHE_COHERENCE_SUPPORT_1      ((uint32_t)0x00000100)          /*!< partial-inner-shared coherency (coherency amongst some - but not all - of  */
 #define SCB_MMFR0_CACHE_COHERENCE_SUPPORT_2      ((uint32_t)0x00000200)          /*!< full-inner-shared coherency (coherency amongst all of the entities within an  */
 #define SCB_MMFR0_CACHE_COHERENCE_SUPPORT_3      ((uint32_t)0x00000300)          /*!< full coherency (coherency amongst all of the entities) */
 #define SCB_MMFR0_OUTER_NON_SHARABLE_SUPPORT_OFS (12)                            /*!< OUTER_NON_SHARABLE_SUPPORT Bit Offset */
@@ -4916,7 +4846,7 @@ typedef struct {
 #define SCB_ISAR3_TRUENOP_INSTRS1                ((uint32_t)0x02000000)          /*!< TRUENOP_INSTRS Bit 1 */
 #define SCB_ISAR3_TRUENOP_INSTRS2                ((uint32_t)0x04000000)          /*!< TRUENOP_INSTRS Bit 2 */
 #define SCB_ISAR3_TRUENOP_INSTRS3                ((uint32_t)0x08000000)          /*!< TRUENOP_INSTRS Bit 3 */
-#define SCB_ISAR3_TRUENOP_INSTRS_0               ((uint32_t)0x00000000)          /*!< true NOP instructions not present - that is, NOP instructions with no register */
+#define SCB_ISAR3_TRUENOP_INSTRS_0               ((uint32_t)0x00000000)          /*!< true NOP instructions not present - that is, NOP instructions with no  */
 #define SCB_ISAR3_TRUENOP_INSTRS_1               ((uint32_t)0x01000000)          /*!< adds "true NOP", and the capability of additional "NOP compatible hints" */
 #define SCB_ISAR4_UNPRIV_INSTRS_OFS              ( 0)                            /*!< UNPRIV_INSTRS Bit Offset */
 #define SCB_ISAR4_UNPRIV_INSTRS_MASK             ((uint32_t)0x0000000F)          /*!< UNPRIV_INSTRS Bit Mask */
@@ -4943,7 +4873,7 @@ typedef struct {
 #define SCB_ISAR4_WRITEBACK_INSTRS1              ((uint32_t)0x00000200)          /*!< WRITEBACK_INSTRS Bit 1 */
 #define SCB_ISAR4_WRITEBACK_INSTRS2              ((uint32_t)0x00000400)          /*!< WRITEBACK_INSTRS Bit 2 */
 #define SCB_ISAR4_WRITEBACK_INSTRS3              ((uint32_t)0x00000800)          /*!< WRITEBACK_INSTRS Bit 3 */
-#define SCB_ISAR4_WRITEBACK_INSTRS_0             ((uint32_t)0x00000000)          /*!< only non-writeback addressing modes present, except that LDMIA/STMDB/PUSH/POP  */
+#define SCB_ISAR4_WRITEBACK_INSTRS_0             ((uint32_t)0x00000000)          /*!< only non-writeback addressing modes present, except that  */
 #define SCB_ISAR4_WRITEBACK_INSTRS_1             ((uint32_t)0x00000100)          /*!< adds all currently-defined writeback addressing modes (ARMv7, Thumb-2) */
 #define SCB_ISAR4_BARRIER_INSTRS_OFS             (16)                            /*!< BARRIER_INSTRS Bit Offset */
 #define SCB_ISAR4_BARRIER_INSTRS_MASK            ((uint32_t)0x000F0000)          /*!< BARRIER_INSTRS Bit Mask */
@@ -5046,7 +4976,7 @@ typedef struct {
 #define SYSCTL_NMI_CTLSTAT_PCM_SRC_OFS           ( 2)                            /*!< PCM_SRC Bit Offset */
 #define SYSCTL_NMI_CTLSTAT_PCM_SRC               ((uint32_t)0x00000004)          /*!< PCM interrupt as a source of NMI */
 #define SYSCTL_NMI_CTLSTAT_PIN_SRC_OFS           ( 3)                            /*!< PIN_SRC Bit Offset */
-#define SYSCTL_NMI_CTLSTAT_PIN_SRC               ((uint32_t)0x00000008)
+#define SYSCTL_NMI_CTLSTAT_PIN_SRC               ((uint32_t)0x00000008)          
 #define SYSCTL_NMI_CTLSTAT_CS_FLG_OFS            (16)                            /*!< CS_FLG Bit Offset */
 #define SYSCTL_NMI_CTLSTAT_CS_FLG                ((uint32_t)0x00010000)          /*!< CS interrupt was the source of NMI */
 #define SYSCTL_NMI_CTLSTAT_PSS_FLG_OFS           (17)                            /*!< PSS_FLG Bit Offset */
@@ -5151,12 +5081,6 @@ typedef struct {
 #define SYSCTL_RESET_STATOVER_HARD_OVER          ((uint32_t)0x00000200)          /*!< HARD_Reset overwrite request */
 #define SYSCTL_RESET_STATOVER_RBT_OVER_OFS       (10)                            /*!< RBT_OVER Bit Offset */
 #define SYSCTL_RESET_STATOVER_RBT_OVER           ((uint32_t)0x00000400)          /*!< Reboot Reset overwrite request */
-#define SYSCTL_SYSTEM_STAT_DBG_SEC_ACT_OFS       ( 3)                            /*!< DBG_SEC_ACT Bit Offset */
-#define SYSCTL_SYSTEM_STAT_DBG_SEC_ACT           ((uint32_t)0x00000008)          /*!< Debug Security active */
-#define SYSCTL_SYSTEM_STAT_JTAG_SWD_LOCK_ACT_OFS ( 4)                            /*!< JTAG_SWD_LOCK_ACT Bit Offset */
-#define SYSCTL_SYSTEM_STAT_JTAG_SWD_LOCK_ACT     ((uint32_t)0x00000010)          /*!< Indicates if JTAG and SWD Lock is active */
-#define SYSCTL_SYSTEM_STAT_IP_PROT_ACT_OFS       ( 5)                            /*!< IP_PROT_ACT Bit Offset */
-#define SYSCTL_SYSTEM_STAT_IP_PROT_ACT           ((uint32_t)0x00000020)          /*!< Indicates if IP protection is active */
 #define SYSCTL_REBOOT_CTL_WKEY_VAL              ((uint32_t)0x00006900)          /*!< Key value to enable writes to bit 0 */
 #define TIMER32_CONTROL_ONESHOT_OFS              ( 0)                            /*!< ONESHOT Bit Offset */
 #define TIMER32_CONTROL_ONESHOT                  ((uint32_t)0x00000001)          /*!< Selects one-shot or wrapping counter mode */
@@ -5548,7 +5472,7 @@ typedef struct {
 #define FLCTL_A_PRGBRST_CTLSTAT_LEN1             ((uint32_t)0x00000010)          /*!< LEN Bit 1 */
 #define FLCTL_A_PRGBRST_CTLSTAT_LEN2             ((uint32_t)0x00000020)          /*!< LEN Bit 2 */
 #define FLCTL_A_PRGBRST_CTLSTAT_LEN_0            ((uint32_t)0x00000000)          /*!< No burst operation */
-#define FLCTL_A_PRGBRST_CTLSTAT_LEN_1            ((uint32_t)0x00000008)          /*!< 1 word burst of 128 bits, starting with address in the FLCTL_PRGBRST_STARTADDR */
+#define FLCTL_A_PRGBRST_CTLSTAT_LEN_1            ((uint32_t)0x00000008)          /*!< 1 word burst of 128 bits, starting with address in the  */
 #define FLCTL_A_PRGBRST_CTLSTAT_LEN_2            ((uint32_t)0x00000010)          /*!< 2*128 bits burst write, starting with address in the FLCTL_PRGBRST_STARTADDR  */
 #define FLCTL_A_PRGBRST_CTLSTAT_LEN_3            ((uint32_t)0x00000018)          /*!< 3*128 bits burst write, starting with address in the FLCTL_PRGBRST_STARTADDR  */
 #define FLCTL_A_PRGBRST_CTLSTAT_LEN_4            ((uint32_t)0x00000020)          /*!< 4*128 bits burst write, starting with address in the FLCTL_PRGBRST_STARTADDR  */
@@ -5750,77 +5674,77 @@ typedef struct {
 #define FLCTL_A_BANK1_MAIN_WEPROT_PROT31_OFS     (31)                            /*!< PROT31 Bit Offset */
 #define FLCTL_A_BANK1_MAIN_WEPROT_PROT31         ((uint32_t)0x80000000)          /*!< Protects Sector 31 from program or erase operations */
 #define FLCTL_A_BMRK_CTLSTAT_I_BMRK_OFS          ( 0)                            /*!< I_BMRK Bit Offset */
-#define FLCTL_A_BMRK_CTLSTAT_I_BMRK              ((uint32_t)0x00000001)
+#define FLCTL_A_BMRK_CTLSTAT_I_BMRK              ((uint32_t)0x00000001)          
 #define FLCTL_A_BMRK_CTLSTAT_D_BMRK_OFS          ( 1)                            /*!< D_BMRK Bit Offset */
-#define FLCTL_A_BMRK_CTLSTAT_D_BMRK              ((uint32_t)0x00000002)
+#define FLCTL_A_BMRK_CTLSTAT_D_BMRK              ((uint32_t)0x00000002)          
 #define FLCTL_A_BMRK_CTLSTAT_CMP_EN_OFS          ( 2)                            /*!< CMP_EN Bit Offset */
-#define FLCTL_A_BMRK_CTLSTAT_CMP_EN              ((uint32_t)0x00000004)
+#define FLCTL_A_BMRK_CTLSTAT_CMP_EN              ((uint32_t)0x00000004)          
 #define FLCTL_A_BMRK_CTLSTAT_CMP_SEL_OFS         ( 3)                            /*!< CMP_SEL Bit Offset */
-#define FLCTL_A_BMRK_CTLSTAT_CMP_SEL             ((uint32_t)0x00000008)
+#define FLCTL_A_BMRK_CTLSTAT_CMP_SEL             ((uint32_t)0x00000008)          
 #define FLCTL_A_IFG_RDBRST_OFS                   ( 0)                            /*!< RDBRST Bit Offset */
-#define FLCTL_A_IFG_RDBRST                       ((uint32_t)0x00000001)
+#define FLCTL_A_IFG_RDBRST                       ((uint32_t)0x00000001)          
 #define FLCTL_A_IFG_AVPRE_OFS                    ( 1)                            /*!< AVPRE Bit Offset */
-#define FLCTL_A_IFG_AVPRE                        ((uint32_t)0x00000002)
+#define FLCTL_A_IFG_AVPRE                        ((uint32_t)0x00000002)          
 #define FLCTL_A_IFG_AVPST_OFS                    ( 2)                            /*!< AVPST Bit Offset */
-#define FLCTL_A_IFG_AVPST                        ((uint32_t)0x00000004)
+#define FLCTL_A_IFG_AVPST                        ((uint32_t)0x00000004)          
 #define FLCTL_A_IFG_PRG_OFS                      ( 3)                            /*!< PRG Bit Offset */
-#define FLCTL_A_IFG_PRG                          ((uint32_t)0x00000008)
+#define FLCTL_A_IFG_PRG                          ((uint32_t)0x00000008)          
 #define FLCTL_A_IFG_PRGB_OFS                     ( 4)                            /*!< PRGB Bit Offset */
-#define FLCTL_A_IFG_PRGB                         ((uint32_t)0x00000010)
+#define FLCTL_A_IFG_PRGB                         ((uint32_t)0x00000010)          
 #define FLCTL_A_IFG_ERASE_OFS                    ( 5)                            /*!< ERASE Bit Offset */
-#define FLCTL_A_IFG_ERASE                        ((uint32_t)0x00000020)
+#define FLCTL_A_IFG_ERASE                        ((uint32_t)0x00000020)          
 #define FLCTL_A_IFG_BMRK_OFS                     ( 8)                            /*!< BMRK Bit Offset */
-#define FLCTL_A_IFG_BMRK                         ((uint32_t)0x00000100)
+#define FLCTL_A_IFG_BMRK                         ((uint32_t)0x00000100)          
 #define FLCTL_A_IFG_PRG_ERR_OFS                  ( 9)                            /*!< PRG_ERR Bit Offset */
-#define FLCTL_A_IFG_PRG_ERR                      ((uint32_t)0x00000200)
+#define FLCTL_A_IFG_PRG_ERR                      ((uint32_t)0x00000200)          
 #define FLCTL_A_IE_RDBRST_OFS                    ( 0)                            /*!< RDBRST Bit Offset */
-#define FLCTL_A_IE_RDBRST                        ((uint32_t)0x00000001)
+#define FLCTL_A_IE_RDBRST                        ((uint32_t)0x00000001)          
 #define FLCTL_A_IE_AVPRE_OFS                     ( 1)                            /*!< AVPRE Bit Offset */
-#define FLCTL_A_IE_AVPRE                         ((uint32_t)0x00000002)
+#define FLCTL_A_IE_AVPRE                         ((uint32_t)0x00000002)          
 #define FLCTL_A_IE_AVPST_OFS                     ( 2)                            /*!< AVPST Bit Offset */
-#define FLCTL_A_IE_AVPST                         ((uint32_t)0x00000004)
+#define FLCTL_A_IE_AVPST                         ((uint32_t)0x00000004)          
 #define FLCTL_A_IE_PRG_OFS                       ( 3)                            /*!< PRG Bit Offset */
-#define FLCTL_A_IE_PRG                           ((uint32_t)0x00000008)
+#define FLCTL_A_IE_PRG                           ((uint32_t)0x00000008)          
 #define FLCTL_A_IE_PRGB_OFS                      ( 4)                            /*!< PRGB Bit Offset */
-#define FLCTL_A_IE_PRGB                          ((uint32_t)0x00000010)
+#define FLCTL_A_IE_PRGB                          ((uint32_t)0x00000010)          
 #define FLCTL_A_IE_ERASE_OFS                     ( 5)                            /*!< ERASE Bit Offset */
-#define FLCTL_A_IE_ERASE                         ((uint32_t)0x00000020)
+#define FLCTL_A_IE_ERASE                         ((uint32_t)0x00000020)          
 #define FLCTL_A_IE_BMRK_OFS                      ( 8)                            /*!< BMRK Bit Offset */
-#define FLCTL_A_IE_BMRK                          ((uint32_t)0x00000100)
+#define FLCTL_A_IE_BMRK                          ((uint32_t)0x00000100)          
 #define FLCTL_A_IE_PRG_ERR_OFS                   ( 9)                            /*!< PRG_ERR Bit Offset */
-#define FLCTL_A_IE_PRG_ERR                       ((uint32_t)0x00000200)
+#define FLCTL_A_IE_PRG_ERR                       ((uint32_t)0x00000200)          
 #define FLCTL_A_CLRIFG_RDBRST_OFS                ( 0)                            /*!< RDBRST Bit Offset */
-#define FLCTL_A_CLRIFG_RDBRST                    ((uint32_t)0x00000001)
+#define FLCTL_A_CLRIFG_RDBRST                    ((uint32_t)0x00000001)          
 #define FLCTL_A_CLRIFG_AVPRE_OFS                 ( 1)                            /*!< AVPRE Bit Offset */
-#define FLCTL_A_CLRIFG_AVPRE                     ((uint32_t)0x00000002)
+#define FLCTL_A_CLRIFG_AVPRE                     ((uint32_t)0x00000002)          
 #define FLCTL_A_CLRIFG_AVPST_OFS                 ( 2)                            /*!< AVPST Bit Offset */
-#define FLCTL_A_CLRIFG_AVPST                     ((uint32_t)0x00000004)
+#define FLCTL_A_CLRIFG_AVPST                     ((uint32_t)0x00000004)          
 #define FLCTL_A_CLRIFG_PRG_OFS                   ( 3)                            /*!< PRG Bit Offset */
-#define FLCTL_A_CLRIFG_PRG                       ((uint32_t)0x00000008)
+#define FLCTL_A_CLRIFG_PRG                       ((uint32_t)0x00000008)          
 #define FLCTL_A_CLRIFG_PRGB_OFS                  ( 4)                            /*!< PRGB Bit Offset */
-#define FLCTL_A_CLRIFG_PRGB                      ((uint32_t)0x00000010)
+#define FLCTL_A_CLRIFG_PRGB                      ((uint32_t)0x00000010)          
 #define FLCTL_A_CLRIFG_ERASE_OFS                 ( 5)                            /*!< ERASE Bit Offset */
-#define FLCTL_A_CLRIFG_ERASE                     ((uint32_t)0x00000020)
+#define FLCTL_A_CLRIFG_ERASE                     ((uint32_t)0x00000020)          
 #define FLCTL_A_CLRIFG_BMRK_OFS                  ( 8)                            /*!< BMRK Bit Offset */
-#define FLCTL_A_CLRIFG_BMRK                      ((uint32_t)0x00000100)
+#define FLCTL_A_CLRIFG_BMRK                      ((uint32_t)0x00000100)          
 #define FLCTL_A_CLRIFG_PRG_ERR_OFS               ( 9)                            /*!< PRG_ERR Bit Offset */
-#define FLCTL_A_CLRIFG_PRG_ERR                   ((uint32_t)0x00000200)
+#define FLCTL_A_CLRIFG_PRG_ERR                   ((uint32_t)0x00000200)          
 #define FLCTL_A_SETIFG_RDBRST_OFS                ( 0)                            /*!< RDBRST Bit Offset */
-#define FLCTL_A_SETIFG_RDBRST                    ((uint32_t)0x00000001)
+#define FLCTL_A_SETIFG_RDBRST                    ((uint32_t)0x00000001)          
 #define FLCTL_A_SETIFG_AVPRE_OFS                 ( 1)                            /*!< AVPRE Bit Offset */
-#define FLCTL_A_SETIFG_AVPRE                     ((uint32_t)0x00000002)
+#define FLCTL_A_SETIFG_AVPRE                     ((uint32_t)0x00000002)          
 #define FLCTL_A_SETIFG_AVPST_OFS                 ( 2)                            /*!< AVPST Bit Offset */
-#define FLCTL_A_SETIFG_AVPST                     ((uint32_t)0x00000004)
+#define FLCTL_A_SETIFG_AVPST                     ((uint32_t)0x00000004)          
 #define FLCTL_A_SETIFG_PRG_OFS                   ( 3)                            /*!< PRG Bit Offset */
-#define FLCTL_A_SETIFG_PRG                       ((uint32_t)0x00000008)
+#define FLCTL_A_SETIFG_PRG                       ((uint32_t)0x00000008)          
 #define FLCTL_A_SETIFG_PRGB_OFS                  ( 4)                            /*!< PRGB Bit Offset */
-#define FLCTL_A_SETIFG_PRGB                      ((uint32_t)0x00000010)
+#define FLCTL_A_SETIFG_PRGB                      ((uint32_t)0x00000010)          
 #define FLCTL_A_SETIFG_ERASE_OFS                 ( 5)                            /*!< ERASE Bit Offset */
-#define FLCTL_A_SETIFG_ERASE                     ((uint32_t)0x00000020)
+#define FLCTL_A_SETIFG_ERASE                     ((uint32_t)0x00000020)          
 #define FLCTL_A_SETIFG_BMRK_OFS                  ( 8)                            /*!< BMRK Bit Offset */
-#define FLCTL_A_SETIFG_BMRK                      ((uint32_t)0x00000100)
+#define FLCTL_A_SETIFG_BMRK                      ((uint32_t)0x00000100)          
 #define FLCTL_A_SETIFG_PRG_ERR_OFS               ( 9)                            /*!< PRG_ERR Bit Offset */
-#define FLCTL_A_SETIFG_PRG_ERR                   ((uint32_t)0x00000200)
+#define FLCTL_A_SETIFG_PRG_ERR                   ((uint32_t)0x00000200)          
 #define FLCTL_A_READ_TIMCTL_SETUP_OFS            ( 0)                            /*!< SETUP Bit Offset */
 #define FLCTL_A_READ_TIMCTL_SETUP_MASK           ((uint32_t)0x000000FF)          /*!< SETUP Bit Mask */
 #define FLCTL_A_READ_TIMCTL_IREF_BOOST1_OFS      (12)                            /*!< IREF_BOOST1 Bit Offset */
@@ -6965,7 +6889,7 @@ typedef struct {
 #define LCD_F_BMCTL_BLKMOD0                      ((uint32_t)0x00000001)          /*!< BLKMOD Bit 0 */
 #define LCD_F_BMCTL_BLKMOD1                      ((uint32_t)0x00000002)          /*!< BLKMOD Bit 1 */
 #define LCD_F_BMCTL_BLKMOD_0                     ((uint32_t)0x00000000)          /*!< Blinking disabled */
-#define LCD_F_BMCTL_BLKMOD_1                     ((uint32_t)0x00000001)          /*!< Blinking of individual segments as enabled in blinking memory register LCDBMx. */
+#define LCD_F_BMCTL_BLKMOD_1                     ((uint32_t)0x00000001)          /*!< Blinking of individual segments as enabled in blinking memory register  */
 #define LCD_F_BMCTL_BLKMOD_2                     ((uint32_t)0x00000002)          /*!< Blinking of all segments */
 #define LCD_F_BMCTL_BLKMOD_3                     ((uint32_t)0x00000003)          /*!< Switching between display contents as stored in LCDMx and LCDBMx memory  */
 #define LCD_F_BMCTL_BLKPRE_OFS                   ( 2)                            /*!< LCDBLKPREx Bit Offset */
@@ -7358,7 +7282,7 @@ typedef struct {
 #define SYSCTL_A_NMI_CTLSTAT_PCM_SRC_OFS         ( 2)                            /*!< PCM_SRC Bit Offset */
 #define SYSCTL_A_NMI_CTLSTAT_PCM_SRC             ((uint32_t)0x00000004)          /*!< PCM interrupt as a source of NMI */
 #define SYSCTL_A_NMI_CTLSTAT_PIN_SRC_OFS         ( 3)                            /*!< PIN_SRC Bit Offset */
-#define SYSCTL_A_NMI_CTLSTAT_PIN_SRC             ((uint32_t)0x00000008)
+#define SYSCTL_A_NMI_CTLSTAT_PIN_SRC             ((uint32_t)0x00000008)          
 #define SYSCTL_A_NMI_CTLSTAT_CS_FLG_OFS          (16)                            /*!< CS_FLG Bit Offset */
 #define SYSCTL_A_NMI_CTLSTAT_CS_FLG              ((uint32_t)0x00010000)          /*!< CS interrupt was the source of NMI */
 #define SYSCTL_A_NMI_CTLSTAT_PSS_FLG_OFS         (17)                            /*!< PSS_FLG Bit Offset */
@@ -7922,9 +7846,9 @@ typedef struct {
 #define SYSCTL_A_SRAM_BLKRET_CTL3_BLK127_EN_OFS  (31)                            /*!< BLK127_EN Bit Offset */
 #define SYSCTL_A_SRAM_BLKRET_CTL3_BLK127_EN      ((uint32_t)0x80000000)          /*!< When 1, Block127 of the SRAM is retained in LPM3 and LPM4 */
 #define SYSCTL_A_SRAM_STAT_BNKEN_RDY_OFS         ( 0)                            /*!< BNKEN_RDY Bit Offset */
-#define SYSCTL_A_SRAM_STAT_BNKEN_RDY             ((uint32_t)0x00000001)          /*!< When 1, indicates SRAM is ready for access and banks can be enabled/disabled. */
+#define SYSCTL_A_SRAM_STAT_BNKEN_RDY             ((uint32_t)0x00000001)          /*!< When 1, indicates SRAM is ready for access and banks can be  */
 #define SYSCTL_A_SRAM_STAT_BLKRET_RDY_OFS        ( 1)                            /*!< BLKRET_RDY Bit Offset */
-#define SYSCTL_A_SRAM_STAT_BLKRET_RDY            ((uint32_t)0x00000002)          /*!< When 1, indicates SRAM is ready for access and blocks can be enabled/disabled  */
+#define SYSCTL_A_SRAM_STAT_BLKRET_RDY            ((uint32_t)0x00000002)          /*!< When 1, indicates SRAM is ready for access and blocks can be  */
 #define SYSCTL_A_MASTER_UNLOCK_UNLKEY_OFS        ( 0)                            /*!< UNLKEY Bit Offset */
 #define SYSCTL_A_MASTER_UNLOCK_UNLKEY_MASK       ((uint32_t)0x0000FFFF)          /*!< UNLKEY Bit Mask */
 #define SYSCTL_A_RESET_REQ_POR_OFS               ( 0)                            /*!< POR Bit Offset */
@@ -7945,12 +7869,6 @@ typedef struct {
 #define SYSCTL_A_RESET_STATOVER_HARD_OVER        ((uint32_t)0x00000200)          /*!< HARD_Reset overwrite request */
 #define SYSCTL_A_RESET_STATOVER_RBT_OVER_OFS     (10)                            /*!< RBT_OVER Bit Offset */
 #define SYSCTL_A_RESET_STATOVER_RBT_OVER         ((uint32_t)0x00000400)          /*!< Reboot Reset overwrite request */
-#define SYSCTL_A_SYSTEM_STAT_DBG_SEC_ACT_OFS     ( 3)                            /*!< DBG_SEC_ACT Bit Offset */
-#define SYSCTL_A_SYSTEM_STAT_DBG_SEC_ACT         ((uint32_t)0x00000008)          /*!< Debug Security active */
-#define SYSCTL_A_SYSTEM_STAT_JTAG_SWD_LOCK_ACT_OFS ( 4)                            /*!< JTAG_SWD_LOCK_ACT Bit Offset */
-#define SYSCTL_A_SYSTEM_STAT_JTAG_SWD_LOCK_ACT   ((uint32_t)0x00000010)          /*!< Indicates if JTAG and SWD Lock is active */
-#define SYSCTL_A_SYSTEM_STAT_IP_PROT_ACT_OFS     ( 5)                            /*!< IP_PROT_ACT Bit Offset */
-#define SYSCTL_A_SYSTEM_STAT_IP_PROT_ACT         ((uint32_t)0x00000020)          /*!< Indicates if IP protection is active */
 #define SYSCTL_A_CSYS_MASTER_UNLOCK_UNLKEY_VAL  ((uint32_t)0x0000695A)          /*!< Unlock key value which when written, determines if accesses to other CPU_SYS register */
 #define SYSCTL_A_REBOOT_CTL_WKEY_VAL            ((uint32_t)0x00006900)          /*!< Key value to validate write to bit 0 */
 #define SYSCTL_A_BOOT_CTL_WKEY_VAL              ((uint32_t)0x00006900)          /*!< Key value to validate write to bit 0 */

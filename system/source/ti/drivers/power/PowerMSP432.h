@@ -49,6 +49,9 @@
 #define ti_drivers_power_PowerMSP432__include
 
 #include <stdint.h>
+
+#include <ti/devices/DeviceFamily.h>
+
 #include <ti/drivers/utils/List.h>
 #include <ti/drivers/Power.h>
 
@@ -567,6 +570,17 @@ typedef struct PowerMSP432_ConfigV1 {
      *  issue.
      */
     bool enableParking; /* enables automatic pin parking during LPM3 and LPM4 */
+    /*!
+     *  @brief  Hook function called when resuming from a SHUTDOWN state
+     *
+     *  This function is called when the device wakes and resumes from a
+     *  previous entry into either the SHUTDOWN_0 or SHUTDOWN_1 states.
+     *  If this function is defined (i.e., this pointer is not NULL), it will
+     *  be called during Power_init(), right before the Power driver clears
+     *  the LOCKLPM5 and LOCKBKUP bits in the PMCTL1 register, to unlock I/Os
+     *  and the backup domain.
+     */
+    void (*resumeShutdownHookFxn)(void);
     /*!
      *  @brief  Pointer to an optional array of custom performance levels
      *

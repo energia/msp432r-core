@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -55,12 +50,21 @@ extern "C"
 {
 #endif
 
+/* Includes */
 #include <ti/devices/msp432p4xx/inc/msp.h>
 #include <stdint.h>
-#include <ti/devices/msp432p4xx/driverlib/sysctl.h>
+
+#ifdef __MCU_HAS_SYSCTL_A__
+
+#define WDT_A_HARD_RESET SYSCTL_A_HARD_RESET
+#define WDT_A_SOFT_RESET SYSCTL_A_SOFT_RESET
+
+#else
 
 #define WDT_A_HARD_RESET SYSCTL_HARD_RESET
 #define WDT_A_SOFT_RESET SYSCTL_SOFT_RESET
+
+#endif
 
 //*****************************************************************************
 //
@@ -72,7 +76,6 @@ extern "C"
 #define WDT_A_CLOCKSOURCE_ACLK                                      (WDT_A_CTL_SSEL_1)
 #define WDT_A_CLOCKSOURCE_VLOCLK                                    (WDT_A_CTL_SSEL_2)
 #define WDT_A_CLOCKSOURCE_BCLK                                      (WDT_A_CTL_SSEL_3)
-#define WDT_A_CLOCKSOURCE_XCLK                                      (WDT_A_CTL_SSEL_3)
 
 //*****************************************************************************
 //
@@ -96,15 +99,6 @@ extern "C"
 #define WDT_A_CLOCKITERATIONS_8192  WDT_A_CLOCKDIVIDER_8192
 #define WDT_A_CLOCKITERATIONS_512   WDT_A_CLOCKDIVIDER_512
 #define WDT_A_CLOCKITERATIONS_64    WDT_A_CLOCKDIVIDER_64
-
-/* Forward compatibility layer */
-#ifdef __MCU_HAS_SYSCTL_A__
-
-#define SysCtl_setWDTPasswordViolationResetType SysCtl_A_setWDTPasswordViolationResetType
-#define SysCtl_setWDTTimeoutResetType SysCtl_A_setWDTTimeoutResetType
-
-#endif
-
 
 //*****************************************************************************
 //

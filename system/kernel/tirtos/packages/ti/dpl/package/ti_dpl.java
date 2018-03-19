@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 import java.util.*;
 import org.mozilla.javascript.*;
@@ -11,7 +11,7 @@ import xdc.services.spec.Session;
 
 public class ti_dpl
 {
-    static final String VERS = "@(#) xdc-D05\n";
+    static final String VERS = "@(#) xdc-D20\n";
 
     static final Proto.Elm $$T_Bool = Proto.Elm.newBool();
     static final Proto.Elm $$T_Num = Proto.Elm.newNum();
@@ -111,11 +111,29 @@ public class ti_dpl
             sb.append("'lib/dpl_msp432p4xx.aem4f',\n");
             sb.append("'lib/dpl_msp432p4xx.am4fg',\n");
             sb.append("'lib/dpl_msp432p4xx.arm4f',\n");
+            sb.append("'lib/dpl_msp432p401x.aem4f',\n");
+            sb.append("'lib/dpl_msp432p401x.am4fg',\n");
+            sb.append("'lib/dpl_msp432p401x.arm4f',\n");
+            sb.append("'lib/dpl_msp432p4x1xi.aem4f',\n");
+            sb.append("'lib/dpl_msp432p4x1xi.am4fg',\n");
+            sb.append("'lib/dpl_msp432p4x1xi.arm4f',\n");
+            sb.append("'lib/dpl_msp432p4x1xt.aem4f',\n");
+            sb.append("'lib/dpl_msp432p4x1xt.am4fg',\n");
+            sb.append("'lib/dpl_msp432p4x1xt.arm4f',\n");
         sb.append("];\n");
         sb.append("pkg.build.libDesc = [\n");
             sb.append("['lib/dpl_msp432p4xx.aem4f', {target: 'ti.targets.arm.elf.M4F', suffix: 'em4f'}],\n");
             sb.append("['lib/dpl_msp432p4xx.am4fg', {target: 'gnu.targets.arm.M4F', suffix: 'm4fg'}],\n");
             sb.append("['lib/dpl_msp432p4xx.arm4f', {target: 'iar.targets.arm.M4F', suffix: 'rm4f'}],\n");
+            sb.append("['lib/dpl_msp432p401x.aem4f', {target: 'ti.targets.arm.elf.M4F', suffix: 'em4f'}],\n");
+            sb.append("['lib/dpl_msp432p401x.am4fg', {target: 'gnu.targets.arm.M4F', suffix: 'm4fg'}],\n");
+            sb.append("['lib/dpl_msp432p401x.arm4f', {target: 'iar.targets.arm.M4F', suffix: 'rm4f'}],\n");
+            sb.append("['lib/dpl_msp432p4x1xi.aem4f', {target: 'ti.targets.arm.elf.M4F', suffix: 'em4f'}],\n");
+            sb.append("['lib/dpl_msp432p4x1xi.am4fg', {target: 'gnu.targets.arm.M4F', suffix: 'm4fg'}],\n");
+            sb.append("['lib/dpl_msp432p4x1xi.arm4f', {target: 'iar.targets.arm.M4F', suffix: 'rm4f'}],\n");
+            sb.append("['lib/dpl_msp432p4x1xt.aem4f', {target: 'ti.targets.arm.elf.M4F', suffix: 'em4f'}],\n");
+            sb.append("['lib/dpl_msp432p4x1xt.am4fg', {target: 'gnu.targets.arm.M4F', suffix: 'm4fg'}],\n");
+            sb.append("['lib/dpl_msp432p4x1xt.arm4f', {target: 'iar.targets.arm.M4F', suffix: 'rm4f'}],\n");
         sb.append("];\n");
         Global.eval(sb.toString());
     }

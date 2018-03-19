@@ -41,15 +41,8 @@
 
 #include <xdc/std.h>
 #include <xdc/runtime/Error.h>
-#include <xdc/runtime/Memory.h>
 
-#ifdef xdc_target__isaCompatible_28
-#include <ti/sysbios/hal/Hwi.h>
-#else
-#define ti_sysbios_family_arm_m3_Hwi__internalaccess
 #include <ti/sysbios/family/arm/m3/Hwi.h>
-#endif
-//todo msp430
 
 /*
  *  ======== HwiP_clearInterrupt ========
@@ -67,32 +60,19 @@ HwiP_Handle HwiP_construct(HwiP_Struct *hwiP, int interruptNum,
 {
     Hwi_Handle  hwi;
     Hwi_Params  hwiParams;
-    Error_Block eb;
-
-    /*
-     *  Hwi_construct() can fail, but the only way to determine this
-     *  is with an Error_Block.
-     */
-    Error_init(&eb);
 
     if (params == NULL) {
-        Hwi_construct((Hwi_Struct *)hwiP, interruptNum,
-                (Hwi_FuncPtr)hwiFxn, NULL, &eb);
+        hwi = Hwi_construct2((Hwi_Struct2 *)hwiP, interruptNum,
+                (Hwi_FuncPtr)hwiFxn, NULL);
     }
     else {
         Hwi_Params_init(&hwiParams);
-        hwiParams.instance->name = params->name;
         hwiParams.arg            = (xdc_UArg)(params->arg);
         hwiParams.priority       = (int)params->priority;
-        Hwi_construct((Hwi_Struct *)hwiP, interruptNum, (Hwi_FuncPtr)hwiFxn,
-                      &hwiParams, &eb);
+        hwiParams.enableInt      = params->enableInt;
+        hwi = Hwi_construct2((Hwi_Struct2 *)hwiP, interruptNum,
+                (Hwi_FuncPtr)hwiFxn, &hwiParams);
     }
-
-    if (Error_check(&eb)) {
-        return (NULL);
-    }
-
-    hwi = Hwi_handle((Hwi_Struct *)hwiP);
 
     return ((HwiP_Handle)hwi);
 }
@@ -105,24 +85,18 @@ HwiP_Handle HwiP_create(int interruptNum, HwiP_Fxn hwiFxn,
 {
     Hwi_Handle  handle;
     Hwi_Params  hwiParams;
-    Error_Block eb;
-
-    /*
-     *  Hwi_create() can fail, but the only way to determine this
-     *  is with an Error_Block.
-     */
-    Error_init(&eb);
 
     if (params == NULL) {
-        handle = Hwi_create(interruptNum, (Hwi_FuncPtr)hwiFxn, NULL, &eb);
+        handle = Hwi_create(interruptNum, (Hwi_FuncPtr)hwiFxn, NULL,
+                Error_IGNORE);
     }
     else {
         Hwi_Params_init(&hwiParams);
-        hwiParams.instance->name = params->name;
         hwiParams.arg            = (xdc_UArg)(params->arg);
         hwiParams.priority       = (int)params->priority;
+        hwiParams.enableInt      = params->enableInt;
         handle = Hwi_create(interruptNum, (Hwi_FuncPtr)hwiFxn,
-                      &hwiParams, &eb);
+                      &hwiParams, Error_IGNORE);
     }
 
     return ((HwiP_Handle)handle);
@@ -131,13 +105,11 @@ HwiP_Handle HwiP_create(int interruptNum, HwiP_Fxn hwiFxn,
 /*
  *  ======== HwiP_delete ========
  */
-HwiP_Status HwiP_delete(HwiP_Handle handle)
+void HwiP_delete(HwiP_Handle handle)
 {
     Hwi_Handle hwi = (Hwi_Handle)handle;
 
     Hwi_delete(&hwi);
-
-    return (HwiP_OK);
 }
 
 /*
@@ -177,13 +149,45 @@ void HwiP_enableInterrupt(int interruptNum)
 }
 
 /*
+ *  ======== HwiP_post ========
+ */
+void HwiP_post(int interruptNum)
+{
+    Hwi_post(interruptNum);
+}
+
+/*
+ *  ======== HwiP_setFunc ========
+ */
+void HwiP_setFunc(HwiP_Handle hwiP, HwiP_Fxn fxn, uintptr_t arg)
+{
+    Hwi_setFunc((Hwi_Handle)hwiP, fxn, arg);
+}
+
+/*
+ *  ======== HwiP_setPriority ========
+ */
+void HwiP_setPriority(int id, uint32_t priority)
+{
+    Hwi_setPriority(id, priority);
+}
+
+/*
+ *  ======== HwiP_plug ========
+ */
+void HwiP_plug(int interruptNum, void *fxn)
+{
+    Hwi_plug((UInt)interruptNum, (Void *)fxn);
+}
+
+/*
  *  ======== HwiP_Params_init ========
  */
 void HwiP_Params_init(HwiP_Params *params)
 {
-    params->name = NULL;
     params->arg = 0;
     params->priority = ~0;
+    params->enableInt = true;
 }
 
 /*

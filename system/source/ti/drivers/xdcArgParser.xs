@@ -15,13 +15,13 @@ function getDeviceWareOpts(xdcArgs)
         "cc26xxware": argMap["cc26xxware"],
         "cc32xxware": argMap["cc32xxware"],
         "msp432DriverLib": argMap["msp432DriverLib"],
+        "msp432e4DriverLib": argMap["msp432e4DriverLib"]
     });
 }
 
 /* Returns a JSON map object of XDCARGS */
 function parseArgs(xdcArgs) {
     var argMap = {};
-    var msp432DevList = [];
 
     /* Parse product versions from XDCARGS options */
     for each (var arg in xdcArgs.split(" ")) {
@@ -30,16 +30,22 @@ function parseArgs(xdcArgs) {
             continue;
         }
 
+        var path = String(arg.split("=").pop());
+
         if (arg.match(/^CC26XXWARE=/)) {
-            argMap["cc26xxware"] = String(arg.split("=").pop());
+            argMap["cc26xxware"] = path;
         }
 
         if (arg.match(/^CC32XXWARE=/)) {
-            argMap["cc32xxware"] = String(arg.split("=").pop());
+            argMap["cc32xxware"] = path;
         }
 
         if (arg.match(/^MSP432DRIVERLIB=/)) {
-            argMap["msp432DriverLib"] = String(arg.split("=").pop());
+            argMap["msp432DriverLib"] = path;
+        }
+
+        if (arg.match(/^MSP432E4DRIVERLIB=/)) {
+            argMap["msp432e4DriverLib"] = path;
         }
     }
 

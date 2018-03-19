@@ -9,8 +9,8 @@ INPUT(
     configPkg/package/cfg/energia_pm4fg.om4fg
     /* ti/runtime/wiring/msp432/lib/wiring_msp432.m4fg.lib commented out by mkbrd.ksh */
     /* lib/board.m4fg.lib commented out by mkbrd.ksh */
-    ti/drivers/lib/drivers_msp432p4xx.am4fg
-    ti/dpl/lib/dpl_msp432p4xx.am4fg
+    ti/drivers/lib/drivers_msp432p401x.am4fg
+    ti/dpl/lib/dpl_msp432p401x.am4fg
     src/sysbios/sysbios.am4fg
     third_party/fatfs/lib/fatfs.am4fg
     gnu/targets/arm/rtsv7M/lib/gnu.targets.arm.rtsv7M.am4fg
@@ -65,6 +65,9 @@ SECTIONS {
     __UNUSED_FLASH_start__ = ADDR(.emptyFlash);
     __UNUSED_FLASH_end__   = ORIGIN(FLASH) + LENGTH(FLASH);
     __FLASH_LENGTH__       = LENGTH(FLASH);
+
+    __NVS_BASE__           = (__UNUSED_FLASH_start__ + 0x1000) & 0xfffff000;
+    __NVS_SIZE__           = (__UNUSED_FLASH_end__ & 0xfffff000) - __NVS_BASE__;
 }
 
 ENTRY(_c_int00)

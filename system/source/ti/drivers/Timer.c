@@ -30,21 +30,21 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include <stdbool.h>
-#include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
 
-#include <ti/drivers/Timer.h>
 #include <ti/drivers/dpl/HwiP.h>
+#include <ti/drivers/Timer.h>
 
 extern const Timer_Config Timer_config[];
 extern const uint_least8_t Timer_count;
 
 /* Default Parameters */
 static const Timer_Params defaultParams = {
-    .timerMode = Timer_ONESHOT_BLOCKING,
-    .periodUnits = Timer_PERIOD_COUNTS,
+    .timerMode     = Timer_ONESHOT_BLOCKING,
+    .periodUnits   = Timer_PERIOD_COUNTS,
     .timerCallback = NULL,
-    .period = ~0
+    .period        = (uint16_t) ~0
 };
 
 static bool isInitialized = false;

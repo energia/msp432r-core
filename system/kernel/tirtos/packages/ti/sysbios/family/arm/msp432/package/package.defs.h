@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 #ifndef ti_sysbios_family_arm_msp432__
@@ -13,7 +13,6 @@
  * ======== module ti.sysbios.family.arm.msp432.Timer ========
  */
 
-typedef struct ti_sysbios_family_arm_msp432_Timer_Control ti_sysbios_family_arm_msp432_Timer_Control;
 typedef struct ti_sysbios_family_arm_msp432_Timer_TimerDevice ti_sysbios_family_arm_msp432_Timer_TimerDevice;
 typedef struct ti_sysbios_family_arm_msp432_Timer_Module_State ti_sysbios_family_arm_msp432_Timer_Module_State;
 typedef struct ti_sysbios_family_arm_msp432_Timer_Fxns__ ti_sysbios_family_arm_msp432_Timer_Fxns__;

@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 import java.util.*;
 import org.mozilla.javascript.*;
@@ -11,7 +11,7 @@ import xdc.services.spec.Session;
 
 public class ti_sysbios_family_arm_msp432_init
 {
-    static final String VERS = "@(#) xdc-D05\n";
+    static final String VERS = "@(#) xdc-D20\n";
 
     static final Proto.Elm $$T_Bool = Proto.Elm.newBool();
     static final Proto.Elm $$T_Num = Proto.Elm.newNum();
@@ -131,7 +131,7 @@ public class ti_sysbios_family_arm_msp432_init
                 po.addFld("$hostonly", $$T_Num, 0, "r");
         if (isCFG) {
             po.addFld("rovViewInfo", (Proto)om.findStrict("xdc.rov.ViewInfo.Instance", "ti.sysbios.family.arm.msp432.init"), $$UNDEF, "wh");
-            po.addFld("configureClocks", $$T_Bool, true, "wh");
+            po.addFld("configureClocks", $$T_Bool, $$UNDEF, "wh");
             po.addFld("speedSelect", (Proto)om.findStrict("ti.sysbios.family.arm.msp432.init.Boot.SpeedOpt", "ti.sysbios.family.arm.msp432.init"), om.find("ti.sysbios.family.arm.msp432.init.Boot.SpeedOpt_High"), "wh");
             po.addFld("enableLFXT", $$T_Bool, false, "w");
             po.addFld("bypassLFXT", $$T_Bool, false, "w");
@@ -209,13 +209,9 @@ public class ti_sysbios_family_arm_msp432_init
         sb.append("}\n");
         sb.append("pkg.build.libraries = [\n");
             sb.append("'lib/sysbios/debug/ti.sysbios.family.arm.msp432.init.aem4f',\n");
-            sb.append("'lib/sysbios/debug/ti.sysbios.family.arm.msp432.init.am4fg',\n");
-            sb.append("'lib/sysbios/debug/ti.sysbios.family.arm.msp432.init.arm4f',\n");
         sb.append("];\n");
         sb.append("pkg.build.libDesc = [\n");
             sb.append("['lib/sysbios/debug/ti.sysbios.family.arm.msp432.init.aem4f', {target: 'ti.targets.arm.elf.M4F', suffix: 'em4f'}],\n");
-            sb.append("['lib/sysbios/debug/ti.sysbios.family.arm.msp432.init.am4fg', {target: 'gnu.targets.arm.M4F', suffix: 'm4fg'}],\n");
-            sb.append("['lib/sysbios/debug/ti.sysbios.family.arm.msp432.init.arm4f', {target: 'iar.targets.arm.M4F', suffix: 'rm4f'}],\n");
         sb.append("];\n");
         Global.eval(sb.toString());
     }

@@ -2,15 +2,15 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
  *     PER-INSTANCE TYPES
@@ -18,7 +18,7 @@
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -459,24 +459,24 @@ struct ti_uia_loggers_LoggerRunMode_Struct {
 struct ti_uia_loggers_LoggerRunMode_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_Bool (*enable)(ti_uia_loggers_LoggerRunMode_Handle);
-    xdc_Bool (*disable)(ti_uia_loggers_LoggerRunMode_Handle);
-    xdc_Void (*write0)(ti_uia_loggers_LoggerRunMode_Handle, xdc_runtime_Log_Event, xdc_runtime_Types_ModuleId);
-    xdc_Void (*write1)(ti_uia_loggers_LoggerRunMode_Handle, xdc_runtime_Log_Event, xdc_runtime_Types_ModuleId, xdc_IArg);
-    xdc_Void (*write2)(ti_uia_loggers_LoggerRunMode_Handle, xdc_runtime_Log_Event, xdc_runtime_Types_ModuleId, xdc_IArg, xdc_IArg);
-    xdc_Void (*write4)(ti_uia_loggers_LoggerRunMode_Handle, xdc_runtime_Log_Event, xdc_runtime_Types_ModuleId, xdc_IArg, xdc_IArg, xdc_IArg, xdc_IArg);
-    xdc_Void (*write8)(ti_uia_loggers_LoggerRunMode_Handle, xdc_runtime_Log_Event, xdc_runtime_Types_ModuleId, xdc_IArg, xdc_IArg, xdc_IArg, xdc_IArg, xdc_IArg, xdc_IArg, xdc_IArg, xdc_IArg);
-    xdc_Void (*setFilterLevel)(ti_uia_loggers_LoggerRunMode_Handle, xdc_runtime_Diags_Mask, xdc_runtime_Diags_EventLevel);
-    xdc_runtime_Diags_Mask (*getFilterLevel)(ti_uia_loggers_LoggerRunMode_Handle, xdc_runtime_Diags_EventLevel);
-    ti_uia_runtime_IUIATransfer_TransferType (*getTransferType)(ti_uia_loggers_LoggerRunMode_Handle);
-    xdc_Bool (*getContents)(ti_uia_loggers_LoggerRunMode_Handle, xdc_Ptr, xdc_SizeT, xdc_SizeT*);
-    xdc_Bool (*isEmpty)(ti_uia_loggers_LoggerRunMode_Handle);
-    xdc_SizeT (*getMaxLength)(ti_uia_loggers_LoggerRunMode_Handle);
-    xdc_UInt16 (*getInstanceId)(ti_uia_loggers_LoggerRunMode_Handle);
-    ti_uia_runtime_IUIATransfer_Priority (*getPriority)(ti_uia_loggers_LoggerRunMode_Handle);
-    xdc_Void (*setPriority)(ti_uia_loggers_LoggerRunMode_Handle, ti_uia_runtime_IUIATransfer_Priority);
-    xdc_Void (*reset)(ti_uia_loggers_LoggerRunMode_Handle);
-    xdc_Void (*writeMemoryRange)(ti_uia_loggers_LoggerRunMode_Handle, xdc_runtime_Log_Event, xdc_runtime_Types_ModuleId, xdc_UInt32, xdc_IArg, xdc_IArg, xdc_IArg, xdc_IArg, xdc_UInt32);
+    xdc_Bool (*enable)(ti_uia_loggers_LoggerRunMode_Handle __inst);
+    xdc_Bool (*disable)(ti_uia_loggers_LoggerRunMode_Handle __inst);
+    xdc_Void (*write0)(ti_uia_loggers_LoggerRunMode_Handle __inst, xdc_runtime_Log_Event evt, xdc_runtime_Types_ModuleId mid);
+    xdc_Void (*write1)(ti_uia_loggers_LoggerRunMode_Handle __inst, xdc_runtime_Log_Event evt, xdc_runtime_Types_ModuleId mid, xdc_IArg a1);
+    xdc_Void (*write2)(ti_uia_loggers_LoggerRunMode_Handle __inst, xdc_runtime_Log_Event evt, xdc_runtime_Types_ModuleId mid, xdc_IArg a1, xdc_IArg a2);
+    xdc_Void (*write4)(ti_uia_loggers_LoggerRunMode_Handle __inst, xdc_runtime_Log_Event evt, xdc_runtime_Types_ModuleId mid, xdc_IArg a1, xdc_IArg a2, xdc_IArg a3, xdc_IArg a4);
+    xdc_Void (*write8)(ti_uia_loggers_LoggerRunMode_Handle __inst, xdc_runtime_Log_Event evt, xdc_runtime_Types_ModuleId mid, xdc_IArg a1, xdc_IArg a2, xdc_IArg a3, xdc_IArg a4, xdc_IArg a5, xdc_IArg a6, xdc_IArg a7, xdc_IArg a8);
+    xdc_Void (*setFilterLevel)(ti_uia_loggers_LoggerRunMode_Handle __inst, xdc_runtime_Diags_Mask mask, xdc_runtime_Diags_EventLevel filterLevel);
+    xdc_runtime_Diags_Mask (*getFilterLevel)(ti_uia_loggers_LoggerRunMode_Handle __inst, xdc_runtime_Diags_EventLevel level);
+    ti_uia_runtime_IUIATransfer_TransferType (*getTransferType)(ti_uia_loggers_LoggerRunMode_Handle __inst);
+    xdc_Bool (*getContents)(ti_uia_loggers_LoggerRunMode_Handle __inst, xdc_Ptr hdrBuf, xdc_SizeT size, xdc_SizeT* cpSize);
+    xdc_Bool (*isEmpty)(ti_uia_loggers_LoggerRunMode_Handle __inst);
+    xdc_SizeT (*getMaxLength)(ti_uia_loggers_LoggerRunMode_Handle __inst);
+    xdc_UInt16 (*getInstanceId)(ti_uia_loggers_LoggerRunMode_Handle __inst);
+    ti_uia_runtime_IUIATransfer_Priority (*getPriority)(ti_uia_loggers_LoggerRunMode_Handle __inst);
+    xdc_Void (*setPriority)(ti_uia_loggers_LoggerRunMode_Handle __inst, ti_uia_runtime_IUIATransfer_Priority priority);
+    xdc_Void (*reset)(ti_uia_loggers_LoggerRunMode_Handle __inst);
+    xdc_Void (*writeMemoryRange)(ti_uia_loggers_LoggerRunMode_Handle __inst, xdc_runtime_Log_Event evt, xdc_runtime_Types_ModuleId mid, xdc_UInt32 snapshotId, xdc_IArg fileName, xdc_IArg LineNum, xdc_IArg fmt, xdc_IArg startAdrs, xdc_UInt32 lengthInMAUs);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_uia_loggers_LoggerRunMode_Module__FXNS__CR
@@ -501,7 +501,7 @@ __extern xdc_Int ti_uia_loggers_LoggerRunMode_Module_startup__F( xdc_Int state )
 
 /* Instance_init__E */
 xdc__CODESECT(ti_uia_loggers_LoggerRunMode_Instance_init__E, "ti_uia_loggers_LoggerRunMode_Instance_init")
-__extern xdc_Void ti_uia_loggers_LoggerRunMode_Instance_init__E(ti_uia_loggers_LoggerRunMode_Object *, const ti_uia_loggers_LoggerRunMode_Params *);
+__extern xdc_Void ti_uia_loggers_LoggerRunMode_Instance_init__E(ti_uia_loggers_LoggerRunMode_Object *__obj, const ti_uia_loggers_LoggerRunMode_Params *__prms);
 
 /* create */
 xdc__CODESECT(ti_uia_loggers_LoggerRunMode_create, "ti_uia_loggers_LoggerRunMode_create")
@@ -697,7 +697,8 @@ __extern xdc_Ptr ti_uia_loggers_LoggerRunMode_writeStart__I( ti_uia_loggers_Logg
  */
 
 /* Module_upCast */
-static inline ti_uia_runtime_ILoggerSnapshot_Module ti_uia_loggers_LoggerRunMode_Module_upCast( void )
+static inline ti_uia_runtime_ILoggerSnapshot_Module ti_uia_loggers_LoggerRunMode_Module_upCast(void);
+static inline ti_uia_runtime_ILoggerSnapshot_Module ti_uia_loggers_LoggerRunMode_Module_upCast(void)
 {
     return (ti_uia_runtime_ILoggerSnapshot_Module)&ti_uia_loggers_LoggerRunMode_Module__FXNS__C;
 }
@@ -706,7 +707,8 @@ static inline ti_uia_runtime_ILoggerSnapshot_Module ti_uia_loggers_LoggerRunMode
 #define ti_uia_loggers_LoggerRunMode_Module_to_ti_uia_runtime_ILoggerSnapshot ti_uia_loggers_LoggerRunMode_Module_upCast
 
 /* Handle_upCast */
-static inline ti_uia_runtime_ILoggerSnapshot_Handle ti_uia_loggers_LoggerRunMode_Handle_upCast( ti_uia_loggers_LoggerRunMode_Handle i )
+static inline ti_uia_runtime_ILoggerSnapshot_Handle ti_uia_loggers_LoggerRunMode_Handle_upCast(ti_uia_loggers_LoggerRunMode_Handle i);
+static inline ti_uia_runtime_ILoggerSnapshot_Handle ti_uia_loggers_LoggerRunMode_Handle_upCast(ti_uia_loggers_LoggerRunMode_Handle i)
 {
     return (ti_uia_runtime_ILoggerSnapshot_Handle)i;
 }
@@ -715,7 +717,8 @@ static inline ti_uia_runtime_ILoggerSnapshot_Handle ti_uia_loggers_LoggerRunMode
 #define ti_uia_loggers_LoggerRunMode_Handle_to_ti_uia_runtime_ILoggerSnapshot ti_uia_loggers_LoggerRunMode_Handle_upCast
 
 /* Handle_downCast */
-static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Handle_downCast( ti_uia_runtime_ILoggerSnapshot_Handle i )
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Handle_downCast(ti_uia_runtime_ILoggerSnapshot_Handle i);
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Handle_downCast(ti_uia_runtime_ILoggerSnapshot_Handle i)
 {
     ti_uia_runtime_ILoggerSnapshot_Handle i2 = (ti_uia_runtime_ILoggerSnapshot_Handle)i;
     return (const void*)i2->__fxns == (const void*)&ti_uia_loggers_LoggerRunMode_Module__FXNS__C ? (ti_uia_loggers_LoggerRunMode_Handle)i : (ti_uia_loggers_LoggerRunMode_Handle)0;
@@ -725,7 +728,8 @@ static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_H
 #define ti_uia_loggers_LoggerRunMode_Handle_from_ti_uia_runtime_ILoggerSnapshot ti_uia_loggers_LoggerRunMode_Handle_downCast
 
 /* Module_upCast2 */
-static inline ti_uia_runtime_IUIATransfer_Module ti_uia_loggers_LoggerRunMode_Module_upCast2( void )
+static inline ti_uia_runtime_IUIATransfer_Module ti_uia_loggers_LoggerRunMode_Module_upCast2(void);
+static inline ti_uia_runtime_IUIATransfer_Module ti_uia_loggers_LoggerRunMode_Module_upCast2(void)
 {
     return (ti_uia_runtime_IUIATransfer_Module)&ti_uia_loggers_LoggerRunMode_Module__FXNS__C;
 }
@@ -734,7 +738,8 @@ static inline ti_uia_runtime_IUIATransfer_Module ti_uia_loggers_LoggerRunMode_Mo
 #define ti_uia_loggers_LoggerRunMode_Module_to_ti_uia_runtime_IUIATransfer ti_uia_loggers_LoggerRunMode_Module_upCast2
 
 /* Handle_upCast2 */
-static inline ti_uia_runtime_IUIATransfer_Handle ti_uia_loggers_LoggerRunMode_Handle_upCast2( ti_uia_loggers_LoggerRunMode_Handle i )
+static inline ti_uia_runtime_IUIATransfer_Handle ti_uia_loggers_LoggerRunMode_Handle_upCast2(ti_uia_loggers_LoggerRunMode_Handle i);
+static inline ti_uia_runtime_IUIATransfer_Handle ti_uia_loggers_LoggerRunMode_Handle_upCast2(ti_uia_loggers_LoggerRunMode_Handle i)
 {
     return (ti_uia_runtime_IUIATransfer_Handle)i;
 }
@@ -743,7 +748,8 @@ static inline ti_uia_runtime_IUIATransfer_Handle ti_uia_loggers_LoggerRunMode_Ha
 #define ti_uia_loggers_LoggerRunMode_Handle_to_ti_uia_runtime_IUIATransfer ti_uia_loggers_LoggerRunMode_Handle_upCast2
 
 /* Handle_downCast2 */
-static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Handle_downCast2( ti_uia_runtime_IUIATransfer_Handle i )
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Handle_downCast2(ti_uia_runtime_IUIATransfer_Handle i);
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Handle_downCast2(ti_uia_runtime_IUIATransfer_Handle i)
 {
     ti_uia_runtime_IUIATransfer_Handle i2 = (ti_uia_runtime_IUIATransfer_Handle)i;
     return (const void*)i2->__fxns == (const void*)&ti_uia_loggers_LoggerRunMode_Module__FXNS__C ? (ti_uia_loggers_LoggerRunMode_Handle)i : (ti_uia_loggers_LoggerRunMode_Handle)0;
@@ -753,7 +759,8 @@ static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_H
 #define ti_uia_loggers_LoggerRunMode_Handle_from_ti_uia_runtime_IUIATransfer ti_uia_loggers_LoggerRunMode_Handle_downCast2
 
 /* Module_upCast3 */
-static inline xdc_runtime_IFilterLogger_Module ti_uia_loggers_LoggerRunMode_Module_upCast3( void )
+static inline xdc_runtime_IFilterLogger_Module ti_uia_loggers_LoggerRunMode_Module_upCast3(void);
+static inline xdc_runtime_IFilterLogger_Module ti_uia_loggers_LoggerRunMode_Module_upCast3(void)
 {
     return (xdc_runtime_IFilterLogger_Module)&ti_uia_loggers_LoggerRunMode_Module__FXNS__C;
 }
@@ -762,7 +769,8 @@ static inline xdc_runtime_IFilterLogger_Module ti_uia_loggers_LoggerRunMode_Modu
 #define ti_uia_loggers_LoggerRunMode_Module_to_xdc_runtime_IFilterLogger ti_uia_loggers_LoggerRunMode_Module_upCast3
 
 /* Handle_upCast3 */
-static inline xdc_runtime_IFilterLogger_Handle ti_uia_loggers_LoggerRunMode_Handle_upCast3( ti_uia_loggers_LoggerRunMode_Handle i )
+static inline xdc_runtime_IFilterLogger_Handle ti_uia_loggers_LoggerRunMode_Handle_upCast3(ti_uia_loggers_LoggerRunMode_Handle i);
+static inline xdc_runtime_IFilterLogger_Handle ti_uia_loggers_LoggerRunMode_Handle_upCast3(ti_uia_loggers_LoggerRunMode_Handle i)
 {
     return (xdc_runtime_IFilterLogger_Handle)i;
 }
@@ -771,7 +779,8 @@ static inline xdc_runtime_IFilterLogger_Handle ti_uia_loggers_LoggerRunMode_Hand
 #define ti_uia_loggers_LoggerRunMode_Handle_to_xdc_runtime_IFilterLogger ti_uia_loggers_LoggerRunMode_Handle_upCast3
 
 /* Handle_downCast3 */
-static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Handle_downCast3( xdc_runtime_IFilterLogger_Handle i )
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Handle_downCast3(xdc_runtime_IFilterLogger_Handle i);
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Handle_downCast3(xdc_runtime_IFilterLogger_Handle i)
 {
     xdc_runtime_IFilterLogger_Handle i2 = (xdc_runtime_IFilterLogger_Handle)i;
     return (const void*)i2->__fxns == (const void*)&ti_uia_loggers_LoggerRunMode_Module__FXNS__C ? (ti_uia_loggers_LoggerRunMode_Handle)i : (ti_uia_loggers_LoggerRunMode_Handle)0;
@@ -781,7 +790,8 @@ static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_H
 #define ti_uia_loggers_LoggerRunMode_Handle_from_xdc_runtime_IFilterLogger ti_uia_loggers_LoggerRunMode_Handle_downCast3
 
 /* Module_upCast4 */
-static inline xdc_runtime_ILogger_Module ti_uia_loggers_LoggerRunMode_Module_upCast4( void )
+static inline xdc_runtime_ILogger_Module ti_uia_loggers_LoggerRunMode_Module_upCast4(void);
+static inline xdc_runtime_ILogger_Module ti_uia_loggers_LoggerRunMode_Module_upCast4(void)
 {
     return (xdc_runtime_ILogger_Module)&ti_uia_loggers_LoggerRunMode_Module__FXNS__C;
 }
@@ -790,7 +800,8 @@ static inline xdc_runtime_ILogger_Module ti_uia_loggers_LoggerRunMode_Module_upC
 #define ti_uia_loggers_LoggerRunMode_Module_to_xdc_runtime_ILogger ti_uia_loggers_LoggerRunMode_Module_upCast4
 
 /* Handle_upCast4 */
-static inline xdc_runtime_ILogger_Handle ti_uia_loggers_LoggerRunMode_Handle_upCast4( ti_uia_loggers_LoggerRunMode_Handle i )
+static inline xdc_runtime_ILogger_Handle ti_uia_loggers_LoggerRunMode_Handle_upCast4(ti_uia_loggers_LoggerRunMode_Handle i);
+static inline xdc_runtime_ILogger_Handle ti_uia_loggers_LoggerRunMode_Handle_upCast4(ti_uia_loggers_LoggerRunMode_Handle i)
 {
     return (xdc_runtime_ILogger_Handle)i;
 }
@@ -799,7 +810,8 @@ static inline xdc_runtime_ILogger_Handle ti_uia_loggers_LoggerRunMode_Handle_upC
 #define ti_uia_loggers_LoggerRunMode_Handle_to_xdc_runtime_ILogger ti_uia_loggers_LoggerRunMode_Handle_upCast4
 
 /* Handle_downCast4 */
-static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Handle_downCast4( xdc_runtime_ILogger_Handle i )
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Handle_downCast4(xdc_runtime_ILogger_Handle i);
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Handle_downCast4(xdc_runtime_ILogger_Handle i)
 {
     xdc_runtime_ILogger_Handle i2 = (xdc_runtime_ILogger_Handle)i;
     return (const void*)i2->__fxns == (const void*)&ti_uia_loggers_LoggerRunMode_Module__FXNS__C ? (ti_uia_loggers_LoggerRunMode_Handle)i : (ti_uia_loggers_LoggerRunMode_Handle)0;
@@ -823,25 +835,29 @@ static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_H
 #define ti_uia_loggers_LoggerRunMode_Module_heap() ti_uia_loggers_LoggerRunMode_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_uia_loggers_LoggerRunMode_Module__id ti_uia_loggers_LoggerRunMode_Module_id(void);
 static inline CT__ti_uia_loggers_LoggerRunMode_Module__id ti_uia_loggers_LoggerRunMode_Module_id( void ) 
 {
     return ti_uia_loggers_LoggerRunMode_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_uia_loggers_LoggerRunMode_Module_hasMask( void ) 
+static inline xdc_Bool ti_uia_loggers_LoggerRunMode_Module_hasMask(void);
+static inline xdc_Bool ti_uia_loggers_LoggerRunMode_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_uia_loggers_LoggerRunMode_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_uia_loggers_LoggerRunMode_Module_getMask(void);
 static inline xdc_Bits16 ti_uia_loggers_LoggerRunMode_Module_getMask( void ) 
 {
     return ti_uia_loggers_LoggerRunMode_Module__diagsMask__C != NULL ? *ti_uia_loggers_LoggerRunMode_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_uia_loggers_LoggerRunMode_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_uia_loggers_LoggerRunMode_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_uia_loggers_LoggerRunMode_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_uia_loggers_LoggerRunMode_Module__diagsMask__C != NULL) {
         *ti_uia_loggers_LoggerRunMode_Module__diagsMask__C = mask;
@@ -849,6 +865,7 @@ static inline xdc_Void ti_uia_loggers_LoggerRunMode_Module_setMask( xdc_Bits16 m
 }
 
 /* Params_init */
+static inline void ti_uia_loggers_LoggerRunMode_Params_init(ti_uia_loggers_LoggerRunMode_Params *prms);
 static inline void ti_uia_loggers_LoggerRunMode_Params_init( ti_uia_loggers_LoggerRunMode_Params *prms ) 
 {
     if (prms) {
@@ -857,6 +874,7 @@ static inline void ti_uia_loggers_LoggerRunMode_Params_init( ti_uia_loggers_Logg
 }
 
 /* Params_copy */
+static inline void ti_uia_loggers_LoggerRunMode_Params_copy(ti_uia_loggers_LoggerRunMode_Params *dst, const ti_uia_loggers_LoggerRunMode_Params *src);
 static inline void ti_uia_loggers_LoggerRunMode_Params_copy(ti_uia_loggers_LoggerRunMode_Params *dst, const ti_uia_loggers_LoggerRunMode_Params *src) 
 {
     if (dst) {
@@ -871,44 +889,51 @@ static inline void ti_uia_loggers_LoggerRunMode_Params_copy(ti_uia_loggers_Logge
 #define ti_uia_loggers_LoggerRunMode_Object_sizeof() ti_uia_loggers_LoggerRunMode_Object__sizeof__C
 
 /* Object_get */
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Object_get(ti_uia_loggers_LoggerRunMode_Instance_State *oarr, int i);
 static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Object_get(ti_uia_loggers_LoggerRunMode_Instance_State *oarr, int i) 
 {
     return (ti_uia_loggers_LoggerRunMode_Handle)ti_uia_loggers_LoggerRunMode_Object__get__S(oarr, i);
 }
 
 /* Object_first */
-static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Object_first( void )
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Object_first(void);
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Object_first(void)
 {
     return (ti_uia_loggers_LoggerRunMode_Handle)ti_uia_loggers_LoggerRunMode_Object__first__S();
 }
 
 /* Object_next */
-static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Object_next( ti_uia_loggers_LoggerRunMode_Object *obj )
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Object_next(ti_uia_loggers_LoggerRunMode_Object *obj);
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_Object_next(ti_uia_loggers_LoggerRunMode_Object *obj)
 {
     return (ti_uia_loggers_LoggerRunMode_Handle)ti_uia_loggers_LoggerRunMode_Object__next__S(obj);
 }
 
 /* Handle_label */
-static inline xdc_runtime_Types_Label *ti_uia_loggers_LoggerRunMode_Handle_label( ti_uia_loggers_LoggerRunMode_Handle inst, xdc_runtime_Types_Label *lab )
+static inline xdc_runtime_Types_Label *ti_uia_loggers_LoggerRunMode_Handle_label(ti_uia_loggers_LoggerRunMode_Handle inst, xdc_runtime_Types_Label *lab);
+static inline xdc_runtime_Types_Label *ti_uia_loggers_LoggerRunMode_Handle_label(ti_uia_loggers_LoggerRunMode_Handle inst, xdc_runtime_Types_Label *lab)
 {
     return ti_uia_loggers_LoggerRunMode_Handle__label__S(inst, lab);
 }
 
 /* Handle_name */
-static inline xdc_String ti_uia_loggers_LoggerRunMode_Handle_name( ti_uia_loggers_LoggerRunMode_Handle inst )
+static inline xdc_String ti_uia_loggers_LoggerRunMode_Handle_name(ti_uia_loggers_LoggerRunMode_Handle inst);
+static inline xdc_String ti_uia_loggers_LoggerRunMode_Handle_name(ti_uia_loggers_LoggerRunMode_Handle inst)
 {
     xdc_runtime_Types_Label lab;
     return ti_uia_loggers_LoggerRunMode_Handle__label__S(inst, &lab)->iname;
 }
 
 /* handle */
-static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_handle( ti_uia_loggers_LoggerRunMode_Struct *str )
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_handle(ti_uia_loggers_LoggerRunMode_Struct *str);
+static inline ti_uia_loggers_LoggerRunMode_Handle ti_uia_loggers_LoggerRunMode_handle(ti_uia_loggers_LoggerRunMode_Struct *str)
 {
     return (ti_uia_loggers_LoggerRunMode_Handle)str;
 }
 
 /* struct */
-static inline ti_uia_loggers_LoggerRunMode_Struct *ti_uia_loggers_LoggerRunMode_struct( ti_uia_loggers_LoggerRunMode_Handle inst )
+static inline ti_uia_loggers_LoggerRunMode_Struct *ti_uia_loggers_LoggerRunMode_struct(ti_uia_loggers_LoggerRunMode_Handle inst);
+static inline ti_uia_loggers_LoggerRunMode_Struct *ti_uia_loggers_LoggerRunMode_struct(ti_uia_loggers_LoggerRunMode_Handle inst)
 {
     return (ti_uia_loggers_LoggerRunMode_Struct*)inst;
 }

@@ -37,6 +37,8 @@
  */
 
 #include <stdbool.h>
+#include <stddef.h>
+#include <stdint.h>
 
 #include <ti/drivers/Power.h>
 #include <ti/drivers/power/PowerMSP432.h>
@@ -124,7 +126,7 @@ const ADCBufMSP432_HWAttrs adcbufMSP432HWAttrs[MSP_EXP432P401R_ADCBUFCOUNT] = {
     {
         .intPriority =  ~0,
         .channelSetting = adcBuf0MSP432Channels,
-        .adcTimerTriggerSource = ADCBufMSP432_TIMERA0_CAPTURECOMPARE2
+        .adcTimerTriggerSource = ADCBufMSP432_TIMERA1_CAPTURECOMPARE2
     }
 };
 
@@ -309,7 +311,7 @@ GPIO_PinConfig gpioPinConfigs[] = {
 
     /* Output pins */
     /* MSP_EXP432P401R_GPIO_LED1 */
-    GPIOMSP432_P1_0 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_HIGH | GPIO_CFG_OUT_LOW,
+    GPIOMSP432_P1_0 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_LOW | GPIO_CFG_OUT_LOW,
     /* MSP_EXP432P401R_GPIO_LED_RED */
     GPIOMSP432_P2_0 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_HIGH | GPIO_CFG_OUT_LOW,
 
@@ -322,6 +324,10 @@ GPIO_PinConfig gpioPinConfigs[] = {
     //GPIOMSP432_P2_1 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_HIGH | GPIO_CFG_OUT_LOW,
     /* MSP_EXP432P401R_GPIO_LED_BLUE */
     //GPIOMSP432_P2_2 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_HIGH | GPIO_CFG_OUT_LOW
+    /* MSP_EXP432P401R_SPI_CS1 */
+    GPIOMSP432_P5_4 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_LOW | GPIO_CFG_OUT_HIGH,
+    /* MSP_EXP432P401R_SPI_CS2 */
+    GPIOMSP432_P5_5 | GPIO_CFG_OUT_STD | GPIO_CFG_OUT_STR_LOW | GPIO_CFG_OUT_HIGH,
 };
 
 /*
@@ -416,6 +422,73 @@ const I2CSlave_Config I2CSlave_config[MSP_EXP432P401R_I2CSLAVECOUNT] = {
 };
 
 const uint_least8_t I2CSlave_count = MSP_EXP432P401R_I2CSLAVECOUNT;
+
+/*
+ *  =============================== NVS ===============================
+ */
+#include <ti/drivers/NVS.h>
+#include <ti/drivers/nvs/NVSMSP432.h>
+
+#define SECTORSIZE       0x1000
+#define NVS_REGIONS_BASE 0x3B000
+#define REGIONSIZE       (SECTORSIZE * 4)
+
+/*
+ * Reserve flash sectors for NVS driver use
+ * by placing an uninitialized byte array
+ * at the desired flash address.
+ */
+#if defined(__TI_COMPILER_VERSION__)
+
+/*
+ * Place uninitialized array at NVS_REGIONS_BASE
+ */
+#pragma LOCATION(flashBuf, NVS_REGIONS_BASE);
+#pragma NOINIT(flashBuf);
+static char flashBuf[REGIONSIZE];
+
+#elif defined(__IAR_SYSTEMS_ICC__)
+
+/*
+ * Place uninitialized array at NVS_REGIONS_BASE
+ */
+__no_init static char flashBuf[REGIONSIZE] @ NVS_REGIONS_BASE;
+
+#elif defined(__GNUC__)
+
+/*
+ * Place the flash buffers in the .nvs section created in the gcc linker file.
+ * The .nvs section enforces alignment on a sector boundary but may
+ * be placed anywhere in flash memory.  If desired the .nvs section can be set
+ * to a fixed address by changing the following in the gcc linker file:
+ *
+ * .nvs (FIXED_FLASH_ADDR) (NOLOAD) : AT (FIXED_FLASH_ADDR) {
+ *      *(.nvs)
+ * } > REGION_TEXT
+ */
+__attribute__ ((section (".nvs")))
+static char flashBuf[REGIONSIZE];
+
+#endif
+
+NVSMSP432_Object nvsMSP432Objects[MSP_EXP432P401R_NVSCOUNT];
+
+const NVSMSP432_HWAttrs nvsMSP432HWAttrs[MSP_EXP432P401R_NVSCOUNT] = {
+    {
+        .regionBase = (void *) flashBuf,
+        .regionSize = REGIONSIZE,
+    },
+};
+
+const NVS_Config NVS_config[MSP_EXP432P401R_NVSCOUNT] = {
+    {
+        .fxnTablePtr = &NVSMSP432_fxnTable,
+        .object = &nvsMSP432Objects[MSP_EXP432P401R_NVSMSP4320],
+        .hwAttrs = &nvsMSP432HWAttrs[MSP_EXP432P401R_NVSMSP4320],
+    },
+};
+
+const uint_least8_t NVS_count = MSP_EXP432P401R_NVSCOUNT;
 
 /*
  *  =============================== Power ===============================
@@ -518,8 +591,8 @@ const SPIMSP432DMA_HWAttrsV1 spiMSP432DMAHWAttrs[MSP_EXP432P401R_SPICOUNT] = {
         .simoPin = SPIMSP432DMA_P1_6_UCB0SIMO,
         .somiPin = SPIMSP432DMA_P1_7_UCB0SOMI,
         .stePin  = SPIMSP432DMA_P1_4_UCB0STE,
-        .pinMode  = EUSCI_SPI_3PIN
-
+        .pinMode  = EUSCI_SPI_3PIN,
+        .minDmaTransferSize = 10
     },
     {
         .baseAddr = EUSCI_B2_BASE,
@@ -534,14 +607,15 @@ const SPIMSP432DMA_HWAttrsV1 spiMSP432DMAHWAttrs[MSP_EXP432P401R_SPICOUNT] = {
         .simoPin = SPIMSP432DMA_P3_6_UCB2SIMO,
         .somiPin = SPIMSP432DMA_P3_7_UCB2SOMI,
         .stePin  = SPIMSP432DMA_P3_4_UCB2STE,
-        .pinMode  = EUSCI_SPI_3PIN
+        .pinMode  = EUSCI_SPI_3PIN,
+        .minDmaTransferSize = 10
     },
     {
         .baseAddr = EUSCI_A1_BASE,
         .bitOrder = EUSCI_A_SPI_MSB_FIRST,
         .clockSource = EUSCI_A_SPI_CLOCKSOURCE_SMCLK,
         .defaultTxBufValue = 0,
-        .dmaIntNum = INT_DMA_INT1,
+        .dmaIntNum = INT_DMA_INT2,
         .intPriority = (~0),
         .rxDMAChannelIndex = DMA_CH3_EUSCIA1RX,
         .txDMAChannelIndex = DMA_CH2_EUSCIA1TX,
@@ -549,15 +623,15 @@ const SPIMSP432DMA_HWAttrsV1 spiMSP432DMAHWAttrs[MSP_EXP432P401R_SPICOUNT] = {
         .simoPin = SPIMSP432DMA_P2_6_UCA1SIMO,
         .somiPin = SPIMSP432DMA_P2_7_UCA1SOMI,
         .stePin  = SPIMSP432DMA_P2_3_UCA1STE,
-        .pinMode  = EUSCI_SPI_4PIN_UCxSTE_ACTIVE_HIGH
-
+        .pinMode  = EUSCI_SPI_4PIN_UCxSTE_ACTIVE_LOW,
+        .minDmaTransferSize = 10
     },
     {
         .baseAddr = EUSCI_B2_BASE,
         .bitOrder = EUSCI_B_SPI_MSB_FIRST,
         .clockSource = EUSCI_B_SPI_CLOCKSOURCE_SMCLK,
         .defaultTxBufValue = 0,
-        .dmaIntNum = INT_DMA_INT2,
+        .dmaIntNum = INT_DMA_INT3,
         .intPriority = (~0),
         .rxDMAChannelIndex = DMA_CH5_EUSCIB2RX0,
         .txDMAChannelIndex = DMA_CH4_EUSCIB2TX0,
@@ -565,7 +639,8 @@ const SPIMSP432DMA_HWAttrsV1 spiMSP432DMAHWAttrs[MSP_EXP432P401R_SPICOUNT] = {
         .simoPin = SPIMSP432DMA_P3_6_UCB2SIMO,
         .somiPin = SPIMSP432DMA_P3_7_UCB2SOMI,
         .stePin  = SPIMSP432DMA_P2_4_UCB2STE,
-        .pinMode  = EUSCI_SPI_4PIN_UCxSTE_ACTIVE_HIGH
+        .pinMode  = EUSCI_SPI_4PIN_UCxSTE_ACTIVE_LOW,
+        .minDmaTransferSize = 10
     }
 };
 

@@ -62,14 +62,6 @@ int usleep(useconds_t useconds)
     UInt32             timeout;
 
     /*
-     *  If useconds >= 1000000 microseconds, this should set errno to EINVAL
-     *  and return -1.
-     */
-    if (useconds >= 1000000) {
-        return (-1);
-    }
-
-    /*
      *  Implementations may place limitations on the granularity of timer
      *  values. For each interval timer, if the requested timer value requires
      *  a finer granularity than the implementation supports, the actual timer

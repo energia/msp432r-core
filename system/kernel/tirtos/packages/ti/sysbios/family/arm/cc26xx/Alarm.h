@@ -2,22 +2,22 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     CREATE ARGS
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
  *     PER-INSTANCE TYPES
  *     FUNCTION DECLARATIONS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -65,7 +65,7 @@
  */
 
 /* FuncPtr */
-typedef xdc_Void (*ti_sysbios_family_arm_cc26xx_Alarm_FuncPtr)(xdc_UArg);
+typedef xdc_Void (*ti_sysbios_family_arm_cc26xx_Alarm_FuncPtr)(xdc_UArg __arg1);
 
 
 /*
@@ -272,11 +272,11 @@ struct ti_sysbios_family_arm_cc26xx_Alarm_Struct {
 
 /* Instance_init__E */
 xdc__CODESECT(ti_sysbios_family_arm_cc26xx_Alarm_Instance_init__E, "ti_sysbios_family_arm_cc26xx_Alarm_Instance_init")
-__extern xdc_Void ti_sysbios_family_arm_cc26xx_Alarm_Instance_init__E(ti_sysbios_family_arm_cc26xx_Alarm_Object *, ti_sysbios_family_arm_cc26xx_Alarm_FuncPtr alarmFxn, xdc_UArg arg, const ti_sysbios_family_arm_cc26xx_Alarm_Params *);
+__extern xdc_Void ti_sysbios_family_arm_cc26xx_Alarm_Instance_init__E(ti_sysbios_family_arm_cc26xx_Alarm_Object *__obj, ti_sysbios_family_arm_cc26xx_Alarm_FuncPtr alarmFxn, xdc_UArg arg, const ti_sysbios_family_arm_cc26xx_Alarm_Params *__prms);
 
 /* Instance_finalize__E */
 xdc__CODESECT(ti_sysbios_family_arm_cc26xx_Alarm_Instance_finalize__E, "ti_sysbios_family_arm_cc26xx_Alarm_Instance_finalize")
-__extern void ti_sysbios_family_arm_cc26xx_Alarm_Instance_finalize__E( ti_sysbios_family_arm_cc26xx_Alarm_Object* );
+__extern void ti_sysbios_family_arm_cc26xx_Alarm_Instance_finalize__E(ti_sysbios_family_arm_cc26xx_Alarm_Object *__obj);
 
 /* create */
 xdc__CODESECT(ti_sysbios_family_arm_cc26xx_Alarm_create, "ti_sysbios_family_arm_cc26xx_Alarm_create")
@@ -361,25 +361,29 @@ __extern xdc_Void ti_sysbios_family_arm_cc26xx_Alarm_stop__E( ti_sysbios_family_
 #define ti_sysbios_family_arm_cc26xx_Alarm_Module_heap() ti_sysbios_family_arm_cc26xx_Alarm_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_family_arm_cc26xx_Alarm_Module__id ti_sysbios_family_arm_cc26xx_Alarm_Module_id(void);
 static inline CT__ti_sysbios_family_arm_cc26xx_Alarm_Module__id ti_sysbios_family_arm_cc26xx_Alarm_Module_id( void ) 
 {
     return ti_sysbios_family_arm_cc26xx_Alarm_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_sysbios_family_arm_cc26xx_Alarm_Module_hasMask( void ) 
+static inline xdc_Bool ti_sysbios_family_arm_cc26xx_Alarm_Module_hasMask(void);
+static inline xdc_Bool ti_sysbios_family_arm_cc26xx_Alarm_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_sysbios_family_arm_cc26xx_Alarm_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_sysbios_family_arm_cc26xx_Alarm_Module_getMask(void);
 static inline xdc_Bits16 ti_sysbios_family_arm_cc26xx_Alarm_Module_getMask( void ) 
 {
     return ti_sysbios_family_arm_cc26xx_Alarm_Module__diagsMask__C != NULL ? *ti_sysbios_family_arm_cc26xx_Alarm_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_sysbios_family_arm_cc26xx_Alarm_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_sysbios_family_arm_cc26xx_Alarm_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_sysbios_family_arm_cc26xx_Alarm_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_sysbios_family_arm_cc26xx_Alarm_Module__diagsMask__C != NULL) {
         *ti_sysbios_family_arm_cc26xx_Alarm_Module__diagsMask__C = mask;
@@ -387,6 +391,7 @@ static inline xdc_Void ti_sysbios_family_arm_cc26xx_Alarm_Module_setMask( xdc_Bi
 }
 
 /* Params_init */
+static inline void ti_sysbios_family_arm_cc26xx_Alarm_Params_init(ti_sysbios_family_arm_cc26xx_Alarm_Params *prms);
 static inline void ti_sysbios_family_arm_cc26xx_Alarm_Params_init( ti_sysbios_family_arm_cc26xx_Alarm_Params *prms ) 
 {
     if (prms) {
@@ -395,6 +400,7 @@ static inline void ti_sysbios_family_arm_cc26xx_Alarm_Params_init( ti_sysbios_fa
 }
 
 /* Params_copy */
+static inline void ti_sysbios_family_arm_cc26xx_Alarm_Params_copy(ti_sysbios_family_arm_cc26xx_Alarm_Params *dst, const ti_sysbios_family_arm_cc26xx_Alarm_Params *src);
 static inline void ti_sysbios_family_arm_cc26xx_Alarm_Params_copy(ti_sysbios_family_arm_cc26xx_Alarm_Params *dst, const ti_sysbios_family_arm_cc26xx_Alarm_Params *src) 
 {
     if (dst) {
@@ -409,44 +415,51 @@ static inline void ti_sysbios_family_arm_cc26xx_Alarm_Params_copy(ti_sysbios_fam
 #define ti_sysbios_family_arm_cc26xx_Alarm_Object_sizeof() ti_sysbios_family_arm_cc26xx_Alarm_Object__sizeof__C
 
 /* Object_get */
+static inline ti_sysbios_family_arm_cc26xx_Alarm_Handle ti_sysbios_family_arm_cc26xx_Alarm_Object_get(ti_sysbios_family_arm_cc26xx_Alarm_Instance_State *oarr, int i);
 static inline ti_sysbios_family_arm_cc26xx_Alarm_Handle ti_sysbios_family_arm_cc26xx_Alarm_Object_get(ti_sysbios_family_arm_cc26xx_Alarm_Instance_State *oarr, int i) 
 {
     return (ti_sysbios_family_arm_cc26xx_Alarm_Handle)ti_sysbios_family_arm_cc26xx_Alarm_Object__get__S(oarr, i);
 }
 
 /* Object_first */
-static inline ti_sysbios_family_arm_cc26xx_Alarm_Handle ti_sysbios_family_arm_cc26xx_Alarm_Object_first( void )
+static inline ti_sysbios_family_arm_cc26xx_Alarm_Handle ti_sysbios_family_arm_cc26xx_Alarm_Object_first(void);
+static inline ti_sysbios_family_arm_cc26xx_Alarm_Handle ti_sysbios_family_arm_cc26xx_Alarm_Object_first(void)
 {
     return (ti_sysbios_family_arm_cc26xx_Alarm_Handle)ti_sysbios_family_arm_cc26xx_Alarm_Object__first__S();
 }
 
 /* Object_next */
-static inline ti_sysbios_family_arm_cc26xx_Alarm_Handle ti_sysbios_family_arm_cc26xx_Alarm_Object_next( ti_sysbios_family_arm_cc26xx_Alarm_Object *obj )
+static inline ti_sysbios_family_arm_cc26xx_Alarm_Handle ti_sysbios_family_arm_cc26xx_Alarm_Object_next(ti_sysbios_family_arm_cc26xx_Alarm_Object *obj);
+static inline ti_sysbios_family_arm_cc26xx_Alarm_Handle ti_sysbios_family_arm_cc26xx_Alarm_Object_next(ti_sysbios_family_arm_cc26xx_Alarm_Object *obj)
 {
     return (ti_sysbios_family_arm_cc26xx_Alarm_Handle)ti_sysbios_family_arm_cc26xx_Alarm_Object__next__S(obj);
 }
 
 /* Handle_label */
-static inline xdc_runtime_Types_Label *ti_sysbios_family_arm_cc26xx_Alarm_Handle_label( ti_sysbios_family_arm_cc26xx_Alarm_Handle inst, xdc_runtime_Types_Label *lab )
+static inline xdc_runtime_Types_Label *ti_sysbios_family_arm_cc26xx_Alarm_Handle_label(ti_sysbios_family_arm_cc26xx_Alarm_Handle inst, xdc_runtime_Types_Label *lab);
+static inline xdc_runtime_Types_Label *ti_sysbios_family_arm_cc26xx_Alarm_Handle_label(ti_sysbios_family_arm_cc26xx_Alarm_Handle inst, xdc_runtime_Types_Label *lab)
 {
     return ti_sysbios_family_arm_cc26xx_Alarm_Handle__label__S(inst, lab);
 }
 
 /* Handle_name */
-static inline xdc_String ti_sysbios_family_arm_cc26xx_Alarm_Handle_name( ti_sysbios_family_arm_cc26xx_Alarm_Handle inst )
+static inline xdc_String ti_sysbios_family_arm_cc26xx_Alarm_Handle_name(ti_sysbios_family_arm_cc26xx_Alarm_Handle inst);
+static inline xdc_String ti_sysbios_family_arm_cc26xx_Alarm_Handle_name(ti_sysbios_family_arm_cc26xx_Alarm_Handle inst)
 {
     xdc_runtime_Types_Label lab;
     return ti_sysbios_family_arm_cc26xx_Alarm_Handle__label__S(inst, &lab)->iname;
 }
 
 /* handle */
-static inline ti_sysbios_family_arm_cc26xx_Alarm_Handle ti_sysbios_family_arm_cc26xx_Alarm_handle( ti_sysbios_family_arm_cc26xx_Alarm_Struct *str )
+static inline ti_sysbios_family_arm_cc26xx_Alarm_Handle ti_sysbios_family_arm_cc26xx_Alarm_handle(ti_sysbios_family_arm_cc26xx_Alarm_Struct *str);
+static inline ti_sysbios_family_arm_cc26xx_Alarm_Handle ti_sysbios_family_arm_cc26xx_Alarm_handle(ti_sysbios_family_arm_cc26xx_Alarm_Struct *str)
 {
     return (ti_sysbios_family_arm_cc26xx_Alarm_Handle)str;
 }
 
 /* struct */
-static inline ti_sysbios_family_arm_cc26xx_Alarm_Struct *ti_sysbios_family_arm_cc26xx_Alarm_struct( ti_sysbios_family_arm_cc26xx_Alarm_Handle inst )
+static inline ti_sysbios_family_arm_cc26xx_Alarm_Struct *ti_sysbios_family_arm_cc26xx_Alarm_struct(ti_sysbios_family_arm_cc26xx_Alarm_Handle inst);
+static inline ti_sysbios_family_arm_cc26xx_Alarm_Struct *ti_sysbios_family_arm_cc26xx_Alarm_struct(ti_sysbios_family_arm_cc26xx_Alarm_Handle inst)
 {
     return (ti_sysbios_family_arm_cc26xx_Alarm_Struct*)inst;
 }
@@ -482,6 +495,7 @@ struct ti_sysbios_family_arm_cc26xx_Alarm_Object {
 #ifndef ti_sysbios_family_arm_cc26xx_Alarm_Instance_State_clockObj__OR
 __extern __FAR__ const xdc_SizeT ti_sysbios_family_arm_cc26xx_Alarm_Instance_State_clockObj__O;
 #endif
+static inline ti_sysbios_knl_Clock_Handle ti_sysbios_family_arm_cc26xx_Alarm_Instance_State_clockObj(ti_sysbios_family_arm_cc26xx_Alarm_Object *obj);
 static inline ti_sysbios_knl_Clock_Handle ti_sysbios_family_arm_cc26xx_Alarm_Instance_State_clockObj(ti_sysbios_family_arm_cc26xx_Alarm_Object *obj)
 {
     return (ti_sysbios_knl_Clock_Handle)(((char*)obj) + ti_sysbios_family_arm_cc26xx_Alarm_Instance_State_clockObj__O);

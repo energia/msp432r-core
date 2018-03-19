@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Texas Instruments Incorporated
+ * Copyright (c) 2016-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -61,8 +61,9 @@
  *
  *  ADC_Params_init(&params);
  *  adc = ADC_open(Board_ADCCHANNEL_A0, &params);
- *  if (adc != NULL) {
- *      ADC_close(adc);
+ *  if (adc == NULL) {
+ *      // ADC_open() failed
+ *      while (1);
  *  }
  *  @endcode
  *
@@ -115,9 +116,15 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
-#include <stddef.h>
+#include <stdint.h>
+
+/**
+ *  @brief Define to support deprecated API ADC_convertRawToMicroVolts.
+ *
+ *  It is succeeded by the generic ADC_convertToMicroVolts.
+ */
+#define ADC_convertRawToMicroVolts ADC_convertToMicroVolts
 
 /**
  *  @defgroup ADC_CONTROL ADC_control command and status codes
@@ -241,10 +248,10 @@ typedef int_fast16_t (*ADC_ConvertFxn) (ADC_Handle handle, uint16_t *value);
 
 /*!
  *  @brief      A function pointer to a driver specific implementation of
- *              ADC_convertRawToMicroVolts().
+ *              ADC_convertToMicroVolts().
  */
-typedef uint32_t (*ADC_ConvertRawToMicroVolts) (ADC_Handle handle,
-    uint16_t rawAdcValue);
+typedef uint32_t (*ADC_ConvertToMicroVoltsFxn) (ADC_Handle handle,
+    uint16_t adcValue);
 
 /*!
  *  @brief      A function pointer to a driver specific implementation of
@@ -273,8 +280,8 @@ typedef struct ADC_FxnTable_ {
     /*! Function to initiate a ADC single channel conversion */
     ADC_ConvertFxn    convertFxn;
 
-    /*! Function to convert raw ADC result to microvolts */
-    ADC_ConvertRawToMicroVolts convertRawToMicroVolts;
+    /*! Function to convert ADC result to microvolts */
+    ADC_ConvertToMicroVoltsFxn convertToMicroVolts;
 
     /*! Function to initialize the given data object */
     ADC_InitFxn       initFxn;
@@ -358,21 +365,21 @@ extern int_fast16_t ADC_control(ADC_Handle handle, uint_fast16_t cmd,
 extern int_fast16_t ADC_convert(ADC_Handle handle, uint16_t *value);
 
 /*!
- *  @brief  Function performs conversion from raw ADC result to actual value in
+ *  @brief  Function performs conversion from ADC result to actual value in
  *          microvolts.
  *
  *  @pre    ADC_open() and ADC_convert() has to be called first.
  *
  *  @param  handle      A ADC handle returned from ADC_open()
  *
- *  @param  rawAdcValue A sampling result return from ADC_convert()
+ *  @param  adcValue A sampling result return from ADC_convert()
  *
  *  @return The actual sampling result in micro volts unit.
  *
  *  @sa     ADC_open()
  */
-extern uint32_t ADC_convertRawToMicroVolts(ADC_Handle handle,
-    uint16_t rawAdcValue);
+extern uint32_t ADC_convertToMicroVolts(ADC_Handle handle,
+    uint16_t adcValue);
 
 /*!
  *  @brief  Function to initializes the ADC driver

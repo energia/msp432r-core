@@ -49,11 +49,15 @@ var cc26xxPowerSrcList = [
 ];
 
 var cc26x2PowerSrcList = [
-   // "./PowerCC26XX_tirtos.c"
+   "./PowerCC26X2_tirtos.c"
 ];
 
 var cc32xxPowerSrcList = [
     "./PowerCC32XX_tirtos.c"
+];
+
+var msp432e4PowerSrcList = [
+    "./PowerMSP432E4_tirtos.c"
 ];
 
 var msp432PowerSrcList = [
@@ -71,12 +75,9 @@ var packageFiles = [
     "package.bld",
 ];
 
+
 /* Generate libraries for products which have been defined */
 if (deviceWareOpts.cc26xxware) {
-    var File = xdc.module("xdc.services.io.File");
-    var deviceFamilyList =
-        File.ls(deviceWareOpts.cc26xxware + "/source/ti/devices", "");
-
     /* optimize IAR object files for size (not speed) */
     var iarM3 = xdc.module('iar.targets.arm.M3');
     iarM3.profiles["release"].compileOpts.copts =
@@ -105,23 +106,29 @@ if (deviceWareOpts.cc26xxware) {
         tiM4F.profiles["release"].compileOpts.copts += " --opt_for_speed=0";
     }
 
-    for each (var deviceFamily in deviceFamilyList) {
-        var targets;
-        var sources;
+    var targets;
+    var sources;
 
-        if (deviceFamily.match("cc26x2")) {
-            /* agama M4F devices */
-            targets = libBuilder.m4fTargets;
-            sources = dplFiles.concat(cc26x2PowerSrcList);
-        }
-        else {
-            targets = libBuilder.m3Targets;
-            sources = dplFiles.concat(cc26xxPowerSrcList);
-        }
+    targets = libBuilder.m3Targets;
+    sources = dplFiles.concat(cc26xxPowerSrcList);
 
-        libBuilder.makeLibs("lib/dpl_" + deviceFamily, targets, sources,
-            " -DDEVICE_FAMILY=" + deviceFamily);
-    }
+    libBuilder.makeLibs("lib/dpl_cc13x0", targets, sources,
+        " -DDeviceFamily_CC13X0");
+
+    libBuilder.makeLibs("lib/dpl_cc26x0", targets, sources,
+        " -DDeviceFamily_CC26X0");
+
+    libBuilder.makeLibs("lib/dpl_cc26x0r2", targets, sources,
+        " -DDeviceFamily_CC26X0R2");
+
+    targets = libBuilder.m4fTargets;
+    sources = dplFiles.concat(cc26x2PowerSrcList);
+
+    libBuilder.makeLibs("lib/dpl_cc13x2", targets, sources,
+        " -DDeviceFamily_CC13X2");
+
+    libBuilder.makeLibs("lib/dpl_cc26x2", targets, sources,
+        " -DDeviceFamily_CC26X2");
 
     /* restore M4F profile options for subsequent users */
     iarM4F.profiles["release"].compileOpts.copts = iarM4FCopts;
@@ -130,26 +137,33 @@ if (deviceWareOpts.cc26xxware) {
 
 if (deviceWareOpts.cc32xxware) {
     var copts = " -DUSE_CC3220_ROM_DRV_API";
-    var File = xdc.module("xdc.services.io.File");
-    var deviceFamilyList =
-        File.ls(deviceWareOpts.cc32xxware + "/source/ti/devices", "");
 
-    for each (var deviceFamily in deviceFamilyList) {
-        libBuilder.makeLibs("lib/dpl_" + deviceFamily, libBuilder.m4Targets,
-            dplFiles.concat(cc32xxPowerSrcList), copts);
-    }
+    libBuilder.makeLibs("lib/dpl_cc32xx",
+        libBuilder.m4Targets, dplFiles.concat(cc32xxPowerSrcList), copts);
 }
 
 if (deviceWareOpts.msp432DriverLib) {
-    var copts = " -D__MSP432P401R__";
-    var File = xdc.module("xdc.services.io.File");
-    var deviceFamilyList =
-        File.ls(deviceWareOpts.msp432DriverLib + "/source/ti/devices", "");
+    /* Build library for backwards compatibility */
+    libBuilder.makeLibs("lib/dpl_msp432p4xx", libBuilder.m4fTargets,
+        dplFiles.concat(msp432PowerSrcList), " -DDeviceFamily_MSP432P401x");
 
-    for each (var deviceFamily in deviceFamilyList) {
-        libBuilder.makeLibs("lib/dpl_" + deviceFamily, libBuilder.m4fTargets,
-            dplFiles.concat(msp432PowerSrcList), copts);
-    }
+    /* Build library for MSP432P401x devices */
+    libBuilder.makeLibs("lib/dpl_msp432p401x", libBuilder.m4fTargets,
+        dplFiles.concat(msp432PowerSrcList), " -DDeviceFamily_MSP432P401x");
+
+    /* Build library for MSP432P4x1xI devices */
+    libBuilder.makeLibs("lib/dpl_msp432p4x1xi", libBuilder.m4fTargets,
+        dplFiles.concat(msp432PowerSrcList), " -DDeviceFamily_MSP432P4x1xI");
+
+    /* Build library for MSP432P4x1xT devices */
+    libBuilder.makeLibs("lib/dpl_msp432p4x1xt", libBuilder.m4fTargets,
+        dplFiles.concat(msp432PowerSrcList), " -DDeviceFamily_MSP432P4x1xT");
+}
+
+if (deviceWareOpts.msp432e4DriverLib) {
+    /* Build library for MSP432E4 devices */
+    libBuilder.makeLibs("lib/dpl_msp432e4", libBuilder.m4fTargets,
+        dplFiles.concat(msp432e4PowerSrcList), " -DDeviceFamily_MSP432E4");
 }
 
 /* Include source files in the release package */

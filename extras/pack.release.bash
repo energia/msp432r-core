@@ -28,7 +28,7 @@ THIS_SCRIPT_NAME=`basename $0`
 rm -f msp432r-$VERSION.tar.bz2
 
 cd ..
-gnutar --transform "s|$FOLDERNAME|$FOLDERNAME-$VERSION|g"  --exclude=extras/** --exclude=.git* --exclude=.idea -cjf msp432r-$VERSION.tar.bz2 $FOLDERNAME
+gtar --transform "s|$FOLDERNAME|$FOLDERNAME-$VERSION|g"  --exclude=extras/** --exclude=.git* --exclude=.idea -cjf msp432r-$VERSION.tar.bz2 $FOLDERNAME
 cd -
 
 mv ../msp432r-$VERSION.tar.bz2 .

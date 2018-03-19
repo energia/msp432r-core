@@ -27,12 +27,12 @@
     </makefiles>
     <targets>
         <target name="ti.targets.arm.elf.M4F"
-            version="ti.targets.arm.elf.M4F{1,0,16.9,1"
-            rawVersion="16.9.1"
+            version="ti.targets.arm.elf.M4F{1,0,16.9,4"
+            rawVersion="16.9.4"
             platform="ti.platforms.tiva:TM4C1294NCPDT:1"
             isa="v7M4"
             suffix="em4f"
-            rootDir="/db/vendors/ti/arm/16.9.1.LTS/Linux"
+            rootDir="/db/vendors/ti/arm/16.9.4.LTS/Linux"
             os="undefined"
             rts="ti.targets.arm.rtsarm">
             <model endian="little"
@@ -40,12 +40,12 @@
                 dataModel="undefined"/>
         </target>
         <target name="gnu.targets.arm.M4F"
-            version="gnu.targets.arm.M4F{1,0,4.9,3"
-            rawVersion="4.9.3"
+            version="gnu.targets.arm.M4F{1,0,6.3,1"
+            rawVersion="6.3.1"
             platform="ti.platforms.tiva:TM4C1294NCPDT"
             isa="v7M4"
             suffix="m4fg"
-            rootDir="/db/vendors/linaro/gcc-arm-none-eabi-4_9-2015q3"
+            rootDir="/db/vendors/linaro/gcc-arm-none-eabi-6-2017-q1-update"
             os="undefined"
             rts="gnu.targets.arm.rtsv7M">
             <model endian="little"
@@ -53,12 +53,12 @@
                 dataModel="undefined"/>
         </target>
         <target name="iar.targets.arm.M4F"
-            version="iar.targets.arm.M4F{1,0,7.80,1"
-            rawVersion="7.80.1.28"
+            version="iar.targets.arm.M4F{1,0,8.11,1"
+            rawVersion="8.11.1.47"
             platform="ti.platforms.tiva:TM4C1294NCPDT:1"
             isa="v7M4"
             suffix="rm4f"
-            rootDir="/db/vendors/iar/arm/7.80.1/Linux"
+            rootDir="/db/vendors/iar/arm/8.11.1.47/Linux"
             os="undefined"
             rts="iar.targets.arm.rts">
             <model endian="little"

@@ -93,31 +93,51 @@
 </tr>
 <tr class="odd">
 <td align="left"><code>Board_I2C0</code></td>
-<td align="left">P1.6, P1.7 (Some I2C examples require Booster packs)</td>
+<td align="left">P1.6 - <code>SDA</code>, P1.7 - <code>SCL</code> (Some I2C examples require Booster packs)</td>
 </tr>
 <tr class="even">
 <td align="left"><code>Board_I2CSLAVE0</code></td>
-<td align="left">P1.6, P1.7</td>
+<td align="left">P1.6 - <code>SDA</code>, P1.7 - <code>SCL</code></td>
 </tr>
 <tr class="odd">
+<td align="left"><code>Board_I2C_TMP</code></td>
+<td align="left">P6.4 - <code>SDA</code>, P6.5 - <code>SCL</code></td>
+</tr>
+<tr class="even">
 <td align="left"><code>Board_PWM0</code></td>
 <td align="left">P2.1 (Green P2.1 must be jumpered)</td>
 </tr>
-<tr class="even">
+<tr class="odd">
 <td align="left"><code>Board_PWM1</code></td>
 <td align="left">P2.2 (Blue P2.2 must be jumpered)</td>
 </tr>
-<tr class="odd">
+<tr class="even">
 <td align="left"><code>Board_SPI0</code></td>
-<td align="left">P1.5, P1.6, P1.7, P1.4</td>
+<td align="left">P1.5 - <code>CLK</code>, P1.6 - <code>MOSI</code>, P1.7 - <code>MISO</code>, P1.4 - <code>STE</code></td>
+</tr>
+<tr class="odd">
+<td align="left"><code>Board_SPI1</code></td>
+<td align="left">P3.5 - <code>CLK</code>, P3.6 - <code>MOSI</code>, P3.7 - <code>MISO</code>, P3.4 - <code>STE</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>Board_SPI1</code></td>
-<td align="left">P3.5, P3.6, P3.7, P3.4</td>
+<td align="left"><code>Board_SPI2</code></td>
+<td align="left">P2.5 - <code>CLK</code>, P2.6 - <code>MOSI</code>, P2.7 - <code>MISO</code>, P2.3 - <code>STE</code></td>
 </tr>
 <tr class="odd">
+<td align="left"><code>Board_SPI3</code></td>
+<td align="left">P3.5 - <code>CLK</code>, P3.6 - <code>MOSI</code>, P3.7 - <code>MISO</code>, P2.4 - <code>STE</code></td>
+</tr>
+<tr class="even">
+<td align="left"><code>Board_SPI_CS1</code></td>
+<td align="left">P5.4</td>
+</tr>
+<tr class="odd">
+<td align="left"><code>Board_SPI_CS2</code></td>
+<td align="left">P5.5</td>
+</tr>
+<tr class="even">
 <td align="left"><code>Board_UART0</code></td>
-<td align="left">P1.2, P1.3 UART provided through emulation (<strong>RXD &lt;&lt;</strong> and <strong>TXD &gt;&gt;</strong> must be jumpered)</td>
+<td align="left">P1.2 - <code>RX</code>, P1.3 - <code>TX</code> (UART provided through emulation, <strong>RXD &lt;&lt;</strong> and <strong>TXD &gt;&gt;</strong> must be jumpered)</td>
 </tr>
 </tbody>
 </table>
@@ -153,125 +173,13 @@
 </tr>
 </tbody>
 </table>
-<h2 id="adc-examples-pin-connections">ADC examples pin connections</h2>
-<p>The ADC examples sample input from the A0 and A1 pins. These pins should be connected to the analog input. For quick testing, the A0 pin can be connected to 3V3 and A1 to ground.</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">ADC Pin (Function)</th>
-<th align="left"></th>
-<th align="left">Analog input</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">P5.5 (A0)</td>
-<td align="left">–&gt;</td>
-<td align="left">3V3</td>
-</tr>
-<tr class="even">
-<td align="left">P5.4 (A1)</td>
-<td align="left">–&gt;</td>
-<td align="left">GND</td>
-</tr>
-</tbody>
-</table>
-<h2 id="i2c-masterslave-example-pin-connections">I2C Master/Slave example pin connections</h2>
-<p>The I2C master and slave examples require two MSP432 boards, one running the master example and the other running the slave example. These should be connected as follows:</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Master Pin (Function)</th>
-<th align="left"></th>
-<th align="left">Slave Pin (Function)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">P1.6 (EUSCI_B0_SIMO)</td>
-<td align="left">–&gt;</td>
-<td align="left">P1.6 (EUSCI_B0_SIMO)</td>
-</tr>
-<tr class="even">
-<td align="left">P1.7 (EUSCI_B0_SOMI)</td>
-<td align="left">–&gt;</td>
-<td align="left">P1.7 (EUSCI_B0_SOMI)</td>
-</tr>
-<tr class="odd">
-<td align="left">GND</td>
-<td align="left">–&gt;</td>
-<td align="left">GND</td>
-</tr>
-</tbody>
-</table>
-<h2 id="spi-loopback-example-pin-connections">SPI Loopback example pin connections</h2>
-<p>When wiring for SPI loopback, pins on a single board are wired to other pins on the same board.</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Master Pin (Function)</th>
-<th align="left"></th>
-<th align="left">Slave Pin (Function)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">P1.5 (EUSCI_B0_CLK)</td>
-<td align="left">–&gt;</td>
-<td align="left">P3.5 (EUSCI_B1_CLK)</td>
-</tr>
-<tr class="even">
-<td align="left">P1.6 (EUSCI_B0_SIMO)</td>
-<td align="left">–&gt;</td>
-<td align="left">P3.6 (EUSCI_B1_SIMO)</td>
-</tr>
-<tr class="odd">
-<td align="left">P1.7 (EUSCI_B0_SOMI)</td>
-<td align="left">–&gt;</td>
-<td align="left">P3.7 (EUSCI_B1_SOMI)</td>
-</tr>
-</tbody>
-</table>
-<h2 id="spi-loopback-4-wire-example-pin-connections">SPI Loopback 4 wire example pin connections</h2>
-<p>When wiring for SPI loopback 4 wire example, pins on a single board are wired to other pins on the same board.</p>
-<table>
-<thead>
-<tr class="header">
-<th align="left">Master Pin (Function)</th>
-<th align="left"></th>
-<th align="left">Slave Pin (Function)</th>
-</tr>
-</thead>
-<tbody>
-<tr class="odd">
-<td align="left">P2.5 (EUSCI_A1_CLK)</td>
-<td align="left">–&gt;</td>
-<td align="left">P3.5 (EUSCI_B2_CLK)</td>
-</tr>
-<tr class="even">
-<td align="left">P2.6 (EUSCI_A1_SIMO)</td>
-<td align="left">–&gt;</td>
-<td align="left">P3.6 (EUSCI_B2_SIMO)</td>
-</tr>
-<tr class="odd">
-<td align="left">P2.7 (EUSCI_A1_SOMI)</td>
-<td align="left">–&gt;</td>
-<td align="left">P3.7 (EUSCI_B2_SOMI)</td>
-</tr>
-<tr class="even">
-<td align="left">P2.3 (EUSCI_A1_STE)</td>
-<td align="left">–&gt;</td>
-<td align="left">P2.4 (EUSCI_B2_STE)</td>
-</tr>
-</tbody>
-</table>
 <h2 id="peripherals-used">Peripherals Used</h2>
 <p>The following list shows which MSP_EXP432P401R peripherals are used by driver and kernel applications. Driver examples control which peripherals (and which ports) are used.</p>
 <ul>
 <li><strong>TI-RTOS Kernel (SYS/BIOS).</strong> Uses the first general-purpose timer available and that timer’s associated interrupts. Generally, this will be Timer_A0. The TI-RTOS Kernel manages the interrupt controller statically without an interrupt dispatcher.</li>
 <li><strong>Drivers.</strong>
 <ul>
-<li><strong>I<sup>2</sup>C:</strong> The I<sup>2</sup>C driver is configured on EUSCI_B0 to support various BoosterPacks.</li>
+<li><strong>I<sup>2</sup>C:</strong> The I<sup>2</sup>C driver is configured on EUSCI_B0 and EUSCI_B1 to support various BoosterPacks.</li>
 <li><strong>PWM:</strong> The PWM driver uses the onboard RGB LED (G:P2.1 and B:P2.2). These pins are configured for the PWM driver. While these pins can also be used by the GPIO driver, your application’s board file must ensure that the pins are not simultaneously used by the GPIO and PWM drivers.</li>
 <li><strong>SD Card:</strong> Uses FatFs and the SDSPI driver on EUSCI_B0 without interrupts to read and write to files.</li>
 <li><strong>SPI:</strong> The SPI driver is configured to use EUSCI_B0 and EUSCI_B1 for SPI communications.</li>

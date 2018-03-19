@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,15 +30,16 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*
- *  ======== MSP_EXP432P401R.cmd ========
+ *  ======== MSP_EXP432P401R_FREERTOS.lds ========
  *  Define the memory block start/length for the MSP_EXP432P401R M4
  */
+
+STACKSIZE = 0x1000;
 
 MEMORY
 {
     MAIN_FLASH (RX) : ORIGIN = 0x00000000, LENGTH = 0x00040000
     INFO_FLASH (RX) : ORIGIN = 0x00200000, LENGTH = 0x00004000
-    SRAM_CODE  (RWX): ORIGIN = 0x01000000, LENGTH = 0x00010000
     SRAM_DATA  (RW) : ORIGIN = 0x20000000, LENGTH = 0x00010000
 }
 
@@ -108,6 +109,10 @@ SECTIONS {
         __data_end__ = .;
     } > REGION_DATA AT> REGION_TEXT
 
+    .nvs (NOLOAD) : ALIGN(0x1000) {
+        *(.nvs)
+    } > REGION_TEXT
+
     .bss : {
         __bss_start__ = .;
         *(.shbss)
@@ -132,6 +137,9 @@ SECTIONS {
         _stack = .;
         __stack = .;
         KEEP(*(.stack))
+        . += STACKSIZE;
+        _stack_end = .;
+        __stack_end = .;
     } > REGION_STACK AT> REGION_STACK
 }
 

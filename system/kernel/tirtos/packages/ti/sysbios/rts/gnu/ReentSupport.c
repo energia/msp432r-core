@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -93,6 +93,14 @@ Int ReentSupport_Module_startup (Int phase)
  */
 
 /*
+ *  ======== ReentSupport_initGlobalReent ========
+ */
+Void ReentSupport_initGlobalReent()
+{
+    _REENT_SMALL_CHECK_INIT(_GLOBAL_REENT);
+}
+
+/*
  *  ======== ReentSupport_taskRegHook ========
  *  The Task register hook is called once per hookset, before main and before
  *  any Task initialization has been done. 
@@ -163,6 +171,7 @@ Ptr ReentSupport_getReent()
                             0, NULL);
 
         _REENT_INIT_PTR(pCurTaskEnv);
+        _REENT_SMALL_CHECK_INIT(pCurTaskEnv);
 
         Task_setHookContext(task, ReentSupport_module->taskHId, pCurTaskEnv);
     }

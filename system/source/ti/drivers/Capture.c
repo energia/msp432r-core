@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Texas Instruments Incorporated
+ * Copyright (c) 2016-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,8 +30,8 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 #include <stdbool.h>
-#include <stddef.h>
 #include <stdint.h>
+#include <stdlib.h>
 
 #include <ti/drivers/Capture.h>
 #include <ti/drivers/dpl/HwiP.h>
@@ -39,10 +39,11 @@
 extern const Capture_Config Capture_config[];
 extern const uint_least8_t Capture_count;
 
-static const Capture_Params defaultCaptureParams = {
+/* Default Parameters */
+static const Capture_Params defaultParams = {
     .callbackFxn = NULL,
-    .mode = CAPTURE_MODE_RISING_RISING,
-    .periodUnit = CAPTURE_PERIOD_COUNTS
+    .mode        = Capture_RISING_EDGE,
+    .periodUnit  = Capture_PERIOD_COUNTS
 };
 
 static bool isInitialized = false;
@@ -59,9 +60,9 @@ void Capture_close(Capture_Handle handle)
  *  ======== Capture_control ========
  */
 int_fast16_t Capture_control(Capture_Handle handle, uint_fast16_t cmd,
-        void *arg)
+    void *arg)
 {
-    return handle->fxnTablePtr->controlFxn(handle, cmd, arg);
+    return (handle->fxnTablePtr->controlFxn(handle, cmd, arg));
 }
 
 /*
@@ -97,7 +98,7 @@ Capture_Handle Capture_open(uint_least8_t index, Capture_Params *params)
     if (isInitialized && (index < Capture_count)) {
         /* If parameters are NULL use defaults */
         if (params == NULL) {
-            params = (Capture_Params *) &defaultCaptureParams;
+            params = (Capture_Params *) &defaultParams;
         }
 
         /* Get handle for this driver instance */
@@ -113,15 +114,15 @@ Capture_Handle Capture_open(uint_least8_t index, Capture_Params *params)
  */
 void Capture_Params_init(Capture_Params *params)
 {
-    *params = defaultCaptureParams;
+    *params = defaultParams;
 }
 
 /*
  *  ======== Capture_start ========
  */
-void Capture_start(Capture_Handle handle)
+int32_t Capture_start(Capture_Handle handle)
 {
-    handle->fxnTablePtr->startFxn(handle);
+    return (handle->fxnTablePtr->startFxn(handle));
 }
 
 /*

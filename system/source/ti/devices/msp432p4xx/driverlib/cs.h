@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -157,20 +152,6 @@ extern "C"
 
 #define CS_OVER32MHZ    0x01
 #define CS_UNDER32MHZ   0x02
-
-/* Accounting for cross peripheral calls with predefines */
-#ifndef __MCU_HAS_SYSCTL_A__
-
-#define SysCtl_A_getNMISourceStatus SysCtl_getNMISourceStatus
-#define SysCtl_A_disableNMISource SysCtl_disableNMISource
-#define SysCtl_A_getNMISourceStatus SysCtl_getNMISourceStatus
-#define SysCtl_A_enableNMISource SysCtl_enableNMISource
-#define SysCtl_A_getTLVInfo SysCtl_getTLVInfo
-#define SYSCTL_A_CS_SRC SYSCTL_CS_SRC
-#define SysCtl_A_CSCalTLV_Info SysCtl_CSCalTLV_Info
-
-#endif
-
 
 //******************************************************************************
 //

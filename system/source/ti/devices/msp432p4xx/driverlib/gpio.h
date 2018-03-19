@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -707,8 +702,7 @@ extern void GPIO_disableInterrupt(uint_fast8_t selectedPort,
 //
 //! \brief This function gets the interrupt status of the selected pin
 //!
-//! This function gets the interrupt status of the selected pin. Note that only
-//! Port 1,2, A have this capability.
+//! This function gets the interrupt status of the selected pin.
 //!
 //! \param selectedPort is the selected port.
 //!        Valid values are:
@@ -762,8 +756,7 @@ extern uint_fast16_t GPIO_getInterruptStatus(uint_fast8_t selectedPort,
 //
 //! \brief This function clears the interrupt flag on the selected pin
 //!
-//! This function clears the interrupt flag on the selected pin. Note that only
-//! Port 1,2,A have this capability.
+//! This function clears the interrupt flag on the selected pin.
 //!
 //! \param selectedPort is the selected port.
 //!        Valid values are:

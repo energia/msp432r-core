@@ -2,20 +2,20 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     VIRTUAL FUNCTIONS
  *     FUNCTION STUBS
  *     FUNCTION SELECTORS
  *     CONVERTORS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -70,8 +70,8 @@ struct ti_sysbios_interfaces_ITimestamp_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
     xdc_Bits32 (*get32)(void);
-    xdc_Void (*get64)(xdc_runtime_Types_Timestamp64*);
-    xdc_Void (*getFreq)(xdc_runtime_Types_FreqHz*);
+    xdc_Void (*get64)(xdc_runtime_Types_Timestamp64* result);
+    xdc_Void (*getFreq)(xdc_runtime_Types_FreqHz* freq);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_interfaces_ITimestamp_Module__BASE__CR
@@ -88,7 +88,8 @@ __extern const xdc_runtime_Types_Base ti_sysbios_interfaces_ITimestamp_Interface
  */
 
 /* Module_id */
-static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ITimestamp_Module_id( ti_sysbios_interfaces_ITimestamp_Module mod )
+static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ITimestamp_Module_id(ti_sysbios_interfaces_ITimestamp_Module mod);
+static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ITimestamp_Module_id(ti_sysbios_interfaces_ITimestamp_Module mod)
 {
     return mod->__sysp->__mid;
 }
@@ -107,21 +108,24 @@ static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ITimestamp_Module
 
 /* get32_{FxnT,fxnP} */
 typedef xdc_Bits32 (*ti_sysbios_interfaces_ITimestamp_get32_FxnT)(void);
-static inline ti_sysbios_interfaces_ITimestamp_get32_FxnT ti_sysbios_interfaces_ITimestamp_get32_fxnP( ti_sysbios_interfaces_ITimestamp_Module __mod )
+static inline ti_sysbios_interfaces_ITimestamp_get32_FxnT ti_sysbios_interfaces_ITimestamp_get32_fxnP(ti_sysbios_interfaces_ITimestamp_Module __mod);
+static inline ti_sysbios_interfaces_ITimestamp_get32_FxnT ti_sysbios_interfaces_ITimestamp_get32_fxnP(ti_sysbios_interfaces_ITimestamp_Module __mod)
 {
     return (ti_sysbios_interfaces_ITimestamp_get32_FxnT)__mod->get32;
 }
 
 /* get64_{FxnT,fxnP} */
-typedef xdc_Void (*ti_sysbios_interfaces_ITimestamp_get64_FxnT)(xdc_runtime_Types_Timestamp64*);
-static inline ti_sysbios_interfaces_ITimestamp_get64_FxnT ti_sysbios_interfaces_ITimestamp_get64_fxnP( ti_sysbios_interfaces_ITimestamp_Module __mod )
+typedef xdc_Void (*ti_sysbios_interfaces_ITimestamp_get64_FxnT)(xdc_runtime_Types_Timestamp64* result);
+static inline ti_sysbios_interfaces_ITimestamp_get64_FxnT ti_sysbios_interfaces_ITimestamp_get64_fxnP(ti_sysbios_interfaces_ITimestamp_Module __mod);
+static inline ti_sysbios_interfaces_ITimestamp_get64_FxnT ti_sysbios_interfaces_ITimestamp_get64_fxnP(ti_sysbios_interfaces_ITimestamp_Module __mod)
 {
     return (ti_sysbios_interfaces_ITimestamp_get64_FxnT)__mod->get64;
 }
 
 /* getFreq_{FxnT,fxnP} */
-typedef xdc_Void (*ti_sysbios_interfaces_ITimestamp_getFreq_FxnT)(xdc_runtime_Types_FreqHz*);
-static inline ti_sysbios_interfaces_ITimestamp_getFreq_FxnT ti_sysbios_interfaces_ITimestamp_getFreq_fxnP( ti_sysbios_interfaces_ITimestamp_Module __mod )
+typedef xdc_Void (*ti_sysbios_interfaces_ITimestamp_getFreq_FxnT)(xdc_runtime_Types_FreqHz* freq);
+static inline ti_sysbios_interfaces_ITimestamp_getFreq_FxnT ti_sysbios_interfaces_ITimestamp_getFreq_fxnP(ti_sysbios_interfaces_ITimestamp_Module __mod);
+static inline ti_sysbios_interfaces_ITimestamp_getFreq_FxnT ti_sysbios_interfaces_ITimestamp_getFreq_fxnP(ti_sysbios_interfaces_ITimestamp_Module __mod)
 {
     return (ti_sysbios_interfaces_ITimestamp_getFreq_FxnT)__mod->getFreq;
 }
@@ -132,7 +136,8 @@ static inline ti_sysbios_interfaces_ITimestamp_getFreq_FxnT ti_sysbios_interface
  */
 
 /* Module_upCast */
-static inline xdc_runtime_ITimestampProvider_Module ti_sysbios_interfaces_ITimestamp_Module_upCast( ti_sysbios_interfaces_ITimestamp_Module m )
+static inline xdc_runtime_ITimestampProvider_Module ti_sysbios_interfaces_ITimestamp_Module_upCast(ti_sysbios_interfaces_ITimestamp_Module m);
+static inline xdc_runtime_ITimestampProvider_Module ti_sysbios_interfaces_ITimestamp_Module_upCast(ti_sysbios_interfaces_ITimestamp_Module m)
 {
     return(xdc_runtime_ITimestampProvider_Module)m;
 }
@@ -141,21 +146,24 @@ static inline xdc_runtime_ITimestampProvider_Module ti_sysbios_interfaces_ITimes
 #define ti_sysbios_interfaces_ITimestamp_Module_to_xdc_runtime_ITimestampProvider ti_sysbios_interfaces_ITimestamp_Module_upCast
 
 /* Module_downCast */
-static inline ti_sysbios_interfaces_ITimestamp_Module ti_sysbios_interfaces_ITimestamp_Module_downCast( xdc_runtime_ITimestampProvider_Module m )
+static inline ti_sysbios_interfaces_ITimestamp_Module ti_sysbios_interfaces_ITimestamp_Module_downCast(xdc_runtime_ITimestampProvider_Module m);
+static inline ti_sysbios_interfaces_ITimestamp_Module ti_sysbios_interfaces_ITimestamp_Module_downCast(xdc_runtime_ITimestampProvider_Module m)
 {
     const xdc_runtime_Types_Base* b;
     for (b = m->__base; b; b = b->base) {
         if (b == &ti_sysbios_interfaces_ITimestamp_Interface__BASE__C) {
             return (ti_sysbios_interfaces_ITimestamp_Module)m;
         }
-    } return 0;
+    }
+    return 0;
 }
 
 /* Module_from_xdc_runtime_ITimestampProvider */
 #define ti_sysbios_interfaces_ITimestamp_Module_from_xdc_runtime_ITimestampProvider ti_sysbios_interfaces_ITimestamp_Module_downCast
 
 /* Module_upCast2 */
-static inline xdc_runtime_ITimestampClient_Module ti_sysbios_interfaces_ITimestamp_Module_upCast2( ti_sysbios_interfaces_ITimestamp_Module m )
+static inline xdc_runtime_ITimestampClient_Module ti_sysbios_interfaces_ITimestamp_Module_upCast2(ti_sysbios_interfaces_ITimestamp_Module m);
+static inline xdc_runtime_ITimestampClient_Module ti_sysbios_interfaces_ITimestamp_Module_upCast2(ti_sysbios_interfaces_ITimestamp_Module m)
 {
     return(xdc_runtime_ITimestampClient_Module)m;
 }
@@ -164,14 +172,16 @@ static inline xdc_runtime_ITimestampClient_Module ti_sysbios_interfaces_ITimesta
 #define ti_sysbios_interfaces_ITimestamp_Module_to_xdc_runtime_ITimestampClient ti_sysbios_interfaces_ITimestamp_Module_upCast2
 
 /* Module_downCast2 */
-static inline ti_sysbios_interfaces_ITimestamp_Module ti_sysbios_interfaces_ITimestamp_Module_downCast2( xdc_runtime_ITimestampClient_Module m )
+static inline ti_sysbios_interfaces_ITimestamp_Module ti_sysbios_interfaces_ITimestamp_Module_downCast2(xdc_runtime_ITimestampClient_Module m);
+static inline ti_sysbios_interfaces_ITimestamp_Module ti_sysbios_interfaces_ITimestamp_Module_downCast2(xdc_runtime_ITimestampClient_Module m)
 {
     const xdc_runtime_Types_Base* b;
     for (b = m->__base; b; b = b->base) {
         if (b == &ti_sysbios_interfaces_ITimestamp_Interface__BASE__C) {
             return (ti_sysbios_interfaces_ITimestamp_Module)m;
         }
-    } return 0;
+    }
+    return 0;
 }
 
 /* Module_from_xdc_runtime_ITimestampClient */

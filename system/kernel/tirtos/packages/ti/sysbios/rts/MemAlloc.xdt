@@ -1,6 +1,6 @@
 %%{
 /*
- * Copyright (c) 2015, Texas Instruments Incorporated
+ * Copyright (c) 2015-2016, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -106,9 +106,9 @@ typedef union Header {
 
 %if (genStubFunctions == false) {
 /*
- *  ======== malloc ========
+ *  ======== ti_sysbios_rts_gnu_MemAlloc_alloc ========
  */
-Void ATTRIBUTE *malloc(SizeT size)
+static Void *ti_sysbios_rts_gnu_MemAlloc_alloc(SizeT size)
 {
     Header *packet;
     xdc_runtime_Error_Block eb;
@@ -130,6 +130,14 @@ Void ATTRIBUTE *malloc(SizeT size)
     packet->header.size = size + sizeof(Header);
 
     return (packet + 1);
+}
+
+/*
+ *  ======== malloc ========
+ */
+Void ATTRIBUTE *malloc(SizeT size)
+{
+    return (ti_sysbios_rts_gnu_MemAlloc_alloc(size));
 }
 
 /*
@@ -188,7 +196,7 @@ Void ATTRIBUTE *calloc(SizeT nmemb, SizeT size)
         return (NULL);
     }
 
-    retval = malloc(nbytes);
+    retval = ti_sysbios_rts_gnu_MemAlloc_alloc(nbytes);
     if (retval != NULL) {
         (Void)memset(retval, (Int)'\0', nbytes);
     }

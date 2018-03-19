@@ -1,11 +1,11 @@
 /**************************************************************************//**
  * @file     cmsis_compiler.h
- * @brief    CMSIS compiler specific macros, functions, instructions
- * @version  V5.00
- * @date     09. November 2016
+ * @brief    CMSIS compiler generic header file
+ * @version  V5.0.1
+ * @date     30. January 2017
  ******************************************************************************/
 /*
- * Copyright (c) 2009-2016 ARM Limited. All rights reserved.
+ * Copyright (c) 2009-2017 ARM Limited. All rights reserved.
  *
  * SPDX-License-Identifier: Apache-2.0
  *
@@ -13,7 +13,7 @@
  * not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- * http://www.apache.org/licenses/LICENSE-2.0
+ * www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an AS IS BASIS, WITHOUT
@@ -85,6 +85,9 @@
   #ifndef   __PACKED
     #define __PACKED                  __packed
   #endif
+  #ifndef   __PACKED_STRUCT
+    #define __PACKED_STRUCT           __packed struct
+  #endif
 
 
 /*
@@ -96,11 +99,9 @@
   #ifndef   __ASM
     #define __ASM                     __asm
   #endif
-  /* For now this section is removed as it causes an invalid redefine
   #ifndef   __INLINE
     #define __INLINE                  inline
   #endif
-  */
   #ifndef   __STATIC_INLINE
     #define __STATIC_INLINE           static inline
   #endif
@@ -122,6 +123,9 @@
   #endif
   #ifndef   __PACKED
     #define __PACKED                  __attribute__((packed))
+  #endif
+  #ifndef   __PACKED_STRUCT
+    #define __PACKED_STRUCT           struct __attribute__((packed))
   #endif
 
 
@@ -163,6 +167,9 @@
   #ifndef   __PACKED
     #define __PACKED                  __packed__
   #endif
+  #ifndef   __PACKED_STRUCT
+    #define __PACKED_STRUCT           struct __packed__
+  #endif
 
 
 /*
@@ -201,6 +208,9 @@
   #endif
   #ifndef   __PACKED
     #define __PACKED                  @packed
+  #endif
+  #ifndef   __PACKED_STRUCT
+    #define __PACKED_STRUCT           @packed struct
   #endif
 
 

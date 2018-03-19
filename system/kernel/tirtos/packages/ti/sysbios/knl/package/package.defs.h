@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 #ifndef ti_sysbios_knl__
@@ -86,6 +86,7 @@ typedef ti_sysbios_knl_Semaphore_Object* ti_sysbios_knl_Semaphore_Instance;
  */
 
 typedef struct ti_sysbios_knl_Swi_HookSet ti_sysbios_knl_Swi_HookSet;
+typedef struct ti_sysbios_knl_Swi_Struct2__ ti_sysbios_knl_Swi_Struct2__;
 typedef struct ti_sysbios_knl_Swi_Module_State ti_sysbios_knl_Swi_Module_State;
 typedef struct ti_sysbios_knl_Swi_Params ti_sysbios_knl_Swi_Params;
 typedef struct ti_sysbios_knl_Swi_Object ti_sysbios_knl_Swi_Object;

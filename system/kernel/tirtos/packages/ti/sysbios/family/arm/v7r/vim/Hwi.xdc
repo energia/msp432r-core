@@ -477,10 +477,10 @@ module Hwi inherits ti.sysbios.interfaces.IHwi
 
     /*!
      *  ======== errataInitESM ========
-     *  Clear ESM errors for AR1xxx devices. Default is true for AR1xxx devices.
+     *  Clear ESM errors for AWR1xxx/IWR1xxx devices. Default is true.
      *
      *  Errata brief description:
-     *  Cortex-R4 on AR14xx devices generates a VIM RAM compare error
+     *  Cortex-R4 on AWR1xxx/IWR1xxx devices generates a VIM RAM compare error
      *  during startup due to a ROM code bug. This error needs to be cleared
      *  before SYS/BIOS is started and interrupts are enabled.
      */
@@ -488,7 +488,7 @@ module Hwi inherits ti.sysbios.interfaces.IHwi
 
     /*!
      *  ======== resetVIM ========
-     *  Reset VIM hardware. Default is true for AR1xxx devices.
+     *  Reset VIM hardware. Default is true for AWR1xxx/IWR1xxx devices.
      *
      *  This feature is available only on certain devices.
      */

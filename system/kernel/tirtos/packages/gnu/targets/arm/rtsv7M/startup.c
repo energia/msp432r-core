@@ -24,6 +24,7 @@ extern unsigned int __data_load__, __data_start__, __data_end__;
 extern void (*__init_array_start []) (void);
 extern void (*__init_array_end []) (void);
 
+extern int main();
 extern void _exit(int code);
 extern void xdc_runtime_System_exit__E(int code);
 volatile unsigned gnu_targets_arm_rtsv7M_exit = 0;
@@ -93,7 +94,7 @@ void _fini(void) {
 
 
 /*
- *  @(#) gnu.targets.arm.rtsv7M; 1, 0, 0,0; 2-10-2017 09:25:27; /db/ztree/library/trees/xdctargets/xdctargets-m11/src/ xlibrary
+ *  @(#) gnu.targets.arm.rtsv7M; 1, 0, 0,0; 7-27-2017 12:28:39; /db/ztree/library/trees/xdctargets/xdctargets-o04/src/ xlibrary
 
  */
 

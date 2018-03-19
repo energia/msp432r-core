@@ -6,16 +6,16 @@ __STACK_SIZE = 0x400;
 __TI_STACK_SIZE = __STACK_SIZE;
 
 INPUT(
-    /db/ztree/library/trees/emt/emt-d09/src/bundles/energia/msp432/configPkg/package/cfg/energia_pm4fg.om4fg
-    /db/ztree/library/trees/emt/emt-d09/src/ti/runtime/wiring/msp432/lib/wiring_msp432.m4fg.lib
+    /db/ztree/library/trees/emt/emt-e06/src/bundles/energia/msp432/configPkg/package/cfg/energia_pm4fg.om4fg
+    /db/ztree/library/trees/emt/emt-e06/src/ti/runtime/wiring/msp432/lib/wiring_msp432.m4fg.lib
     lib/board.m4fg.lib
-    /db/vendors/ti/msp432_sdk/simplelink_msp432_sdk_1_30_00_40/source/ti/drivers/lib/drivers_msp432p4xx.am4fg
-    /db/vendors/ti/msp432_sdk/simplelink_msp432_sdk_1_30_00_40/kernel/tirtos/packages/ti/dpl/lib/dpl_msp432p4xx.am4fg
-    /db/ztree/library/trees/emt/emt-d09/src/bundles/energia/msp432/src/sysbios/sysbios.am4fg
-    /db/vendors/ti/msp432_sdk/simplelink_msp432_sdk_1_30_00_40/source/third_party/fatfs/lib/fatfs.am4fg
-    /db/vendors/ti/msp432_sdk/simplelink_msp432_sdk_1_30_00_40/kernel/tirtos/packages/gnu/targets/arm/rtsv7M/lib/gnu.targets.arm.rtsv7M.am4fg
-    /db/vendors/ti/msp432_sdk/simplelink_msp432_sdk_1_30_00_40/kernel/tirtos/packages/gnu/targets/arm/rtsv7M/lib/boot.am4fg
-    /db/vendors/ti/msp432_sdk/simplelink_msp432_sdk_1_30_00_40/kernel/tirtos/packages/gnu/targets/arm/rtsv7M/lib/syscalls.am4fg
+    /db/vendors/ti/msp432_sdk/simplelink_msp432p4_sdk_1_50_00_06/source/ti/drivers/lib/drivers_msp432p401x.am4fg
+    /db/vendors/ti/msp432_sdk/simplelink_msp432p4_sdk_1_50_00_06/kernel/tirtos/packages/ti/dpl/lib/dpl_msp432p401x.am4fg
+    /db/ztree/library/trees/emt/emt-e06/src/bundles/energia/msp432/src/sysbios/sysbios.am4fg
+    /db/vendors/ti/msp432_sdk/simplelink_msp432p4_sdk_1_50_00_06/source/third_party/fatfs/lib/fatfs.am4fg
+    /db/vendors/ti/msp432_sdk/simplelink_msp432p4_sdk_1_50_00_06/kernel/tirtos/packages/gnu/targets/arm/rtsv7M/lib/gnu.targets.arm.rtsv7M.am4fg
+    /db/vendors/ti/msp432_sdk/simplelink_msp432p4_sdk_1_50_00_06/kernel/tirtos/packages/gnu/targets/arm/rtsv7M/lib/boot.am4fg
+    /db/vendors/ti/msp432_sdk/simplelink_msp432p4_sdk_1_50_00_06/kernel/tirtos/packages/gnu/targets/arm/rtsv7M/lib/syscalls.am4fg
 )
 
 /*
@@ -24,7 +24,7 @@ INPUT(
 xdc_runtime_Startup__EXECFXN__C = 1;
 xdc_runtime_Startup__RESETFXN__C = 1;
 
-INCLUDE "/db/ztree/library/trees/emt/emt-d09/src/ti/platforms/emt432//include_gnu/MSP432P401R.lds"
+INCLUDE "/db/ztree/library/trees/emt/emt-e06/src/ti/platforms/emt432//include_gnu/MSP432P401R.lds"
 
 SECTIONS {
         .bootVecs (DSECT) : {*(.bootVecs)} 
@@ -65,6 +65,9 @@ SECTIONS {
     __UNUSED_FLASH_start__ = ADDR(.emptyFlash);
     __UNUSED_FLASH_end__   = ORIGIN(FLASH) + LENGTH(FLASH);
     __FLASH_LENGTH__       = LENGTH(FLASH);
+
+    __NVS_BASE__           = (__UNUSED_FLASH_start__ + 0x1000) & 0xfffff000;
+    __NVS_SIZE__           = (__UNUSED_FLASH_end__ & 0xfffff000) - __NVS_BASE__;
 }
 
 ENTRY(_c_int00)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Texas Instruments Incorporated
+ * Copyright (c) 2016-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -82,9 +82,7 @@ typedef void (*UDMAMSP432_ErrorFxn)(uintptr_t arg);
  *  intPriority is priority of the uDMA peripheral's error interrupt, as
  *  defined by the underlying OS.  It is passed unmodified to the
  *  underlying OS's interrupt handler creation code, so you need to
- *  refer to the OS documentation for usage.  For example, for
- *  SYS/BIOS applications, refer to the ti.sysbios.family.arm.m3.Hwi
- *  documentation for SYS/BIOS usage of interrupt priorities.  If the
+ *  refer to the OS documentation for usage.  If the
  *  driver uses the ti.dpl interface instead of making OS
  *  calls directly, then the HwiP port handles the interrupt priority
  *  in an OS specific way.  In the case of the SYS/BIOS port,

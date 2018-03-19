@@ -646,7 +646,7 @@ int pthread_setschedparam(pthread_t pthread, int policy,
 void _pthread_cleanup_pop(struct _pthread_cleanup_context *context,
         int execute)
 {
-    pthread_Obj    *thread = (pthread_Obj *)pthread_self();
+    pthread_Obj    *thread = (pthread_Obj *)context->thread;
 
     thread->cleanupList = context->next;
 
@@ -663,6 +663,7 @@ void _pthread_cleanup_push(struct _pthread_cleanup_context *context,
 {
     pthread_Obj    *thread = (pthread_Obj *)pthread_self();
 
+    context->thread = (pthread_t)thread;
     context->fxn = fxn;
     context->arg = arg;
     context->next = thread->cleanupList;

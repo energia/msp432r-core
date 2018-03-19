@@ -361,9 +361,9 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 /**
  *  @defgroup I2C_CONTROL I2C_control command and status codes

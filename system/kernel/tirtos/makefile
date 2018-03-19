@@ -1,7 +1,7 @@
-# BOARD-NAME below selects the board the kernel is built for. By default,
+# BOARDNAME below selects the board the kernel is built for. By default,
 # '*' is selected as the board name so the kernel is built for all boards.
 #
-# List of board names supported (choose only one for BOARD-NAME):
+# List of board names supported (choose only one for BOARDNAME):
 #
 # coresdk_cc13xx_cc26xx_<version>:
 # CC1310_LAUNCHXL CC1310DK_7XD CC1350_LAUNCHXL CC1350STK CC2640R2_LAUNCHXL
@@ -11,17 +11,17 @@
 # CC3220S_LAUNCHXL CC3220SF_LAUNCHXL
 #
 # coresdk_msp432_<version>:
-# MSP_EXP432P401R
+# MSP_EXP432P401R MSP_EXP432P4111
 #
-BOARD-NAME = *
+BOARDNAME ?= *
 
 # Find subdirectories
-RELEASE-CCS-SUBDIRS   = $(wildcard builds/$(BOARD-NAME)/release/ccs/.)
-RELEASE-GCC-SUBDIRS   = $(wildcard builds/$(BOARD-NAME)/release/gcc/.)
-RELEASE-IAR-SUBDIRS   = $(wildcard builds/$(BOARD-NAME)/release/iar/.)
-DEBUG-CCS-SUBDIRS     = $(wildcard builds/$(BOARD-NAME)/debug/ccs/.)
-DEBUG-GCC-SUBDIRS     = $(wildcard builds/$(BOARD-NAME)/debug/gcc/.)
-DEBUG-IAR-SUBDIRS     = $(wildcard builds/$(BOARD-NAME)/debug/iar/.)
+RELEASE-CCS-SUBDIRS   = $(wildcard builds/$(BOARDNAME)/release/ccs/.)
+RELEASE-GCC-SUBDIRS   = $(wildcard builds/$(BOARDNAME)/release/gcc/.)
+RELEASE-IAR-SUBDIRS   = $(wildcard builds/$(BOARDNAME)/release/iar/.)
+DEBUG-CCS-SUBDIRS     = $(wildcard builds/$(BOARDNAME)/debug/ccs/.)
+DEBUG-GCC-SUBDIRS     = $(wildcard builds/$(BOARDNAME)/debug/gcc/.)
+DEBUG-IAR-SUBDIRS     = $(wildcard builds/$(BOARDNAME)/debug/iar/.)
 
 include ../../imports.mak
 

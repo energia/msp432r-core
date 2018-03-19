@@ -2,22 +2,22 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     CREATE ARGS
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
  *     PER-INSTANCE TYPES
  *     FUNCTION DECLARATIONS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -74,22 +74,22 @@
  */
 
 /* FuncPtr */
-typedef xdc_Void (*ti_sysbios_knl_Task_FuncPtr)(xdc_UArg, xdc_UArg);
+typedef xdc_Void (*ti_sysbios_knl_Task_FuncPtr)(xdc_UArg __arg1, xdc_UArg __arg2);
 
 /* AllBlockedFuncPtr */
 typedef xdc_Void (*ti_sysbios_knl_Task_AllBlockedFuncPtr)(xdc_Void);
 
 /* ModStateCheckValueFuncPtr */
-typedef xdc_UInt32 (*ti_sysbios_knl_Task_ModStateCheckValueFuncPtr)(ti_sysbios_knl_Task_Module_State*);
+typedef xdc_UInt32 (*ti_sysbios_knl_Task_ModStateCheckValueFuncPtr)(ti_sysbios_knl_Task_Module_State* __arg1);
 
 /* ModStateCheckFuncPtr */
-typedef xdc_Int (*ti_sysbios_knl_Task_ModStateCheckFuncPtr)(ti_sysbios_knl_Task_Module_State*, xdc_UInt32);
+typedef xdc_Int (*ti_sysbios_knl_Task_ModStateCheckFuncPtr)(ti_sysbios_knl_Task_Module_State* __arg1, xdc_UInt32 __arg2);
 
 /* ObjectCheckValueFuncPtr */
-typedef xdc_UInt32 (*ti_sysbios_knl_Task_ObjectCheckValueFuncPtr)(ti_sysbios_knl_Task_Handle);
+typedef xdc_UInt32 (*ti_sysbios_knl_Task_ObjectCheckValueFuncPtr)(ti_sysbios_knl_Task_Handle __arg1);
 
 /* ObjectCheckFuncPtr */
-typedef xdc_Int (*ti_sysbios_knl_Task_ObjectCheckFuncPtr)(ti_sysbios_knl_Task_Handle, xdc_UInt32);
+typedef xdc_Int (*ti_sysbios_knl_Task_ObjectCheckFuncPtr)(ti_sysbios_knl_Task_Handle __arg1, xdc_UInt32 __arg2);
 
 /* Mode */
 enum ti_sysbios_knl_Task_Mode {
@@ -115,12 +115,12 @@ struct ti_sysbios_knl_Task_Stat {
 
 /* HookSet */
 struct ti_sysbios_knl_Task_HookSet {
-    xdc_Void (*registerFxn)(xdc_Int);
-    xdc_Void (*createFxn)(ti_sysbios_knl_Task_Handle, xdc_runtime_Error_Block*);
-    xdc_Void (*readyFxn)(ti_sysbios_knl_Task_Handle);
-    xdc_Void (*switchFxn)(ti_sysbios_knl_Task_Handle, ti_sysbios_knl_Task_Handle);
-    xdc_Void (*exitFxn)(ti_sysbios_knl_Task_Handle);
-    xdc_Void (*deleteFxn)(ti_sysbios_knl_Task_Handle);
+    xdc_Void (*registerFxn)(xdc_Int __arg1);
+    xdc_Void (*createFxn)(ti_sysbios_knl_Task_Handle __arg1, xdc_runtime_Error_Block* __arg2);
+    xdc_Void (*readyFxn)(ti_sysbios_knl_Task_Handle __arg1);
+    xdc_Void (*switchFxn)(ti_sysbios_knl_Task_Handle __arg1, ti_sysbios_knl_Task_Handle __arg2);
+    xdc_Void (*exitFxn)(ti_sysbios_knl_Task_Handle __arg1);
+    xdc_Void (*deleteFxn)(ti_sysbios_knl_Task_Handle __arg1);
 };
 
 /* AFFINITY_NONE */
@@ -664,9 +664,9 @@ __extern __FAR__ const CT__ti_sysbios_knl_Task_deleteTerminatedTasks ti_sysbios_
 
 /* hooks */
 typedef ti_sysbios_knl_Task_HookSet __T1_ti_sysbios_knl_Task_hooks;
-typedef struct { int length; ti_sysbios_knl_Task_HookSet const *elem; } __ARRAY1_ti_sysbios_knl_Task_hooks;
+typedef struct { int length; ti_sysbios_knl_Task_HookSet *elem; } __ARRAY1_ti_sysbios_knl_Task_hooks;
 typedef struct { int length; ti_sysbios_knl_Task_HookSet const *elem; } __CARRAY1_ti_sysbios_knl_Task_hooks;
-typedef __ARRAY1_ti_sysbios_knl_Task_hooks __TA_ti_sysbios_knl_Task_hooks;
+typedef __CARRAY1_ti_sysbios_knl_Task_hooks __TA_ti_sysbios_knl_Task_hooks;
 typedef __CARRAY1_ti_sysbios_knl_Task_hooks CT__ti_sysbios_knl_Task_hooks;
 __extern __FAR__ const CT__ti_sysbios_knl_Task_hooks ti_sysbios_knl_Task_hooks__C;
 #ifdef ti_sysbios_knl_Task_hooks__CR
@@ -819,11 +819,11 @@ __extern xdc_Int ti_sysbios_knl_Task_Module_startup__F( xdc_Int state );
 
 /* Instance_init__E */
 xdc__CODESECT(ti_sysbios_knl_Task_Instance_init__E, "ti_sysbios_knl_Task_Instance_init")
-__extern xdc_Int ti_sysbios_knl_Task_Instance_init__E(ti_sysbios_knl_Task_Object *, ti_sysbios_knl_Task_FuncPtr fxn, const ti_sysbios_knl_Task_Params *, xdc_runtime_Error_Block *);
+__extern xdc_Int ti_sysbios_knl_Task_Instance_init__E(ti_sysbios_knl_Task_Object *__obj, ti_sysbios_knl_Task_FuncPtr fxn, const ti_sysbios_knl_Task_Params *__prms, xdc_runtime_Error_Block *__eb);
 
 /* Instance_finalize__E */
 xdc__CODESECT(ti_sysbios_knl_Task_Instance_finalize__E, "ti_sysbios_knl_Task_Instance_finalize")
-__extern void ti_sysbios_knl_Task_Instance_finalize__E( ti_sysbios_knl_Task_Object* , int );
+__extern void ti_sysbios_knl_Task_Instance_finalize__E(ti_sysbios_knl_Task_Object *__obj, int __ec);
 
 /* create */
 xdc__CODESECT(ti_sysbios_knl_Task_create, "ti_sysbios_knl_Task_create")
@@ -1113,25 +1113,29 @@ __extern xdc_UInt32 ti_sysbios_knl_Task_getObjectCheckValue__I( ti_sysbios_knl_T
 #define ti_sysbios_knl_Task_Module_heap() ti_sysbios_knl_Task_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_knl_Task_Module__id ti_sysbios_knl_Task_Module_id(void);
 static inline CT__ti_sysbios_knl_Task_Module__id ti_sysbios_knl_Task_Module_id( void ) 
 {
     return ti_sysbios_knl_Task_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_sysbios_knl_Task_Module_hasMask( void ) 
+static inline xdc_Bool ti_sysbios_knl_Task_Module_hasMask(void);
+static inline xdc_Bool ti_sysbios_knl_Task_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_sysbios_knl_Task_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_sysbios_knl_Task_Module_getMask(void);
 static inline xdc_Bits16 ti_sysbios_knl_Task_Module_getMask( void ) 
 {
     return ti_sysbios_knl_Task_Module__diagsMask__C != NULL ? *ti_sysbios_knl_Task_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_sysbios_knl_Task_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_sysbios_knl_Task_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_sysbios_knl_Task_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_sysbios_knl_Task_Module__diagsMask__C != NULL) {
         *ti_sysbios_knl_Task_Module__diagsMask__C = mask;
@@ -1139,6 +1143,7 @@ static inline xdc_Void ti_sysbios_knl_Task_Module_setMask( xdc_Bits16 mask )
 }
 
 /* Params_init */
+static inline void ti_sysbios_knl_Task_Params_init(ti_sysbios_knl_Task_Params *prms);
 static inline void ti_sysbios_knl_Task_Params_init( ti_sysbios_knl_Task_Params *prms ) 
 {
     if (prms) {
@@ -1147,6 +1152,7 @@ static inline void ti_sysbios_knl_Task_Params_init( ti_sysbios_knl_Task_Params *
 }
 
 /* Params_copy */
+static inline void ti_sysbios_knl_Task_Params_copy(ti_sysbios_knl_Task_Params *dst, const ti_sysbios_knl_Task_Params *src);
 static inline void ti_sysbios_knl_Task_Params_copy(ti_sysbios_knl_Task_Params *dst, const ti_sysbios_knl_Task_Params *src) 
 {
     if (dst) {
@@ -1161,44 +1167,51 @@ static inline void ti_sysbios_knl_Task_Params_copy(ti_sysbios_knl_Task_Params *d
 #define ti_sysbios_knl_Task_Object_sizeof() ti_sysbios_knl_Task_Object__sizeof__C
 
 /* Object_get */
+static inline ti_sysbios_knl_Task_Handle ti_sysbios_knl_Task_Object_get(ti_sysbios_knl_Task_Instance_State *oarr, int i);
 static inline ti_sysbios_knl_Task_Handle ti_sysbios_knl_Task_Object_get(ti_sysbios_knl_Task_Instance_State *oarr, int i) 
 {
     return (ti_sysbios_knl_Task_Handle)ti_sysbios_knl_Task_Object__get__S(oarr, i);
 }
 
 /* Object_first */
-static inline ti_sysbios_knl_Task_Handle ti_sysbios_knl_Task_Object_first( void )
+static inline ti_sysbios_knl_Task_Handle ti_sysbios_knl_Task_Object_first(void);
+static inline ti_sysbios_knl_Task_Handle ti_sysbios_knl_Task_Object_first(void)
 {
     return (ti_sysbios_knl_Task_Handle)ti_sysbios_knl_Task_Object__first__S();
 }
 
 /* Object_next */
-static inline ti_sysbios_knl_Task_Handle ti_sysbios_knl_Task_Object_next( ti_sysbios_knl_Task_Object *obj )
+static inline ti_sysbios_knl_Task_Handle ti_sysbios_knl_Task_Object_next(ti_sysbios_knl_Task_Object *obj);
+static inline ti_sysbios_knl_Task_Handle ti_sysbios_knl_Task_Object_next(ti_sysbios_knl_Task_Object *obj)
 {
     return (ti_sysbios_knl_Task_Handle)ti_sysbios_knl_Task_Object__next__S(obj);
 }
 
 /* Handle_label */
-static inline xdc_runtime_Types_Label *ti_sysbios_knl_Task_Handle_label( ti_sysbios_knl_Task_Handle inst, xdc_runtime_Types_Label *lab )
+static inline xdc_runtime_Types_Label *ti_sysbios_knl_Task_Handle_label(ti_sysbios_knl_Task_Handle inst, xdc_runtime_Types_Label *lab);
+static inline xdc_runtime_Types_Label *ti_sysbios_knl_Task_Handle_label(ti_sysbios_knl_Task_Handle inst, xdc_runtime_Types_Label *lab)
 {
     return ti_sysbios_knl_Task_Handle__label__S(inst, lab);
 }
 
 /* Handle_name */
-static inline xdc_String ti_sysbios_knl_Task_Handle_name( ti_sysbios_knl_Task_Handle inst )
+static inline xdc_String ti_sysbios_knl_Task_Handle_name(ti_sysbios_knl_Task_Handle inst);
+static inline xdc_String ti_sysbios_knl_Task_Handle_name(ti_sysbios_knl_Task_Handle inst)
 {
     xdc_runtime_Types_Label lab;
     return ti_sysbios_knl_Task_Handle__label__S(inst, &lab)->iname;
 }
 
 /* handle */
-static inline ti_sysbios_knl_Task_Handle ti_sysbios_knl_Task_handle( ti_sysbios_knl_Task_Struct *str )
+static inline ti_sysbios_knl_Task_Handle ti_sysbios_knl_Task_handle(ti_sysbios_knl_Task_Struct *str);
+static inline ti_sysbios_knl_Task_Handle ti_sysbios_knl_Task_handle(ti_sysbios_knl_Task_Struct *str)
 {
     return (ti_sysbios_knl_Task_Handle)str;
 }
 
 /* struct */
-static inline ti_sysbios_knl_Task_Struct *ti_sysbios_knl_Task_struct( ti_sysbios_knl_Task_Handle inst )
+static inline ti_sysbios_knl_Task_Struct *ti_sysbios_knl_Task_struct(ti_sysbios_knl_Task_Handle inst);
+static inline ti_sysbios_knl_Task_Struct *ti_sysbios_knl_Task_struct(ti_sysbios_knl_Task_Handle inst)
 {
     return (ti_sysbios_knl_Task_Struct*)inst;
 }
@@ -1277,6 +1290,7 @@ struct ti_sysbios_knl_Task_Object {
 #ifndef ti_sysbios_knl_Task_Module_State_inactiveQ__OR
 __extern __FAR__ const xdc_SizeT ti_sysbios_knl_Task_Module_State_inactiveQ__O;
 #endif
+static inline ti_sysbios_knl_Queue_Handle ti_sysbios_knl_Task_Module_State_inactiveQ();
 static inline ti_sysbios_knl_Queue_Handle ti_sysbios_knl_Task_Module_State_inactiveQ()
 {
     return (ti_sysbios_knl_Queue_Handle)(((char*)&ti_sysbios_knl_Task_Module__state__V) + ti_sysbios_knl_Task_Module_State_inactiveQ__O);
@@ -1286,6 +1300,7 @@ static inline ti_sysbios_knl_Queue_Handle ti_sysbios_knl_Task_Module_State_inact
 #ifndef ti_sysbios_knl_Task_Module_State_terminatedQ__OR
 __extern __FAR__ const xdc_SizeT ti_sysbios_knl_Task_Module_State_terminatedQ__O;
 #endif
+static inline ti_sysbios_knl_Queue_Handle ti_sysbios_knl_Task_Module_State_terminatedQ();
 static inline ti_sysbios_knl_Queue_Handle ti_sysbios_knl_Task_Module_State_terminatedQ()
 {
     return (ti_sysbios_knl_Queue_Handle)(((char*)&ti_sysbios_knl_Task_Module__state__V) + ti_sysbios_knl_Task_Module_State_terminatedQ__O);

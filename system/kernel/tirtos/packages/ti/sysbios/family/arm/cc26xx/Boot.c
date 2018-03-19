@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2016, Texas Instruments Incorporated
+ * Copyright (c) 2014-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -33,14 +33,10 @@
  *  ======== Boot.c ========
  */
 
-#ifdef DEVICE_FAMILY
-#define DEVICE_FAMILY_PREFIX(x) <ti/devices/DEVICE_FAMILY/x>
-#else
-#define DEVICE_FAMILY_PREFIX(x) <x>
-#endif
+#include <ti/devices/DeviceFamily.h>
 
-#include DEVICE_FAMILY_PREFIX(driverlib/sys_ctrl.h)
-#include DEVICE_FAMILY_PREFIX(driverlib/setup.h)
+#include DeviceFamily_constructPath(driverlib/sys_ctrl.h)
+#include DeviceFamily_constructPath(driverlib/setup.h)
 
 #include "package/internal/Boot.xdc.h"
 

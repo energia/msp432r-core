@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -38,8 +33,15 @@
 #include <stdint.h>
 
 /* DriverLib Includes */
-#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
+#include <ti/devices/msp432p4xx/driverlib/cs.h>
+#include <ti/devices/msp432p4xx/driverlib/interrupt.h>
 #include <ti/devices/msp432p4xx/driverlib/debug.h>
+
+#ifdef __MCU_HAS_SYSCTL_A__
+#include <ti/devices/msp432p4xx/driverlib/sysctl_a.h>
+#else
+#include <ti/devices/msp432p4xx/driverlib/sysctl.h>
+#endif
 
 /* Statics */
 static uint32_t hfxtFreq;
@@ -345,8 +347,13 @@ bool CS_startHFXTWithTimeout(bool bypassMode, uint32_t timeout)
     CS->KEY = CS_KEY;
 
     /* Saving status and temporarily disabling NMIs for UCS faults */
+#ifdef __MCU_HAS_SYSCTL_A__
     bNMIStatus = SysCtl_A_getNMISourceStatus() & SYSCTL_A_CS_SRC;
     SysCtl_A_disableNMISource(SYSCTL_A_CS_SRC);
+#else
+    bNMIStatus = SysCtl_getNMISourceStatus() & SYSCTL_CS_SRC;
+    SysCtl_disableNMISource(SYSCTL_CS_SRC);
+#endif
 
     /* Determining which frequency range to use */
     wHFFreqRange = _CSGetHFXTFrequency();
@@ -387,7 +394,11 @@ bool CS_startHFXTWithTimeout(bool bypassMode, uint32_t timeout)
     BITBAND_PERI(CS->KEY, CS_KEY_KEY_OFS) = 1;
 
     /* Enabling the NMI state */
+#ifdef __MCU_HAS_SYSCTL_A__
     SysCtl_A_enableNMISource(bNMIStatus);
+#else
+    SysCtl_enableNMISource(bNMIStatus);
+#endif
 
     if (boolTimeout && timeout == 0)
         return false;
@@ -416,8 +427,13 @@ bool CS_startLFXTWithTimeout(uint32_t xtDrive, uint32_t timeout)
     CS->KEY = CS_KEY;
 
     /* Saving status and temporarily disabling NMIs for UCS faults */
+#ifdef __MCU_HAS_SYSCTL_A__
     bNMIStatus = SysCtl_A_getNMISourceStatus() & SYSCTL_A_CS_SRC;
     SysCtl_A_disableNMISource(SYSCTL_A_CS_SRC);
+#else
+    bNMIStatus = SysCtl_getNMISourceStatus() & SYSCTL_CS_SRC;
+    SysCtl_disableNMISource(SYSCTL_CS_SRC);
+#endif
     boolBypassMode = (xtDrive == CS_LFXT_BYPASS) ? true : false;
     boolTimeout = (timeout == 0) ? false : true;
 
@@ -452,7 +468,11 @@ bool CS_startLFXTWithTimeout(uint32_t xtDrive, uint32_t timeout)
     BITBAND_PERI(CS->KEY, CS_KEY_KEY_OFS) = 1;
 
     /* Enabling the NMI state */
+#ifdef __MCU_HAS_SYSCTL_A__
     SysCtl_A_enableNMISource(bNMIStatus);
+#else
+    SysCtl_enableNMISource(bNMIStatus);
+#endif
 
     if (boolTimeout && timeout == 0)
         return false;
@@ -604,13 +624,21 @@ uint32_t CS_getDCOFrequency(void)
     uint32_t centeredFreq;
     int16_t dcoTune;
     uint_fast8_t tlvLength;
-    SysCtl_A_CSCalTLV_Info *csInfo;
     uint32_t retVal;
+    
+#ifdef __MCU_HAS_SYSCTL_A__
+    SysCtl_A_CSCalTLV_Info *csInfo;
+    
+    /* Parsing the TLV and getting the trim information */
+    SysCtl_A_getTLVInfo(TLV_TAG_CS, 0, &tlvLength, (uint32_t**) &csInfo);
+#else
+    SysCtl_CSCalTLV_Info *csInfo;
+
+    /* Parsing the TLV and getting the trim information */
+    SysCtl_getTLVInfo(TLV_TAG_CS, 0, &tlvLength, (uint32_t**) &csInfo);
+#endif
 
     centeredFreq = _CSGetDOCFrequency();
-
-    /* Parsing the TLV and getting the maximum erase pulses */
-    SysCtl_A_getTLVInfo(TLV_TAG_CS, 0, &tlvLength, (uint32_t**) &csInfo);
 
     if (tlvLength == 0)
     {
@@ -672,7 +700,19 @@ void CS_setDCOFrequency(uint32_t dcoFrequency)
     bool rsel5 = false;
     dcoSigned = (int32_t) dcoFrequency;
     uint_fast8_t tlvLength;
+    
+#ifdef __MCU_HAS_SYSCTL_A__
     SysCtl_A_CSCalTLV_Info *csInfo;
+    
+    /* Parsing the TLV and getting the trim information */
+    SysCtl_A_getTLVInfo(TLV_TAG_CS, 0, &tlvLength, (uint32_t**) &csInfo);
+#else
+    SysCtl_CSCalTLV_Info *csInfo;
+    
+    /* Parsing the TLV and getting the trim information */
+    SysCtl_getTLVInfo(TLV_TAG_CS, 0, &tlvLength, (uint32_t**) &csInfo);
+#endif
+
 
     if (dcoFrequency < 2000000)
     {
@@ -704,9 +744,6 @@ void CS_setDCOFrequency(uint32_t dcoFrequency)
         ASSERT(false);
         return;
     }
-
-    /* Parsing the TLV and getting the maximum erase pulses */
-    SysCtl_A_getTLVInfo(TLV_TAG_CS, 0, &tlvLength, (uint32_t**) &csInfo);
 
     if (dcoFrequency == nomFreq || tlvLength == 0)
     {

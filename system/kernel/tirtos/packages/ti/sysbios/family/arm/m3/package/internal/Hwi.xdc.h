@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 #ifndef ti_sysbios_family_arm_m3_Hwi__INTERNAL__
@@ -80,6 +80,10 @@
 /* getIrp */
 #undef ti_sysbios_family_arm_m3_Hwi_getIrp
 #define ti_sysbios_family_arm_m3_Hwi_getIrp ti_sysbios_family_arm_m3_Hwi_getIrp__E
+
+/* construct2 */
+#undef ti_sysbios_family_arm_m3_Hwi_construct2
+#define ti_sysbios_family_arm_m3_Hwi_construct2 ti_sysbios_family_arm_m3_Hwi_construct2__E
 
 /* disableFxn */
 #undef ti_sysbios_family_arm_m3_Hwi_disableFxn

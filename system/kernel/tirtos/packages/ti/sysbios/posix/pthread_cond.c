@@ -43,6 +43,7 @@
 
 #include "pthread.h"
 #include "errno.h"
+#include "pthread_util.h"
 
 
 typedef struct CondElem {
@@ -67,13 +68,37 @@ int pthread_condattr_destroy(pthread_condattr_t *attr)
 }
 
 /*
+ *  ======== pthread_condattr_getclock ========
+ */
+int pthread_condattr_getclock(const pthread_condattr_t *attr,
+        clockid_t *clock_id)
+{
+    *clock_id = (clockid_t)(*attr);
+    return (0);
+}
+
+/*
  *  ======== pthread_condattr_init ========
  */
 int pthread_condattr_init(pthread_condattr_t * attr)
 {
+    *attr = (pthread_condattr_t)CLOCK_REALTIME;
     return (0);
 }
 
+/*
+ *  ======== pthread_condattr_setclock ========
+ */
+int pthread_condattr_setclock(pthread_condattr_t *attr,
+        clockid_t clock_id)
+{
+    if ((clock_id != CLOCK_REALTIME) && (clock_id != CLOCK_MONOTONIC)) {
+        return (EINVAL);
+    }
+
+    *attr = (pthread_condattr_t)clock_id;
+    return (0);
+}
 /*
  *************************************************************************
  *                      pthread_cond
@@ -120,6 +145,13 @@ int pthread_cond_init(pthread_cond_t *cond, const pthread_condattr_t *attr)
 {
     Queue_construct(&(cond->waitList), NULL);
 
+    if (attr != NULL) {
+        cond->clockId = (clockid_t)(*attr);
+    }
+    else {
+        cond->clockId = CLOCK_REALTIME;
+    }
+
     return (0);
 }
 
@@ -155,33 +187,12 @@ int pthread_cond_signal(pthread_cond_t *cond)
 int pthread_cond_timedwait(pthread_cond_t *cond, pthread_mutex_t *mutex,
         const struct timespec *abstime)
 {
-    struct timespec    curtime;
     UInt32             timeout;
-    long               usecs = 0;
-    time_t             secs = 0;
 
-    if ((abstime->tv_nsec < 0) || (1000000000 <= abstime->tv_nsec)) {
+    if (_pthread_abstime2ticks(cond->clockId, abstime, &timeout) != 0) {
         return (EINVAL);
     }
-
-    clock_gettime(CLOCK_REALTIME, &curtime);
-    secs = abstime->tv_sec - curtime.tv_sec;
-
-    if ((abstime->tv_sec < curtime.tv_sec) ||
-            ((secs == 0) && (abstime->tv_nsec <= curtime.tv_nsec))) {
-        timeout = 0;
-    }
-    else {
-        usecs = (abstime->tv_nsec - curtime.tv_nsec) / 1000;
-
-        if (usecs < 0) {
-            usecs += 1000000;
-            secs--;
-        }
-        usecs += (long)secs * 1000000;
-        timeout = (UInt32)(usecs / Clock_tickPeriod);
-    }
-
+    
     return (condWait(cond, mutex, timeout));
 }
 

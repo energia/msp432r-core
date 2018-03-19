@@ -1,5 +1,5 @@
 /* 
- *  Copyright (c) 2015 Texas Instruments Incorporated
+ *  Copyright (c) 2015-2017 Texas Instruments Incorporated
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
@@ -17,7 +17,7 @@
 metaonly interface IR4 inherits ti.targets.arm.elf.IArm {
     override readonly config string isa         = "v7R";
 
-    override config string platform   = "ti.platforms.evmTMS570";
+    override config string platform   = "ti.platforms.cortexR:AWR14XX:1";
 
     override readonly config xdc.bld.ITarget2.Command lnk = {
         cmd:  "armlnk",
@@ -25,7 +25,7 @@ metaonly interface IR4 inherits ti.targets.arm.elf.IArm {
     };
 }
 /*
- *  @(#) ti.targets.arm.elf; 1, 0, 0,0; 2-10-2017 09:06:44; /db/ztree/library/trees/xdctargets/xdctargets-m11/src/ xlibrary
+ *  @(#) ti.targets.arm.elf; 1, 0, 0,1; 7-27-2017 11:47:34; /db/ztree/library/trees/xdctargets/xdctargets-o04/src/ xlibrary
 
  */
 

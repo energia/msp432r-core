@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 import java.util.*;
 import org.mozilla.javascript.*;
@@ -11,7 +11,7 @@ import xdc.services.spec.Session;
 
 public class ti_sysbios
 {
-    static final String VERS = "@(#) xdc-D05\n";
+    static final String VERS = "@(#) xdc-D20\n";
 
     static final Proto.Elm $$T_Bool = Proto.Elm.newBool();
     static final Proto.Elm $$T_Num = Proto.Elm.newNum();
@@ -145,7 +145,7 @@ public class ti_sysbios
         om.bind("ti.sysbios.BIOS.LibType_Debug", xdc.services.intern.xsr.Enum.make((Proto.Enm)om.findStrict("ti.sysbios.BIOS.LibType", "ti.sysbios"), "ti.sysbios.BIOS.LibType_Debug", 3));
         om.bind("ti.sysbios.BIOS.WAIT_FOREVER", Global.eval("~(0)"));
         om.bind("ti.sysbios.BIOS.NO_WAIT", 0L);
-        om.bind("ti.sysbios.BIOS.version", 0x65000L);
+        om.bind("ti.sysbios.BIOS.version", 0x65200L);
         om.bind("ti.sysbios.BIOS.linkedWithIncorrectBootLibrary", new Extern("ti_sysbios_BIOS_linkedWithIncorrectBootLibrary__E", "xdc_Void(*)(xdc_Void)", true, false));
         om.bind("ti.sysbios.BIOS.start", new Extern("ti_sysbios_BIOS_start__E", "xdc_Void(*)(xdc_Void)", true, false));
         om.bind("ti.sysbios.BIOS.exit", new Extern("ti_sysbios_BIOS_exit__E", "xdc_Void(*)(xdc_Int)", true, false));
@@ -350,7 +350,7 @@ public class ti_sysbios
                 po.addFld("$hostonly", $$T_Num, 0, "r");
                 po.addFld("WAIT_FOREVER", Proto.Elm.newCNum("(xdc_UInt)"), Global.eval("~(0)"), "rh");
                 po.addFld("NO_WAIT", Proto.Elm.newCNum("(xdc_UInt)"), 0L, "rh");
-                po.addFld("version", Proto.Elm.newCNum("(xdc_UInt32)"), 0x65000L, "rh");
+                po.addFld("version", Proto.Elm.newCNum("(xdc_UInt32)"), 0x65200L, "rh");
         if (isCFG) {
             po.addFld("rovViewInfo", (Proto)om.findStrict("xdc.rov.ViewInfo.Instance", "ti.sysbios"), $$UNDEF, "wh");
             po.addFld("libType", (Proto)om.findStrict("ti.sysbios.BIOS.LibType", "ti.sysbios"), om.find("ti.sysbios.BIOS.LibType_Instrumented"), "wh");

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -43,6 +43,8 @@
 #ifndef DebugP_LOG_ENABLED
 #define DebugP_LOG_ENABLED 0
 #endif
+
+#include <ti/devices/DeviceFamily.h>
 
 #include <ti/drivers/dpl/ClockP.h>
 #include <ti/drivers/dpl/DebugP.h>
@@ -311,7 +313,7 @@ static void readBlockingTimeout(uintptr_t arg)
     UARTMSP432_Object *object = ((UART_Handle)arg)->object;
 
     object->state.bufTimeout = true;
-    SemaphoreP_postFromClock(object->readSem);
+    SemaphoreP_post(object->readSem);
 }
 
 /*
@@ -520,8 +522,10 @@ static int readTaskBlocking(UART_Handle handle)
      * so that it resets the Semaphore count.
      */
     SemaphoreP_pend(object->readSem, SemaphoreP_NO_WAIT);
-    if (object->readTimeout != 0) {
-        ClockP_start(object->timeoutClk, object->readTimeout);
+    if ((object->readTimeout != 0) &&
+                (object->readTimeout != UART_WAIT_FOREVER)) {
+        ClockP_setTimeout(object->timeoutClk, object->readTimeout);
+        ClockP_start(object->timeoutClk);
     }
 
     while (object->readCount) {
@@ -721,11 +725,12 @@ void UARTMSP432_close(UART_Handle handle)
         object->perfConstraintMask >>= 1;
     }
     if (object->state.rxEnabled) {
+
+ #if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
         Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
         Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
     }
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
     Power_unregisterNotify(&object->perfChangeNotify);
 
     object->state.opened = false;
@@ -773,7 +778,9 @@ int_fast16_t UARTMSP432_control(UART_Handle handle, uint_fast16_t cmd,
                  * Set power constraints to keep peripheral active receiving
                  * RX interrupts and prevent a performance level change.
                  */
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
                 Power_setConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
                 Power_setConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
                 MAP_UART_enableInterrupt(hwAttrs->baseAddr,
                     EUSCI_A_UART_RECEIVE_INTERRUPT);
@@ -797,7 +804,9 @@ int_fast16_t UARTMSP432_control(UART_Handle handle, uint_fast16_t cmd,
                  * LPM3 and higher as well as allow performance level changes
                  * by the application.
                  */
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
                 Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
                 Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
                 object->state.rxEnabled = false;
                 DebugP_log1("UART:(%p) UART_CMD_RXDISABLE: Disabled",
@@ -876,7 +885,9 @@ void UARTMSP432_hwiIntFxn(uintptr_t arg)
             MAP_UART_disableInterrupt(hwAttrs->baseAddr,
                     EUSCI_A_UART_TRANSMIT_COMPLETE_INTERRUPT);
             clearTXCPTIFG(hwAttrs->baseAddr);
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
             Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
             Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
 
             object->writeCallback((UART_Handle)arg, (void *) object->writeBuf,
@@ -1009,7 +1020,8 @@ UART_Handle UARTMSP432_open(UART_Handle handle, UART_Params *params)
         for (i = 0; i < numPerfLevels; i++) {
             PowerMSP432_getFreqs(i, &powerFreqs);
             baudrateIndex = findBaudDividerIndex(hwAttrs->baudrateLUT,
-                hwAttrs->numBaudrateEntries, params->baudRate, powerFreqs.SMCLK);
+                hwAttrs->numBaudrateEntries, params->baudRate,
+                powerFreqs.SMCLK);
             if (baudrateIndex == -1) {
                 /* Set constraint and keep track of it in perfConstraintMask */
                 object->perfConstraintMask |= (1 << i);
@@ -1019,19 +1031,20 @@ UART_Handle UARTMSP432_open(UART_Handle handle, UART_Params *params)
     }
 
     /*
-     * Shutdown not supported while driver is open.  The DEEPSLEEP_0 constraint
-     * keeps stops the device from going into LPM3 or higher.  This is done
-     * to keep the UART peripheral receiving in the background and storing data
-     * in the internal ring buff.
+     * For MSP432P401x devices the DEEPSLEEP_0 constraint is set to allow the
+     * UART peripheral to continue to receive data.  This constraint is not
+     * used with later MSP432 devices, because on later devices the CPU can
+     * enter deep sleep without stopping the UART peripheral.
      */
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
     Power_setConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
+#endif
 
     /* Register function to reconfigure peripheral on perf level changes */
     Power_registerNotify(&object->perfChangeNotify,
-        PowerMSP432_START_CHANGE_PERF_LEVEL | PowerMSP432_DONE_CHANGE_PERF_LEVEL,
-        perfChangeNotifyFxn, (uintptr_t) handle);
+        PowerMSP432_START_CHANGE_PERF_LEVEL |
+        PowerMSP432_DONE_CHANGE_PERF_LEVEL, perfChangeNotifyFxn,
+        (uintptr_t) handle);
 
     /* Create the Hwi for this UART peripheral */
     HwiP_Params_init(&(portsParams.hwiParams));
@@ -1078,7 +1091,7 @@ UART_Handle UARTMSP432_open(UART_Handle handle, UART_Params *params)
         ClockP_Params_init(&(portsParams.clockParams));
         portsParams.clockParams.arg = (uintptr_t) handle;
         object->timeoutClk = ClockP_create((ClockP_Fxn) &readBlockingTimeout,
-            &(portsParams.clockParams));
+                0 /* timeout */, &(portsParams.clockParams));
         if (object->timeoutClk == NULL) {
             DebugP_log1("UART:(%p) ClockP_create() failed.", hwAttrs->baseAddr);
             UARTMSP432_close(handle);
@@ -1283,7 +1296,9 @@ int_fast32_t UARTMSP432_write(UART_Handle handle, const void *buffer,
      * Set power constraint to keep peripheral active during transfer and
      * to prevent a performance level change
      */
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
     Power_setConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
     Power_setConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
 
     /* Enabling TX interrupt will trigger the Hwi which handles the write */
@@ -1294,8 +1309,8 @@ int_fast32_t UARTMSP432_write(UART_Handle handle, const void *buffer,
     /* If writeMode is blocking, block and get the state. */
     if (object->state.writeMode == UART_MODE_BLOCKING) {
         /* Pend on semaphore and wait for Hwi to finish. */
-        if (SemaphoreP_pend(object->writeSem, object->writeTimeout) !=
-                SemaphoreP_OK) {
+        if (SemaphoreP_OK != SemaphoreP_pend(object->writeSem,
+                    object->writeTimeout)) {
             /* Semaphore timed out, make the write empty and log the write. */
             MAP_UART_disableInterrupt(hwAttrs->baseAddr,
                     EUSCI_A_UART_TRANSMIT_INTERRUPT |
@@ -1345,7 +1360,9 @@ void UARTMSP432_writeCancel(UART_Handle handle)
     HwiP_restore(key);
 
     /* Remove constraints set during write */
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
     Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
     Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
 
     /* Reset the write buffer so we can pass it back */

@@ -2,22 +2,22 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     MODULE-WIDE CONFIGS
  *     PER-INSTANCE TYPES
  *     VIRTUAL FUNCTIONS
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -255,9 +255,9 @@ struct ti_sysbios_heaps_HeapMem_Module_GateProxy_Struct {
 struct ti_sysbios_heaps_HeapMem_Module_GateProxy_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_Bool (*query)(xdc_Int);
-    xdc_IArg (*enter)(ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle);
-    xdc_Void (*leave)(ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle, xdc_IArg);
+    xdc_Bool (*query)(xdc_Int qual);
+    xdc_IArg (*enter)(ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle __inst);
+    xdc_Void (*leave)(ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle __inst, xdc_IArg key);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_heaps_HeapMem_Module_GateProxy_Module__FXNS__CR
@@ -337,7 +337,8 @@ __extern xdc_Void ti_sysbios_heaps_HeapMem_Module_GateProxy_leave__E( ti_sysbios
  */
 
 /* Module_upCast */
-static inline xdc_runtime_IGateProvider_Module ti_sysbios_heaps_HeapMem_Module_GateProxy_Module_upCast( void )
+static inline xdc_runtime_IGateProvider_Module ti_sysbios_heaps_HeapMem_Module_GateProxy_Module_upCast(void);
+static inline xdc_runtime_IGateProvider_Module ti_sysbios_heaps_HeapMem_Module_GateProxy_Module_upCast(void)
 {
     return (xdc_runtime_IGateProvider_Module)ti_sysbios_heaps_HeapMem_Module_GateProxy_Proxy__delegate__S();
 }
@@ -346,7 +347,8 @@ static inline xdc_runtime_IGateProvider_Module ti_sysbios_heaps_HeapMem_Module_G
 #define ti_sysbios_heaps_HeapMem_Module_GateProxy_Module_to_xdc_runtime_IGateProvider ti_sysbios_heaps_HeapMem_Module_GateProxy_Module_upCast
 
 /* Handle_upCast */
-static inline xdc_runtime_IGateProvider_Handle ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle_upCast( ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle i )
+static inline xdc_runtime_IGateProvider_Handle ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle_upCast(ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle i);
+static inline xdc_runtime_IGateProvider_Handle ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle_upCast(ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle i)
 {
     return (xdc_runtime_IGateProvider_Handle)i;
 }
@@ -355,7 +357,8 @@ static inline xdc_runtime_IGateProvider_Handle ti_sysbios_heaps_HeapMem_Module_G
 #define ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle_to_xdc_runtime_IGateProvider ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle_upCast
 
 /* Handle_downCast */
-static inline ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle_downCast( xdc_runtime_IGateProvider_Handle i )
+static inline ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle_downCast(xdc_runtime_IGateProvider_Handle i);
+static inline ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle_downCast(xdc_runtime_IGateProvider_Handle i)
 {
     xdc_runtime_IGateProvider_Handle i2 = (xdc_runtime_IGateProvider_Handle)i;
     if (ti_sysbios_heaps_HeapMem_Module_GateProxy_Proxy__abstract__S()) {
@@ -382,6 +385,7 @@ static inline ti_sysbios_heaps_HeapMem_Module_GateProxy_Handle ti_sysbios_heaps_
 #define ti_sysbios_heaps_HeapMem_Module_GateProxy_Module_heap() ti_sysbios_heaps_HeapMem_Module_GateProxy_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_heaps_HeapMem_Module_GateProxy_Module__id ti_sysbios_heaps_HeapMem_Module_GateProxy_Module_id(void);
 static inline CT__ti_sysbios_heaps_HeapMem_Module_GateProxy_Module__id ti_sysbios_heaps_HeapMem_Module_GateProxy_Module_id( void ) 
 {
     return ti_sysbios_heaps_HeapMem_Module_GateProxy_Module__id__C;
@@ -394,6 +398,7 @@ static inline CT__ti_sysbios_heaps_HeapMem_Module_GateProxy_Module__id ti_sysbio
 #define ti_sysbios_heaps_HeapMem_Module_GateProxy_Proxy_delegate() ((xdc_runtime_IGateProvider_Module)ti_sysbios_heaps_HeapMem_Module_GateProxy_Proxy__delegate__S())
 
 /* Params_init */
+static inline void ti_sysbios_heaps_HeapMem_Module_GateProxy_Params_init(ti_sysbios_heaps_HeapMem_Module_GateProxy_Params *prms);
 static inline void ti_sysbios_heaps_HeapMem_Module_GateProxy_Params_init( ti_sysbios_heaps_HeapMem_Module_GateProxy_Params *prms ) 
 {
     if (prms) {
@@ -402,6 +407,7 @@ static inline void ti_sysbios_heaps_HeapMem_Module_GateProxy_Params_init( ti_sys
 }
 
 /* Params_copy */
+static inline void ti_sysbios_heaps_HeapMem_Module_GateProxy_Params_copy(ti_sysbios_heaps_HeapMem_Module_GateProxy_Params *dst, const ti_sysbios_heaps_HeapMem_Module_GateProxy_Params *src);
 static inline void ti_sysbios_heaps_HeapMem_Module_GateProxy_Params_copy(ti_sysbios_heaps_HeapMem_Module_GateProxy_Params *dst, const ti_sysbios_heaps_HeapMem_Module_GateProxy_Params *src) 
 {
     if (dst) {

@@ -69,11 +69,21 @@ extern "C" {
  *  @brief    Number of bytes greater than or equal to the size of any RTOS
  *            ClockP object.
  *
- *  nortos:   20
- *  FreeRTOS: 60
+ *  nortos:   32 (biggest of the HW-specific ClockP instance structs)
  *  SysBIOS:  36
  */
-#define ClockP_STRUCT_SIZE   (60)
+#define ClockP_STRUCT_SIZE   (36)
+
+/*!
+ *  @brief    ClockP structure.
+ *
+ *  Opaque structure that should be large enough to hold any of the
+ *  RTOS specific ClockP objects.
+ */
+typedef union ClockP_Struct {
+    uint32_t dummy;  /*!< Align object */
+    char     data[ClockP_STRUCT_SIZE];
+} ClockP_Struct;
 
 /*!
  *  @brief  Frequency-in-hertz struct
@@ -100,6 +110,10 @@ typedef enum ClockP_Status {
  */
 typedef  void *ClockP_Handle;
 
+#define ClockP_handle(x) ((ClockP_Handle)(x))
+
+extern uint32_t ClockP_tickPeriod;
+
 /*!
  *  @brief  Prototype for a ClockP function.
  */
@@ -110,35 +124,31 @@ typedef void (*ClockP_Fxn)(uintptr_t arg);
  *
  *  Structure that contains the parameters passed into ::ClockP_create
  *  when creating a ClockP instance. The ::ClockP_Params_init function should
- *  be used to initialize the fields to default values before the application sets
- *  the fields manually. The ClockP default parameters are noted in
+ *  be used to initialize the fields to default values before the application
+ *  sets the fields manually. The ClockP default parameters are noted in
  *  ClockP_Params_init.
+ *  The default startFlag is false, meaning the user will have to call
+ *  ClockP_start().  If startFlag is true, the clock instance will be
+ *  started automatically when it is created.
+ *
+ *  The default value of period is 0, indicating a one-shot clock object.
+ *  A non-zero period indicates the clock function will be called
+ *  periodically at the period rate (in system clock ticks), after the
+ *  clock is initially started and set to expire with the 'timeout'
+ *  argument.
  */
 typedef struct ClockP_Params {
-    char     *name;     /*!< Name of the clock instance. Memory must
-                             persist for the life of the clock instance.
-                             This can be used for debugging purposes, or
-                             set to NULL if not needed. */
+    bool      startFlag; /*!< Start immediately after instance is created. */
+    uint32_t  period;    /*!< Period of clock object. */
     uintptr_t arg;       /*!< Argument passed into the clock function. */
 } ClockP_Params;
 
-/*!
- *  @brief    ClockP structure.
- *
- *  Opaque structure that should be large enough to hold any of the
- *  RTOS specific ClockP objects.
- */
-typedef struct ClockP_Struct {
-    union {
-        double d;  /*!< Align object */
-        char   data[ClockP_STRUCT_SIZE];
-    } clock;
-} ClockP_Struct;
 
 /*!
  *  @brief  Function to construct a clock object.
  *
  *  @param  clockP    Pointer to ClockP_Struct object.
+ *  @param  timeout   The startup timeout, if supported by the RTOS.
  *  @param  clockFxn  Function called when timeout or period expires.
  *
  *  @param  params    Pointer to the instance configuration parameters. NULL
@@ -149,33 +159,8 @@ typedef struct ClockP_Struct {
  */
 extern ClockP_Handle ClockP_construct(ClockP_Struct *clockP,
                                       ClockP_Fxn clockFxn,
+                                      uint32_t timeout,
                                       ClockP_Params *params);
-
-/*!
- *  @brief  Function to create a clock object.
- *
- *  @param  clockFxn  Function called when timeout or period expires.
- *
- *  @param  params    Pointer to the instance configuration parameters. NULL
- *                    denotes to use the default parameters. The ClockP default
- *                    parameters are noted in ::ClockP_Params_init.
- *
- *  @return A ClockP_Handle on success or a NULL on an error.  This handle can
- *          be passed to ClockP_start()
- */
-extern ClockP_Handle ClockP_create(ClockP_Fxn clockFxn,
-                                   ClockP_Params *params);
-
-/*!
- *  @brief  Function to delete a clock.
- *
- *  @param  handle  A ClockP_Handle returned from ::ClockP_create
- *
- *  @return Status of the function.
- *    - ClockP_OK: Deleted the clock instance
- *    - ClockP_FAILURE: Timed out waiting to delete the clock object.
- */
-extern ClockP_Status ClockP_delete(ClockP_Handle handle);
 
 /*!
  *  @brief  Function to destruct a clock object
@@ -186,6 +171,29 @@ extern ClockP_Status ClockP_delete(ClockP_Handle handle);
  *  @return
  */
 extern void ClockP_destruct(ClockP_Struct *clockP);
+
+/*!
+ *  @brief  Function to create a clock object.
+ *
+ *  @param  clockFxn  Function called when timeout or period expires.
+ *  @param  timeout   The startup timeout, if supported by the RTOS.
+ *  @param  params    Pointer to the instance configuration parameters. NULL
+ *                    denotes to use the default parameters. The ClockP default
+ *                    parameters are noted in ::ClockP_Params_init.
+ *
+ *  @return A ClockP_Handle on success or a NULL on an error.  This handle can
+ *          be passed to ClockP_start()
+ */
+extern ClockP_Handle ClockP_create(ClockP_Fxn clockFxn,
+                                   uint32_t timeout,
+                                   ClockP_Params *params);
+
+/*!
+ *  @brief  Function to delete a clock.
+ *
+ *  @param  handle  A ClockP_Handle returned from ::ClockP_create
+ */
+extern void ClockP_delete(ClockP_Handle handle);
 
 /*!
  *  @brief  Get CPU frequency in Hz
@@ -212,6 +220,42 @@ extern uint32_t ClockP_getSystemTickPeriod();
 extern uint32_t ClockP_getSystemTicks();
 
 /*!
+ *  @brief  Get number of ClockP tick periods expected to expire between
+ *          now and the next interrupt from the timer peripheral
+ *
+ *  Returns the number of ClockP tick periods that are expected to expore
+ *  between now and the next interrupt from the timer peripheral.
+ *
+ *  Used internally by PowerCC26XX module
+ *
+ *  @return count in ticks
+ */
+extern uint32_t ClockP_getTicksUntilInterrupt();
+
+/*!
+ *  @brief  Get timeout of clock instance.
+ *
+ *  Returns the remaining time in clock ticks if the instance has
+ *  been started.  If the clock is not active, the initial timeout value
+ *  is returned.
+ *
+ *  @return  remaining timeout in clock ticks.
+ *
+ *  Cannot change the initial timeout if the clock has been started.
+ */
+extern uint32_t ClockP_getTimeout(ClockP_Handle handle);
+
+/*!
+ *  @brief  Determine if a clock object is currently active (i.e., running)
+ *
+ *  Returns true if the clock object is currently active, otherwise
+ *  returns false.
+ *
+ *  @return  active state
+ */
+extern bool ClockP_isActive(ClockP_Handle handle);
+
+/*!
  *  @brief  Initialize params structure to default values.
  *
  *  The default parameters are:
@@ -223,32 +267,20 @@ extern uint32_t ClockP_getSystemTicks();
 extern void ClockP_Params_init(ClockP_Params *params);
 
 /*!
+ *  @brief  Set the initial timeout
+ *
+ *  @param timeout    Initial timeout in ClockP ticks
+ *
+ *  Cannot change the initial timeout if the clock has been started.
+ */
+extern void ClockP_setTimeout(ClockP_Handle handle, uint32_t timeout);
+
+/*!
  *  @brief  Function to start a clock.
  *
  *  @param  handle  A ClockP_Handle returned from ::ClockP_create
- *
- *  @param  timeout   The timeout used for a one-shot clock object.  The
- *                    value of timeout must not be 0.
- *
- *  @return Status of the functions
- *    - ClockP_OK: Scheduled the clock function successfully
- *    - ClockP_FAILURE: The API failed.
  */
-extern ClockP_Status ClockP_start(ClockP_Handle handle, uint32_t timeout);
-
-/*!
- *  @brief  Function to start a clock from an interrupt.
- *
- *  @param  handle  A ClockP_Handle returned from ::ClockP_create
- *
- *  @param  timeout   The timeout used for a one-shot clock object.  The
- *                    value of timeout must not be 0.
- *
- *  @return Status of the functions
- *    - ClockP_OK: Scheduled the clock function successfully
- *    - ClockP_FAILURE: The API failed.
- */
-extern ClockP_Status ClockP_startFromISR(ClockP_Handle handle, uint32_t timeout);
+extern void ClockP_start(ClockP_Handle handle);
 
 /*!
  *  @brief  Function to stop a clock.
@@ -261,20 +293,9 @@ extern ClockP_Status ClockP_startFromISR(ClockP_Handle handle, uint32_t timeout)
  *    - ClockP_OK: Stopped the clock function successfully
  *    - ClockP_FAILURE: The API failed.
  */
-extern ClockP_Status ClockP_stop(ClockP_Handle handle);
+extern void ClockP_stop(ClockP_Handle handle);
 
-/*!
- *  @brief  Function to stop a clock from an interrupt.
- *
- *  @param  handle  A ClockP_Handle returned from ::ClockP_create
- *
- *  @return Status of the functions
- *    - ClockP_OK: Stopped the clock function successfully
- *    - ClockP_FAILURE: The API failed.
- */
-extern ClockP_Status ClockP_stopFromISR(ClockP_Handle handle);
-
-extern ClockP_Status ClockP_timestamp(ClockP_Handle handle);
+extern void ClockP_timestamp(ClockP_Handle handle);
 
 /*!
  *  @brief  Set delay in microseconds
@@ -283,7 +304,7 @@ extern ClockP_Status ClockP_timestamp(ClockP_Handle handle);
  *
  *  @return ClockP_OK
  */
-extern ClockP_Status ClockP_usleep(uint32_t usec);
+extern void ClockP_usleep(uint32_t usec);
 
 /*!
  *  @brief  Set delay in seconds
@@ -292,7 +313,8 @@ extern ClockP_Status ClockP_usleep(uint32_t usec);
  *
  *  @return ClockP_OK
  */
-extern ClockP_Status ClockP_sleep(uint32_t sec);
+extern void ClockP_sleep(uint32_t sec);
+
 
 #ifdef __cplusplus
 }

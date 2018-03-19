@@ -13,6 +13,8 @@ CC32xx.xdc
 CC32xx.xs
 MSP432.xdc
 MSP432.xs
+MSP432E.xdc
+MSP432E.xs
 CC13xx.xdc
 CC13xx.xs
 CC26xx.xdc
@@ -21,7 +23,7 @@ package/ti.catalog.arm.cortexm4.sch
 package/.vers_g200
 package/.vers_r200
 package/.vers_b200
-package/.xdc-D05
+package/.xdc-D20
 package/ti_catalog_arm_cortexm4.java
 package/ti_catalog_arm_cortexm4.class
 package/package_ti.catalog.arm.cortexm4.c

@@ -2,20 +2,20 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     VIRTUAL FUNCTIONS
  *     FUNCTION STUBS
  *     FUNCTION SELECTORS
  *     CONVERTORS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -70,8 +70,8 @@ struct ti_uia_runtime_IUIATimestampProvider_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
     xdc_Bits32 (*get32)(void);
-    xdc_Void (*get64)(xdc_runtime_Types_Timestamp64*);
-    xdc_Void (*getFreq)(xdc_runtime_Types_FreqHz*);
+    xdc_Void (*get64)(xdc_runtime_Types_Timestamp64* result);
+    xdc_Void (*getFreq)(xdc_runtime_Types_FreqHz* freq);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_uia_runtime_IUIATimestampProvider_Module__BASE__CR
@@ -88,24 +88,28 @@ __extern const xdc_runtime_Types_Base ti_uia_runtime_IUIATimestampProvider_Inter
  */
 
 /* Module_id */
-static inline xdc_runtime_Types_ModuleId ti_uia_runtime_IUIATimestampProvider_Module_id( ti_uia_runtime_IUIATimestampProvider_Module mod )
+static inline xdc_runtime_Types_ModuleId ti_uia_runtime_IUIATimestampProvider_Module_id(ti_uia_runtime_IUIATimestampProvider_Module mod);
+static inline xdc_runtime_Types_ModuleId ti_uia_runtime_IUIATimestampProvider_Module_id(ti_uia_runtime_IUIATimestampProvider_Module mod)
 {
     return mod->__sysp->__mid;
 }
 
 /* get32 */
+static inline xdc_Bits32 ti_uia_runtime_IUIATimestampProvider_get32(ti_uia_runtime_IUIATimestampProvider_Module __mod);
 static inline xdc_Bits32 ti_uia_runtime_IUIATimestampProvider_get32( ti_uia_runtime_IUIATimestampProvider_Module __mod )
 {
     return __mod->get32();
 }
 
 /* get64 */
+static inline xdc_Void ti_uia_runtime_IUIATimestampProvider_get64(ti_uia_runtime_IUIATimestampProvider_Module __mod, xdc_runtime_Types_Timestamp64 *result);
 static inline xdc_Void ti_uia_runtime_IUIATimestampProvider_get64( ti_uia_runtime_IUIATimestampProvider_Module __mod, xdc_runtime_Types_Timestamp64 *result )
 {
     __mod->get64(result);
 }
 
 /* getFreq */
+static inline xdc_Void ti_uia_runtime_IUIATimestampProvider_getFreq(ti_uia_runtime_IUIATimestampProvider_Module __mod, xdc_runtime_Types_FreqHz *freq);
 static inline xdc_Void ti_uia_runtime_IUIATimestampProvider_getFreq( ti_uia_runtime_IUIATimestampProvider_Module __mod, xdc_runtime_Types_FreqHz *freq )
 {
     __mod->getFreq(freq);
@@ -125,21 +129,24 @@ static inline xdc_Void ti_uia_runtime_IUIATimestampProvider_getFreq( ti_uia_runt
 
 /* get32_{FxnT,fxnP} */
 typedef xdc_Bits32 (*ti_uia_runtime_IUIATimestampProvider_get32_FxnT)(void);
-static inline ti_uia_runtime_IUIATimestampProvider_get32_FxnT ti_uia_runtime_IUIATimestampProvider_get32_fxnP( ti_uia_runtime_IUIATimestampProvider_Module __mod )
+static inline ti_uia_runtime_IUIATimestampProvider_get32_FxnT ti_uia_runtime_IUIATimestampProvider_get32_fxnP(ti_uia_runtime_IUIATimestampProvider_Module __mod);
+static inline ti_uia_runtime_IUIATimestampProvider_get32_FxnT ti_uia_runtime_IUIATimestampProvider_get32_fxnP(ti_uia_runtime_IUIATimestampProvider_Module __mod)
 {
     return (ti_uia_runtime_IUIATimestampProvider_get32_FxnT)__mod->get32;
 }
 
 /* get64_{FxnT,fxnP} */
-typedef xdc_Void (*ti_uia_runtime_IUIATimestampProvider_get64_FxnT)(xdc_runtime_Types_Timestamp64*);
-static inline ti_uia_runtime_IUIATimestampProvider_get64_FxnT ti_uia_runtime_IUIATimestampProvider_get64_fxnP( ti_uia_runtime_IUIATimestampProvider_Module __mod )
+typedef xdc_Void (*ti_uia_runtime_IUIATimestampProvider_get64_FxnT)(xdc_runtime_Types_Timestamp64* result);
+static inline ti_uia_runtime_IUIATimestampProvider_get64_FxnT ti_uia_runtime_IUIATimestampProvider_get64_fxnP(ti_uia_runtime_IUIATimestampProvider_Module __mod);
+static inline ti_uia_runtime_IUIATimestampProvider_get64_FxnT ti_uia_runtime_IUIATimestampProvider_get64_fxnP(ti_uia_runtime_IUIATimestampProvider_Module __mod)
 {
     return (ti_uia_runtime_IUIATimestampProvider_get64_FxnT)__mod->get64;
 }
 
 /* getFreq_{FxnT,fxnP} */
-typedef xdc_Void (*ti_uia_runtime_IUIATimestampProvider_getFreq_FxnT)(xdc_runtime_Types_FreqHz*);
-static inline ti_uia_runtime_IUIATimestampProvider_getFreq_FxnT ti_uia_runtime_IUIATimestampProvider_getFreq_fxnP( ti_uia_runtime_IUIATimestampProvider_Module __mod )
+typedef xdc_Void (*ti_uia_runtime_IUIATimestampProvider_getFreq_FxnT)(xdc_runtime_Types_FreqHz* freq);
+static inline ti_uia_runtime_IUIATimestampProvider_getFreq_FxnT ti_uia_runtime_IUIATimestampProvider_getFreq_fxnP(ti_uia_runtime_IUIATimestampProvider_Module __mod);
+static inline ti_uia_runtime_IUIATimestampProvider_getFreq_FxnT ti_uia_runtime_IUIATimestampProvider_getFreq_fxnP(ti_uia_runtime_IUIATimestampProvider_Module __mod)
 {
     return (ti_uia_runtime_IUIATimestampProvider_getFreq_FxnT)__mod->getFreq;
 }
@@ -150,7 +157,8 @@ static inline ti_uia_runtime_IUIATimestampProvider_getFreq_FxnT ti_uia_runtime_I
  */
 
 /* Module_upCast */
-static inline xdc_runtime_ITimestampProvider_Module ti_uia_runtime_IUIATimestampProvider_Module_upCast( ti_uia_runtime_IUIATimestampProvider_Module m )
+static inline xdc_runtime_ITimestampProvider_Module ti_uia_runtime_IUIATimestampProvider_Module_upCast(ti_uia_runtime_IUIATimestampProvider_Module m);
+static inline xdc_runtime_ITimestampProvider_Module ti_uia_runtime_IUIATimestampProvider_Module_upCast(ti_uia_runtime_IUIATimestampProvider_Module m)
 {
     return(xdc_runtime_ITimestampProvider_Module)m;
 }
@@ -159,21 +167,24 @@ static inline xdc_runtime_ITimestampProvider_Module ti_uia_runtime_IUIATimestamp
 #define ti_uia_runtime_IUIATimestampProvider_Module_to_xdc_runtime_ITimestampProvider ti_uia_runtime_IUIATimestampProvider_Module_upCast
 
 /* Module_downCast */
-static inline ti_uia_runtime_IUIATimestampProvider_Module ti_uia_runtime_IUIATimestampProvider_Module_downCast( xdc_runtime_ITimestampProvider_Module m )
+static inline ti_uia_runtime_IUIATimestampProvider_Module ti_uia_runtime_IUIATimestampProvider_Module_downCast(xdc_runtime_ITimestampProvider_Module m);
+static inline ti_uia_runtime_IUIATimestampProvider_Module ti_uia_runtime_IUIATimestampProvider_Module_downCast(xdc_runtime_ITimestampProvider_Module m)
 {
     const xdc_runtime_Types_Base* b;
     for (b = m->__base; b; b = b->base) {
         if (b == &ti_uia_runtime_IUIATimestampProvider_Interface__BASE__C) {
             return (ti_uia_runtime_IUIATimestampProvider_Module)m;
         }
-    } return 0;
+    }
+    return 0;
 }
 
 /* Module_from_xdc_runtime_ITimestampProvider */
 #define ti_uia_runtime_IUIATimestampProvider_Module_from_xdc_runtime_ITimestampProvider ti_uia_runtime_IUIATimestampProvider_Module_downCast
 
 /* Module_upCast2 */
-static inline xdc_runtime_ITimestampClient_Module ti_uia_runtime_IUIATimestampProvider_Module_upCast2( ti_uia_runtime_IUIATimestampProvider_Module m )
+static inline xdc_runtime_ITimestampClient_Module ti_uia_runtime_IUIATimestampProvider_Module_upCast2(ti_uia_runtime_IUIATimestampProvider_Module m);
+static inline xdc_runtime_ITimestampClient_Module ti_uia_runtime_IUIATimestampProvider_Module_upCast2(ti_uia_runtime_IUIATimestampProvider_Module m)
 {
     return(xdc_runtime_ITimestampClient_Module)m;
 }
@@ -182,14 +193,16 @@ static inline xdc_runtime_ITimestampClient_Module ti_uia_runtime_IUIATimestampPr
 #define ti_uia_runtime_IUIATimestampProvider_Module_to_xdc_runtime_ITimestampClient ti_uia_runtime_IUIATimestampProvider_Module_upCast2
 
 /* Module_downCast2 */
-static inline ti_uia_runtime_IUIATimestampProvider_Module ti_uia_runtime_IUIATimestampProvider_Module_downCast2( xdc_runtime_ITimestampClient_Module m )
+static inline ti_uia_runtime_IUIATimestampProvider_Module ti_uia_runtime_IUIATimestampProvider_Module_downCast2(xdc_runtime_ITimestampClient_Module m);
+static inline ti_uia_runtime_IUIATimestampProvider_Module ti_uia_runtime_IUIATimestampProvider_Module_downCast2(xdc_runtime_ITimestampClient_Module m)
 {
     const xdc_runtime_Types_Base* b;
     for (b = m->__base; b; b = b->base) {
         if (b == &ti_uia_runtime_IUIATimestampProvider_Interface__BASE__C) {
             return (ti_uia_runtime_IUIATimestampProvider_Module)m;
         }
-    } return 0;
+    }
+    return 0;
 }
 
 /* Module_from_xdc_runtime_ITimestampClient */

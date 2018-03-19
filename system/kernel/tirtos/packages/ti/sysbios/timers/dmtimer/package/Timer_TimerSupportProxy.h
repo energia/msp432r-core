@@ -2,21 +2,21 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     MODULE-WIDE CONFIGS
  *     VIRTUAL FUNCTIONS
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -227,7 +227,7 @@ __extern __FAR__ const CT__ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_Obj
 struct ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_Void (*enable)(xdc_UInt, xdc_runtime_Error_Block*);
+    xdc_Void (*enable)(xdc_UInt timerId, xdc_runtime_Error_Block* eb);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_Module__FXNS__CR
@@ -289,7 +289,8 @@ __extern xdc_Void ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_enable__E( x
  */
 
 /* Module_upCast */
-static inline ti_sysbios_interfaces_ITimerSupport_Module ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_Module_upCast( void )
+static inline ti_sysbios_interfaces_ITimerSupport_Module ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_Module_upCast(void);
+static inline ti_sysbios_interfaces_ITimerSupport_Module ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_Module_upCast(void)
 {
     return (ti_sysbios_interfaces_ITimerSupport_Module)ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_Proxy__delegate__S();
 }
@@ -312,6 +313,7 @@ static inline ti_sysbios_interfaces_ITimerSupport_Module ti_sysbios_timers_dmtim
 #define ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_Module_heap() ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_Module__id ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_Module_id(void);
 static inline CT__ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_Module__id ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_Module_id( void ) 
 {
     return ti_sysbios_timers_dmtimer_Timer_TimerSupportProxy_Module__id__C;

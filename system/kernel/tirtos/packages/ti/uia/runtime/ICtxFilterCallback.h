@@ -2,20 +2,20 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     PER-INSTANCE TYPES
  *     VIRTUAL FUNCTIONS
  *     FUNCTION STUBS
  *     FUNCTION SELECTORS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -82,7 +82,7 @@ struct ti_uia_runtime_ICtxFilterCallback_Params {
 struct ti_uia_runtime_ICtxFilterCallback_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_Void (*updateIsLoggingEnabledFlag)(void*);
+    xdc_Void (*updateIsLoggingEnabledFlag)(void* __inst);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_uia_runtime_ICtxFilterCallback_Module__BASE__CR
@@ -100,31 +100,35 @@ __extern const xdc_runtime_Types_Base ti_uia_runtime_ICtxFilterCallback_Interfac
 
 /* create */
 xdc__CODESECT(ti_uia_runtime_ICtxFilterCallback_create, "ti_uia_runtime_ICtxFilterCallback_create")
-__extern ti_uia_runtime_ICtxFilterCallback_Handle ti_uia_runtime_ICtxFilterCallback_create(ti_uia_runtime_ICtxFilterCallback_Module, const ti_uia_runtime_ICtxFilterCallback_Params *, xdc_runtime_Error_Block *__eb);
+__extern ti_uia_runtime_ICtxFilterCallback_Handle ti_uia_runtime_ICtxFilterCallback_create(ti_uia_runtime_ICtxFilterCallback_Module __mod, const ti_uia_runtime_ICtxFilterCallback_Params *__prms, xdc_runtime_Error_Block *__eb);
 
 /* delete */
 xdc__CODESECT(ti_uia_runtime_ICtxFilterCallback_delete, "ti_uia_runtime_ICtxFilterCallback_delete")
-__extern xdc_Void ti_uia_runtime_ICtxFilterCallback_delete(ti_uia_runtime_ICtxFilterCallback_Handle *);
+__extern xdc_Void ti_uia_runtime_ICtxFilterCallback_delete(ti_uia_runtime_ICtxFilterCallback_Handle *__inst);
 
 /* Handle_to_Module */
-static inline ti_uia_runtime_ICtxFilterCallback_Module ti_uia_runtime_ICtxFilterCallback_Handle_to_Module( ti_uia_runtime_ICtxFilterCallback_Handle inst )
+static inline ti_uia_runtime_ICtxFilterCallback_Module ti_uia_runtime_ICtxFilterCallback_Handle_to_Module(ti_uia_runtime_ICtxFilterCallback_Handle inst);
+static inline ti_uia_runtime_ICtxFilterCallback_Module ti_uia_runtime_ICtxFilterCallback_Handle_to_Module(ti_uia_runtime_ICtxFilterCallback_Handle inst)
 {
     return inst->__fxns;
 }
 
 /* Handle_label */
-static inline xdc_runtime_Types_Label *ti_uia_runtime_ICtxFilterCallback_Handle_label( ti_uia_runtime_ICtxFilterCallback_Handle inst, xdc_runtime_Types_Label *lab )
+static inline xdc_runtime_Types_Label *ti_uia_runtime_ICtxFilterCallback_Handle_label(ti_uia_runtime_ICtxFilterCallback_Handle inst, xdc_runtime_Types_Label *lab);
+static inline xdc_runtime_Types_Label *ti_uia_runtime_ICtxFilterCallback_Handle_label(ti_uia_runtime_ICtxFilterCallback_Handle inst, xdc_runtime_Types_Label *lab)
 {
     return inst->__fxns->__sysp->__label(inst, lab);
 }
 
 /* Module_id */
-static inline xdc_runtime_Types_ModuleId ti_uia_runtime_ICtxFilterCallback_Module_id( ti_uia_runtime_ICtxFilterCallback_Module mod )
+static inline xdc_runtime_Types_ModuleId ti_uia_runtime_ICtxFilterCallback_Module_id(ti_uia_runtime_ICtxFilterCallback_Module mod);
+static inline xdc_runtime_Types_ModuleId ti_uia_runtime_ICtxFilterCallback_Module_id(ti_uia_runtime_ICtxFilterCallback_Module mod)
 {
     return mod->__sysp->__mid;
 }
 
 /* updateIsLoggingEnabledFlag */
+static inline xdc_Void ti_uia_runtime_ICtxFilterCallback_updateIsLoggingEnabledFlag(ti_uia_runtime_ICtxFilterCallback_Handle __inst);
 static inline xdc_Void ti_uia_runtime_ICtxFilterCallback_updateIsLoggingEnabledFlag( ti_uia_runtime_ICtxFilterCallback_Handle __inst )
 {
     __inst->__fxns->updateIsLoggingEnabledFlag((void*)__inst);
@@ -143,8 +147,9 @@ static inline xdc_Void ti_uia_runtime_ICtxFilterCallback_updateIsLoggingEnabledF
  */
 
 /* updateIsLoggingEnabledFlag_{FxnT,fxnP} */
-typedef xdc_Void (*ti_uia_runtime_ICtxFilterCallback_updateIsLoggingEnabledFlag_FxnT)(xdc_Void *);
-static inline ti_uia_runtime_ICtxFilterCallback_updateIsLoggingEnabledFlag_FxnT ti_uia_runtime_ICtxFilterCallback_updateIsLoggingEnabledFlag_fxnP( ti_uia_runtime_ICtxFilterCallback_Handle __inst )
+typedef xdc_Void (*ti_uia_runtime_ICtxFilterCallback_updateIsLoggingEnabledFlag_FxnT)(xdc_Void *__inst);
+static inline ti_uia_runtime_ICtxFilterCallback_updateIsLoggingEnabledFlag_FxnT ti_uia_runtime_ICtxFilterCallback_updateIsLoggingEnabledFlag_fxnP(ti_uia_runtime_ICtxFilterCallback_Handle __inst);
+static inline ti_uia_runtime_ICtxFilterCallback_updateIsLoggingEnabledFlag_FxnT ti_uia_runtime_ICtxFilterCallback_updateIsLoggingEnabledFlag_fxnP(ti_uia_runtime_ICtxFilterCallback_Handle __inst)
 {
     return (ti_uia_runtime_ICtxFilterCallback_updateIsLoggingEnabledFlag_FxnT)__inst->__fxns->updateIsLoggingEnabledFlag;
 }

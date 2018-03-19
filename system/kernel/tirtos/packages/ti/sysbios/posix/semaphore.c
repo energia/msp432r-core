@@ -39,6 +39,7 @@
 #include <ti/sysbios/knl/Clock.h>
 #include <ti/sysbios/knl/Semaphore.h>
 
+#include "pthread_util.h"
 #include "errno.h"
 #include "semaphore.h"
 
@@ -97,47 +98,21 @@ int sem_post(sem_t *semaphore)
 int sem_timedwait(sem_t *semaphore, const struct timespec *abstime)
 {
     Bool               retVal;
-    struct timespec    curtime;
     UInt32             timeout;
-    long               usecs = 0;
-    time_t             secs = 0;
-    int                retc = 0;
 
-    if ((abstime->tv_nsec < 0) || (1000000000 <= abstime->tv_nsec)) {
+    if (_pthread_abstime2ticks(CLOCK_REALTIME, abstime, &timeout) != 0) {
         /* EINVAL */
         return (-1);
-    }
-
-    /*
-     *  Since timers are supported, timeouts must be based on the realtime
-     *  clock.
-     */
-    clock_gettime(CLOCK_REALTIME, &curtime);
-    secs = abstime->tv_sec - curtime.tv_sec;
-
-    if ((abstime->tv_sec < curtime.tv_sec) ||
-            ((secs == 0) && (abstime->tv_nsec <= curtime.tv_nsec))) {
-        timeout = 0;
-    }
-    else {
-        usecs = (abstime->tv_nsec - curtime.tv_nsec) / 1000;
-
-        if (usecs < 0) {
-            usecs += 1000000;
-            secs--;
-        }
-        usecs += (long)secs * 1000000;
-        timeout = (UInt32)(usecs / Clock_tickPeriod);
     }
 
     retVal = Semaphore_pend(Semaphore_handle(&(semaphore->sem)), timeout);
 
     if (!retVal) {
         /* ETIMEDOUT */
-        retc = -1;
+        return (-1);
     }
 
-    return (retc);
+    return (0);
 }
 
 /*

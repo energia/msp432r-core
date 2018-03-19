@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Texas Instruments Incorporated
+ * Copyright (c) 2014-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,6 +35,7 @@
 
 var Boot = null;
 var Program = null;
+var Build = null;
 
 /*
  *  ======== module$meta$init ========
@@ -62,16 +63,66 @@ function module$meta$init()
 function module$use()
 {
     Program = xdc.useModule('xdc.cfg.Program');
+    Build = xdc.useModule('ti.sysbios.Build');
 
     /* only install Boot_init if using XDC runtime */
     if (Program.build.rtsName === null) {
         return;
     }
 
+    /* if Boot.configureClocks not written, set default based on device ID */
+    if (!Boot.$written("configureClocks")) {
+        if (Program.platformName.match(/MSP432P401/)) {
+            Boot.configureClocks = true;
+        }
+        else {
+            Boot.configureClocks = false;
+        }
+    }
+    /* else, if was written, check that selection is valid */
+    else {
+        if ((!Program.platformName.match(/MSP432P401/)) &&
+            (Boot.configureClocks == true)) {
+            Boot.$logError(
+              "Boot.configureClocks is only supported on MSP432P401x devices",
+              Boot);
+        }
+    }
+
     /* install Boot_init as reset function */
     var Reset = xdc.useModule('xdc.runtime.Reset');
     Reset.fxns[Reset.fxns.length++] =
         '&ti_sysbios_family_arm_msp432_init_Boot_init';
+
+    /* insert include path to CMSIS headers */
+    var xdcpath =
+        String(environment['xdc.path'] + '/packages/').replace(/\\/g, "/");
+    var xdcincs = xdcpath.split(';');
+    var ADD_XDC_PATH = "";
+    for each (var inc in xdcincs) {
+        if(inc.match(/source/)) {
+            ADD_XDC_PATH += "-I\"" + inc + "/third_party/CMSIS/Include/\" ";
+        }
+    }
+    Build.ccArgs.$add(ADD_XDC_PATH);
+
+    /* Add in the appropriate -DDeviceFamily_XXX definition */
+
+    var devFamily = "";
+
+    if (Program.platformName.match(/MSP432P401/)) {
+        devFamily = "-DDeviceFamily_MSP432P401x";
+    }
+    else if (Program.platformName.match(/MSP432P411/)) {
+        devFamily = "-DDeviceFamily_MSP432P4x1xI";
+    }
+    else {
+        Boot.$logWarning("Unknown device: " + Program.cpu.deviceName
+            + ". Assuming MSP432P401P compatible.", Boot);
+        devFamily = "-DDeviceFamily_MSP432P401x";
+    }
+
+    Build.ccArgs.$add(devFamily);
 }
 
 /*

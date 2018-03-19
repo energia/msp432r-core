@@ -126,8 +126,14 @@ if (xdc.om.$name == "cfg") {
             resetVectorAddress : 0,
             vectorTableAddress : 0x20000000,
         },
-        "MSP432.*": {
+        "MSP432P.*": {
             numInterrupts : 16 + 64,
+            numPriorities : 8,
+            resetVectorAddress : 0,
+            vectorTableAddress : 0x20000000,
+        },
+        "MSP432E.*": {
+            numInterrupts : 16 + 200,
             numPriorities : 8,
             resetVectorAddress : 0,
             vectorTableAddress : 0x20000000,
@@ -154,6 +160,12 @@ if (xdc.om.$name == "cfg") {
             numInterrupts : 16 + 147,           /* supports 163 interrupts */
             numPriorities : 8,
             resetVectorAddress : 0x00200000,    /* placed low in flash */
+            vectorTableAddress : 0x20000000,
+        },
+        "CC26.2.*": {
+            numInterrupts : 16 + 38,            /* supports 54 interrupts */
+            numPriorities : 8,
+            resetVectorAddress : 0x0,           /* placed low in flash */
             vectorTableAddress : 0x20000000,
         },
         "CC26.*": {
@@ -192,6 +204,7 @@ if (xdc.om.$name == "cfg") {
     deviceTable["OMAP5430"]      = deviceTable["OMAP4430"];
     deviceTable["Vayu"]          = deviceTable["OMAP4430"];
     deviceTable["DRA7XX"]        = deviceTable["OMAP4430"];
+    deviceTable["CC13.2.*"]      = deviceTable["CC26.2.*"];
     deviceTable["CC13.*"]        = deviceTable["CC26.*"];
     deviceTable["CC3220"]        = deviceTable["CC3200"];
     deviceTable["CC3220S"]       = deviceTable["CC3200"];
@@ -578,12 +591,13 @@ function module$static$init(mod, params)
     }
 
     mod.isrStack = null;
-    mod.isrStackBase = $externPtr('__TI_STACK_BASE');
     /* Overriden by Hwi_initIsrStackSize() if IAR */
     if (Program.build.target.$name.match(/iar/)) {
+        mod.isrStackBase = null;
         mod.isrStackSize = null;
     }
     else {
+        mod.isrStackBase = $externPtr('__TI_STACK_BASE');
         mod.isrStackSize = $externPtr('__TI_STACK_SIZE');
     }
 
@@ -676,7 +690,9 @@ function module$static$init(mod, params)
 
         /* place msp432's sparse dispatchTable in SRAM_CODE */
         if (Program.platformName.match(/ti\.platforms\.msp432/)) {
+            if (!(Program.cpu.deviceName.match(/MSP432E/))) {
             Build.ccArgs.$add("-Dti_sysbios_family_arm_m3_Hwi_FIX_MSP432_DISPATCH_TABLE_ADDRESS");
+            }
         }
     }
 
@@ -911,23 +927,44 @@ var modView = null;
 /*
  *  ======== viewGetPriority ========
  */
-function viewGetPriority(that, intNum)
+function viewGetPriority(view, that, intNum)
 {
     var priority = 0;
+    var registerBaseAddr;
 
     try {
-        that.IPR = Program.fetchArray({type: 'xdc.rov.support.ScalarStructs.S_UInt8', isScalar: true}, 0xe000e400, 240, false);
-        that.SHPR = Program.fetchArray({type: 'xdc.rov.support.ScalarStructs.S_UInt8', isScalar: true}, 0xe000ed18, 12, false);
+        registerBaseAddr = 0xe000e400;
+        that.IPR = Program.fetchArray(
+            {
+                type: 'xdc.rov.support.ScalarStructs.S_UInt8',
+                isScalar: true
+            },
+            registerBaseAddr,
+            240,
+            false);
+
+        registerBaseAddr = 0xe000ed18;
+        that.SHPR = Program.fetchArray(
+            {
+                type: 'xdc.rov.support.ScalarStructs.S_UInt8',
+                isScalar: true
+            },
+            registerBaseAddr,
+            12,
+            false);
+
+        if (intNum >= 16) {
+            priority = that.IPR[intNum-16];
+        }
+        else if (intNum >= 4) {
+            priority = that.SHPR[intNum-4];
+        }
     }
     catch (e) {
         print("Error: Problem fetching priorities: " + e.toString());
-    }
 
-    if (intNum >= 16) {
-        priority = that.IPR[intNum-16];
-    }
-    else if (intNum >= 4) {
-        priority = that.SHPR[intNum-4];
+        Program.displayError(view, "priority",  "Unable to read Hwi priority " +
+            "registers at 0x" + registerBaseAddr.toString(16));
     }
 
     return priority;
@@ -1000,7 +1037,7 @@ function viewFillBasicInfo(view, obj)
         }
     }
 
-    var pri = viewGetPriority(this, Math.abs(obj.intNum));
+    var pri = viewGetPriority(view, this, Math.abs(obj.intNum));
 
     mask = numPriTable[hwiModCfg.NUM_PRIORITIES].mask;
 

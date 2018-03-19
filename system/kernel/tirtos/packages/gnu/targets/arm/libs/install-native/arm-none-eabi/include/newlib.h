@@ -11,7 +11,7 @@
 /* #undef _ELIX_LEVEL */
 
 /* Newlib version */
-#define _NEWLIB_VERSION "2.2.0"
+#include <_newlib_version.h>
 
 /* C99 formats support (such as %a, %zu, ...) in IO functions like
  * printf/scanf enabled */
@@ -82,6 +82,9 @@
 
 /* Define if small footprint nano-formatted-IO implementation used.  */
 /* #undef _NANO_FORMATTED_IO */
+
+/* Define if using retargetable functions for default lock routines.  */
+#define _RETARGETABLE_LOCKING 1
 
 /*
  * Iconv encodings enabled ("to" direction)

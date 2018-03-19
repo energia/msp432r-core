@@ -77,6 +77,13 @@ function compile(goal) {
         A53F.targetPkgPath = this.$package.packageBase;
     }
 
+//    var ccOpts = A15F.ccOpts.prefix + " " + A15F.cc.opts + " " +
+//                 A15F.ccOpts.suffix;
+
+//    if (!ccOpts.match(/--specs=nano\.specs/)) {
+//        goal.opts.copts += " --specs=nano.specs ";
+//    }
+
 //    goal.opts.copts += " -I" + A53F.targetPkgPath +
 //        "/libs/install-native/$(GCCTARG)/include ";
 
@@ -101,7 +108,7 @@ function link(goal)
     return(this.$super.link(goal));
 }
 /*
- *  @(#) gnu.targets.arm; 1, 0, 0,0; 2-10-2017 09:06:32; /db/ztree/library/trees/xdctargets/xdctargets-m11/src/ xlibrary
+ *  @(#) gnu.targets.arm; 1, 0, 0,1; 7-27-2017 11:46:57; /db/ztree/library/trees/xdctargets/xdctargets-o04/src/ xlibrary
 
  */
 

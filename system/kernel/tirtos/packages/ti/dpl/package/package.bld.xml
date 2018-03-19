@@ -50,16 +50,106 @@
         <srcFile name="package/lib/lib/dpl_msp432p4xx/./SwiP_tirtos.orm4f.dep" src="./SwiP_tirtos.c"/>
         <srcFile name="package/lib/lib/dpl_msp432p4xx/./SystemP_tirtos.orm4f.dep" src="./SystemP_tirtos.c"/>
         <srcFile name="package/lib/lib/dpl_msp432p4xx/./PowerMSP432_tirtos.orm4f.dep" src="./PowerMSP432_tirtos.c"/>
+        <srcFile name="lib/dpl_msp432p401x.aem4f.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/package/package_ti.dpl.oem4f.dep" src="package/package_ti.dpl.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./ClockP_tirtos.oem4f.dep" src="./ClockP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./DebugP_tirtos.oem4f.dep" src="./DebugP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./HwiP_tirtos.oem4f.dep" src="./HwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./MutexP_tirtos.oem4f.dep" src="./MutexP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./SemaphoreP_tirtos.oem4f.dep" src="./SemaphoreP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./SwiP_tirtos.oem4f.dep" src="./SwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./SystemP_tirtos.oem4f.dep" src="./SystemP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./PowerMSP432_tirtos.oem4f.dep" src="./PowerMSP432_tirtos.c"/>
+        <srcFile name="lib/dpl_msp432p401x.am4fg.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/package/package_ti.dpl.om4fg.dep" src="package/package_ti.dpl.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./ClockP_tirtos.om4fg.dep" src="./ClockP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./DebugP_tirtos.om4fg.dep" src="./DebugP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./HwiP_tirtos.om4fg.dep" src="./HwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./MutexP_tirtos.om4fg.dep" src="./MutexP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./SemaphoreP_tirtos.om4fg.dep" src="./SemaphoreP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./SwiP_tirtos.om4fg.dep" src="./SwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./SystemP_tirtos.om4fg.dep" src="./SystemP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./PowerMSP432_tirtos.om4fg.dep" src="./PowerMSP432_tirtos.c"/>
+        <srcFile name="lib/dpl_msp432p401x.arm4f.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/package/package_ti.dpl.orm4f.dep" src="package/package_ti.dpl.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./ClockP_tirtos.orm4f.dep" src="./ClockP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./DebugP_tirtos.orm4f.dep" src="./DebugP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./HwiP_tirtos.orm4f.dep" src="./HwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./MutexP_tirtos.orm4f.dep" src="./MutexP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./SemaphoreP_tirtos.orm4f.dep" src="./SemaphoreP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./SwiP_tirtos.orm4f.dep" src="./SwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./SystemP_tirtos.orm4f.dep" src="./SystemP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p401x/./PowerMSP432_tirtos.orm4f.dep" src="./PowerMSP432_tirtos.c"/>
+        <srcFile name="lib/dpl_msp432p4x1xi.aem4f.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/package/package_ti.dpl.oem4f.dep" src="package/package_ti.dpl.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./ClockP_tirtos.oem4f.dep" src="./ClockP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./DebugP_tirtos.oem4f.dep" src="./DebugP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./HwiP_tirtos.oem4f.dep" src="./HwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./MutexP_tirtos.oem4f.dep" src="./MutexP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./SemaphoreP_tirtos.oem4f.dep" src="./SemaphoreP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./SwiP_tirtos.oem4f.dep" src="./SwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./SystemP_tirtos.oem4f.dep" src="./SystemP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./PowerMSP432_tirtos.oem4f.dep" src="./PowerMSP432_tirtos.c"/>
+        <srcFile name="lib/dpl_msp432p4x1xi.am4fg.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/package/package_ti.dpl.om4fg.dep" src="package/package_ti.dpl.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./ClockP_tirtos.om4fg.dep" src="./ClockP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./DebugP_tirtos.om4fg.dep" src="./DebugP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./HwiP_tirtos.om4fg.dep" src="./HwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./MutexP_tirtos.om4fg.dep" src="./MutexP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./SemaphoreP_tirtos.om4fg.dep" src="./SemaphoreP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./SwiP_tirtos.om4fg.dep" src="./SwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./SystemP_tirtos.om4fg.dep" src="./SystemP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./PowerMSP432_tirtos.om4fg.dep" src="./PowerMSP432_tirtos.c"/>
+        <srcFile name="lib/dpl_msp432p4x1xi.arm4f.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/package/package_ti.dpl.orm4f.dep" src="package/package_ti.dpl.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./ClockP_tirtos.orm4f.dep" src="./ClockP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./DebugP_tirtos.orm4f.dep" src="./DebugP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./HwiP_tirtos.orm4f.dep" src="./HwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./MutexP_tirtos.orm4f.dep" src="./MutexP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./SemaphoreP_tirtos.orm4f.dep" src="./SemaphoreP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./SwiP_tirtos.orm4f.dep" src="./SwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./SystemP_tirtos.orm4f.dep" src="./SystemP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xi/./PowerMSP432_tirtos.orm4f.dep" src="./PowerMSP432_tirtos.c"/>
+        <srcFile name="lib/dpl_msp432p4x1xt.aem4f.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/package/package_ti.dpl.oem4f.dep" src="package/package_ti.dpl.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./ClockP_tirtos.oem4f.dep" src="./ClockP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./DebugP_tirtos.oem4f.dep" src="./DebugP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./HwiP_tirtos.oem4f.dep" src="./HwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./MutexP_tirtos.oem4f.dep" src="./MutexP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./SemaphoreP_tirtos.oem4f.dep" src="./SemaphoreP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./SwiP_tirtos.oem4f.dep" src="./SwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./SystemP_tirtos.oem4f.dep" src="./SystemP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./PowerMSP432_tirtos.oem4f.dep" src="./PowerMSP432_tirtos.c"/>
+        <srcFile name="lib/dpl_msp432p4x1xt.am4fg.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/package/package_ti.dpl.om4fg.dep" src="package/package_ti.dpl.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./ClockP_tirtos.om4fg.dep" src="./ClockP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./DebugP_tirtos.om4fg.dep" src="./DebugP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./HwiP_tirtos.om4fg.dep" src="./HwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./MutexP_tirtos.om4fg.dep" src="./MutexP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./SemaphoreP_tirtos.om4fg.dep" src="./SemaphoreP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./SwiP_tirtos.om4fg.dep" src="./SwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./SystemP_tirtos.om4fg.dep" src="./SystemP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./PowerMSP432_tirtos.om4fg.dep" src="./PowerMSP432_tirtos.c"/>
+        <srcFile name="lib/dpl_msp432p4x1xt.arm4f.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/package/package_ti.dpl.orm4f.dep" src="package/package_ti.dpl.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./ClockP_tirtos.orm4f.dep" src="./ClockP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./DebugP_tirtos.orm4f.dep" src="./DebugP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./HwiP_tirtos.orm4f.dep" src="./HwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./MutexP_tirtos.orm4f.dep" src="./MutexP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./SemaphoreP_tirtos.orm4f.dep" src="./SemaphoreP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./SwiP_tirtos.orm4f.dep" src="./SwiP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./SystemP_tirtos.orm4f.dep" src="./SystemP_tirtos.c"/>
+        <srcFile name="package/lib/lib/dpl_msp432p4x1xt/./PowerMSP432_tirtos.orm4f.dep" src="./PowerMSP432_tirtos.c"/>
         <srcFile name="package/rel/ti_dpl.tar.dep" src="package/rel/ti_dpl.xdc.inc"/>
     </makefiles>
     <targets>
         <target name="ti.targets.arm.elf.M4F"
-            version="ti.targets.arm.elf.M4F{1,0,16.9,1"
-            rawVersion="16.9.1"
+            version="ti.targets.arm.elf.M4F{1,0,16.9,4"
+            rawVersion="16.9.4"
             platform="ti.platforms.tiva:TM4C1294NCPDT:1"
             isa="v7M4"
             suffix="em4f"
-            rootDir="/db/vendors/ti/arm/16.9.1.LTS/Linux"
+            rootDir="/db/vendors/ti/arm/16.9.4.LTS/Linux"
             os="undefined"
             rts="ti.targets.arm.rtsarm">
             <model endian="little"
@@ -67,12 +157,12 @@
                 dataModel="undefined"/>
         </target>
         <target name="gnu.targets.arm.M4F"
-            version="gnu.targets.arm.M4F{1,0,4.9,3"
-            rawVersion="4.9.3"
+            version="gnu.targets.arm.M4F{1,0,6.3,1"
+            rawVersion="6.3.1"
             platform="ti.platforms.tiva:TM4C1294NCPDT"
             isa="v7M4"
             suffix="m4fg"
-            rootDir="/db/vendors/linaro/gcc-arm-none-eabi-4_9-2015q3"
+            rootDir="/db/vendors/linaro/gcc-arm-none-eabi-6-2017-q1-update"
             os="undefined"
             rts="gnu.targets.arm.rtsv7M">
             <model endian="little"
@@ -80,12 +170,12 @@
                 dataModel="undefined"/>
         </target>
         <target name="iar.targets.arm.M4F"
-            version="iar.targets.arm.M4F{1,0,7.80,1"
-            rawVersion="7.80.1.28"
+            version="iar.targets.arm.M4F{1,0,8.11,1"
+            rawVersion="8.11.1.47"
             platform="ti.platforms.tiva:TM4C1294NCPDT:1"
             isa="v7M4"
             suffix="rm4f"
-            rootDir="/db/vendors/iar/arm/7.80.1/Linux"
+            rootDir="/db/vendors/iar/arm/8.11.1.47/Linux"
             os="undefined"
             rts="iar.targets.arm.rts">
             <model endian="little"
@@ -104,6 +194,42 @@
         target="gnu.targets.arm.M4F"/>
     <library name="lib/dpl_msp432p4xx"
         pname="lib/dpl_msp432p4xx.arm4f"
+        profile="release"
+        target="iar.targets.arm.M4F"/>
+    <library name="lib/dpl_msp432p401x"
+        pname="lib/dpl_msp432p401x.aem4f"
+        profile="release"
+        target="ti.targets.arm.elf.M4F"/>
+    <library name="lib/dpl_msp432p401x"
+        pname="lib/dpl_msp432p401x.am4fg"
+        profile="release"
+        target="gnu.targets.arm.M4F"/>
+    <library name="lib/dpl_msp432p401x"
+        pname="lib/dpl_msp432p401x.arm4f"
+        profile="release"
+        target="iar.targets.arm.M4F"/>
+    <library name="lib/dpl_msp432p4x1xi"
+        pname="lib/dpl_msp432p4x1xi.aem4f"
+        profile="release"
+        target="ti.targets.arm.elf.M4F"/>
+    <library name="lib/dpl_msp432p4x1xi"
+        pname="lib/dpl_msp432p4x1xi.am4fg"
+        profile="release"
+        target="gnu.targets.arm.M4F"/>
+    <library name="lib/dpl_msp432p4x1xi"
+        pname="lib/dpl_msp432p4x1xi.arm4f"
+        profile="release"
+        target="iar.targets.arm.M4F"/>
+    <library name="lib/dpl_msp432p4x1xt"
+        pname="lib/dpl_msp432p4x1xt.aem4f"
+        profile="release"
+        target="ti.targets.arm.elf.M4F"/>
+    <library name="lib/dpl_msp432p4x1xt"
+        pname="lib/dpl_msp432p4x1xt.am4fg"
+        profile="release"
+        target="gnu.targets.arm.M4F"/>
+    <library name="lib/dpl_msp432p4x1xt"
+        pname="lib/dpl_msp432p4x1xt.arm4f"
         profile="release"
         target="iar.targets.arm.M4F"/>
     </libraries>
@@ -135,6 +261,15 @@
         <file name="./PowerMSP432_tirtos.c"/>
         <file name="lib/dpl_msp432p4xx.am4fg"/>
         <file name="lib/dpl_msp432p4xx.arm4f"/>
+        <file name="lib/dpl_msp432p401x.aem4f"/>
+        <file name="lib/dpl_msp432p401x.am4fg"/>
+        <file name="lib/dpl_msp432p401x.arm4f"/>
+        <file name="lib/dpl_msp432p4x1xi.aem4f"/>
+        <file name="lib/dpl_msp432p4x1xi.am4fg"/>
+        <file name="lib/dpl_msp432p4x1xi.arm4f"/>
+        <file name="lib/dpl_msp432p4x1xt.aem4f"/>
+        <file name="lib/dpl_msp432p4x1xt.am4fg"/>
+        <file name="lib/dpl_msp432p4x1xt.arm4f"/>
     </release>
     </releases>
     <repositories>

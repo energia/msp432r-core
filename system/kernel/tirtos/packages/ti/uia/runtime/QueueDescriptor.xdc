@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2014, Texas Instruments Incorporated
+ * Copyright (c) 2013-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -91,19 +91,18 @@ module QueueDescriptor {
 
     /*!
      *  ======== QueueType ========
-     *  Type of Queue
+     *  Type of Queue.  We use constants instead of enums as a
+     *  work-around for bug DVT-1928.
      */
-    enum QueueType {
-        QueueType_NONE = 0,
-        QueueType_TOHOST_CMD_CIRCULAR_BUFFER = 1,
-        QueueType_FROMHOST_CMD_CIRCULAR_BUFFER = 2,
-        QueueType_TOHOST_EVENT_CIRCULAR_BUFFER = 3,
-        QueueType_TOHOST_EVENT_OVERFLOW_BUFFER = 4,
-        QueueType_TOHOST_DATA_CIRCULAR_BUFFER = 5,
-        QueueType_FROMHOST_DATA_CIRCULAR_BUFFER = 6,
-        QueueType_TOHOST_EVENT_UIAPACKET_ARRAY = 7,
-        QueueType_TOHOST_EVENT_UIAPACKET_STOPMODE = 8
-    };
+    const UInt QueueType_NONE = 0;
+    const UInt QueueType_TOHOST_CMD_CIRCULAR_BUFFER = 1;
+    const UInt QueueType_FROMHOST_CMD_CIRCULAR_BUFFER = 2;
+    const UInt QueueType_TOHOST_EVENT_CIRCULAR_BUFFER = 3;
+    const UInt QueueType_TOHOST_EVENT_OVERFLOW_BUFFER = 4;
+    const UInt QueueType_TOHOST_DATA_CIRCULAR_BUFFER = 5;
+    const UInt QueueType_FROMHOST_DATA_CIRCULAR_BUFFER = 6;
+    const UInt QueueType_TOHOST_EVENT_UIAPACKET_ARRAY = 7;
+    const UInt QueueType_TOHOST_EVENT_UIAPACKET_STOPMODE = 8;
 
     /*!
      *  ======== Header ========
@@ -142,7 +141,7 @@ module QueueDescriptor {
     struct Header {
         Int structSize;
         Header *next;
-        QueueType queueType;
+        UInt queueType;
         Bits32 *readPtr;
         Bits32 *writePtr;
         Bits32 *queueStartAdrs;
@@ -151,8 +150,8 @@ module QueueDescriptor {
         UInt ownerModuleId;
         UInt priority;
         Bits32 *numDroppedCtrAdrs;
-	Bits32 *partialPacketWritePtr;
-	};
+        Bits32 *partialPacketWritePtr;
+    };
 
     /*!
      *  ======== addToList ========
@@ -189,7 +188,7 @@ module QueueDescriptor {
     @DirectCall
     Void initHeader(QueueDescriptor.Header *pHdr, Ptr start,
                    SizeT size, UInt loggerModuleId, UInt loggerInstanceId,
-                   UInt loggerPriority, QueueType type, Ptr pNumDroppedCtr);
+                   UInt loggerPriority, UInt type, Ptr pNumDroppedCtr);
 
     /*!
      *  ======== removeFromList ========

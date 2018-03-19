@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -143,5 +143,5 @@ int_fast16_t Watchdog_setReload(Watchdog_Handle handle, uint32_t ticks)
  */
 uint32_t Watchdog_convertMsToTicks(Watchdog_Handle handle, uint32_t milliseconds)
 {
-    return (handle->fxnTablePtr->watchdogConvertMsToTicks(milliseconds));
+    return (handle->fxnTablePtr->watchdogConvertMsToTicks(handle, milliseconds));
 }

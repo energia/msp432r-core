@@ -52,11 +52,14 @@ extern "C" {
  *  ssize_t is a signed size_t.  It is the return type for mqueue
  *  receive functions, so we need to define it for TI and IAR.
  */
+#define _TI_POSIX_DECL_ssize_t
 typedef long int ssize_t;
 
 typedef uint32_t clockid_t;
 typedef unsigned long useconds_t;
 typedef unsigned long timer_t;
+
+typedef long suseconds_t;
 
 #else
 #include <../include/sys/types.h>
@@ -107,7 +110,8 @@ typedef struct pthread_barrier_t {
  *  ======== pthread_cond_t ========
  */
 typedef struct pthread_cond_t {
-    ti_sysbios_knl_Queue_Struct     waitList;
+    ti_sysbios_knl_Queue_Struct  waitList;
+    clockid_t                    clockId;
 } pthread_cond_t;
 
 typedef void *pthread_mutex_t;
@@ -141,9 +145,10 @@ typedef struct pthread_rwlock_t {
 } pthread_rwlock_t;
 
 struct _pthread_cleanup_context {
-    void    (*fxn)(void *);
-    void    *arg;
-    int     cancelType;
+    pthread_t  thread;
+    void       (*fxn)(void *);
+    void      *arg;
+    int        cancelType;
     struct _pthread_cleanup_context *next;
 };
 

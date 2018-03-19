@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 #ifndef ti_sysbios_rts_gnu_ReentSupport__INTERNAL__
@@ -23,6 +23,9 @@
 
 /* getReent */
 #define ReentSupport_getReent ti_sysbios_rts_gnu_ReentSupport_getReent__I
+
+/* initGlobalReent */
+#define ReentSupport_initGlobalReent ti_sysbios_rts_gnu_ReentSupport_initGlobalReent__I
 
 /* taskCreateHook */
 #define ReentSupport_taskCreateHook ti_sysbios_rts_gnu_ReentSupport_taskCreateHook__I

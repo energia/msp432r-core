@@ -6,7 +6,7 @@ package/ti.sysbios.timers.rti.sch
 package/.vers_g200
 package/.vers_r200
 package/.vers_b200
-package/.xdc-D05
+package/.xdc-D20
 package/ti_sysbios_timers_rti.java
 package/ti_sysbios_timers_rti.class
 package/package_ti.sysbios.timers.rti.c

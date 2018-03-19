@@ -19,6 +19,6 @@ if (!(target instanceof xdc.module("xdc.bld.ITarget").Module)) {
 target.ccOpts.prefix = unescape("-gdwarf-3%20-gstrict-dwarf%20-fno-exceptions%20") + target.ccOpts.prefix;
 
 /* configuro was passed the target's rootDir explicitly */
-target.rootDir = '/db/toolsrc/library/tools/vendors/linaro/gcc-arm-none-eabi-4_9-2015q3';
+target.rootDir = '/db/vendors/linaro/gcc-arm-none-eabi-6-2017-q1-update/';
 
 Build.targets = [target];

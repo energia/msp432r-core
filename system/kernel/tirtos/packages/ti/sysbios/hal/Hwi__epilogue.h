@@ -483,7 +483,65 @@ static inline Void ti_sysbios_hal_Hwi_restore(UInt key)
 }
 
 #else
+#if defined(xdc_target__isaCompatible_v8A)
 
+#include "ti/sysbios/family/arm/gicv3/Hwi.h"
+
+#ifndef ti_sysbios_Build_useHwiMacros
+/* Use function call implementations */
+
+/*
+ *  ======== Hwi_disable ========
+ */
+#define ti_sysbios_hal_Hwi_disable()    \
+    ti_sysbios_family_arm_gicv3_Hwi_disableFxn()
+
+/*
+ *  ======== Hwi_enable ========
+ */
+#define ti_sysbios_hal_Hwi_enable()     \
+    ti_sysbios_family_arm_gicv3_Hwi_enableFxn()
+
+/*
+ *  ======== Hwi_restore ========
+ */
+#define ti_sysbios_hal_Hwi_restore(key) \
+    ti_sysbios_family_arm_gicv3_Hwi_restoreFxn(key)
+
+#else /* ti_sysbios_Build_useHwiMacros */
+
+#include <ti/sysbios/family/arm/gicv3/HwiMacros.h>
+
+/*
+ *  ======== Hwi_disable ========
+ */
+static inline UInt ti_sysbios_hal_Hwi_disable()
+{
+    UInt key;
+    ti_sysbios_family_arm_gicv3_HwiMacros_disable(key);
+    return (key);
+}
+
+/*
+ *  ======== Hwi_enable ========
+ */
+static inline UInt ti_sysbios_hal_Hwi_enable()
+{
+    UInt key;
+    ti_sysbios_family_arm_gicv3_HwiMacros_enable(key);
+    return (key);
+}
+
+/*
+ *  ======== Hwi_restore ========
+ */
+static inline Void ti_sysbios_hal_Hwi_restore(UInt key)
+{
+    ti_sysbios_family_arm_gicv3_HwiMacros_restore(key);
+}
+#endif /* !ti_sysbios_Build_useHwiMacros */
+
+#else
 #if defined(xdc_target__isaCompatible_v7R)
 
 #if defined(__ti__)
@@ -521,6 +579,8 @@ static inline Void ti_sysbios_hal_Hwi_restore(UInt key)
  *  ======== Hwi_restore ========
  */
 #define ti_sysbios_hal_Hwi_restore(key) ti_sysbios_hal_Hwi_HwiProxy_restore(key)
+
+#endif
 
 #endif
 

@@ -42,35 +42,38 @@
 #include <xdc/std.h>
 #include <xdc/runtime/Error.h>
 #include <xdc/runtime/Types.h>
-#include <xdc/runtime/Memory.h>
-#include <ti/sysbios/hal/Hwi.h>
+
 #include <ti/sysbios/BIOS.h>
 #include <ti/sysbios/knl/Clock.h>
 #include <ti/sysbios/knl/Task.h>
+
+uint32_t ClockP_tickPeriod;
 
 
 /*
  *  ======== ClockP_construct ========
  */
 ClockP_Handle ClockP_construct(ClockP_Struct *handle, ClockP_Fxn clockFxn,
-        ClockP_Params *params)
+        uint32_t timeout, ClockP_Params *params)
 {
     Clock_Params clockParams;
     Clock_Handle clock;
 
     if (params == NULL) {
         Clock_construct((Clock_Struct *)handle, (Clock_FuncPtr)clockFxn,
-                0 /* timeout */, NULL);
+                timeout, NULL);
     }
     else {
         Clock_Params_init(&clockParams);
         clockParams.arg = params->arg;
-        clockParams.instance->name = params->name;
-        Clock_construct((Clock_Struct *)handle, (Clock_FuncPtr)clockFxn, 0,
-                        &clockParams);
+        Clock_construct((Clock_Struct *)handle, (Clock_FuncPtr)clockFxn,
+                timeout, &clockParams);
     }
 
     clock = Clock_handle((Clock_Struct *)handle);
+
+    /* temp workaround, need to reconsider */
+    ClockP_tickPeriod = Clock_tickPeriod;
 
     return ((ClockP_Handle)clock);
 }
@@ -78,22 +81,26 @@ ClockP_Handle ClockP_construct(ClockP_Struct *handle, ClockP_Fxn clockFxn,
 /*
  *  ======== ClockP_create ========
  */
-ClockP_Handle ClockP_create(ClockP_Fxn clockFxn, ClockP_Params *params)
+ClockP_Handle ClockP_create(ClockP_Fxn clockFxn, uint32_t timeout,
+        ClockP_Params *params)
 {
     Clock_Handle handle;
     Clock_Params clockParams;
 
     /* Use 0 for timeout since we are only doing one-shot clocks */
     if (params == NULL) {
-        handle = Clock_create((Clock_FuncPtr)clockFxn, 0, NULL, Error_IGNORE);
+        handle = Clock_create((Clock_FuncPtr)clockFxn, timeout, NULL,
+                Error_IGNORE);
     }
     else {
         Clock_Params_init(&clockParams);
         clockParams.arg = params->arg;
-        clockParams.instance->name = params->name;
-        handle = Clock_create((Clock_FuncPtr)clockFxn, 0, &clockParams,
+        handle = Clock_create((Clock_FuncPtr)clockFxn, timeout, &clockParams,
                 Error_IGNORE);
     }
+
+    /* temp workaround, need to reconsider */
+    ClockP_tickPeriod = Clock_tickPeriod;
 
     return ((ClockP_Handle)handle);
 }
@@ -101,13 +108,11 @@ ClockP_Handle ClockP_create(ClockP_Fxn clockFxn, ClockP_Params *params)
 /*
  *  ======== ClockP_delete ========
  */
-ClockP_Status ClockP_delete(ClockP_Handle handle)
+void ClockP_delete(ClockP_Handle handle)
 {
     Clock_Handle clock = (Clock_Handle)handle;
 
     Clock_delete(&clock);
-
-    return (ClockP_OK);
 }
 
 /*
@@ -143,31 +148,76 @@ uint32_t ClockP_getSystemTicks()
 }
 
 /*
+ *  ======== ClockP_getTimeout ========
+ */
+uint32_t ClockP_getTimeout(ClockP_Handle handle)
+{
+    return (Clock_getTimeout((Clock_Handle)handle));
+}
+
+/*
+ *  ======== ClockP_isActive ========
+ */
+bool ClockP_isActive(ClockP_Handle handle)
+{
+    return (Clock_isActive((Clock_Handle)handle));
+}
+
+/*
  *  ======== ClockP_Params_init ========
  */
 void ClockP_Params_init(ClockP_Params *params)
 {
-    params->name = NULL;
     params->arg = 0;
+}
+
+/*
+ *  ======== ClockP_setTimeout ========
+ */
+void ClockP_setTimeout(ClockP_Handle handle, uint32_t timeout)
+{
+    Clock_setTimeout((Clock_Handle)handle, timeout);
 }
 
 /*
  *  ======== ClockP_start ========
  */
-ClockP_Status ClockP_start(ClockP_Handle handle, uint32_t timeout)
+void ClockP_start(ClockP_Handle handle)
 {
-    Clock_setTimeout((Clock_Handle)handle, timeout);
     Clock_start((Clock_Handle)handle);
-
-    return (ClockP_OK);
 }
 
 /*
- *  ======== ClockP_startFromISR ========
+ *  ======== ClockP_stop ========
  */
-ClockP_Status ClockP_startFromISR(ClockP_Handle handle, uint32_t timeout)
+void ClockP_stop(ClockP_Handle handle)
 {
-    return(ClockP_start(handle, timeout));
+    Clock_stop((Clock_Handle)handle);
+}
+
+/*
+ *  ======== ClockP_sleep ========
+ */
+void ClockP_sleep(uint32_t sec)
+{
+    unsigned long timeout;
+
+    timeout = ((unsigned long)sec * 1000000L) / Clock_tickPeriod;
+
+    Task_sleep((uint32_t)timeout);
+}
+
+/*
+ *  ======== ClockP_usleep ========
+ */
+void ClockP_usleep(uint32_t usec)
+{
+    uint32_t timeout;
+
+    /* Clock_tickPeriod is the Clock period in microsecnds */
+    timeout = (uint32_t)((usec + Clock_tickPeriod / 2) / Clock_tickPeriod);
+
+    Task_sleep(timeout);
 }
 
 /*
@@ -176,59 +226,4 @@ ClockP_Status ClockP_startFromISR(ClockP_Handle handle, uint32_t timeout)
 size_t ClockP_staticObjectSize(void)
 {
     return (sizeof(Clock_Struct));
-}
-
-/*
- *  ======== ClockP_stop ========
- */
-ClockP_Status ClockP_stop(ClockP_Handle handle)
-{
-    Clock_stop((Clock_Handle)handle);
-
-    return (ClockP_OK);
-}
-
-/*
- *  ======== ClockP_stopFromISR ========
- */
-ClockP_Status ClockP_stopFromISR(ClockP_Handle handle)
-{
-    return(ClockP_stop(handle));
-}
-
-/*
- *  ======== ClockP_sleep ========
- */
-ClockP_Status ClockP_sleep(uint32_t sec)
-{
-    unsigned long timeout;
-
-    timeout = ((unsigned long)sec * 1000000L) / Clock_tickPeriod;
-
-    Task_sleep((uint32_t)timeout);
-
-    return (ClockP_OK);
-}
-
-/*
- *  ======== ClockP_usleep ========
- */
-ClockP_Status ClockP_usleep(uint32_t usec)
-{
-    uint32_t timeout;
-
-    /*
-    *  If usec >= 1000000 microseconds, this should set errno to EINVAL
-    *  and return -1.
-    */
-    if (usec >= 1000000) {
-        return (ClockP_FAILURE);
-    }
-
-    /* Clock_tickPeriod is the Clock period in microsecnds */
-    timeout = (uint32_t)((usec + Clock_tickPeriod / 2) / Clock_tickPeriod);
-
-    Task_sleep(timeout);
-
-    return (ClockP_OK);
 }

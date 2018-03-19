@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 import java.util.*;
 import org.mozilla.javascript.*;
@@ -11,7 +11,7 @@ import xdc.services.spec.Session;
 
 public class ti_catalog_arm_cortexm4
 {
-    static final String VERS = "@(#) xdc-D05\n";
+    static final String VERS = "@(#) xdc-D20\n";
 
     static final Proto.Elm $$T_Bool = Proto.Elm.newBool();
     static final Proto.Elm $$T_Num = Proto.Elm.newNum();
@@ -190,6 +190,23 @@ public class ti_catalog_arm_cortexm4
         om.bind("ti.catalog.arm.cortexm4.MSP432.Params", new Proto.Str(po, true));
     }
 
+    void MSP432E$$OBJECTS()
+    {
+        Proto.Obj po, spo;
+        Value.Obj vo;
+
+        po = (Proto.Obj)om.bind("ti.catalog.arm.cortexm4.MSP432E.Module", new Proto.Obj());
+        vo = (Value.Obj)om.bind("ti.catalog.arm.cortexm4.MSP432E", new Value.Obj("ti.catalog.arm.cortexm4.MSP432E", po));
+        pkgV.bind("MSP432E", vo);
+        // decls 
+        // insts 
+        Object insP = om.bind("ti.catalog.arm.cortexm4.MSP432E.Instance", new Proto.Obj());
+        po = (Proto.Obj)om.bind("ti.catalog.arm.cortexm4.MSP432E$$Object", new Proto.Obj());
+        om.bind("ti.catalog.arm.cortexm4.MSP432E.Object", new Proto.Str(po, true));
+        po = (Proto.Obj)om.bind("ti.catalog.arm.cortexm4.MSP432E$$Params", new Proto.Obj());
+        om.bind("ti.catalog.arm.cortexm4.MSP432E.Params", new Proto.Str(po, true));
+    }
+
     void CC13xx$$OBJECTS()
     {
         Proto.Obj po, spo;
@@ -257,6 +274,11 @@ public class ti_catalog_arm_cortexm4
     void MSP432$$CONSTS()
     {
         // module MSP432
+    }
+
+    void MSP432E$$CONSTS()
+    {
+        // module MSP432E
     }
 
     void CC13xx$$CONSTS()
@@ -702,6 +724,67 @@ public class ti_catalog_arm_cortexm4
         Global.eval(sb.toString());
     }
 
+    void MSP432E$$CREATES()
+    {
+        Proto.Fxn fxn;
+        StringBuilder sb;
+
+        fxn = (Proto.Fxn)om.bind("ti.catalog.arm.cortexm4.MSP432E$$create", new Proto.Fxn(om.findStrict("ti.catalog.arm.cortexm4.MSP432E.Module", "ti.catalog.arm.cortexm4"), om.findStrict("ti.catalog.arm.cortexm4.MSP432E.Instance", "ti.catalog.arm.cortexm4"), 2, 1, false));
+                fxn.addArg(0, "revision", $$T_Str, $$UNDEF);
+                fxn.addArg(1, "__params", (Proto)om.findStrict("ti.catalog.arm.cortexm4.MSP432E.Params", "ti.catalog.arm.cortexm4"), Global.newObject());
+        sb = new StringBuilder();
+        sb.append("ti$catalog$arm$cortexm4$MSP432E$$create = function( revision, __params ) {\n");
+            sb.append("var __mod = xdc.om['ti.catalog.arm.cortexm4.MSP432E'];\n");
+            sb.append("var __inst = xdc.om['ti.catalog.arm.cortexm4.MSP432E.Instance'].$$make();\n");
+            sb.append("__inst.$$bind('$package', xdc.om['ti.catalog.arm.cortexm4']);\n");
+            sb.append("__inst.$$bind('$index', __mod.$instances.length);\n");
+            sb.append("__inst.$$bind('$category', 'Instance');\n");
+            sb.append("__inst.$$bind('$args', {revision:revision});\n");
+            sb.append("__inst.$$bind('$module', __mod);\n");
+            sb.append("__mod.$instances.$add(__inst);\n");
+            sb.append("__inst.cpuCore = __mod.PARAMS.cpuCore;\n");
+            sb.append("__inst.cpuCoreRevision = __mod.PARAMS.cpuCoreRevision;\n");
+            sb.append("__inst.minProgUnitSize = __mod.PARAMS.minProgUnitSize;\n");
+            sb.append("__inst.minDataUnitSize = __mod.PARAMS.minDataUnitSize;\n");
+            sb.append("__inst.dataWordSize = __mod.PARAMS.dataWordSize;\n");
+            sb.append("__inst.peripherals = __mod.PARAMS.peripherals;\n");
+            sb.append("__inst.deviceHeader = __mod.PARAMS.deviceHeader;\n");
+            sb.append("__inst.isa = __mod.PARAMS.isa;\n");
+            sb.append("for (var __p in __params) __inst[__p] = __params[__p];\n");
+            sb.append("var save = xdc.om.$curpkg;\n");
+            sb.append("xdc.om.$$bind('$curpkg', __mod.$package.$name);\n");
+            sb.append("__mod.instance$meta$init.$fxn.apply(__inst, [revision]);\n");
+            sb.append("xdc.om.$$bind('$curpkg', save);\n");
+            sb.append("__inst.$$bless();\n");
+            sb.append("return __inst;\n");
+        sb.append("}\n");
+        Global.eval(sb.toString());
+        fxn = (Proto.Fxn)om.bind("ti.catalog.arm.cortexm4.MSP432E$$construct", new Proto.Fxn(om.findStrict("ti.catalog.arm.cortexm4.MSP432E.Module", "ti.catalog.arm.cortexm4"), null, 3, 1, false));
+                fxn.addArg(0, "__obj", (Proto)om.findStrict("ti.catalog.arm.cortexm4.MSP432E$$Object", "ti.catalog.arm.cortexm4"), null);
+                fxn.addArg(1, "revision", $$T_Str, $$UNDEF);
+                fxn.addArg(2, "__params", (Proto)om.findStrict("ti.catalog.arm.cortexm4.MSP432E.Params", "ti.catalog.arm.cortexm4"), Global.newObject());
+        sb = new StringBuilder();
+        sb.append("ti$catalog$arm$cortexm4$MSP432E$$construct = function( __obj, revision, __params ) {\n");
+            sb.append("var __mod = xdc.om['ti.catalog.arm.cortexm4.MSP432E'];\n");
+            sb.append("var __inst = __obj;\n");
+            sb.append("__inst.$$bind('$args', {revision:revision});\n");
+            sb.append("__inst.$$bind('$module', __mod);\n");
+            sb.append("__mod.$objects.$add(__inst);\n");
+            sb.append("__inst.cpuCore = __mod.PARAMS.cpuCore;\n");
+            sb.append("__inst.cpuCoreRevision = __mod.PARAMS.cpuCoreRevision;\n");
+            sb.append("__inst.minProgUnitSize = __mod.PARAMS.minProgUnitSize;\n");
+            sb.append("__inst.minDataUnitSize = __mod.PARAMS.minDataUnitSize;\n");
+            sb.append("__inst.dataWordSize = __mod.PARAMS.dataWordSize;\n");
+            sb.append("__inst.peripherals = __mod.PARAMS.peripherals;\n");
+            sb.append("__inst.deviceHeader = __mod.PARAMS.deviceHeader;\n");
+            sb.append("__inst.isa = __mod.PARAMS.isa;\n");
+            sb.append("for (var __p in __params) __inst[__p] = __params[__p];\n");
+            sb.append("__inst.$$bless();\n");
+            sb.append("return null;\n");
+        sb.append("}\n");
+        Global.eval(sb.toString());
+    }
+
     void CC13xx$$CREATES()
     {
         Proto.Fxn fxn;
@@ -866,6 +949,12 @@ public class ti_catalog_arm_cortexm4
 
     }
 
+    void MSP432E$$FUNCTIONS()
+    {
+        Proto.Fxn fxn;
+
+    }
+
     void CC13xx$$FUNCTIONS()
     {
         Proto.Fxn fxn;
@@ -903,6 +992,10 @@ public class ti_catalog_arm_cortexm4
     }
 
     void MSP432$$SIZES()
+    {
+    }
+
+    void MSP432E$$SIZES()
     {
     }
 
@@ -1327,6 +1420,63 @@ public class ti_catalog_arm_cortexm4
                 if (fxn != null) po.addFxn("getRegisterSet", (Proto.Fxn)om.findStrict("xdc.platform.ICpuDataSheet$$getRegisterSet", "ti.catalog.arm.cortexm4"), fxn);
     }
 
+    void MSP432E$$TYPES()
+    {
+        Scriptable cap;
+        Proto.Obj po;
+        Proto.Str ps;
+        Proto.Typedef pt;
+        Object fxn;
+
+        cap = (Scriptable)Global.callFxn("loadCapsule", xdcO, "ti/catalog/arm/cortexm4/MSP432E.xs");
+        om.bind("ti.catalog.arm.cortexm4.MSP432E$$capsule", cap);
+        po = (Proto.Obj)om.findStrict("ti.catalog.arm.cortexm4.MSP432E.Module", "ti.catalog.arm.cortexm4");
+        po.init("ti.catalog.arm.cortexm4.MSP432E.Module", om.findStrict("ti.catalog.ICpuDataSheet.Module", "ti.catalog.arm.cortexm4"));
+                po.addFld("$hostonly", $$T_Num, 1, "r");
+                po.addFxn("create", (Proto.Fxn)om.findStrict("ti.catalog.arm.cortexm4.MSP432E$$create", "ti.catalog.arm.cortexm4"), Global.get("ti$catalog$arm$cortexm4$MSP432E$$create"));
+                po.addFxn("construct", (Proto.Fxn)om.findStrict("ti.catalog.arm.cortexm4.MSP432E$$construct", "ti.catalog.arm.cortexm4"), Global.get("ti$catalog$arm$cortexm4$MSP432E$$construct"));
+        fxn = Global.get(cap, "module$use");
+        if (fxn != null) om.bind("ti.catalog.arm.cortexm4.MSP432E$$module$use", true);
+        if (fxn != null) po.addFxn("module$use", $$T_Met, fxn);
+        fxn = Global.get(cap, "module$meta$init");
+        if (fxn != null) om.bind("ti.catalog.arm.cortexm4.MSP432E$$module$meta$init", true);
+        if (fxn != null) po.addFxn("module$meta$init", $$T_Met, fxn);
+        fxn = Global.get(cap, "instance$meta$init");
+        if (fxn != null) om.bind("ti.catalog.arm.cortexm4.MSP432E$$instance$meta$init", true);
+        if (fxn != null) po.addFxn("instance$meta$init", $$T_Met, fxn);
+        fxn = Global.get(cap, "module$validate");
+        if (fxn != null) om.bind("ti.catalog.arm.cortexm4.MSP432E$$module$validate", true);
+        if (fxn != null) po.addFxn("module$validate", $$T_Met, fxn);
+        po = (Proto.Obj)om.findStrict("ti.catalog.arm.cortexm4.MSP432E.Instance", "ti.catalog.arm.cortexm4");
+        po.init("ti.catalog.arm.cortexm4.MSP432E.Instance", om.findStrict("ti.catalog.ICpuDataSheet.Instance", "ti.catalog.arm.cortexm4"));
+                po.addFld("$hostonly", $$T_Num, 1, "r");
+        po.addFld("cpuCore", $$T_Str, "CM4", "wh");
+        po.addFld("isa", $$T_Str, "v7M4", "wh");
+        po.addFld("cpuCoreRevision", $$T_Str, "1.0", "wh");
+        po.addFld("minProgUnitSize", Proto.Elm.newCNum("(xdc_Int)"), 1L, "wh");
+        po.addFld("minDataUnitSize", Proto.Elm.newCNum("(xdc_Int)"), 1L, "wh");
+        po.addFld("dataWordSize", Proto.Elm.newCNum("(xdc_Int)"), 4L, "wh");
+                fxn = Global.get(cap, "getMemoryMap");
+                if (fxn != null) po.addFxn("getMemoryMap", (Proto.Fxn)om.findStrict("xdc.platform.ICpuDataSheet$$getMemoryMap", "ti.catalog.arm.cortexm4"), fxn);
+                fxn = Global.get(cap, "getRegisterSet");
+                if (fxn != null) po.addFxn("getRegisterSet", (Proto.Fxn)om.findStrict("xdc.platform.ICpuDataSheet$$getRegisterSet", "ti.catalog.arm.cortexm4"), fxn);
+        po = (Proto.Obj)om.findStrict("ti.catalog.arm.cortexm4.MSP432E$$Params", "ti.catalog.arm.cortexm4");
+        po.init("ti.catalog.arm.cortexm4.MSP432E.Params", om.findStrict("ti.catalog.ICpuDataSheet$$Params", "ti.catalog.arm.cortexm4"));
+                po.addFld("$hostonly", $$T_Num, 1, "r");
+        po.addFld("cpuCore", $$T_Str, "CM4", "wh");
+        po.addFld("isa", $$T_Str, "v7M4", "wh");
+        po.addFld("cpuCoreRevision", $$T_Str, "1.0", "wh");
+        po.addFld("minProgUnitSize", Proto.Elm.newCNum("(xdc_Int)"), 1L, "wh");
+        po.addFld("minDataUnitSize", Proto.Elm.newCNum("(xdc_Int)"), 1L, "wh");
+        po.addFld("dataWordSize", Proto.Elm.newCNum("(xdc_Int)"), 4L, "wh");
+        po = (Proto.Obj)om.findStrict("ti.catalog.arm.cortexm4.MSP432E$$Object", "ti.catalog.arm.cortexm4");
+        po.init("ti.catalog.arm.cortexm4.MSP432E.Object", om.findStrict("ti.catalog.arm.cortexm4.MSP432E.Instance", "ti.catalog.arm.cortexm4"));
+                fxn = Global.get(cap, "getMemoryMap");
+                if (fxn != null) po.addFxn("getMemoryMap", (Proto.Fxn)om.findStrict("xdc.platform.ICpuDataSheet$$getMemoryMap", "ti.catalog.arm.cortexm4"), fxn);
+                fxn = Global.get(cap, "getRegisterSet");
+                if (fxn != null) po.addFxn("getRegisterSet", (Proto.Fxn)om.findStrict("xdc.platform.ICpuDataSheet$$getRegisterSet", "ti.catalog.arm.cortexm4"), fxn);
+    }
+
     void CC13xx$$TYPES()
     {
         Scriptable cap;
@@ -1466,6 +1616,10 @@ public class ti_catalog_arm_cortexm4
     }
 
     void MSP432$$ROV()
+    {
+    }
+
+    void MSP432E$$ROV()
     {
     }
 
@@ -1856,6 +2010,56 @@ public class ti_catalog_arm_cortexm4
         ((Value.Arr)pkgV.getv("$unitNames")).add("MSP432");
     }
 
+    void MSP432E$$SINGLETONS()
+    {
+        Proto.Obj po;
+        Value.Obj vo;
+
+        vo = (Value.Obj)om.findStrict("ti.catalog.arm.cortexm4.MSP432E", "ti.catalog.arm.cortexm4");
+        po = (Proto.Obj)om.findStrict("ti.catalog.arm.cortexm4.MSP432E.Module", "ti.catalog.arm.cortexm4");
+        vo.init2(po, "ti.catalog.arm.cortexm4.MSP432E", $$DEFAULT, false);
+        vo.bind("Module", po);
+        vo.bind("$category", "Module");
+        vo.bind("$capsule", om.findStrict("ti.catalog.arm.cortexm4.MSP432E$$capsule", "ti.catalog.arm.cortexm4"));
+        vo.bind("Instance", om.findStrict("ti.catalog.arm.cortexm4.MSP432E.Instance", "ti.catalog.arm.cortexm4"));
+        vo.bind("Params", om.findStrict("ti.catalog.arm.cortexm4.MSP432E.Params", "ti.catalog.arm.cortexm4"));
+        vo.bind("PARAMS", ((Proto.Str)om.findStrict("ti.catalog.arm.cortexm4.MSP432E.Params", "ti.catalog.arm.cortexm4")).newInstance());
+        vo.bind("$package", om.findStrict("ti.catalog.arm.cortexm4", "ti.catalog.arm.cortexm4"));
+        tdefs.clear();
+        proxies.clear();
+        mcfgs.clear();
+        icfgs.clear();
+        inherits.clear();
+        vo.bind("$$tdefs", Global.newArray(tdefs.toArray()));
+        vo.bind("$$proxies", Global.newArray(proxies.toArray()));
+        vo.bind("$$mcfgs", Global.newArray(mcfgs.toArray()));
+        vo.bind("$$icfgs", Global.newArray(icfgs.toArray()));
+        inherits.add("ti.catalog");
+        inherits.add("xdc.platform");
+        vo.bind("$$inherits", Global.newArray(inherits.toArray()));
+        ((Value.Arr)pkgV.getv("$modules")).add(vo);
+        ((Value.Arr)om.findStrict("$modules", "ti.catalog.arm.cortexm4")).add(vo);
+        vo.bind("$$instflag", 1);
+        vo.bind("$$iobjflag", 1);
+        vo.bind("$$sizeflag", 1);
+        vo.bind("$$dlgflag", 0);
+        vo.bind("$$iflag", 1);
+        vo.bind("$$romcfgs", "|");
+        vo.bind("$$nortsflag", 0);
+        Proto.Str ps = (Proto.Str)vo.find("Module_State");
+        if (ps != null) vo.bind("$object", ps.newInstance());
+        vo.bind("$$meta_iobj", om.has("ti.catalog.arm.cortexm4.MSP432E$$instance$static$init", null) ? 1 : 0);
+        vo.bind("$$fxntab", Global.newArray());
+        vo.bind("$$logEvtCfgs", Global.newArray());
+        vo.bind("$$errorDescCfgs", Global.newArray());
+        vo.bind("$$assertDescCfgs", Global.newArray());
+        Value.Map atmap = (Value.Map)vo.getv("$attr");
+        atmap.seal("length");
+        vo.bind("Object", om.findStrict("ti.catalog.arm.cortexm4.MSP432E.Object", "ti.catalog.arm.cortexm4"));
+        pkgV.bind("MSP432E", vo);
+        ((Value.Arr)pkgV.getv("$unitNames")).add("MSP432E");
+    }
+
     void CC13xx$$SINGLETONS()
     {
         Proto.Obj po;
@@ -1969,6 +2173,7 @@ public class ti_catalog_arm_cortexm4
         Global.callFxn("module$meta$init", (Scriptable)om.findStrict("ti.catalog.arm.cortexm4.TDA3XX", "ti.catalog.arm.cortexm4"));
         Global.callFxn("module$meta$init", (Scriptable)om.findStrict("ti.catalog.arm.cortexm4.CC32xx", "ti.catalog.arm.cortexm4"));
         Global.callFxn("module$meta$init", (Scriptable)om.findStrict("ti.catalog.arm.cortexm4.MSP432", "ti.catalog.arm.cortexm4"));
+        Global.callFxn("module$meta$init", (Scriptable)om.findStrict("ti.catalog.arm.cortexm4.MSP432E", "ti.catalog.arm.cortexm4"));
         Global.callFxn("module$meta$init", (Scriptable)om.findStrict("ti.catalog.arm.cortexm4.CC13xx", "ti.catalog.arm.cortexm4"));
         Global.callFxn("module$meta$init", (Scriptable)om.findStrict("ti.catalog.arm.cortexm4.CC26xx", "ti.catalog.arm.cortexm4"));
         Global.callFxn("init", pkgV);
@@ -1979,6 +2184,7 @@ public class ti_catalog_arm_cortexm4
         ((Value.Obj)om.getv("ti.catalog.arm.cortexm4.TDA3XX")).bless();
         ((Value.Obj)om.getv("ti.catalog.arm.cortexm4.CC32xx")).bless();
         ((Value.Obj)om.getv("ti.catalog.arm.cortexm4.MSP432")).bless();
+        ((Value.Obj)om.getv("ti.catalog.arm.cortexm4.MSP432E")).bless();
         ((Value.Obj)om.getv("ti.catalog.arm.cortexm4.CC13xx")).bless();
         ((Value.Obj)om.getv("ti.catalog.arm.cortexm4.CC26xx")).bless();
         ((Value.Arr)om.findStrict("$packages", "ti.catalog.arm.cortexm4")).add(pkgV);
@@ -2004,6 +2210,7 @@ public class ti_catalog_arm_cortexm4
         TDA3XX$$OBJECTS();
         CC32xx$$OBJECTS();
         MSP432$$OBJECTS();
+        MSP432E$$OBJECTS();
         CC13xx$$OBJECTS();
         CC26xx$$OBJECTS();
         Tiva$$CONSTS();
@@ -2013,6 +2220,7 @@ public class ti_catalog_arm_cortexm4
         TDA3XX$$CONSTS();
         CC32xx$$CONSTS();
         MSP432$$CONSTS();
+        MSP432E$$CONSTS();
         CC13xx$$CONSTS();
         CC26xx$$CONSTS();
         Tiva$$CREATES();
@@ -2022,6 +2230,7 @@ public class ti_catalog_arm_cortexm4
         TDA3XX$$CREATES();
         CC32xx$$CREATES();
         MSP432$$CREATES();
+        MSP432E$$CREATES();
         CC13xx$$CREATES();
         CC26xx$$CREATES();
         Tiva$$FUNCTIONS();
@@ -2031,6 +2240,7 @@ public class ti_catalog_arm_cortexm4
         TDA3XX$$FUNCTIONS();
         CC32xx$$FUNCTIONS();
         MSP432$$FUNCTIONS();
+        MSP432E$$FUNCTIONS();
         CC13xx$$FUNCTIONS();
         CC26xx$$FUNCTIONS();
         Tiva$$SIZES();
@@ -2040,6 +2250,7 @@ public class ti_catalog_arm_cortexm4
         TDA3XX$$SIZES();
         CC32xx$$SIZES();
         MSP432$$SIZES();
+        MSP432E$$SIZES();
         CC13xx$$SIZES();
         CC26xx$$SIZES();
         Tiva$$TYPES();
@@ -2049,6 +2260,7 @@ public class ti_catalog_arm_cortexm4
         TDA3XX$$TYPES();
         CC32xx$$TYPES();
         MSP432$$TYPES();
+        MSP432E$$TYPES();
         CC13xx$$TYPES();
         CC26xx$$TYPES();
         if (isROV) {
@@ -2059,6 +2271,7 @@ public class ti_catalog_arm_cortexm4
             TDA3XX$$ROV();
             CC32xx$$ROV();
             MSP432$$ROV();
+            MSP432E$$ROV();
             CC13xx$$ROV();
             CC26xx$$ROV();
         }//isROV
@@ -2070,6 +2283,7 @@ public class ti_catalog_arm_cortexm4
         TDA3XX$$SINGLETONS();
         CC32xx$$SINGLETONS();
         MSP432$$SINGLETONS();
+        MSP432E$$SINGLETONS();
         CC13xx$$SINGLETONS();
         CC26xx$$SINGLETONS();
         $$INITIALIZATION();

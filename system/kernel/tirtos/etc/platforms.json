@@ -141,8 +141,24 @@
         "platform": "ti.platforms.simCM3"
     },
     {
-        "target": "ti.targets.arm.elf.R5F",
-        "platform": "ti.platforms.cortexR"
+        "target": "ti.targets.arm.elf.R4F",
+        "device": "^AWR14.*",
+        "platform": "ti.platforms.cortexR:AWR14XX"
+    },
+    {
+        "target": "ti.targets.arm.elf.R4F",
+        "device": "^AWR16.*",
+        "platform": "ti.platforms.cortexR:AWR16XX"
+    },
+    {
+        "target": "ti.targets.arm.elf.R4F",
+        "device": "^IWR14.*",
+        "platform": "ti.platforms.cortexR:IWR14XX"
+    },
+    {
+        "target": "ti.targets.arm.elf.R4F",
+        "device": "^IWR16.*",
+        "platform": "ti.platforms.cortexR:IWR16XX"
     },
     {
         "target": "ti.targets.arm.elf.M(3|4)",
@@ -218,11 +234,6 @@
         "target": "gnu.targets.arm.M4F",
         "device": "^MSP432.*",
         "platform": "ti.platforms.msp432"
-    },
-    {
-        "target": "ti.targets.arm.elf.R4F$",
-        "device": "^AR14.*|^AR16.*",
-        "platform": "ti.platforms.cortexR"
     },
     {
         "target": "ti.targets.arm.elf.Arm9",
@@ -562,6 +573,16 @@
         "target": "ti.targets(.elf)?.C674",
         "device": "OMAPL138",
         "platform": "ti.platforms.evmOMAPL138"
+    },
+    {
+        "target": "ti.targets(.elf)?.C674",
+        "device": "AWR16.*",
+        "platform": "ti.platforms.c6x:AWR16XX"
+    },
+    {
+        "target": "ti.targets(.elf)?.C674",
+        "device": "IWR16.*",
+        "platform": "ti.platforms.c6x:IWR16XX"
     },
     {
         "target": "ti.targets(.elf)?.C64T",

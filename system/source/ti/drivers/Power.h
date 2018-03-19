@@ -55,7 +55,9 @@
 #ifndef ti_drivers_Power__include
 #define ti_drivers_Power__include
 
+#include <stdbool.h>
 #include <stdint.h>
+
 #include <ti/drivers/utils/List.h>
 
 #ifdef __cplusplus
@@ -127,9 +129,11 @@ typedef struct Power_NotifyObj_ {
  *  "enablePolicy" setting in the Power manager configuration object, as well
  *  as a previous runtime call to the Power_enablePolicy() function.
  *
+ *  @return The old value of "enablePolicy".
+ *
  *  @sa     Power_enablePolicy
  */
-void Power_disablePolicy(void);
+bool Power_disablePolicy(void);
 
 /*!
  *  @brief  Enable the configured power policy to run when the CPU is idle
@@ -570,7 +574,8 @@ int_fast16_t Power_shutdown(uint_fast16_t shutdownState,
  *  @param  sleepState      the sleep state
  *
  *  @return Power_SOK on success, the device has slept and is awake again.
- *          Power_EFAIL if an error occurred during client notifications.
+ *          Power_EFAIL if an error occurred during client notifications, or
+ *          if a general failure occurred.
  *          Power_EINVALIDINPUT if the sleepState is invalid.
  *          Power_EBUSY if another transition is already in progress.
  */

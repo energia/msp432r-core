@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -37,6 +32,14 @@
 #ifndef __SYSCTL_A_H__
 #define __SYSCTL_A_H__
 
+#include <stdint.h>
+#include <stdbool.h>
+#include <ti/devices/msp432p4xx/inc/msp.h>
+
+/* Define to ensure that our current MSP432 has the SYSCTL_A module. This
+    definition is included in the device specific header file */
+#ifdef __MCU_HAS_SYSCTL_A__
+
 //*****************************************************************************
 //
 //! \addtogroup sysctl_a_api
@@ -54,10 +57,6 @@
 extern "C"
 {
 #endif
-
-#include <stdint.h>
-#include <stdbool.h>
-#include <ti/devices/msp432p4xx/inc/msp.h>
 
 //*****************************************************************************
 //
@@ -555,5 +554,7 @@ extern uint_fast16_t SysCtl_A_getTempCalibrationConstant(uint32_t refVoltage,
 //! @}
 //
 //*****************************************************************************
+
+#endif /* __MCU_HAS_SYSCTL_A__ */
 
 #endif // __SYSCTL_A_H__
