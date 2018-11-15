@@ -36,6 +36,13 @@
 #include <stdbool.h>
 #include <stdint.h>
 
+static const uint8_t SS      = 18;
+static const uint8_t SCK     = 7;
+static const uint8_t MOSI    = 15;
+static const uint8_t MISO    = 14;
+static const uint8_t TWISDA  = 10;
+static const uint8_t TWISCL  = 9;
+
 static const uint8_t RED_LED = 75;
 static const uint8_t GREEN_LED = 76;
 static const uint8_t BLUE_LED = 77;

@@ -56,6 +56,30 @@
 
 #define MAX_USING_INTERRUPTS 16
 
+class SPISettings {
+public:
+  uint8_t _bitOrder;  
+  uint8_t _mode;
+  uint8_t _rate;
+  SPISettings(uint32_t clock, uint8_t bitOrder, uint8_t dataMode) {
+      init_AlwaysInline(clock, bitOrder, dataMode);
+  }
+  SPISettings() {
+    init_AlwaysInline(4000000, MSBFIRST, SPI_MODE0);
+  }
+private:
+
+  void init_AlwaysInline(uint32_t clock, uint8_t bitOrder, uint8_t dataMode)
+    __attribute__((__always_inline__)) {
+
+    // Pack into the SPISettings class
+    _bitOrder = bitOrder;
+    _mode     = dataMode ;
+    _rate     =  F_CPU/clock;;
+  }
+  friend class SPIClass;  
+};
+
 class SPIClass
 {
     private:
@@ -92,6 +116,8 @@ class SPIClass
         void setDataMode(uint8_t);
         void setClockDivider(uint8_t);
 
+        inline static void beginTransaction(SPISettings settings);
+        inline static void endTransaction(void);
         uint8_t transfer(uint8_t);
         uint8_t transfer(uint8_t, uint8_t);
         uint8_t transfer(uint8_t, uint8_t, uint8_t);
@@ -103,5 +129,17 @@ class SPIClass
 
 extern SPIClass SPI;
 extern SPIClass SPI1;
+
+void SPIClass::beginTransaction(SPISettings settings) {
+	SPI.setBitOrder(settings._bitOrder);
+	SPI.setDataMode(settings._mode);
+	SPI.setClockDivider(settings._rate);
+}
+
+// After performing a group of transfers and releasing the chip select
+// signal, this function allows others to access the SPI bus
+void SPIClass::endTransaction(void) {
+    SPI.end();
+}
 
 #endif
