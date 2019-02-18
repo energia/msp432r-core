@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Texas Instruments Incorporated
+ * Copyright (c) 2015-2016, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,6 +41,7 @@ function getAsmFiles(targetName)
         case "ti.targets.arm.elf.Arm9":
         case "ti.targets.arm.elf.A8Fnv":
         case "ti.targets.arm.elf.R4F":
+        case "ti.targets.arm.elf.R4Ft":
         case "ti.targets.arm.elf.R5F":
             return (["IntrinsicsSupport_asm.asm"]);
             break;
@@ -51,6 +52,9 @@ function getAsmFiles(targetName)
             return (["IntrinsicsSupport_asm_gnu.asm"]);
             break;
 
+        case "gnu.targets.arm.A53F":
+            return (["IntrinsicsSupport_asm_gnu.sv8A"]);
+            break;
 	default:
 	    return (null);
 	    break;

@@ -92,6 +92,14 @@ extern "C" {
     /*
      *  timespec and itimerspec are included with GCC tools.
      */
+#elif defined(__ICCARM__)
+    /*
+     *  timespec is included with IAR tools.
+     */
+struct itimerspec {
+    struct timespec it_interval;  /* Timer interval */
+    struct timespec it_value;     /* Timer expiration */
+};
 #else
 struct timespec {
     time_t  tv_sec;   /* Seconds */
@@ -114,6 +122,9 @@ struct itimerspec {
  *  ti.sysbios.knl.Clock ticks.
  */
 extern int clock_gettime(clockid_t clockId, struct timespec *ts);
+
+extern int clock_nanosleep(clockid_t clock_id, int flags,
+        const struct timespec *rqtp, struct timespec *rmtp);
 
 /*
  *  Only clockId = CLOCK_REALTIME is supported for clock_settime(). Only

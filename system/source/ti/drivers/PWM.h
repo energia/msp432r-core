@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -74,10 +74,10 @@
  *    // Initialize the PWM parameters
  *    PWM_Params_init(&pwmParams);
  *    pwmParams.idleLevel = PWM_IDLE_LOW;      // Output low when PWM is not running
- *    pwmParams.period.unit = PWM_PERIOD_HZ;   // Period is in Hz
- *    pwmParams.period.value = 1e6;            // 1MHz
- *    pwmParams.duty.unit = PWM_DUTY_FRACTION; // Duty is in fractional percentage
- *    pwmParams.duty.value = 0;                // 0% initial duty cycle
+ *    pwmParams.periodUnits = PWM_PERIOD_HZ;   // Period is in Hz
+ *    pwmParams.periodValue = 1e6;             // 1MHz
+ *    pwmParams.dutyUnits = PWM_DUTY_FRACTION; // Duty is in fractional percentage
+ *    pwmParams.dutyValue = 0;                 // 0% initial duty cycle
  *
  *    // Open the PWM instance
  *    pwm = PWM_open(Board_PWM0, &pwmParams);
@@ -87,7 +87,7 @@
  *        while (1);
  *    }
  *
- *    PWM_start(handle);                       // start PWM with 0% duty cycle
+ *    PWM_start(pwm);                          // start PWM with 0% duty cycle
  *
  *    PWM_setDuty(pwm,
  *         (PWM_DUTY_FRACTION_MAX / 2));       // set duty cycle to 50%

@@ -2,8 +2,8 @@
 * @file     system_msp432p411y.h
 * @brief    CMSIS Cortex-M4F Device Peripheral Access Layer Header File for
 *           MSP432P411Y
-* @version  3.000    (Beta-Build-Tag: #0042)
-* @date     12/14/16
+* @version  3.202
+* @date     08/03/17
 *
 * @note     View configuration instructions embedded in comments
 *

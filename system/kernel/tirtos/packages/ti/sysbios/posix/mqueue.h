@@ -39,6 +39,7 @@
 #include <stddef.h>
 #include <stdint.h>
 
+#include "time.h"
 #include "sys/types.h"
 
 #ifdef __cplusplus
@@ -67,7 +68,7 @@ typedef struct mq_attr {
 #define O_RDWR          2
 #define O_NONBLOCK      0x4000  /* Fail with EAGAIN if resources unavailable */
 
-typedef unsigned mode_t;  /* TODO: sys/stat.h? */
+typedef uint32_t mode_t;  /* TODO: sys/stat.h? */
 
 /*
  *  TODO: mq_receive() and mq_timedreceive() should return a type

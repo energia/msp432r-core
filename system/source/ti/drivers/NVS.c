@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,20 +34,22 @@
  *  ======== NVS.c ========
  */
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdint.h>
 #include <stdlib.h>
 
+#include <ti/drivers/dpl/HwiP.h>
 #include <ti/drivers/NVS.h>
 
-extern const NVS_Config NVS_config[];
+extern NVS_Config NVS_config[];
 extern const uint8_t NVS_count;
+
+static bool isInitialized = false;
 
 /* Default NVS parameters structure */
 const NVS_Params NVS_defaultParams = {
-    false,  /* eraseOnOpen */
+    NULL    /* custom */
 };
-
-static bool isInitialized = false;
 
 /*
  *  ======== NVS_close =======
@@ -60,7 +62,7 @@ void NVS_close(NVS_Handle handle)
 /*
  *  ======== NVS_control ========
  */
-int NVS_control(NVS_Handle handle, unsigned int cmd, uintptr_t arg)
+int_fast16_t NVS_control(NVS_Handle handle, uint_fast16_t cmd, uintptr_t arg)
 {
     return (handle->fxnTablePtr->controlFxn(handle, cmd, arg));
 }
@@ -68,29 +70,17 @@ int NVS_control(NVS_Handle handle, unsigned int cmd, uintptr_t arg)
 /*
  *  ======== NVS_erase =======
  */
-int NVS_erase(NVS_Handle handle)
+int_fast16_t NVS_erase(NVS_Handle handle, size_t offset, size_t size)
 {
-    return (handle->fxnTablePtr->writeFxn(handle, 0, NULL, 0, NVS_WRITE_ERASE));
-}
-
-/*
- *  ======== NVS_exit =======
- */
-void NVS_exit(void)
-{
-    int i;
-    for (i = 0; i < NVS_count; i++) {
-        /* Call each driver's exit function */
-        NVS_config[i].fxnTablePtr->exitFxn((NVS_Handle)&(NVS_config[i]));
-    }
+    return (handle->fxnTablePtr->eraseFxn(handle, offset, size));
 }
 
 /*
  *  ======== NVS_getAttrs =======
  */
-int NVS_getAttrs(NVS_Handle handle, NVS_Attrs *attrs)
+void NVS_getAttrs(NVS_Handle handle, NVS_Attrs *attrs)
 {
-    return (handle->fxnTablePtr->getAttrsFxn(handle, attrs));
+    handle->fxnTablePtr->getAttrsFxn(handle, attrs);
 }
 
 /*
@@ -98,38 +88,37 @@ int NVS_getAttrs(NVS_Handle handle, NVS_Attrs *attrs)
  */
 void NVS_init(void)
 {
-    int i;
+    uint_least8_t i;
 
-    if (!isInitialized) {
-        /* Call each driver's init function */
-        for (i = 0; i < NVS_count; i++) {
-            NVS_config[i].fxnTablePtr->initFxn((NVS_Handle)&(NVS_config[i]));
-        }
-        isInitialized = true;
+    /* Call each driver's init function */
+    for (i = 0; i < NVS_count; i++) {
+        NVS_config[i].fxnTablePtr->initFxn();
     }
+
+    isInitialized = true;
 }
 
 /*
  *  ======== NVS_open =======
  */
-NVS_Handle NVS_open(int index, NVS_Params *params)
+NVS_Handle NVS_open(uint_least8_t index, NVS_Params *params)
 {
-    NVS_Handle handle;
+    NVS_Handle handle = NULL;
 
-    /* Verify driver index and state */
-    if ((index >= NVS_count) || (!isInitialized)) {
-        return (NULL);
+    /* do init if not done yet */
+    if (!isInitialized) {
+        NVS_init();
     }
 
-    if (params == NULL) {
-        /* No params passed in, so use the defaults */
-        params = (NVS_Params *)&NVS_defaultParams;
+    if (index < NVS_count) {
+        if (params == NULL) {
+            /* No params passed in, so use the defaults */
+            params = (NVS_Params *)&NVS_defaultParams;
+        }
+        handle = NVS_config[index].fxnTablePtr->openFxn(index, params);
     }
 
-    /* Get handle for this driver instance */
-    handle = (NVS_Handle)&(NVS_config[index]);
-
-    return (handle->fxnTablePtr->openFxn(handle, params));
+    return (handle);
 }
 
 /*
@@ -143,7 +132,7 @@ void NVS_Params_init(NVS_Params *params)
 /*
  *  ======== NVS_read =======
  */
-int NVS_read(NVS_Handle handle, size_t offset, void *buffer,
+int_fast16_t NVS_read(NVS_Handle handle, size_t offset, void *buffer,
              size_t bufferSize)
 {
     return (handle->fxnTablePtr->readFxn(handle, offset, buffer, bufferSize));
@@ -152,8 +141,8 @@ int NVS_read(NVS_Handle handle, size_t offset, void *buffer,
 /*
  *  ======== NVS_write =======
  */
-int NVS_write(NVS_Handle handle, size_t offset, void *buffer,
-              size_t bufferSize, unsigned int flags)
+int_fast16_t NVS_write(NVS_Handle handle, size_t offset, void *buffer,
+              size_t bufferSize, uint_fast16_t flags)
 {
     return (handle->fxnTablePtr->writeFxn(handle, offset, buffer,
                     bufferSize, flags));

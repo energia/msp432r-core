@@ -92,7 +92,6 @@
 /* we want the reentrancy structure to be returned by a function */
 #define __DYNAMIC_REENT__
 #define HAVE_GETDATE
-#define _HAVE_SYSTYPES
 #define _READ_WRITE_RETURN_TYPE _ssize_t
 #define __LARGE64_FILES 1
 /* we use some glibc header files so turn on glibc large file feature */
@@ -232,9 +231,6 @@
 
 #if defined(__CYGWIN__)
 #include <cygwin/config.h>
-#if !defined (__STRICT_ANSI__) || (__STDC_VERSION__ >= 199901L)
-#define __USE_XOPEN2K 1
-#endif
 #endif
 
 #if defined(__rtems__)

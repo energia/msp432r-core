@@ -1,5 +1,5 @@
 @
-@  Copyright (c) 2013-2016, Texas Instruments Incorporated
+@  Copyright (c) 2013-2017, Texas Instruments Incorporated
 @  All rights reserved.
 @
 @  Redistribution and use in source and binary forms, with or without
@@ -48,6 +48,7 @@
         .global ti_sysbios_family_arm_m3_Hwi_excHandlerAsm__I
         .global ti_sysbios_family_arm_m3_Hwi_excHandler__I
         .global ti_sysbios_family_arm_m3_Hwi_return
+        .global ti_sysbios_family_arm_m3_Hwi_interruptsAreDisabledButShouldNotBe
 
         .global ti_sysbios_family_arm_ducati_Core_unlock__E
 
@@ -221,11 +222,20 @@ lab$1:
 
 @ CAUTION!!! Do NOT single step thru the next instruction
 @ else, the processor won't arrive at pendSV thru the
-@ exception mechanism.
+@ exception mechanism  and catastrophic things will happen
+@ afterwards.
 
         msr     basepri, r0     @ causes pendSV to happen
         nop                     @ 2 nops required for prefetch
         nop                     @
+
+@ Arriving here can only happen if interrupts were globally disabled
+@ when the pendSV interrupt was posted above. This can happen if
+@ user code has set the PRIMASK and not cleared it, or when single
+@ stepping with interrupts disabled.
+
+ti_sysbios_family_arm_m3_Hwi_interruptsAreDisabledButShouldNotBe:
+        b   ti_sysbios_family_arm_m3_Hwi_interruptsAreDisabledButShouldNotBe
 
         .thumb_func
 ti_sysbios_family_arm_m3_Hwi_pendSV__I:

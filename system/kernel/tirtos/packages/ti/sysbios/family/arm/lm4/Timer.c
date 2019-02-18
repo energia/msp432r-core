@@ -55,13 +55,9 @@
 
 #ifdef ti_sysbios_family_arm_cc26xx_Boot_driverlibVersion
 
-#ifdef DEVICE_FAMILY
-#define DEVICE_FAMILY_PREFIX(x) <ti/devices/DEVICE_FAMILY/x>
-#else
-#define DEVICE_FAMILY_PREFIX(x) <x>
-#endif
+#include <ti/devices/DeviceFamily.h>
 
-#include DEVICE_FAMILY_PREFIX(driverlib/prcm.h)
+#include DeviceFamily_constructPath(driverlib/prcm.h)
 
 #endif
 

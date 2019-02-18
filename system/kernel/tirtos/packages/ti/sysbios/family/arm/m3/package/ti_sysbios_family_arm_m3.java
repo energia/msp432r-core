@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 import java.util.*;
 import org.mozilla.javascript.*;
@@ -11,7 +11,7 @@ import xdc.services.spec.Session;
 
 public class ti_sysbios_family_arm_m3
 {
-    static final String VERS = "@(#) xdc-D05\n";
+    static final String VERS = "@(#) xdc-D20\n";
 
     static final Proto.Elm $$T_Bool = Proto.Elm.newBool();
     static final Proto.Elm $$T_Num = Proto.Elm.newNum();
@@ -112,6 +112,8 @@ public class ti_sysbios_family_arm_m3
         om.bind("ti.sysbios.family.arm.m3.Hwi.NVIC", new Proto.Str(spo, false));
         spo = (Proto.Obj)om.bind("ti.sysbios.family.arm.m3.Hwi$$ExcContext", new Proto.Obj());
         om.bind("ti.sysbios.family.arm.m3.Hwi.ExcContext", new Proto.Str(spo, false));
+        spo = (Proto.Obj)om.bind("ti.sysbios.family.arm.m3.Hwi$$Struct2__", new Proto.Obj());
+        om.bind("ti.sysbios.family.arm.m3.Hwi.Struct2__", new Proto.Str(spo, false));
         spo = (Proto.Obj)om.bind("ti.sysbios.family.arm.m3.Hwi$$BasicView", new Proto.Obj());
         om.bind("ti.sysbios.family.arm.m3.Hwi.BasicView", new Proto.Str(spo, false));
         spo = (Proto.Obj)om.bind("ti.sysbios.family.arm.m3.Hwi$$DetailedView", new Proto.Obj());
@@ -245,6 +247,7 @@ public class ti_sysbios_family_arm_m3
         om.bind("ti.sysbios.family.arm.m3.Hwi.enableInterrupt", new Extern("ti_sysbios_family_arm_m3_Hwi_enableInterrupt__E", "xdc_UInt(*)(xdc_UInt)", true, false));
         om.bind("ti.sysbios.family.arm.m3.Hwi.restoreInterrupt", new Extern("ti_sysbios_family_arm_m3_Hwi_restoreInterrupt__E", "xdc_Void(*)(xdc_UInt,xdc_UInt)", true, false));
         om.bind("ti.sysbios.family.arm.m3.Hwi.clearInterrupt", new Extern("ti_sysbios_family_arm_m3_Hwi_clearInterrupt__E", "xdc_Void(*)(xdc_UInt)", true, false));
+        om.bind("ti.sysbios.family.arm.m3.Hwi.construct2", new Extern("ti_sysbios_family_arm_m3_Hwi_construct2__E", "ti_sysbios_family_arm_m3_Hwi_Handle(*)(ti_sysbios_family_arm_m3_Hwi_Struct2__*,xdc_Int,xdc_Void(*)(xdc_UArg),ti_sysbios_family_arm_m3_Hwi_Params*)", true, false));
         om.bind("ti.sysbios.family.arm.m3.Hwi.disableFxn", new Extern("ti_sysbios_family_arm_m3_Hwi_disableFxn__E", "xdc_UInt(*)(xdc_Void)", true, false));
         om.bind("ti.sysbios.family.arm.m3.Hwi.enableFxn", new Extern("ti_sysbios_family_arm_m3_Hwi_enableFxn__E", "xdc_UInt(*)(xdc_Void)", true, false));
         om.bind("ti.sysbios.family.arm.m3.Hwi.restoreFxn", new Extern("ti_sysbios_family_arm_m3_Hwi_restoreFxn__E", "xdc_Void(*)(xdc_UInt)", true, false));
@@ -713,6 +716,23 @@ public class ti_sysbios_family_arm_m3
         so.bind("$alignof", fxn);
         fxn = Global.eval("function(fld) { return $$offsetof(xdc.om['ti.sysbios.family.arm.m3.Hwi.ExcContext'], fld); }");
         so.bind("$offsetof", fxn);
+        so = (Proto.Str)om.findStrict("ti.sysbios.family.arm.m3.Hwi.Struct2__", "ti.sysbios.family.arm.m3");
+        sizes.clear();
+        sizes.add(Global.newArray("fxns", "UPtr"));
+        sizes.add(Global.newArray("arg", "UIArg"));
+        sizes.add(Global.newArray("fxn", "UFxn"));
+        sizes.add(Global.newArray("irp", "UIArg"));
+        sizes.add(Global.newArray("priority", "UInt8"));
+        sizes.add(Global.newArray("intNum", "TInt16"));
+        sizes.add(Global.newArray("hookEnv", "UPtr"));
+        sizes.add(Global.newArray("name", "UPtr"));
+        so.bind("$$sizes", Global.newArray(sizes.toArray()));
+        fxn = Global.eval("function() { return $$sizeof(xdc.om['ti.sysbios.family.arm.m3.Hwi.Struct2__']); }");
+        so.bind("$sizeof", fxn);
+        fxn = Global.eval("function() { return $$alignof(xdc.om['ti.sysbios.family.arm.m3.Hwi.Struct2__']); }");
+        so.bind("$alignof", fxn);
+        fxn = Global.eval("function(fld) { return $$offsetof(xdc.om['ti.sysbios.family.arm.m3.Hwi.Struct2__'], fld); }");
+        so.bind("$offsetof", fxn);
         so = (Proto.Str)om.findStrict("ti.sysbios.family.arm.m3.Hwi.Instance_State", "ti.sysbios.family.arm.m3");
         sizes.clear();
         sizes.add(Global.newArray("__fxns", "UPtr"));
@@ -1126,6 +1146,20 @@ public class ti_sysbios_family_arm_m3
                 po.addFld("MMAR", new Proto.Adr("xdc_Ptr", "Pv"), $$UNDEF, "w");
                 po.addFld("BFAR", new Proto.Adr("xdc_Ptr", "Pv"), $$UNDEF, "w");
                 po.addFld("AFSR", new Proto.Adr("xdc_Ptr", "Pv"), $$UNDEF, "w");
+        // struct Hwi.Struct2__
+        po = (Proto.Obj)om.findStrict("ti.sysbios.family.arm.m3.Hwi$$Struct2__", "ti.sysbios.family.arm.m3");
+        po.init("ti.sysbios.family.arm.m3.Hwi.Struct2__", null);
+                po.addFld("$hostonly", $$T_Num, 0, "r");
+                po.addFld("fxns", new Proto.Adr("xdc_Ptr", "Pv"), $$UNDEF, "w");
+                po.addFld("arg", new Proto.Adr("xdc_UArg", "Pv"), $$UNDEF, "w");
+                po.addFld("fxn", new Proto.Adr("xdc_Void(*)(xdc_UArg)", "PFv"), $$UNDEF, "w");
+                po.addFld("irp", new Proto.Adr("xdc_UArg", "Pv"), $$UNDEF, "w");
+                po.addFld("priority", Proto.Elm.newCNum("(xdc_UInt8)"), $$UNDEF, "w");
+                po.addFld("intNum", Proto.Elm.newCNum("(xdc_Int16)"), $$UNDEF, "w");
+                po.addFld("hookEnv", new Proto.Adr("xdc_Ptr", "Pv"), $$UNDEF, "w");
+                po.addFld("name", new Proto.Adr("xdc_runtime_Types_CordAddr__*", "PE"), $$UNDEF, "w");
+        // typedef Hwi.Struct2
+        om.bind("ti.sysbios.family.arm.m3.Hwi.Struct2", (Proto)om.findStrict("ti.sysbios.family.arm.m3.Hwi.Struct2__", "ti.sysbios.family.arm.m3"));
         // struct Hwi.BasicView
         po = (Proto.Obj)om.findStrict("ti.sysbios.family.arm.m3.Hwi$$BasicView", "ti.sysbios.family.arm.m3");
         po.init("ti.sysbios.family.arm.m3.Hwi.BasicView", null);
@@ -1505,6 +1539,8 @@ public class ti_sysbios_family_arm_m3
         po = (Proto.Obj)om.findStrict("ti.sysbios.family.arm.m3.Hwi$$NVIC", "ti.sysbios.family.arm.m3");
         vo.bind("ExcContext$fetchDesc", Global.newObject("type", "ti.sysbios.family.arm.m3.Hwi.ExcContext", "isScalar", false));
         po = (Proto.Obj)om.findStrict("ti.sysbios.family.arm.m3.Hwi$$ExcContext", "ti.sysbios.family.arm.m3");
+        vo.bind("Struct2__$fetchDesc", Global.newObject("type", "ti.sysbios.family.arm.m3.Hwi.Struct2__", "isScalar", false));
+        po = (Proto.Obj)om.findStrict("ti.sysbios.family.arm.m3.Hwi$$Struct2__", "ti.sysbios.family.arm.m3");
         vo.bind("Instance_State$fetchDesc", Global.newObject("type", "ti.sysbios.family.arm.m3.Hwi.Instance_State", "isScalar", false));
         po = (Proto.Obj)om.findStrict("ti.sysbios.family.arm.m3.Hwi$$Instance_State", "ti.sysbios.family.arm.m3");
         vo.bind("Module_State$fetchDesc", Global.newObject("type", "ti.sysbios.family.arm.m3.Hwi.Module_State", "isScalar", false));
@@ -1824,6 +1860,9 @@ public class ti_sysbios_family_arm_m3
         vo.bind("vnvic", om.findStrict("ti.sysbios.family.arm.m3.Hwi.vnvic", "ti.sysbios.family.arm.m3"));
         vo.bind("ExcContext", om.findStrict("ti.sysbios.family.arm.m3.Hwi.ExcContext", "ti.sysbios.family.arm.m3"));
         tdefs.add(om.findStrict("ti.sysbios.family.arm.m3.Hwi.ExcContext", "ti.sysbios.family.arm.m3"));
+        vo.bind("Struct2__", om.findStrict("ti.sysbios.family.arm.m3.Hwi.Struct2__", "ti.sysbios.family.arm.m3"));
+        tdefs.add(om.findStrict("ti.sysbios.family.arm.m3.Hwi.Struct2__", "ti.sysbios.family.arm.m3"));
+        vo.bind("Struct2", om.findStrict("ti.sysbios.family.arm.m3.Hwi.Struct2", "ti.sysbios.family.arm.m3"));
         vo.bind("BasicView", om.findStrict("ti.sysbios.family.arm.m3.Hwi.BasicView", "ti.sysbios.family.arm.m3"));
         tdefs.add(om.findStrict("ti.sysbios.family.arm.m3.Hwi.BasicView", "ti.sysbios.family.arm.m3"));
         vo.bind("DetailedView", om.findStrict("ti.sysbios.family.arm.m3.Hwi.DetailedView", "ti.sysbios.family.arm.m3"));
@@ -1913,6 +1952,7 @@ public class ti_sysbios_family_arm_m3
         vo.bind("enableInterrupt", om.findStrict("ti.sysbios.family.arm.m3.Hwi.enableInterrupt", "ti.sysbios.family.arm.m3"));
         vo.bind("restoreInterrupt", om.findStrict("ti.sysbios.family.arm.m3.Hwi.restoreInterrupt", "ti.sysbios.family.arm.m3"));
         vo.bind("clearInterrupt", om.findStrict("ti.sysbios.family.arm.m3.Hwi.clearInterrupt", "ti.sysbios.family.arm.m3"));
+        vo.bind("construct2", om.findStrict("ti.sysbios.family.arm.m3.Hwi.construct2", "ti.sysbios.family.arm.m3"));
         vo.bind("disableFxn", om.findStrict("ti.sysbios.family.arm.m3.Hwi.disableFxn", "ti.sysbios.family.arm.m3"));
         vo.bind("enableFxn", om.findStrict("ti.sysbios.family.arm.m3.Hwi.enableFxn", "ti.sysbios.family.arm.m3"));
         vo.bind("restoreFxn", om.findStrict("ti.sysbios.family.arm.m3.Hwi.restoreFxn", "ti.sysbios.family.arm.m3"));
@@ -1946,7 +1986,7 @@ public class ti_sysbios_family_arm_m3
         vo.bind("dispatchC", om.findStrict("ti.sysbios.family.arm.m3.Hwi.dispatchC", "ti.sysbios.family.arm.m3"));
         vo.bind("doSwiRestore", om.findStrict("ti.sysbios.family.arm.m3.Hwi.doSwiRestore", "ti.sysbios.family.arm.m3"));
         vo.bind("doTaskRestore", om.findStrict("ti.sysbios.family.arm.m3.Hwi.doTaskRestore", "ti.sysbios.family.arm.m3"));
-        vo.bind("$$fxntab", Global.newArray("ti_sysbios_family_arm_m3_Hwi_Handle__label__E", "ti_sysbios_family_arm_m3_Hwi_Module__startupDone__E", "ti_sysbios_family_arm_m3_Hwi_Object__create__E", "ti_sysbios_family_arm_m3_Hwi_Object__delete__E", "ti_sysbios_family_arm_m3_Hwi_Object__get__E", "ti_sysbios_family_arm_m3_Hwi_Object__first__E", "ti_sysbios_family_arm_m3_Hwi_Object__next__E", "ti_sysbios_family_arm_m3_Hwi_Params__init__E", "ti_sysbios_family_arm_m3_Hwi_getStackInfo__E", "ti_sysbios_family_arm_m3_Hwi_getCoreStackInfo__E", "ti_sysbios_family_arm_m3_Hwi_startup__E", "ti_sysbios_family_arm_m3_Hwi_switchFromBootStack__E", "ti_sysbios_family_arm_m3_Hwi_post__E", "ti_sysbios_family_arm_m3_Hwi_getTaskSP__E", "ti_sysbios_family_arm_m3_Hwi_disableInterrupt__E", "ti_sysbios_family_arm_m3_Hwi_enableInterrupt__E", "ti_sysbios_family_arm_m3_Hwi_restoreInterrupt__E", "ti_sysbios_family_arm_m3_Hwi_clearInterrupt__E", "ti_sysbios_family_arm_m3_Hwi_getFunc__E", "ti_sysbios_family_arm_m3_Hwi_setFunc__E", "ti_sysbios_family_arm_m3_Hwi_getHookContext__E", "ti_sysbios_family_arm_m3_Hwi_setHookContext__E", "ti_sysbios_family_arm_m3_Hwi_getIrp__E", "ti_sysbios_family_arm_m3_Hwi_disable__E", "ti_sysbios_family_arm_m3_Hwi_enable__E", "ti_sysbios_family_arm_m3_Hwi_restore__E", "ti_sysbios_family_arm_m3_Hwi_disableFxn__E", "ti_sysbios_family_arm_m3_Hwi_enableFxn__E", "ti_sysbios_family_arm_m3_Hwi_restoreFxn__E", "ti_sysbios_family_arm_m3_Hwi_plug__E", "ti_sysbios_family_arm_m3_Hwi_getHandle__E", "ti_sysbios_family_arm_m3_Hwi_setPriority__E", "ti_sysbios_family_arm_m3_Hwi_excSetBuffers__E", "ti_sysbios_family_arm_m3_Hwi_initNVIC__E", "ti_sysbios_family_arm_m3_Hwi_initStacks__E", "ti_sysbios_family_arm_m3_Hwi_flushVnvic__E", "ti_sysbios_family_arm_m3_Hwi_reconfig__E"));
+        vo.bind("$$fxntab", Global.newArray("ti_sysbios_family_arm_m3_Hwi_Handle__label__E", "ti_sysbios_family_arm_m3_Hwi_Module__startupDone__E", "ti_sysbios_family_arm_m3_Hwi_Object__create__E", "ti_sysbios_family_arm_m3_Hwi_Object__delete__E", "ti_sysbios_family_arm_m3_Hwi_Object__get__E", "ti_sysbios_family_arm_m3_Hwi_Object__first__E", "ti_sysbios_family_arm_m3_Hwi_Object__next__E", "ti_sysbios_family_arm_m3_Hwi_Params__init__E", "ti_sysbios_family_arm_m3_Hwi_getStackInfo__E", "ti_sysbios_family_arm_m3_Hwi_getCoreStackInfo__E", "ti_sysbios_family_arm_m3_Hwi_startup__E", "ti_sysbios_family_arm_m3_Hwi_switchFromBootStack__E", "ti_sysbios_family_arm_m3_Hwi_post__E", "ti_sysbios_family_arm_m3_Hwi_getTaskSP__E", "ti_sysbios_family_arm_m3_Hwi_disableInterrupt__E", "ti_sysbios_family_arm_m3_Hwi_enableInterrupt__E", "ti_sysbios_family_arm_m3_Hwi_restoreInterrupt__E", "ti_sysbios_family_arm_m3_Hwi_clearInterrupt__E", "ti_sysbios_family_arm_m3_Hwi_getFunc__E", "ti_sysbios_family_arm_m3_Hwi_setFunc__E", "ti_sysbios_family_arm_m3_Hwi_getHookContext__E", "ti_sysbios_family_arm_m3_Hwi_setHookContext__E", "ti_sysbios_family_arm_m3_Hwi_getIrp__E", "ti_sysbios_family_arm_m3_Hwi_construct2__E", "ti_sysbios_family_arm_m3_Hwi_disable__E", "ti_sysbios_family_arm_m3_Hwi_enable__E", "ti_sysbios_family_arm_m3_Hwi_restore__E", "ti_sysbios_family_arm_m3_Hwi_disableFxn__E", "ti_sysbios_family_arm_m3_Hwi_enableFxn__E", "ti_sysbios_family_arm_m3_Hwi_restoreFxn__E", "ti_sysbios_family_arm_m3_Hwi_plug__E", "ti_sysbios_family_arm_m3_Hwi_getHandle__E", "ti_sysbios_family_arm_m3_Hwi_setPriority__E", "ti_sysbios_family_arm_m3_Hwi_excSetBuffers__E", "ti_sysbios_family_arm_m3_Hwi_initNVIC__E", "ti_sysbios_family_arm_m3_Hwi_initStacks__E", "ti_sysbios_family_arm_m3_Hwi_flushVnvic__E", "ti_sysbios_family_arm_m3_Hwi_reconfig__E"));
         vo.bind("$$logEvtCfgs", Global.newArray("LM_begin", "LD_end"));
         vo.bind("$$errorDescCfgs", Global.newArray("E_alreadyDefined", "E_hwiLimitExceeded", "E_exception", "E_noIsr", "E_NMI", "E_hardFault", "E_memFault", "E_busFault", "E_usageFault", "E_svCall", "E_debugMon", "E_reserved"));
         vo.bind("$$assertDescCfgs", Global.newArray("A_unsupportedMaskingOption"));

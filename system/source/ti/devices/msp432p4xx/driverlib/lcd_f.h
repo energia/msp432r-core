@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -40,6 +35,10 @@
 #include <stdbool.h>
 #include <stdint.h>
 #include <ti/devices/msp432p4xx/inc/msp.h>
+
+/* Define to ensure that our current MSP432 has the LCD_F module. This
+    definition is included in the device specific header file */
+#ifdef __MCU_HAS_LCD_F__
 
 //*****************************************************************************
 //
@@ -272,7 +271,7 @@ typedef struct LCD_F_initParam
 //
 //*****************************************************************************
 #define LCD_F_DISPLAYSOURCE_MEMORY                                        (0x0)
-#define LCD_F_DISPLAYSOURCE_BLINKINGMEMORY                   (LCD_F_BMCTL_DISP)
+#define LCD_F_DISPLAYSOURCE_BLINKINGMEMORY                                (0x1)
 
 //*****************************************************************************
 //
@@ -1198,5 +1197,7 @@ extern void LCD_F_unregisterInterrupt(void);
 //! @}
 //
 //*****************************************************************************
+
+#endif /* __MCU_HAS_LCD_F__ */
 
 #endif /* LCD_F_H_ */

@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -38,8 +33,15 @@
 #include <stdint.h>
 
 /* DriverLib Includes */
-#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
+#include <ti/devices/msp432p4xx/driverlib/wdt_a.h>
+#include <ti/devices/msp432p4xx/driverlib/interrupt.h>
 #include <ti/devices/msp432p4xx/driverlib/debug.h>
+
+#ifdef __MCU_HAS_SYSCTL_A__
+#include <ti/devices/msp432p4xx/driverlib/sysctl_a.h>
+#else
+#include <ti/devices/msp432p4xx/driverlib/sysctl.h>
+#endif
 
 
 void WDT_A_holdTimer(void)
@@ -83,12 +85,20 @@ void WDT_A_initIntervalTimer(uint_fast8_t clockSelect,
 
 void WDT_A_setPasswordViolationReset(uint_fast8_t resetType)
 {
+#ifdef __MCU_HAS_SYSCTL_A__
+    SysCtl_A_setWDTPasswordViolationResetType(resetType);
+#else
     SysCtl_setWDTPasswordViolationResetType(resetType);
+#endif
 }
 
 void WDT_A_setTimeoutReset(uint_fast8_t resetType)
 {
+#ifdef __MCU_HAS_SYSCTL_A__
+    SysCtl_A_setWDTTimeoutResetType(resetType);
+#else
     SysCtl_setWDTTimeoutResetType(resetType);
+#endif
 }
 
 void WDT_A_registerInterrupt(void (*intHandler)(void))

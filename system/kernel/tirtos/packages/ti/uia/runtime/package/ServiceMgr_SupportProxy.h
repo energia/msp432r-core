@@ -2,21 +2,21 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     MODULE-WIDE CONFIGS
  *     VIRTUAL FUNCTIONS
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -227,11 +227,11 @@ __extern __FAR__ const CT__ti_uia_runtime_ServiceMgr_SupportProxy_Object__table 
 struct ti_uia_runtime_ServiceMgr_SupportProxy_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_Void (*freePacket)(ti_uia_runtime_UIAPacket_Hdr*);
-    ti_uia_runtime_UIAPacket_Hdr *(*getFreePacket)(ti_uia_runtime_UIAPacket_HdrType, xdc_UInt);
-    xdc_Void (*requestEnergy)(xdc_Int);
-    xdc_Bool (*sendPacket)(ti_uia_runtime_UIAPacket_Hdr*);
-    xdc_Void (*setPeriod)(xdc_Int, xdc_UInt32);
+    xdc_Void (*freePacket)(ti_uia_runtime_UIAPacket_Hdr* packet);
+    ti_uia_runtime_UIAPacket_Hdr *(*getFreePacket)(ti_uia_runtime_UIAPacket_HdrType type, xdc_UInt timeout);
+    xdc_Void (*requestEnergy)(xdc_Int id);
+    xdc_Bool (*sendPacket)(ti_uia_runtime_UIAPacket_Hdr* packet);
+    xdc_Void (*setPeriod)(xdc_Int id, xdc_UInt32 periodInMs);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_uia_runtime_ServiceMgr_SupportProxy_Module__FXNS__CR
@@ -313,7 +313,8 @@ __extern xdc_Void ti_uia_runtime_ServiceMgr_SupportProxy_setPeriod__E( xdc_Int i
  */
 
 /* Module_upCast */
-static inline ti_uia_runtime_IServiceMgrSupport_Module ti_uia_runtime_ServiceMgr_SupportProxy_Module_upCast( void )
+static inline ti_uia_runtime_IServiceMgrSupport_Module ti_uia_runtime_ServiceMgr_SupportProxy_Module_upCast(void);
+static inline ti_uia_runtime_IServiceMgrSupport_Module ti_uia_runtime_ServiceMgr_SupportProxy_Module_upCast(void)
 {
     return (ti_uia_runtime_IServiceMgrSupport_Module)ti_uia_runtime_ServiceMgr_SupportProxy_Proxy__delegate__S();
 }
@@ -336,6 +337,7 @@ static inline ti_uia_runtime_IServiceMgrSupport_Module ti_uia_runtime_ServiceMgr
 #define ti_uia_runtime_ServiceMgr_SupportProxy_Module_heap() ti_uia_runtime_ServiceMgr_SupportProxy_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_uia_runtime_ServiceMgr_SupportProxy_Module__id ti_uia_runtime_ServiceMgr_SupportProxy_Module_id(void);
 static inline CT__ti_uia_runtime_ServiceMgr_SupportProxy_Module__id ti_uia_runtime_ServiceMgr_SupportProxy_Module_id( void ) 
 {
     return ti_uia_runtime_ServiceMgr_SupportProxy_Module__id__C;

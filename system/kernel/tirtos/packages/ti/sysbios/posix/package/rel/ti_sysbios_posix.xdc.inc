@@ -10,6 +10,7 @@ pthread_cond.c
 pthread_key.c
 pthread_mutex.c
 pthread_rwlock.c
+pthread_util.c
 clock.c
 mqueue.c
 sched.c
@@ -22,8 +23,10 @@ errno.h
 _pthread_error.h
 _time.h
 mqueue.h
+pthread_util.h
 sched.h
 signal.h
+sys/time.h
 sys/types.h
 semaphore.h
 time.h

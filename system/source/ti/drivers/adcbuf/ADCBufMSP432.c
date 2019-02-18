@@ -33,7 +33,6 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-
 /*
  * By default disable both asserts and log for this module.
  * This must be done before DebugP.h is included.
@@ -44,6 +43,8 @@
 #ifndef DebugP_LOG_ENABLED
 #define DebugP_LOG_ENABLED 0
 #endif
+
+#include <ti/devices/DeviceFamily.h>
 
 #include <ti/drivers/ADCBuf.h>
 #include <ti/drivers/adcbuf/ADCBufMSP432.h>
@@ -202,9 +203,9 @@ static bool initHw(ADCBufMSP432_Object *object,
     uint32_t timerCCRAddr;
     PowerMSP432_Freqs         powerFreqs;
 
-    /* Initializing ADC (MCLK/1/1) */
+    /* Initializing ADC (MODCLK/1/1) */
     MAP_ADC14_enableModule();
-    MAP_ADC14_initModule(ADC_CLOCKSOURCE_MCLK, ADC_PREDIVIDER_1, ADC_DIVIDER_1,
+    MAP_ADC14_initModule(ADC_CLOCKSOURCE_ADCOSC, ADC_PREDIVIDER_1, ADC_DIVIDER_1,
             0);
 
     timerAddr = (adcTriggerTable[hwAttrs->adcTimerTriggerSource] & 0xFFFFFF00);
@@ -277,7 +278,7 @@ static void primeConvert(ADCBufMSP432_Object *object,
     /* Set reference voltage for current conversion */
     uint32_t refSource = hwAttrs->channelSetting[conversions[0].adcChannel].refSource;
     uint32_t refVolts = hwAttrs->channelSetting[conversions[0].adcChannel].refVoltage;
-    uint16_t refVoltsDef;
+    uint16_t refVoltsDef = 0;
     if (refSource == ADCBufMSP432_VREFPOS_INTBUF_VREFNEG_VSS) {
 
         switch(refVolts) {
@@ -405,10 +406,6 @@ void ADCBufMSP432_close(ADCBuf_Handle handle)
     /* Freeing up the resource with the Timer driver */
     TimerMSP432_freeTimerResource(timerAddr);
 
-    /* Remove power constraints */
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
-
     object->isOpen = false;
 
     DebugP_log0("ADCBuf: Object closed.");
@@ -454,8 +451,8 @@ int_fast16_t ADCBufMSP432_convert(ADCBuf_Handle handle,
          * It's OK to block from here because the ADC's Hwi will unblock
          * upon errors
          */
-        if (SemaphoreP_TIMEOUT ==
-                SemaphoreP_pend(object->convertComplete, object->semaphoreTimeout)) {
+        if (SemaphoreP_OK != SemaphoreP_pend(object->convertComplete,
+                    object->semaphoreTimeout)) {
             DebugP_log0("ADCBuf: Convert timeout");
 
             ret = ADCBuf_STATUS_ERROR;
@@ -578,6 +575,12 @@ void ADCBufMSP432_hwiIntFxn(uintptr_t arg)
             /* Stop sampling */
             MAP_ADC14_disableConversion();
 
+            /* Remedy race condition causing potential unintended re-entry into the hwiIntFxn */
+            HwiP_clearInterrupt(INT_ADC14);
+
+            intStatus = MAP_ADC14_getEnabledInterruptStatus();
+            MAP_ADC14_clearInterruptFlag(intStatus);
+
             /* Get last result after sampling is disabled */
             if (object->channelCount == 1) {
                 MAP_ADC14_getResult(ADC_MEM0);
@@ -653,10 +656,6 @@ ADCBuf_Handle ADCBufMSP432_open(ADCBuf_Handle handle,
      * opening the driver.
      */
     Power_setConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
-
-    /* Shutdown not supported while driver is open */
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
 
     /* Create Hwi object for ADC */
     HwiP_Params_init(&(portsParams.hwiParams));

@@ -2,15 +2,15 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
  *     PER-INSTANCE TYPES
@@ -18,7 +18,7 @@
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -264,9 +264,9 @@ struct ti_sysbios_xdcruntime_GateThreadSupport_Struct {
 struct ti_sysbios_xdcruntime_GateThreadSupport_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_Bool (*query)(xdc_Int);
-    xdc_IArg (*enter)(ti_sysbios_xdcruntime_GateThreadSupport_Handle);
-    xdc_Void (*leave)(ti_sysbios_xdcruntime_GateThreadSupport_Handle, xdc_IArg);
+    xdc_Bool (*query)(xdc_Int qual);
+    xdc_IArg (*enter)(ti_sysbios_xdcruntime_GateThreadSupport_Handle __inst);
+    xdc_Void (*leave)(ti_sysbios_xdcruntime_GateThreadSupport_Handle __inst, xdc_IArg key);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_xdcruntime_GateThreadSupport_Module__FXNS__CR
@@ -287,11 +287,11 @@ __extern const ti_sysbios_xdcruntime_GateThreadSupport_Fxns__ ti_sysbios_xdcrunt
 
 /* Instance_init__E */
 xdc__CODESECT(ti_sysbios_xdcruntime_GateThreadSupport_Instance_init__E, "ti_sysbios_xdcruntime_GateThreadSupport_Instance_init")
-__extern xdc_Void ti_sysbios_xdcruntime_GateThreadSupport_Instance_init__E(ti_sysbios_xdcruntime_GateThreadSupport_Object *, const ti_sysbios_xdcruntime_GateThreadSupport_Params *);
+__extern xdc_Void ti_sysbios_xdcruntime_GateThreadSupport_Instance_init__E(ti_sysbios_xdcruntime_GateThreadSupport_Object *__obj, const ti_sysbios_xdcruntime_GateThreadSupport_Params *__prms);
 
 /* Instance_finalize__E */
 xdc__CODESECT(ti_sysbios_xdcruntime_GateThreadSupport_Instance_finalize__E, "ti_sysbios_xdcruntime_GateThreadSupport_Instance_finalize")
-__extern void ti_sysbios_xdcruntime_GateThreadSupport_Instance_finalize__E( ti_sysbios_xdcruntime_GateThreadSupport_Object* );
+__extern void ti_sysbios_xdcruntime_GateThreadSupport_Instance_finalize__E(ti_sysbios_xdcruntime_GateThreadSupport_Object *__obj);
 
 /* create */
 xdc__CODESECT(ti_sysbios_xdcruntime_GateThreadSupport_create, "ti_sysbios_xdcruntime_GateThreadSupport_create")
@@ -362,7 +362,8 @@ __extern xdc_Void ti_sysbios_xdcruntime_GateThreadSupport_leave__E( ti_sysbios_x
  */
 
 /* Module_upCast */
-static inline xdc_runtime_knl_IGateThreadSupport_Module ti_sysbios_xdcruntime_GateThreadSupport_Module_upCast( void )
+static inline xdc_runtime_knl_IGateThreadSupport_Module ti_sysbios_xdcruntime_GateThreadSupport_Module_upCast(void);
+static inline xdc_runtime_knl_IGateThreadSupport_Module ti_sysbios_xdcruntime_GateThreadSupport_Module_upCast(void)
 {
     return (xdc_runtime_knl_IGateThreadSupport_Module)&ti_sysbios_xdcruntime_GateThreadSupport_Module__FXNS__C;
 }
@@ -371,7 +372,8 @@ static inline xdc_runtime_knl_IGateThreadSupport_Module ti_sysbios_xdcruntime_Ga
 #define ti_sysbios_xdcruntime_GateThreadSupport_Module_to_xdc_runtime_knl_IGateThreadSupport ti_sysbios_xdcruntime_GateThreadSupport_Module_upCast
 
 /* Handle_upCast */
-static inline xdc_runtime_knl_IGateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Handle_upCast( ti_sysbios_xdcruntime_GateThreadSupport_Handle i )
+static inline xdc_runtime_knl_IGateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Handle_upCast(ti_sysbios_xdcruntime_GateThreadSupport_Handle i);
+static inline xdc_runtime_knl_IGateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Handle_upCast(ti_sysbios_xdcruntime_GateThreadSupport_Handle i)
 {
     return (xdc_runtime_knl_IGateThreadSupport_Handle)i;
 }
@@ -380,7 +382,8 @@ static inline xdc_runtime_knl_IGateThreadSupport_Handle ti_sysbios_xdcruntime_Ga
 #define ti_sysbios_xdcruntime_GateThreadSupport_Handle_to_xdc_runtime_knl_IGateThreadSupport ti_sysbios_xdcruntime_GateThreadSupport_Handle_upCast
 
 /* Handle_downCast */
-static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Handle_downCast( xdc_runtime_knl_IGateThreadSupport_Handle i )
+static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Handle_downCast(xdc_runtime_knl_IGateThreadSupport_Handle i);
+static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Handle_downCast(xdc_runtime_knl_IGateThreadSupport_Handle i)
 {
     xdc_runtime_knl_IGateThreadSupport_Handle i2 = (xdc_runtime_knl_IGateThreadSupport_Handle)i;
     return (const void*)i2->__fxns == (const void*)&ti_sysbios_xdcruntime_GateThreadSupport_Module__FXNS__C ? (ti_sysbios_xdcruntime_GateThreadSupport_Handle)i : (ti_sysbios_xdcruntime_GateThreadSupport_Handle)0;
@@ -390,7 +393,8 @@ static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcrunti
 #define ti_sysbios_xdcruntime_GateThreadSupport_Handle_from_xdc_runtime_knl_IGateThreadSupport ti_sysbios_xdcruntime_GateThreadSupport_Handle_downCast
 
 /* Module_upCast2 */
-static inline xdc_runtime_IGateProvider_Module ti_sysbios_xdcruntime_GateThreadSupport_Module_upCast2( void )
+static inline xdc_runtime_IGateProvider_Module ti_sysbios_xdcruntime_GateThreadSupport_Module_upCast2(void);
+static inline xdc_runtime_IGateProvider_Module ti_sysbios_xdcruntime_GateThreadSupport_Module_upCast2(void)
 {
     return (xdc_runtime_IGateProvider_Module)&ti_sysbios_xdcruntime_GateThreadSupport_Module__FXNS__C;
 }
@@ -399,7 +403,8 @@ static inline xdc_runtime_IGateProvider_Module ti_sysbios_xdcruntime_GateThreadS
 #define ti_sysbios_xdcruntime_GateThreadSupport_Module_to_xdc_runtime_IGateProvider ti_sysbios_xdcruntime_GateThreadSupport_Module_upCast2
 
 /* Handle_upCast2 */
-static inline xdc_runtime_IGateProvider_Handle ti_sysbios_xdcruntime_GateThreadSupport_Handle_upCast2( ti_sysbios_xdcruntime_GateThreadSupport_Handle i )
+static inline xdc_runtime_IGateProvider_Handle ti_sysbios_xdcruntime_GateThreadSupport_Handle_upCast2(ti_sysbios_xdcruntime_GateThreadSupport_Handle i);
+static inline xdc_runtime_IGateProvider_Handle ti_sysbios_xdcruntime_GateThreadSupport_Handle_upCast2(ti_sysbios_xdcruntime_GateThreadSupport_Handle i)
 {
     return (xdc_runtime_IGateProvider_Handle)i;
 }
@@ -408,7 +413,8 @@ static inline xdc_runtime_IGateProvider_Handle ti_sysbios_xdcruntime_GateThreadS
 #define ti_sysbios_xdcruntime_GateThreadSupport_Handle_to_xdc_runtime_IGateProvider ti_sysbios_xdcruntime_GateThreadSupport_Handle_upCast2
 
 /* Handle_downCast2 */
-static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Handle_downCast2( xdc_runtime_IGateProvider_Handle i )
+static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Handle_downCast2(xdc_runtime_IGateProvider_Handle i);
+static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Handle_downCast2(xdc_runtime_IGateProvider_Handle i)
 {
     xdc_runtime_IGateProvider_Handle i2 = (xdc_runtime_IGateProvider_Handle)i;
     return (const void*)i2->__fxns == (const void*)&ti_sysbios_xdcruntime_GateThreadSupport_Module__FXNS__C ? (ti_sysbios_xdcruntime_GateThreadSupport_Handle)i : (ti_sysbios_xdcruntime_GateThreadSupport_Handle)0;
@@ -432,25 +438,29 @@ static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcrunti
 #define ti_sysbios_xdcruntime_GateThreadSupport_Module_heap() ti_sysbios_xdcruntime_GateThreadSupport_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_xdcruntime_GateThreadSupport_Module__id ti_sysbios_xdcruntime_GateThreadSupport_Module_id(void);
 static inline CT__ti_sysbios_xdcruntime_GateThreadSupport_Module__id ti_sysbios_xdcruntime_GateThreadSupport_Module_id( void ) 
 {
     return ti_sysbios_xdcruntime_GateThreadSupport_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_sysbios_xdcruntime_GateThreadSupport_Module_hasMask( void ) 
+static inline xdc_Bool ti_sysbios_xdcruntime_GateThreadSupport_Module_hasMask(void);
+static inline xdc_Bool ti_sysbios_xdcruntime_GateThreadSupport_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_sysbios_xdcruntime_GateThreadSupport_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_sysbios_xdcruntime_GateThreadSupport_Module_getMask(void);
 static inline xdc_Bits16 ti_sysbios_xdcruntime_GateThreadSupport_Module_getMask( void ) 
 {
     return ti_sysbios_xdcruntime_GateThreadSupport_Module__diagsMask__C != NULL ? *ti_sysbios_xdcruntime_GateThreadSupport_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_sysbios_xdcruntime_GateThreadSupport_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_sysbios_xdcruntime_GateThreadSupport_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_sysbios_xdcruntime_GateThreadSupport_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_sysbios_xdcruntime_GateThreadSupport_Module__diagsMask__C != NULL) {
         *ti_sysbios_xdcruntime_GateThreadSupport_Module__diagsMask__C = mask;
@@ -458,6 +468,7 @@ static inline xdc_Void ti_sysbios_xdcruntime_GateThreadSupport_Module_setMask( x
 }
 
 /* Params_init */
+static inline void ti_sysbios_xdcruntime_GateThreadSupport_Params_init(ti_sysbios_xdcruntime_GateThreadSupport_Params *prms);
 static inline void ti_sysbios_xdcruntime_GateThreadSupport_Params_init( ti_sysbios_xdcruntime_GateThreadSupport_Params *prms ) 
 {
     if (prms) {
@@ -466,6 +477,7 @@ static inline void ti_sysbios_xdcruntime_GateThreadSupport_Params_init( ti_sysbi
 }
 
 /* Params_copy */
+static inline void ti_sysbios_xdcruntime_GateThreadSupport_Params_copy(ti_sysbios_xdcruntime_GateThreadSupport_Params *dst, const ti_sysbios_xdcruntime_GateThreadSupport_Params *src);
 static inline void ti_sysbios_xdcruntime_GateThreadSupport_Params_copy(ti_sysbios_xdcruntime_GateThreadSupport_Params *dst, const ti_sysbios_xdcruntime_GateThreadSupport_Params *src) 
 {
     if (dst) {
@@ -480,44 +492,51 @@ static inline void ti_sysbios_xdcruntime_GateThreadSupport_Params_copy(ti_sysbio
 #define ti_sysbios_xdcruntime_GateThreadSupport_Object_sizeof() ti_sysbios_xdcruntime_GateThreadSupport_Object__sizeof__C
 
 /* Object_get */
+static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Object_get(ti_sysbios_xdcruntime_GateThreadSupport_Instance_State *oarr, int i);
 static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Object_get(ti_sysbios_xdcruntime_GateThreadSupport_Instance_State *oarr, int i) 
 {
     return (ti_sysbios_xdcruntime_GateThreadSupport_Handle)ti_sysbios_xdcruntime_GateThreadSupport_Object__get__S(oarr, i);
 }
 
 /* Object_first */
-static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Object_first( void )
+static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Object_first(void);
+static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Object_first(void)
 {
     return (ti_sysbios_xdcruntime_GateThreadSupport_Handle)ti_sysbios_xdcruntime_GateThreadSupport_Object__first__S();
 }
 
 /* Object_next */
-static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Object_next( ti_sysbios_xdcruntime_GateThreadSupport_Object *obj )
+static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Object_next(ti_sysbios_xdcruntime_GateThreadSupport_Object *obj);
+static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_Object_next(ti_sysbios_xdcruntime_GateThreadSupport_Object *obj)
 {
     return (ti_sysbios_xdcruntime_GateThreadSupport_Handle)ti_sysbios_xdcruntime_GateThreadSupport_Object__next__S(obj);
 }
 
 /* Handle_label */
-static inline xdc_runtime_Types_Label *ti_sysbios_xdcruntime_GateThreadSupport_Handle_label( ti_sysbios_xdcruntime_GateThreadSupport_Handle inst, xdc_runtime_Types_Label *lab )
+static inline xdc_runtime_Types_Label *ti_sysbios_xdcruntime_GateThreadSupport_Handle_label(ti_sysbios_xdcruntime_GateThreadSupport_Handle inst, xdc_runtime_Types_Label *lab);
+static inline xdc_runtime_Types_Label *ti_sysbios_xdcruntime_GateThreadSupport_Handle_label(ti_sysbios_xdcruntime_GateThreadSupport_Handle inst, xdc_runtime_Types_Label *lab)
 {
     return ti_sysbios_xdcruntime_GateThreadSupport_Handle__label__S(inst, lab);
 }
 
 /* Handle_name */
-static inline xdc_String ti_sysbios_xdcruntime_GateThreadSupport_Handle_name( ti_sysbios_xdcruntime_GateThreadSupport_Handle inst )
+static inline xdc_String ti_sysbios_xdcruntime_GateThreadSupport_Handle_name(ti_sysbios_xdcruntime_GateThreadSupport_Handle inst);
+static inline xdc_String ti_sysbios_xdcruntime_GateThreadSupport_Handle_name(ti_sysbios_xdcruntime_GateThreadSupport_Handle inst)
 {
     xdc_runtime_Types_Label lab;
     return ti_sysbios_xdcruntime_GateThreadSupport_Handle__label__S(inst, &lab)->iname;
 }
 
 /* handle */
-static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_handle( ti_sysbios_xdcruntime_GateThreadSupport_Struct *str )
+static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_handle(ti_sysbios_xdcruntime_GateThreadSupport_Struct *str);
+static inline ti_sysbios_xdcruntime_GateThreadSupport_Handle ti_sysbios_xdcruntime_GateThreadSupport_handle(ti_sysbios_xdcruntime_GateThreadSupport_Struct *str)
 {
     return (ti_sysbios_xdcruntime_GateThreadSupport_Handle)str;
 }
 
 /* struct */
-static inline ti_sysbios_xdcruntime_GateThreadSupport_Struct *ti_sysbios_xdcruntime_GateThreadSupport_struct( ti_sysbios_xdcruntime_GateThreadSupport_Handle inst )
+static inline ti_sysbios_xdcruntime_GateThreadSupport_Struct *ti_sysbios_xdcruntime_GateThreadSupport_struct(ti_sysbios_xdcruntime_GateThreadSupport_Handle inst);
+static inline ti_sysbios_xdcruntime_GateThreadSupport_Struct *ti_sysbios_xdcruntime_GateThreadSupport_struct(ti_sysbios_xdcruntime_GateThreadSupport_Handle inst)
 {
     return (ti_sysbios_xdcruntime_GateThreadSupport_Struct*)inst;
 }
@@ -553,6 +572,7 @@ struct ti_sysbios_xdcruntime_GateThreadSupport_Object {
 #ifndef ti_sysbios_xdcruntime_GateThreadSupport_Instance_State_gate__OR
 __extern __FAR__ const xdc_SizeT ti_sysbios_xdcruntime_GateThreadSupport_Instance_State_gate__O;
 #endif
+static inline ti_sysbios_gates_GateMutexPri_Handle ti_sysbios_xdcruntime_GateThreadSupport_Instance_State_gate(ti_sysbios_xdcruntime_GateThreadSupport_Object *obj);
 static inline ti_sysbios_gates_GateMutexPri_Handle ti_sysbios_xdcruntime_GateThreadSupport_Instance_State_gate(ti_sysbios_xdcruntime_GateThreadSupport_Object *obj)
 {
     return (ti_sysbios_gates_GateMutexPri_Handle)(((char*)obj) + ti_sysbios_xdcruntime_GateThreadSupport_Instance_State_gate__O);

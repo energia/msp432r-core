@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-* Copyright (C) 2012 - 2016 Texas Instruments Incorporated - http://www.ti.com/
+* Copyright (C) 2012 - 2017 Texas Instruments Incorporated - http://www.ti.com/
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions
@@ -32,14 +32,14 @@
 *
 * GCC linker script for Texas Instruments MSP432P4111
 *
-* File creation date: 2016-12-07
+* File creation date: 08/03/17
 *
 ******************************************************************************/
 
 MEMORY
 {
     MAIN_FLASH (RX) : ORIGIN = 0x00000000, LENGTH = 0x00200000
-    INFO_FLASH (RX) : ORIGIN = 0x00200000, LENGTH = 0x00004000
+    INFO_FLASH (RX) : ORIGIN = 0x00200000, LENGTH = 0x00008000
     SRAM_CODE  (RWX): ORIGIN = 0x01000000, LENGTH = 0x00040000
     SRAM_DATA  (RW) : ORIGIN = 0x20000000, LENGTH = 0x00040000
 }

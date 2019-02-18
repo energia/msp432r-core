@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -150,10 +145,17 @@ void RTC_C_setCalendarEvent(uint_fast16_t eventSelect)
 
 void RTC_C_definePrescaleEvent(uint_fast8_t prescaleSelect,
         uint_fast8_t prescaleEventDivider)
-{
-    HWREG8(&RTC_C->PS0CTL + prescaleSelect) &= ~(RTC_C_PS0CTL_RT0IP_7);
-    HWREG8(&RTC_C->PS0CTL + prescaleSelect) |=
-            prescaleEventDivider;
+{   
+    if(prescaleSelect == RTC_C_PRESCALE_0)
+    {
+        HWREG8(&RTC_C->PS0CTL) &= ~(RTC_C_PS0CTL_RT0IP_7);
+        HWREG8(&RTC_C->PS0CTL) |= prescaleEventDivider;
+    }
+    else if(prescaleSelect == RTC_C_PRESCALE_1)
+    {
+        HWREG8(&RTC_C->PS1CTL) &= ~(RTC_C_PS0CTL_RT0IP_7);
+        HWREG8(&RTC_C->PS1CTL) |= prescaleEventDivider;
+    }
 }
 
 uint_fast8_t RTC_C_getPrescaleValue(uint_fast8_t prescaleSelect)

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Texas Instruments Incorporated
+ * Copyright (c) 2014-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -103,7 +103,7 @@ UInt32 Clock_getTickPeriod()
 }
 
 /*
- *  ======== Clock_getTicks  ========
+ *  ======== Clock_getTicks ========
  */
 UInt32 Clock_getTicks()
 {
@@ -725,12 +725,19 @@ UInt32 Clock_getPeriod(Clock_Object *obj)
  */
 UInt32 Clock_getTimeout(Clock_Object *obj)
 {
+    UInt32 timeout = 0;
+    UInt key;
+
+    key = Hwi_disable();
     if (obj->active == TRUE) {
-        return (obj->currTimeout - Clock_getTicks());
+        timeout = obj->currTimeout - Clock_getTicks();
+        if (timeout > obj->timeout) {
+            timeout = 0;
+        }
     }
-    else {
-        return (obj->timeout);
-    }
+    Hwi_restore(key);
+
+    return(timeout);
 }
 
 /*

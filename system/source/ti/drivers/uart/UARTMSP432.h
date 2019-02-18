@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -118,7 +118,7 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
-#include <ti/devices/msp432p4xx/inc/msp.h>
+#include <ti/devices/DeviceFamily.h>
 
 #include <ti/drivers/dpl/ClockP.h>
 #include <ti/drivers/dpl/HwiP.h>
@@ -127,6 +127,7 @@ extern "C" {
 #include <ti/drivers/UART.h>
 #include <ti/drivers/utils/RingBuf.h>
 
+#include <ti/devices/msp432p4xx/inc/msp.h>
 
 #define UARTMSP432_P1_2_UCA0RXD  0x00000112  /* Primary, port 1, pin 2 */
 #define UARTMSP432_P1_3_UCA0TXD  0x00000113  /* Primary, port 1, pin 3 */

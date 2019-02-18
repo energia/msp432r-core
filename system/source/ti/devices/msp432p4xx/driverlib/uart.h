@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -206,7 +201,7 @@ typedef struct _eUSCI_eUSCI_UART_Config
 //! \b UCSWRST bits of \b UCAxCTL1
 //!
 //! \return true or
-//!         STATUS_FAIL of the initialization process
+//!         false of the initialization process
 //
 //*****************************************************************************
 extern bool UART_initModule(uint32_t moduleInstance,

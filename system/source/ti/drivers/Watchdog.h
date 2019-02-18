@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -140,7 +140,6 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
-
 
 #include <stdint.h>
 
@@ -336,7 +335,8 @@ typedef int_fast16_t (*Watchdog_SetReloadFxn)(Watchdog_Handle handle,
  *  @brief      A function pointer to a driver specific implementation of
  *              Watchdog_ConvertMsToTicksFxn().
  */
-typedef uint32_t (*Watchdog_ConvertMsToTicksFxn)   (uint32_t milliseconds);
+typedef uint32_t (*Watchdog_ConvertMsToTicksFxn)   (Watchdog_Handle handle,
+                                                    uint32_t milliseconds);
 
 /*!
  *  @brief      The definition of a Watchdog function table that contains the
@@ -529,7 +529,8 @@ extern int_fast16_t Watchdog_setReload(Watchdog_Handle handle, uint32_t ticks);
      *
  *  @sa     Watchdog_setReload()
  */
-extern uint32_t Watchdog_convertMsToTicks(Watchdog_Handle handle, uint32_t milliseconds);
+extern uint32_t Watchdog_convertMsToTicks(Watchdog_Handle handle,
+    uint32_t milliseconds);
 
 #ifdef __cplusplus
 }

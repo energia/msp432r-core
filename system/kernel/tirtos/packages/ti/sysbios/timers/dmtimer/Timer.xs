@@ -63,6 +63,7 @@ function getAsmFiles(targetName)
         case "ti.targets.arm.elf.Arm9":
         case "ti.targets.arm.elf.A8F":
         case "ti.targets.arm.elf.A8Fnv":
+        case "ti.targets.arm.elf.R5F":
             return (["Timer_asm.s470"]);
             break;
 
@@ -72,6 +73,13 @@ function getAsmFiles(targetName)
             return (["Timer_asm_gnu.sv7A"]);
             break;
 
+        case "gnu.targets.arm.A53F":
+            return (["Timer_asm_gnu.sv8A"]);
+            break;
+
+        case "ti.targets.C674":
+        case "ti.targets.C64P":
+        case "ti.targets.C64P_big_endian":
         case "ti.targets.elf.C674":
         case "ti.targets.elf.C64P":
         case "ti.targets.elf.C64P_big_endian":
@@ -83,6 +91,10 @@ function getAsmFiles(targetName)
 
         case "ti.targets.elf.C64T":
             return (["Timer_asm.s64T"]);
+            break;
+
+        case "ti.targets.elf.nda.C71":
+            return (["Timer_asm.s71"]);
             break;
 
         case "ti.targets.arp32.elf.ARP32":
@@ -97,6 +109,22 @@ function getAsmFiles(targetName)
 
 if (xdc.om.$name == "cfg" || typeof(genCdoc) != "undefined") {
     var deviceTable = {
+        "ti.catalog.c7000": {
+            "C71": {
+                timer: [
+                    {
+                        name: "GPTimer1",
+                        baseAddr: 0x4AE18000,
+                        intNum:  14,
+                        eventId: 63,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                ],
+            }
+        },
         "ti.catalog.c6000": {
             "TDA3XX": {
                 timer: [
@@ -1232,6 +1260,426 @@ used by linux */
                         name: "GPTimer10",
                         baseAddr: 0x48086000,  /* L4 address */ 
                         intNum:  78,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                ]
+            },
+        },
+        "ti.catalog.arm.cortexa53": {
+            "SIMFLEMING": {
+                timer: [
+                    {
+                        name: "DMTimer0",
+                        baseAddr: 0x02400000,
+                        intNum:  96,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer1",
+                        baseAddr: 0x02410000,
+                        intNum:  97,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer2",
+                        baseAddr: 0x02420000,
+                        intNum:  98,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer3",
+                        baseAddr: 0x02430000,
+                        intNum:  99,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer4",
+                        baseAddr: 0x02440000,
+                        intNum:  100,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer5",
+                        baseAddr: 0x02450000,
+                        intNum:  101,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer6",
+                        baseAddr: 0x02460000,
+                        intNum:  102,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer7",
+                        baseAddr: 0x02470000,
+                        intNum:  103,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer8",
+                        baseAddr: 0x02480000,
+                        intNum:  104,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer9",
+                        baseAddr: 0x02490000,
+                        intNum:  105,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer10",
+                        baseAddr: 0x024A0000,
+                        intNum:  106,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer11",
+                        baseAddr: 0x024B0000,
+                        intNum:  107,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer12",
+                        baseAddr: 0x024C0000,
+                        intNum:  108,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer13",
+                        baseAddr: 0x024D0000,
+                        intNum:  109,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer14",
+                        baseAddr: 0x024E0000,
+                        intNum:  110,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer15",
+                        baseAddr: 0x024F0000,
+                        intNum:  111,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer16",
+                        baseAddr: 0x02500000,
+                        intNum:  112,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer17",
+                        baseAddr: 0x02510000,
+                        intNum:  113,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer18",
+                        baseAddr: 0x02520000,
+                        intNum:  114,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer19",
+                        baseAddr: 0x02530000,
+                        intNum:  115,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                ]
+            },
+            "SIMMAXWELL": {
+                timer: [
+                    {
+                        name: "DMTimer0",
+                        baseAddr: 0x02400000,
+                        intNum:  256,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer1",
+                        baseAddr: 0x02410000,
+                        intNum:  257,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer2",
+                        baseAddr: 0x02420000,
+                        intNum:  258,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer3",
+                        baseAddr: 0x02430000,
+                        intNum:  259,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer4",
+                        baseAddr: 0x02440000,
+                        intNum:  260,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer5",
+                        baseAddr: 0x02450000,
+                        intNum:  261,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer6",
+                        baseAddr: 0x02460000,
+                        intNum:  262,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer7",
+                        baseAddr: 0x02470000,
+                        intNum:  263,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer8",
+                        baseAddr: 0x02480000,
+                        intNum:  264,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer9",
+                        baseAddr: 0x02490000,
+                        intNum:  265,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer10",
+                        baseAddr: 0x024A0000,
+                        intNum:  266,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer11",
+                        baseAddr: 0x024B0000,
+                        intNum:  267,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                ]
+            },
+        },
+        "ti.catalog.arm.cortexr5": {
+            "SIMFLEMING": {
+                timer: [
+                    {
+                        name: "DMTimer0",
+                        baseAddr: 0x40400000,
+                        intNum:  32,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer1",
+                        baseAddr: 0x40410000,
+                        intNum:  33,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer2",
+                        baseAddr: 0x40420000,
+                        intNum:  34,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer3",
+                        baseAddr: 0x40430000,
+                        intNum:  35,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                ]
+            },
+            "SIMMAXWELL": {
+                timer: [
+                    {
+                        name: "DMTimer0",
+                        baseAddr: 0x40400000,
+                        intNum:  38,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer1",
+                        baseAddr: 0x40410000,
+                        intNum:  39,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer2",
+                        baseAddr: 0x40420000,
+                        intNum:  40,
+                        eventId: -1,
+                        intFreq: {
+                            lo: 19200000,
+                            hi: 0,
+                        },
+                    },
+                    {
+                        name: "DMTimer3",
+                        baseAddr: 0x40430000,
+                        intNum:  41,
                         eventId: -1,
                         intFreq: {
                             lo: 19200000,

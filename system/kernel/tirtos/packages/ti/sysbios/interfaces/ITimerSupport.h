@@ -2,19 +2,19 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     VIRTUAL FUNCTIONS
  *     FUNCTION STUBS
  *     FUNCTION SELECTORS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -68,7 +68,7 @@
 struct ti_sysbios_interfaces_ITimerSupport_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_Void (*enable)(xdc_UInt, xdc_runtime_Error_Block*);
+    xdc_Void (*enable)(xdc_UInt timerId, xdc_runtime_Error_Block* eb);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_interfaces_ITimerSupport_Module__BASE__CR
@@ -85,12 +85,14 @@ __extern const xdc_runtime_Types_Base ti_sysbios_interfaces_ITimerSupport_Interf
  */
 
 /* Module_id */
-static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ITimerSupport_Module_id( ti_sysbios_interfaces_ITimerSupport_Module mod )
+static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ITimerSupport_Module_id(ti_sysbios_interfaces_ITimerSupport_Module mod);
+static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ITimerSupport_Module_id(ti_sysbios_interfaces_ITimerSupport_Module mod)
 {
     return mod->__sysp->__mid;
 }
 
 /* enable */
+static inline xdc_Void ti_sysbios_interfaces_ITimerSupport_enable(ti_sysbios_interfaces_ITimerSupport_Module __mod, xdc_UInt timerId, xdc_runtime_Error_Block *eb);
 static inline xdc_Void ti_sysbios_interfaces_ITimerSupport_enable( ti_sysbios_interfaces_ITimerSupport_Module __mod, xdc_UInt timerId, xdc_runtime_Error_Block *eb )
 {
     __mod->enable(timerId, eb);
@@ -109,8 +111,9 @@ static inline xdc_Void ti_sysbios_interfaces_ITimerSupport_enable( ti_sysbios_in
  */
 
 /* enable_{FxnT,fxnP} */
-typedef xdc_Void (*ti_sysbios_interfaces_ITimerSupport_enable_FxnT)(xdc_UInt, xdc_runtime_Error_Block*);
-static inline ti_sysbios_interfaces_ITimerSupport_enable_FxnT ti_sysbios_interfaces_ITimerSupport_enable_fxnP( ti_sysbios_interfaces_ITimerSupport_Module __mod )
+typedef xdc_Void (*ti_sysbios_interfaces_ITimerSupport_enable_FxnT)(xdc_UInt timerId, xdc_runtime_Error_Block* eb);
+static inline ti_sysbios_interfaces_ITimerSupport_enable_FxnT ti_sysbios_interfaces_ITimerSupport_enable_fxnP(ti_sysbios_interfaces_ITimerSupport_Module __mod);
+static inline ti_sysbios_interfaces_ITimerSupport_enable_FxnT ti_sysbios_interfaces_ITimerSupport_enable_fxnP(ti_sysbios_interfaces_ITimerSupport_Module __mod)
 {
     return (ti_sysbios_interfaces_ITimerSupport_enable_FxnT)__mod->enable;
 }

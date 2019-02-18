@@ -2,21 +2,21 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     MODULE-WIDE CONFIGS
  *     VIRTUAL FUNCTIONS
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -231,8 +231,8 @@ struct ti_sysbios_hal_Seconds_SecondsProxy_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
     xdc_UInt32 (*get)(void);
-    xdc_UInt32 (*getTime)(ti_sysbios_interfaces_ISeconds_Time*);
-    xdc_Void (*set)(xdc_UInt32);
+    xdc_UInt32 (*getTime)(ti_sysbios_interfaces_ISeconds_Time* ts);
+    xdc_Void (*set)(xdc_UInt32 seconds);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_hal_Seconds_SecondsProxy_Module__FXNS__CR
@@ -304,7 +304,8 @@ __extern xdc_Void ti_sysbios_hal_Seconds_SecondsProxy_set__E( xdc_UInt32 seconds
  */
 
 /* Module_upCast */
-static inline ti_sysbios_interfaces_ISeconds_Module ti_sysbios_hal_Seconds_SecondsProxy_Module_upCast( void )
+static inline ti_sysbios_interfaces_ISeconds_Module ti_sysbios_hal_Seconds_SecondsProxy_Module_upCast(void);
+static inline ti_sysbios_interfaces_ISeconds_Module ti_sysbios_hal_Seconds_SecondsProxy_Module_upCast(void)
 {
     return (ti_sysbios_interfaces_ISeconds_Module)ti_sysbios_hal_Seconds_SecondsProxy_Proxy__delegate__S();
 }
@@ -327,6 +328,7 @@ static inline ti_sysbios_interfaces_ISeconds_Module ti_sysbios_hal_Seconds_Secon
 #define ti_sysbios_hal_Seconds_SecondsProxy_Module_heap() ti_sysbios_hal_Seconds_SecondsProxy_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_hal_Seconds_SecondsProxy_Module__id ti_sysbios_hal_Seconds_SecondsProxy_Module_id(void);
 static inline CT__ti_sysbios_hal_Seconds_SecondsProxy_Module__id ti_sysbios_hal_Seconds_SecondsProxy_Module_id( void ) 
 {
     return ti_sysbios_hal_Seconds_SecondsProxy_Module__id__C;

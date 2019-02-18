@@ -114,6 +114,13 @@ typedef enum MSP_EXP432P401R_GPIOName {
     //MSP_EXP432P401R_GPIO_LED_GREEN,
     //MSP_EXP432P401R_GPIO_LED_BLUE,
 
+    /*
+     * MSP_EXP432P401R_SPI_CS1 is used to control chip select pin for slave1
+     * MSP_EXP432P401R_SPI_CS2 is used to control chip select pin for slave2
+     */
+    MSP_EXP432P401R_SPI_CS1,
+    MSP_EXP432P401R_SPI_CS2,
+
     MSP_EXP432P401R_GPIOCOUNT
 } MSP_EXP432P401R_GPIOName;
 
@@ -137,6 +144,17 @@ typedef enum MSP_EXP432P401R_I2CSlaveName {
 
     MSP_EXP432P401R_I2CSLAVECOUNT
 } MSP_EXP432P401R_I2CSlaveName;
+
+/*!
+ *  @def    MSP_EXP432P401R_NVSName
+ *  @brief  Enum of NVS names on the MSP_EXP432P401R dev board
+ */
+typedef enum MSP_EXP432P401R_NVSName {
+    MSP_EXP432P401R_NVSMSP4320 = 0,
+
+    MSP_EXP432P401R_NVSCOUNT
+} MSP_EXP432P401R_NVSName;
+
 
 /*!
  *  @def    MSP_EXP432P401R_PWMName

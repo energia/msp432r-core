@@ -62,11 +62,21 @@ extern "C" {
  *  @brief    Number of bytes greater than or equal to the size of any RTOS
  *            HwiP object.
  *
- *  nortos:   0
- *  FreeRTOS: 4
+ *  nortos:   4
  *  SysBIOS:  28
  */
 #define HwiP_STRUCT_SIZE   (28)
+
+/*!
+ *  @brief    HwiP structure.
+ *
+ *  Opaque structure that should be large enough to hold any of the RTOS
+ *  specific HwiP objects.
+ */
+typedef union HwiP_Struct {
+    uint32_t dummy;  /*!< Align object */
+    char     data[HwiP_STRUCT_SIZE];
+} HwiP_Struct;
 
 /*!
  *  @brief    Opaque client reference to an instance of a HwiP
@@ -96,35 +106,32 @@ typedef void (*HwiP_Fxn)(uintptr_t arg);
  *  be used to initialize the fields to default values before the application sets
  *  the fields manually. The HwiP default parameters are noted in
  *  HwiP_Params_init.
+ *
+ *  Parameter enableInt specifies if the interrupt should be enabled
+ *  upon creation of the HwiP object.  The default is true.
  */
 typedef struct HwiP_Params {
-    char      *name;      /*!< Name of the HwiP instance. Memory must
-                               persist for the life of the HwiP instance.
-                               This can be used for debugging purposes, or
-                               set to NULL if not needed. */
     uintptr_t  arg;       /*!< Argument passed into the Hwi function. */
     uint32_t   priority;  /*!< Device specific priority. */
+    bool       enableInt; /*!< Enable interrupt on creation. */
 } HwiP_Params;
 
 /*!
- *  @brief    HwiP structure.
+ *  @brief    Interrupt number posted by SwiP
  *
- *  Opaque structure that should be large enough to hold any of the
- *  RTOS specific HwiP objects.
- */
-typedef struct HwiP_Struct {
-    union {
-        double d;  /*!< Align object */
-        char   data[HwiP_STRUCT_SIZE];
-    } hwi;
-} HwiP_Struct;
-
-/*!
- *  @brief  Function to clear a single interrupt
+ *  The SwiP module needs its scheduler to run at key points in SwiP
+ *  processing.  This is accomplished via an interrupt that is configured
+ *  at the lowest possible interrupt priority level and is plugged with
+ *  the SwiP scheduler.  This interrupt must be the *only* interrupt at
+ *  that lowest priority.  SwiP will post this interrupt whenever its
+ *  scheduler needs to run.
  *
- *  @param  interruptNum interrupt number to clear
+ *  The default value for your device should suffice, but if a different
+ *  interrupt is needed to be used for SwiP scheduling then HwiP_swiPIntNum
+ *  can be assigned with this interrupt (early on, before HwiPs are created
+ *  and before any SwiP gets posted).
  */
-extern void HwiP_clearInterrupt(int interruptNum);
+extern int HwiP_swiPIntNum;
 
 /*!
  *  @brief  Function to construct a hardware interrupt object.
@@ -141,6 +148,23 @@ extern void HwiP_clearInterrupt(int interruptNum);
  */
 extern HwiP_Handle HwiP_construct(HwiP_Struct *hwiP, int interruptNum,
                                   HwiP_Fxn hwiFxn, HwiP_Params *params);
+
+/*!
+ *  @brief  Function to destruct a hardware interrupt object
+ *
+ *  @param  hwiP  Pointer to a HwiP_Struct object that was passed to
+ *                HwiP_construct().
+ *
+ *  @return
+ */
+extern void HwiP_destruct(HwiP_Struct *hwiP);
+
+/*!
+ *  @brief  Function to clear a single interrupt
+ *
+ *  @param  interruptNum interrupt number to clear
+ */
+extern void HwiP_clearInterrupt(int interruptNum);
 
 /*!
  *  @brief  Function to create an interrupt on CortexM devices
@@ -165,17 +189,7 @@ extern HwiP_Handle HwiP_create(int interruptNum, HwiP_Fxn hwiFxn,
  *
  *  @return
  */
-extern HwiP_Status HwiP_delete(HwiP_Handle handle);
-
-/*!
- *  @brief  Function to destruct a hardware interrupt object
- *
- *  @param  hwiP  Pointer to a HwiP_Struct object that was passed to
- *                HwiP_construct().
- *
- *  @return
- */
-extern void HwiP_destruct(HwiP_Struct *hwiP);
+extern void HwiP_delete(HwiP_Handle handle);
 
 /*!
  *  @brief  Function to disable interrupts to enter a critical region
@@ -193,6 +207,11 @@ extern void HwiP_destruct(HwiP_Struct *hwiP);
  *  @return A key that must be passed to HwiP_restore to re-enable interrupts.
  */
 extern uintptr_t HwiP_disable(void);
+
+/*!
+ *  @brief  Function to enable interrupts
+ */
+extern void HwiP_enable(void);
 
 /*!
  *  @brief  Function to disable a single interrupt
@@ -221,13 +240,28 @@ extern bool HwiP_inISR(void);
  *  @brief  Initialize params structure to default values.
  *
  *  The default parameters are:
- *   - name: NULL
  *   - arg: 0
  *   - priority: ~0
+ *   - enableInt: true
  *
  *  @param params  Pointer to the instance configuration parameters.
  */
 extern void HwiP_Params_init(HwiP_Params *params);
+
+/*!
+ *  @brief  Function to plug an interrupt vector
+ *
+ *  @param  interruptNum ID of interrupt to plug
+ *  @param  fxn ISR that services plugged interrupt
+ */
+extern void HwiP_plug(int interruptNum, void *fxn);
+
+/*!
+ *  @brief  Function to generate an interrupt
+ *
+ *  @param  interruptNum ID of interrupt to generate
+ */
+extern void HwiP_post(int interruptNum);
 
 /*!
  *  @brief  Function to restore interrupts to exit a critical region
@@ -235,6 +269,23 @@ extern void HwiP_Params_init(HwiP_Params *params);
  *  @param  key return from HwiP_disable
  */
 extern void HwiP_restore(uintptr_t key);
+
+/*!
+ *  @brief  Function to overwrite HwiP function and arg
+ *
+ *  @param  hwiP handle returned from the HwiP_create or construct call
+ *  @param  fxn  pointer to ISR function
+ *  @param  arg  argument to ISR function
+ */
+extern void HwiP_setFunc(HwiP_Handle hwiP, HwiP_Fxn fxn, uintptr_t arg);
+
+/*!
+ *  @brief  Function to set the priority of a hardware interrupt
+ *
+ *  @param  interruptNum id of the interrupt to change
+ *  @param  priority new priority
+ */
+extern void HwiP_setPriority(int interruptNum, uint32_t priority);
 
 #ifdef __cplusplus
 }

@@ -260,6 +260,15 @@
         "packageName": "ti.targets.arm"
     },
     {
+        "CompilerBuildOptionsPattern": "--silicon_version=7R4",
+        "baseTargetName": "R4F",
+        "deviceFamilyPattern": "ARM.*",
+        "deviceNamePattern": "(A|I)WR1.*",
+        "elf": "true",
+        "toolChain": "TI",
+        "packageName": "ti.targets.arm"
+    },
+    {
         "CompilerBuildOptionsPattern": "-silicon_version=7R5($|\\s)",
         "baseTargetName": "R5F",
         "deviceFamilyPattern": "ARM.*",

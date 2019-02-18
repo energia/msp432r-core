@@ -116,6 +116,13 @@ function module$meta$init()
             Boot28.registerFreqListener(this);
         }
     }
+    /* register frequency listener for MSP432E */
+    else if (Program.cpu.deviceName.match(/MSP432E/)) {
+        var Boot = xdc.useModule('ti.sysbios.family.arm.msp432e4.init.Boot');
+        if ('registerFreqListener' in Boot) {
+            Boot.registerFreqListener(this);
+        }
+    }
     /* register frequency listener for MSP432 */
     else if (Program.cpu.deviceName.match(/MSP432/)) {
         var Boot = xdc.module('ti.sysbios.family.arm.msp432.init.Boot');
@@ -393,10 +400,10 @@ function module$use()
     BIOS.installedErrorHook = Error.raiseHook;
     Error.raiseHook = BIOS.errorRaiseHook;
 
-    if (xdc.module('ti.sysbios.family.Settings').bootModule == 
-	    "ti.sysbios.family.arm.cc26xx.Boot") {
-	/* force cc26xx/driverlib to be after sysbios lib in .xdl file */
-	xdc.useModule(xdc.module('ti.sysbios.family.Settings').bootModule);
+    if (xdc.module('ti.sysbios.family.Settings').bootModule ==
+        "ti.sysbios.family.arm.cc26xx.Boot") {
+        /* force cc26xx/driverlib to be after sysbios lib in .xdl file */
+        xdc.useModule(xdc.module('ti.sysbios.family.Settings').bootModule);
     }
 }
 
@@ -948,32 +955,28 @@ function _setLibType(field, val)
 {
     var BIOS = this;
 
-    if (val == BIOS.LibType_Instrumented) {
-        BIOS.assertsEnabled = true;
-        BIOS.logsEnabled = true;
-    }
-    else if (val == BIOS.LibType_NonInstrumented) {
-        BIOS.assertsEnabled = false;
-        BIOS.logsEnabled = false;
-    }
-    else if (val == BIOS.LibType_Custom) {
-	if (BIOS.$written("assertsEnabled") == false) {
-	    BIOS.assertsEnabled = true;
-	}
-	if (BIOS.$written("logsEnabled") == false) {
-            BIOS.logsEnabled = true;
-	}
-    }
-    else if (val == BIOS.LibType_Debug) {
-	if (BIOS.$written("assertsEnabled") == false) {
-	    BIOS.assertsEnabled = true;
-	}
-	if (BIOS.$written("logsEnabled") == false) {
-            BIOS.logsEnabled = true;
-	}
-    }
-    else {
-        print(BIOS.$name + ": unknown libType setting: " + val);
+    /*
+     * Set BIOS.assertsEnabled and BIOS.logsEnabled according to libType
+     */
+    switch (val) {
+        case BIOS.LibType_Instrumented:
+        case BIOS.LibType_Custom:
+        case BIOS.LibType_Debug:
+            /*
+             * do nothing, default value for assertsEnabled
+             * and logsEnabled is true
+             */
+            break;
+
+        case BIOS.LibType_NonInstrumented:
+            /* override default value of true */
+            BIOS.assertsEnabled = false;
+            BIOS.logsEnabled = false;
+            break;
+
+        default:
+            print(BIOS.$name + ": unknown libType setting: " + val);
+            break;
     }
 
     /*

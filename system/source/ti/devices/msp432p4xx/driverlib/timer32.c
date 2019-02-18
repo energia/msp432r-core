@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -97,7 +92,7 @@ uint32_t Timer32_getValue(uint32_t timer)
 
 void Timer32_startTimer(uint32_t timer, bool oneShot)
 {
-    ASSERT(timer == TIMER32_0_MODULE || timer == TIMER32_1_MODULE);
+    ASSERT(timer == TIMER32_0_BASE || timer == TIMER32_1_BASE);
 
     if (oneShot)
         BITBAND_PERI(TIMER32_CMSIS(timer)->CONTROL, TIMER32_CONTROL_ONESHOT_OFS)
@@ -111,7 +106,7 @@ void Timer32_startTimer(uint32_t timer, bool oneShot)
 
 void Timer32_haltTimer(uint32_t timer)
 {
-    ASSERT(timer == TIMER32_0_MODULE || timer == TIMER32_1_MODULE);
+    ASSERT(timer == TIMER32_0_BASE || timer == TIMER32_1_BASE);
 
     TIMER32_CMSIS(timer)->CONTROL &= ~TIMER32_CONTROL_ENABLE;
 }

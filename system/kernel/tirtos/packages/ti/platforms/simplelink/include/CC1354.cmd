@@ -80,15 +80,15 @@ MEMORY
 SECTIONS
 {
     .intvecs        :   > FLASH_BASE
-    .text           :   > FLASH
-    .const          :   > FLASH
-    .constdata      :   > FLASH
-    .rodata         :   > FLASH
+    .text           :   >> FLASH
+    .const          :   >> FLASH
+    .constdata      :   >> FLASH
+    .rodata         :   >> FLASH
     .binit          :   > FLASH
     .cinit          :   > FLASH
     .pinit          :   > FLASH
     .init_array     :   > FLASH
-    .emb_text       :   > FLASH
+    .emb_text       :   >> FLASH
     .ccfg           :   > FLASH (HIGH)
 
     .vtable         :   > SRAM

@@ -32,9 +32,9 @@
 </div>
 <h2 id="gcc-cortex-a15-with-hard-fp-timing-benchmarks">GCC Cortex-A15 with hard FP Timing Benchmarks</h2>
 <p><strong>Target Platform:</strong> ti.platforms.evmDRA7XX</p>
-<p><strong>Tool Chain Version:</strong> 4.9.3</p>
-<p><strong>BIOS Version:</strong> bios_6_50_00_06_eng</p>
-<p><strong>XDCTools Version:</strong> xdctools_3_50_00_09_eng</p>
+<p><strong>Tool Chain Version:</strong> 6.3.1</p>
+<p><strong>BIOS Version:</strong> bios_6_51_00_11_eng</p>
+<p><strong>XDCTools Version:</strong> xdctools_3_50_02_20_core</p>
 <table>
 <thead>
 <tr class="header">
@@ -45,7 +45,7 @@
 <tbody>
 <tr class="odd">
 <td align="left">Interrupt Latency</td>
-<td align="left">750</td>
+<td align="left">746</td>
 </tr>
 <tr class="even">
 <td align="left">Hwi_restore()</td>
@@ -53,39 +53,39 @@
 </tr>
 <tr class="odd">
 <td align="left">Hwi_disable()</td>
-<td align="left">79</td>
+<td align="left">80</td>
 </tr>
 <tr class="even">
 <td align="left">Hwi dispatcher prolog</td>
-<td align="left">433</td>
+<td align="left">435</td>
 </tr>
 <tr class="odd">
 <td align="left">Hwi dispatcher epilog</td>
-<td align="left">335</td>
+<td align="left">321</td>
 </tr>
 <tr class="even">
 <td align="left">Hwi dispatcher</td>
-<td align="left">761</td>
+<td align="left">743</td>
 </tr>
 <tr class="odd">
 <td align="left">Hardware Interrupt to Blocked Task</td>
-<td align="left">1411</td>
+<td align="left">1384</td>
 </tr>
 <tr class="even">
 <td align="left">Hardware Interrupt to Software Interrupt</td>
-<td align="left">906</td>
+<td align="left">909</td>
 </tr>
 <tr class="odd">
 <td align="left">Swi_enable()</td>
-<td align="left">316</td>
+<td align="left">313</td>
 </tr>
 <tr class="even">
 <td align="left">Swi_disable()</td>
-<td align="left">5</td>
+<td align="left">6</td>
 </tr>
 <tr class="odd">
 <td align="left">Post Software Interrupt Again</td>
-<td align="left">166</td>
+<td align="left">157</td>
 </tr>
 <tr class="even">
 <td align="left">Post Software Interrupt without Context Switch</td>
@@ -93,39 +93,39 @@
 </tr>
 <tr class="odd">
 <td align="left">Post Software Interrupt with Context Switch</td>
-<td align="left">374</td>
+<td align="left">376</td>
 </tr>
 <tr class="even">
 <td align="left">Create a New Task without Context Switch</td>
-<td align="left">2256</td>
+<td align="left">2861</td>
 </tr>
 <tr class="odd">
 <td align="left">Set a Task Priority without a Context Switch</td>
-<td align="left">333</td>
+<td align="left">330</td>
 </tr>
 <tr class="even">
 <td align="left">Task_yield()</td>
-<td align="left">706</td>
+<td align="left">702</td>
 </tr>
 <tr class="odd">
 <td align="left">Post Semaphore No Waiting Task</td>
-<td align="left">177</td>
+<td align="left">171</td>
 </tr>
 <tr class="even">
 <td align="left">Post Semaphore No Task Switch</td>
-<td align="left">534</td>
+<td align="left">519</td>
 </tr>
 <tr class="odd">
 <td align="left">Post Semaphore with Task Switch</td>
-<td align="left">876</td>
+<td align="left">869</td>
 </tr>
 <tr class="even">
 <td align="left">Pend on Semaphore No Context Switch</td>
-<td align="left">171</td>
+<td align="left">181</td>
 </tr>
 <tr class="odd">
 <td align="left">Pend on Semaphore with Task Switch</td>
-<td align="left">761</td>
+<td align="left">746</td>
 </tr>
 <tr class="even">
 <td align="left">Clock_getTicks()</td>
@@ -133,31 +133,31 @@
 </tr>
 <tr class="odd">
 <td align="left">POSIX Create a New Task without Context Switch</td>
-<td align="left">3147</td>
+<td align="left">4513</td>
 </tr>
 <tr class="even">
 <td align="left">POSIX Set a Task Priority without a Context Switch</td>
-<td align="left">331</td>
+<td align="left">337</td>
 </tr>
 <tr class="odd">
 <td align="left">POSIX Post Semaphore No Waiting Task</td>
-<td align="left">177</td>
+<td align="left">173</td>
 </tr>
 <tr class="even">
 <td align="left">POSIX Post Semaphore No Task Switch</td>
-<td align="left">533</td>
+<td align="left">523</td>
 </tr>
 <tr class="odd">
 <td align="left">POSIX Post Semaphore with Task Switch</td>
-<td align="left">906</td>
+<td align="left">896</td>
 </tr>
 <tr class="even">
 <td align="left">POSIX Pend on Semaphore No Context Switch</td>
-<td align="left">165</td>
+<td align="left">166</td>
 </tr>
 <tr class="odd">
 <td align="left">POSIX Pend on Semaphore with Task Switch</td>
-<td align="left">766</td>
+<td align="left">753</td>
 </tr>
 </tbody>
 </table>

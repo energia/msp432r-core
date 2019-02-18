@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -37,6 +32,13 @@
 #ifndef __FLASH_A_H__
 #define __FLASH_A_H__
 
+#include <stdbool.h>
+#include <ti/devices/msp432p4xx/inc/msp.h>
+
+/* Define to ensure that our current MSP432 has the FLCTL_A module. This
+    definition is included in the device specific header file */
+#ifdef __MCU_HAS_FLCTL_A__
+
 //*****************************************************************************
 //
 //! \addtogroup flash_a_api
@@ -54,9 +56,6 @@
 extern "C"
 {
 #endif
-
-#include <ti/devices/msp432p4xx/inc/msp.h>
-#include <stdbool.h>
 
 //*****************************************************************************
 //
@@ -188,10 +187,10 @@ typedef struct __sFlashCtl_ProtectionRegister
 //!
 //! \param addr Address to calculate the bank/sector information for
 //!
-//! \param sectorNum The sector number will be stored in here after the function
+//! \param bankNum The bank number will be stored in here after the function
 //!                     completes.
 //!
-//! \param sectorNum The bank number will be stored in here after the function
+//! \param sectorNum The sector number will be stored in here after the function
 //!                     completes.
 //!
 //! \note For simplicity, this API only works with address in MAIN flash memory.
@@ -201,8 +200,8 @@ typedef struct __sFlashCtl_ProtectionRegister
 //! \return None.
 //
 //*****************************************************************************
-extern void FlashCtl_A_getMemoryInfo(uint32_t addr, uint32_t *sectorNum,
-        uint32_t *bankNum);
+extern void FlashCtl_A_getMemoryInfo(uint32_t addr, uint32_t *bankNum,
+            uint32_t *sectorNum);
 
 //*****************************************************************************
 //
@@ -846,5 +845,7 @@ extern void __FlashCtl_A_remaskBurstDataPre(uint32_t addr, uint32_t size);
 //! @}
 //
 //*****************************************************************************
+
+#endif /* __MCU_HAS_FLCTL_A__ */
 
 #endif // __FLASH_A_H__

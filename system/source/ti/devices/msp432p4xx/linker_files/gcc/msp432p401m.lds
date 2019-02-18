@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-* Copyright (C) 2012 - 2016 Texas Instruments Incorporated - http://www.ti.com/
+* Copyright (C) 2012 - 2017 Texas Instruments Incorporated - http://www.ti.com/
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions
@@ -32,7 +32,7 @@
 *
 * GCC linker script for Texas Instruments MSP432P401M
 *
-* File creation date: 2016-08-19
+* File creation date: 08/03/17
 *
 ******************************************************************************/
 
@@ -122,7 +122,7 @@ SECTIONS {
     } > REGION_ARM_EXIDX AT> REGION_ARM_EXIDX
 
     .ARM.extab : {
-        KEEP(*(.ARM.extab* .gnu.linkonce.armextab.*))
+        KEEP (*(.ARM.extab* .gnu.linkonce.armextab.*))
     } > REGION_ARM_EXTAB AT> REGION_ARM_EXTAB
 
     __etext = .;

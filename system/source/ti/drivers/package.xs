@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -53,8 +53,8 @@ function getLibs()
     }
 
     /* Determine libraries required by device name. */
-    if (Program.cpu.deviceName.match(/CC32.*/)) {
-        driverString = "_cc32xx";
+    if (Program.cpu.deviceName.match(/CC13.*2/)) {
+        driverString = "_cc13x2";
     }
     else if (Program.cpu.deviceName.match(/CC13.*/)) {
         driverString = "_cc13x0";
@@ -62,32 +62,32 @@ function getLibs()
     else if (Program.cpu.deviceName.match(/CC26.*R2/)) {
         driverString = "_cc26x0r2";
     }
-    else if (Program.cpu.deviceName.match(/CC2652.*/)) {
-        libName = "_eng_cc26x2_cc26x4_fpga";
-    }
-    else if (Program.cpu.deviceName.match(/CC2654.*/)) {
-        libName = "_eng_cc26x2_cc26x4_fpga";
+    else if (Program.cpu.deviceName.match(/CC26.*2/)) {
+        driverString = "_cc26x2";
     }
     else if (Program.cpu.deviceName.match(/CC26.*/)) {
         driverString = "_cc26x0";
     }
-    else if (Program.cpu.deviceName.match(/MSP432.*/)) {
-        driverString = "_msp432p4xx";
+    else if (Program.cpu.deviceName.match(/CC32.*/)) {
+        driverString = "_cc32xx";
+    }
+    else if (Program.cpu.deviceName.match(/MSP432E4.*/)) {
+        driverString = "_msp432e4";
+    }
+    else if (Program.cpu.deviceName.match(/MSP432.*01/)) {
+        driverString = "_msp432p401x";
+    }
+    else if (Program.cpu.deviceName.match(/MSP432.*11/)) {
+        driverString = "_msp432p4x1xi";
     }
     else {
         throw ("Driver not found for this device " + Program.cpu.deviceName +
                " and target " + Program.build.target.suffix);
     }
 
-    /* Get instrumentation preference */
-    if (driversConfig.libType == driversConfig.LibType_Instrumented) {
-        instrumentedString = "_instrumented";
-    }
-
     targetSuffix = ".a" + Program.build.target.suffix + ";";
 
-    retString += driversBase + "/lib/drivers" + driverString +
-        instrumentedString + targetSuffix;
+    retString += driversBase + "/lib/drivers" + driverString + targetSuffix;
 
     /* strip duplicate '//' characters from the library list */
     return (retString.replace(/\/\/+/g, '/'));

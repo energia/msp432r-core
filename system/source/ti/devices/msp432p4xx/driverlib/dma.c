@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -141,7 +136,7 @@ void* DMA_getControlAlternateBase(void)
     // Read the current value of the control base register and return it to
     // the caller.
     //
-    return ((void *) DMA_Control->ATLBASE);
+    return ((void *) DMA_Control->ALTBASE);
 }
 
 void DMA_requestChannel(uint32_t channelNum)

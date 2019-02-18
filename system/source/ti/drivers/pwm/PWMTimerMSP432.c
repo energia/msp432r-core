@@ -41,6 +41,8 @@
 #define DebugP_LOG_ENABLED 0
 #endif
 
+#include <ti/devices/DeviceFamily.h>
+
 #include <ti/drivers/dpl/DebugP.h>
 #include <ti/drivers/dpl/HwiP.h>
 
@@ -63,7 +65,8 @@
 #define PinConfigCompareRegister(config)  (((config) >> 20) & 0xF)
 
 void PWMTimerMSP432_close(PWM_Handle handle);
-int_fast16_t PWMTimerMSP432_control(PWM_Handle handle, uint_fast16_t cmd, void *arg);
+int_fast16_t PWMTimerMSP432_control(PWM_Handle handle, uint_fast16_t cmd,
+    void *arg);
 void PWMTimerMSP432_init(PWM_Handle handle);
 PWM_Handle PWMTimerMSP432_open(PWM_Handle handle, PWM_Params *params);
 int_fast16_t PWMTimerMSP432_setDuty(PWM_Handle handle, uint32_t dutyValue);
@@ -71,7 +74,26 @@ int_fast16_t PWMTimerMSP432_setPeriod(PWM_Handle handle, uint32_t periodValue);
 void PWMTimerMSP432_start(PWM_Handle handle);
 void PWMTimerMSP432_stop(PWM_Handle handle);
 
+/* Static functions */
+static inline bool allocatePWMResource(PWM_Handle handle, PWM_Period_Units units,
+    uint32_t period, uint32_t periodCounts, uint32_t dutyCounts,
+    uint8_t prescalar);
+static inline uint8_t calculatePrescalar(uint32_t period);
+static int32_t corroborateDuty(PWM_Handle handle, uint32_t period, uint32_t duty);
+static int32_t corroboratePeriod(PWM_Handle handle, uint32_t period,
+    uint8_t prescalar);
+static inline void freePWMResource(PWM_Handle handle);
+static uint32_t getDutyCounts(PWM_Duty_Units dutyUnits, uint32_t dutyValue,
+    uint32_t periodCounts, uint32_t clockFreq);
+static uint32_t getPeriodCounts(PWM_Period_Units periodUnits,
+    uint32_t periodValue, uint32_t clockFreq);
+static void releaseConstraints(PWM_Handle handle);
+static void setConstraints(PWM_Handle handle, PWM_Period_Units units,
+    uint32_t period);
+static void initHw(PWM_Handle handle);
 static void mapPin(uint8_t port, uint8_t pin, uint8_t value);
+static int_fast16_t perfChangeNotifyFxn(uint_fast16_t eventType,
+    uintptr_t eventArg, uintptr_t clientArg);
 
 /* PWM function table for PWMTimerMSP432 implementation */
 const PWM_FxnTable PWMTimerMSP432_fxnTable = {
@@ -113,6 +135,72 @@ static const uint16_t PWM_MAX_PRESCALAR = (64);
 static PWMTimerMSP432_Status pwmTimerStatus[PWMTimerMSP432_NUM_TIMERS] = {0};
 
 /*
+ *  ======== allocatePWMResource ========
+ *  This function ensures allocation of a Timer_A peripheral and corresponding
+ *  Capture Compare Register. A Timer_A peripheral can support up to 6
+ *  individual PWM outputs which all share a clock source, prescalar and period.
+ *  This function calls setConstraints() to set initial power performance
+ *  constraints. See also freePWMResource().
+ */
+static bool inline allocatePWMResource(PWM_Handle handle, PWM_Period_Units units,
+    uint32_t period, uint32_t periodCounts, uint32_t dutyCounts,
+    uint8_t prescalar)
+{
+    PWMTimerMSP432_Object const *object = handle->object;
+    PWMTimerMSP432_HWAttrsV2 const *hwAttrs = handle->hwAttrs;
+    uintptr_t key;
+
+    key = HwiP_disable();
+
+    /* Check if this Timer_A peripheral is already in use by this driver */
+    if (object->timerStatus->openMask == 0x00) {
+
+        /* Attempt to allocate Timer_A peripheral */
+        if(!TimerMSP432_allocateTimerResource(object->baseAddress)) {
+            HwiP_restore(key);
+
+            return (false);
+        }
+
+        object->timerStatus->clockSource = hwAttrs->clockSource;
+        object->timerStatus->periodCounts = periodCounts;
+        object->timerStatus->period = period;
+        object->timerStatus->periodUnits = units;
+        object->timerStatus->prescalar = prescalar;
+
+        /* Set performance level constraints */
+        setConstraints(handle, units, period);
+
+        /* Register function to reconfigure peripheral on perf level changes */
+        Power_registerNotify(&(object->timerStatus->perfChangeNotify),
+            PowerMSP432_DONE_CHANGE_PERF_LEVEL, perfChangeNotifyFxn,
+            (uintptr_t) handle);
+
+    }
+    /* Check if this Timer_A capture compare register (CCR) is in use */
+    else if (object->timerStatus->openMask & (1 << object->compareOutputNum)) {
+        HwiP_restore(key);
+
+        return (false);
+    }
+    /* Period, periodUnits and clock source must be the same */
+    else if ((object->timerStatus->period != period) ||
+        (object->timerStatus->periodUnits != units)||
+        (object->timerStatus->clockSource != hwAttrs->clockSource)) {
+        HwiP_restore(key);
+
+        return (false);
+    }
+
+    object->timerStatus->openMask |= (1 << object->compareOutputNum);
+    object->timerStatus->duties[object->compareOutputNum] = dutyCounts;
+
+    HwiP_restore(key);
+
+    return (true);
+}
+
+/*
  *  ======== calculatePrescalar ========
  *  Calculates timer prescalar for a given period.
  *
@@ -135,7 +223,8 @@ static inline uint8_t calculatePrescalar(uint32_t period)
 /*
  *  ======== corroborateDuty ========
  */
-static int corroborateDuty(PWM_Handle handle, uint32_t period, uint32_t duty)
+static int32_t corroborateDuty(PWM_Handle handle, uint32_t period,
+    uint32_t duty)
 {
     if (duty == PWM_INVALID_VALUE) {
         DebugP_log1("PWM:(%p) duty units could not be determined.",
@@ -156,7 +245,7 @@ static int corroborateDuty(PWM_Handle handle, uint32_t period, uint32_t duty)
 /*
  *  ======== corroboratePeriod ========
  */
-static int corroboratePeriod(PWM_Handle handle, uint32_t period,
+static int32_t corroboratePeriod(PWM_Handle handle, uint32_t period,
     uint8_t prescalar)
 {
     if (period == PWM_INVALID_VALUE) {
@@ -173,6 +262,36 @@ static int corroboratePeriod(PWM_Handle handle, uint32_t period,
     }
 
     return (PWM_STATUS_SUCCESS);
+}
+
+/*
+ *  ======== freePWMResource ========
+ *  This function will undo allocation performed by
+ *  allocatePWMResource() appropriately.
+ */
+static inline void freePWMResource(PWM_Handle handle)
+{
+    PWMTimerMSP432_Object const *object = handle->object;
+    uintptr_t key;
+
+    key = HwiP_disable();
+
+    object->timerStatus->duties[object->compareOutputNum] = 0;
+    object->timerStatus->openMask &= ~(1 << object->compareOutputNum);
+
+    /* If all PWM instances are closed on this Timer_A peripheral */
+    if (object->timerStatus->openMask == 0x00) {
+        object->timerStatus->period = 0;
+        object->timerStatus->periodCounts = 0;
+        object->timerStatus->prescalar = 0;
+
+        releaseConstraints(handle);
+        Power_unregisterNotify(&object->timerStatus->perfChangeNotify);
+        MAP_Timer_A_stopTimer(object->baseAddress);
+        TimerMSP432_freeTimerResource(object->baseAddress);
+    }
+
+    HwiP_restore(key);
 }
 
 /*
@@ -239,94 +358,130 @@ static uint32_t getPeriodCounts(PWM_Period_Units periodUnits,
 /*
  *  ======== initHw ========
  */
-static int initHw(PWM_Handle handle, uint32_t period, uint32_t duty)
+static void initHw(PWM_Handle handle)
 {
-    uintptr_t                       key;
-    int32_t                         result;
-    uint32_t                        dutyTicks;
-    uint32_t                        periodTicks;
-    uint8_t                         prescalar;
-    uint32_t                        clockFreq;
-    Timer_A_PWMConfig               pwmConfig;
-    PowerMSP432_Freqs               powerFreqs;
-    PWMTimerMSP432_Object          *object = handle->object;
+    PWMTimerMSP432_Object    const *object = handle->object;
     PWMTimerMSP432_HWAttrsV2 const *hwAttrs = handle->hwAttrs;
-
-    PowerMSP432_getFreqs(Power_getPerformanceLevel(), &powerFreqs);
-    clockFreq = (hwAttrs->clockSource == TIMER_A_CLOCKSOURCE_SMCLK) ?
-        powerFreqs.SMCLK : powerFreqs.ACLK;
-
-    periodTicks = getPeriodCounts(object->periodUnits, period, clockFreq);
-    dutyTicks = getDutyCounts(object->dutyUnits, duty, periodTicks, clockFreq);
-    prescalar = calculatePrescalar(periodTicks);
-
-    result = corroboratePeriod(handle, periodTicks, prescalar);
-    if (result != PWM_STATUS_SUCCESS) {
-        return (result);
-    }
-
-    result = corroborateDuty(handle, periodTicks, dutyTicks);
-    if (result != PWM_STATUS_SUCCESS) {
-        return (result);
-    }
-
-    /* Trying to allocate the timer resource. If the timer that the PWM is using
-     *  is in use by either the Capture or Timer driver, this will return false.
-     */
-    if(!TimerMSP432_allocateTimerResource(object->timerBaseAddr))
-    {
-        return PWM_STATUS_ERROR;
-    }
+    Timer_A_PWMConfig               pwmConfig;
+    uint32_t                        period, duty;
+    uintptr_t                       key;
 
     key = HwiP_disable();
 
-    /*
-     * Verify if timer has been initialized by another PWM instance.  If so,
-     * make sure PWM periods & prescalars are the same, do not open driver if
-     * otherwise.
-     */
-    if ((object->timerStatusStruct)->period &&
-        ((object->timerStatusStruct)->period != periodTicks ||
-            (object->timerStatusStruct)->prescalar != prescalar)) {
-        HwiP_restore(key);
-
-        DebugP_log1("PWM:(%p) differing PWM periods, cannot open driver.",
-            (uintptr_t) handle);
-
-        return (PWM_STATUS_INVALID_PERIOD);
-    }
-
-    /*
-     * Store configuration & mark PWM instance as active (prevents other
-     * instances from shutting off the timer in PWM_close()).
-     */
-    (object->timerStatusStruct)->period = periodTicks;
-    (object->timerStatusStruct)->prescalar = prescalar;
-    (object->timerStatusStruct)->duties[object->compareOutputNum] = dutyTicks;
-    (object->timerStatusStruct)->activeOutputsMask |=
-        (1 << object->compareOutputNum);
+    duty = object->timerStatus->duties[object->compareOutputNum];
+    period = object->timerStatus->periodCounts;
 
     /*
      * This condition ensures that the output will remain active if the duty
      * is equal to the period.
      */
-    duty = dutyTicks / (object->timerStatusStruct)->prescalar;
-    period = periodTicks / (object->timerStatusStruct)->prescalar;
-    if (duty == period) {
+    duty = duty / object->timerStatus->prescalar;
+    period = period / object->timerStatus->prescalar;
+    if (period == duty) {
         duty++;
     }
 
     pwmConfig.clockSource = hwAttrs->clockSource;
-    pwmConfig.clockSourceDivider = prescalar;
+    pwmConfig.clockSourceDivider = object->timerStatus->prescalar;;
     pwmConfig.timerPeriod = period;
     pwmConfig.compareRegister = PinConfigCompareRegister(hwAttrs->pwmPin);
     pwmConfig.compareOutputMode = TIMER_A_OUTPUTMODE_RESET_SET;
     pwmConfig.dutyCycle = duty;
-    MAP_Timer_A_generatePWM(object->timerBaseAddr, &pwmConfig);
+    MAP_Timer_A_generatePWM(object->baseAddress, &pwmConfig);
+
+    HwiP_restore(key);
+}
+
+/*
+ *  ======== perfChangeNotifyFxn ========
+ *  Called by Power module before and after performance level is changed.
+ */
+static int_fast16_t perfChangeNotifyFxn(uint_fast16_t eventType,
+    uintptr_t eventArg, uintptr_t clientArg)
+{
+    PWM_Handle handle = (PWM_Handle) clientArg;
+    PWMTimerMSP432_Object const *object = handle->object;
+    PWMTimerMSP432_HWAttrsV2 const *hwAttrs = handle->hwAttrs;
+    PowerMSP432_Freqs powerFreqs;
+    uint32_t          clockFreq;
+    uintptr_t         key;
+
+    /* Get new performance level clock frequencies */
+    PowerMSP432_getFreqs((uint32_t) eventArg, &powerFreqs);
+
+    clockFreq = (hwAttrs->clockSource == TIMER_A_CLOCKSOURCE_SMCLK) ?
+            powerFreqs.SMCLK : powerFreqs.ACLK;
+
+    key = HwiP_disable();
+
+    object->timerStatus->periodCounts =
+        getPeriodCounts(object->timerStatus->periodUnits,
+        object->timerStatus->period, clockFreq);
+
+    object->timerStatus->prescalar =
+            calculatePrescalar(object->timerStatus->periodCounts);
 
     HwiP_restore(key);
 
-    return (PWM_STATUS_SUCCESS);
+    initHw(handle);
+
+    return (Power_NOTIFYDONE);
+}
+
+/*
+ *  ======== releaseConstraints ========
+ *  This function will release all performance level constraints set in
+ *  setConstraints().
+ */
+static void releaseConstraints(PWM_Handle handle)
+{
+    PWMTimerMSP432_Object const *object = handle->object;
+    uint32_t i;
+
+    for (i = 0; object->timerStatus->perfConstraintMask; i++) {
+
+        if (object->timerStatus->perfConstraintMask & 0x01) {
+
+            Power_releaseConstraint(PowerMSP432_DISALLOW_PERFLEVEL_0 + i);
+        }
+
+        object->timerStatus->perfConstraintMask >>= 1;
+    }
+}
+
+/*
+ *  ======== setConstraints ========
+ *  This function will determine and set appropriate performance levels
+ *  constraints given the period and period units. Performance levels
+ *  set are tracked in perfConstraintMask.
+ */
+static void setConstraints(PWM_Handle handle, PWM_Period_Units units,
+    uint32_t period)
+{
+    PWMTimerMSP432_Object const *object = handle->object;
+    PWMTimerMSP432_HWAttrsV2 const *hwAttrs = handle->hwAttrs;
+    PowerMSP432_Freqs powerFreqs;
+    uint32_t perfLevel, numPerfLevels, clockFreq;
+
+    numPerfLevels = PowerMSP432_getNumPerfLevels();
+
+    for (perfLevel = 0; perfLevel < numPerfLevels; perfLevel++) {
+
+        PowerMSP432_getFreqs(perfLevel, &powerFreqs);
+
+        clockFreq = (hwAttrs->clockSource == TIMER_A_CLOCKSOURCE_SMCLK) ?
+        powerFreqs.SMCLK : powerFreqs.ACLK;
+
+        period = getPeriodCounts(units, period, clockFreq);
+
+        if (corroboratePeriod(handle, period, calculatePrescalar(period)) !=
+            PWM_STATUS_SUCCESS) {
+
+            /* Set constraint and keep track of it in perfConstraintMask */
+            object->timerStatus->perfConstraintMask |= (1 << perfLevel);
+            Power_setConstraint(PowerMSP432_DISALLOW_PERFLEVEL_0 + perfLevel);
+        }
+    }
 }
 
 /*
@@ -335,28 +490,10 @@ static int initHw(PWM_Handle handle, uint32_t period, uint32_t duty)
  */
 void PWMTimerMSP432_close(PWM_Handle handle)
 {
-    uintptr_t                       key;
-    PWMTimerMSP432_Object          *object  = handle->object;
     PWMTimerMSP432_HWAttrsV2 const *hwAttrs = handle->hwAttrs;
 
     PWMTimerMSP432_stop(handle);
-
-    key = HwiP_disable();
-
-    /* Remove power constraints */
-    Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
-
-    /* Mark the PWM as inactive */
-    (object->timerStatusStruct)->activeOutputsMask &=
-        ~(1 << object->compareOutputNum);
-    (object->timerStatusStruct)->duties[object->compareOutputNum] = 0;
-
-    /* Stop timer & clear all status if no other PWM instances are being used */
-    if ((object->timerStatusStruct)->activeOutputsMask == 0) {
-        MAP_Timer_A_stopTimer(object->timerBaseAddr);
-        (object->timerStatusStruct)->period = 0;
-        (object->timerStatusStruct)->prescalar = 0;
-    }
+    freePWMResource(handle);
 
     /* If the pin was mapped in open, restore to PMAP_NONE */
     if (PinConfigValue(hwAttrs->pwmPin) != 0) {
@@ -364,13 +501,6 @@ void PWMTimerMSP432_close(PWM_Handle handle)
         mapPin(PinConfigPort(hwAttrs->pwmPin), (hwAttrs->pwmPin) & 0x7,
             PMAP_NONE);
     }
-
-    object->isOpen = false;
-
-    /* Freeing up the resource with the Timer driver */
-    TimerMSP432_freeTimerResource(object->timerBaseAddr);
-
-    HwiP_restore(key);
 
     DebugP_log1("PWM:(%p) closed", (uintptr_t) handle);
 }
@@ -399,48 +529,16 @@ void PWMTimerMSP432_init(PWM_Handle handle)
  */
 PWM_Handle PWMTimerMSP432_open(PWM_Handle handle, PWM_Params *params)
 {
-    uintptr_t                       key;
-    bool                            timerIsRunning;
-    uint8_t                         structIndex;
     PWMTimerMSP432_Object          *object = handle->object;
     PWMTimerMSP432_HWAttrsV2 const *hwAttrs = handle->hwAttrs;
-    uint16_t                        pin;
-    uint16_t                        port;
-    uint16_t                        value;
+    PowerMSP432_Freqs               powerFreqs;
+    uint32_t                        periodCounts, dutyCounts;
+    uint32_t                        clockFreq;
+    uint16_t                        port, pin, value;
+    uint8_t                         structIndex, prescalar;
 
-    /* Assign corresponding status structure to the PWM instance */
-    structIndex = PinConfigTimerId(hwAttrs->pwmPin);
-    object->timerStatusStruct = &(pwmTimerStatus[structIndex]);
-    object->timerBaseAddr = pwmTimerBaseAddr[structIndex];
-    object->compareOutputNum = (PinConfigCompareRegister(hwAttrs->pwmPin) / 2) - 2;
-
-    key = HwiP_disable();
-
-    /*
-     * Before opening the PWM instance, we must verify that the Timer is not
-     * already open or being used by another source (possibly the Kernel).
-     * Additionally, the Timer peripheral could have already been initialized
-     * by another PWM instance, so we must verify if any other PWM driver
-     * (on the same Timer) is initialized.
-     */
-    timerIsRunning =
-        (TIMER_A_CMSIS(object->timerBaseAddr)->CTL & TIMER_A_CTL_MC_3) != TIMER_A_STOP_MODE;
-    if (object->isOpen ||
-        (timerIsRunning && (object->timerStatusStruct)->activeOutputsMask == 0)) {
-        /* Timer already opened or used by source other than PWM driver */
-        HwiP_restore(key);
-
-        DebugP_log1("PWM:(%p) timer used by another source.",
-            (uintptr_t) handle);
-
-        return (NULL);
-    }
-    object->isOpen = true;
-
-    HwiP_restore(key);
-
-    if (PinConfigCompareRegister(hwAttrs->pwmPin) == TIMER_A_CAPTURECOMPARE_REGISTER_0) {
-        object->isOpen = false;
+    if (PinConfigCompareRegister(hwAttrs->pwmPin) ==
+        TIMER_A_CAPTURECOMPARE_REGISTER_0) {
 
         DebugP_log1("PWM:(%p) Cannot use COMPARE_REGISTER_0 to generate PWM.",
             (uintptr_t) handle);
@@ -450,7 +548,6 @@ PWM_Handle PWMTimerMSP432_open(PWM_Handle handle, PWM_Params *params)
 
     if (hwAttrs->clockSource != TIMER_A_CLOCKSOURCE_ACLK &&
         hwAttrs->clockSource != TIMER_A_CLOCKSOURCE_SMCLK) {
-        object->isOpen = false;
 
         DebugP_log1("PWM:(%p) Unsupported PWM clock source.",
             (uintptr_t) handle);
@@ -461,7 +558,6 @@ PWM_Handle PWMTimerMSP432_open(PWM_Handle handle, PWM_Params *params)
     if ((hwAttrs->clockSource == TIMER_A_CLOCKSOURCE_ACLK) &&
         ((params->periodUnits == PWM_PERIOD_US) ||
             (params->dutyUnits == PWM_DUTY_US))) {
-        object->isOpen = false;
 
         DebugP_log1("PWM:(%p) Microseconds units unsupported with ACLK source.",
             (uintptr_t) handle);
@@ -469,40 +565,71 @@ PWM_Handle PWMTimerMSP432_open(PWM_Handle handle, PWM_Params *params)
         return (NULL);
     }
 
-    /*
-     * Add power management support - PWM driver does not allow performance
-     * level changes while open.
-     */
     Power_setConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+    PowerMSP432_getFreqs(Power_getPerformanceLevel(), &powerFreqs);
 
-    /* Map the pin, only if its a mappable pin. */
-    value = PinConfigValue(hwAttrs->pwmPin);
+    clockFreq = (hwAttrs->clockSource == TIMER_A_CLOCKSOURCE_SMCLK) ?
+        powerFreqs.SMCLK : powerFreqs.ACLK;
 
-    if (value != 0) {
-        port = PinConfigPort(hwAttrs->pwmPin);
-        pin = (hwAttrs->pwmPin) & 0x7;
-        mapPin(port, pin, value);
-    }
+    periodCounts = getPeriodCounts(params->periodUnits, params->periodValue,
+        clockFreq);
+    dutyCounts = getDutyCounts(params->dutyUnits, params->dutyValue, periodCounts,
+        clockFreq);
+    prescalar = calculatePrescalar(periodCounts);
 
-    /* Store PWM configuration */
-    object->dutyUnits = params->dutyUnits;
-    object->idleLevel = params->idleLevel;
-    object->periodUnits = params->periodUnits;
-    object->pwmStarted = false;
-
-    /* Initialize the peripheral & set the period & duty */
-    if (initHw(handle, params->periodValue, params->dutyValue) !=
-        PWM_STATUS_SUCCESS) {
-        PWMTimerMSP432_close(handle);
-
-        DebugP_log1("PWM:(%p) Failed set initial PWM configuration.",
-            (uintptr_t) handle);
+    if (corroboratePeriod(handle, periodCounts, prescalar) != PWM_STATUS_SUCCESS) {
+        Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
 
         return (NULL);
     }
 
-    /* Called to set the initial idleLevel */
-    PWMTimerMSP432_stop(handle);
+    if (corroborateDuty(handle, periodCounts, dutyCounts) != PWM_STATUS_SUCCESS) {
+        Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+
+        return (NULL);
+    }
+
+    /* Assign corresponding status structure to the PWM instance */
+    structIndex = PinConfigTimerId(hwAttrs->pwmPin);
+    object->timerStatus = &(pwmTimerStatus[structIndex]);
+    object->baseAddress = pwmTimerBaseAddr[structIndex];
+    object->compareOutputNum = (PinConfigCompareRegister(hwAttrs->pwmPin) / 2) - 2;
+
+    if (allocatePWMResource(handle, params->periodUnits, params->periodValue,
+        periodCounts, dutyCounts, prescalar) == false) {
+        Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+
+        return (NULL);
+    }
+
+    Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+
+    /* Store PWM configuration */
+    object->dutyUnits = params->dutyUnits;
+    object->idleLevel = params->idleLevel;
+
+    /* Map the pin, only if its a mappable pin. */
+    value = PinConfigValue(hwAttrs->pwmPin);
+    port = PinConfigPort(hwAttrs->pwmPin);
+    pin = (hwAttrs->pwmPin) & 0x7;
+
+    if (value != 0) {
+        mapPin(port, pin, value);
+    }
+
+    /* Set the idleLevel */
+    MAP_GPIO_setAsOutputPin(port, pin);
+    MAP_GPIO_setDriveStrengthHigh(port, pin);
+
+    if (object->idleLevel) {
+        MAP_GPIO_setOutputHighOnPin(port, pin);
+    }
+    else {
+        MAP_GPIO_setOutputLowOnPin(port, pin);
+    }
+
+    /* Initialize the peripheral & set the period & duty */
+    initHw(handle);
 
     DebugP_log3("PWM:(%p) opened; period set to: %d; duty set to: %d",
         (uintptr_t) handle, params->periodValue, params->dutyValue);
@@ -516,14 +643,12 @@ PWM_Handle PWMTimerMSP432_open(PWM_Handle handle, PWM_Params *params)
  */
 int_fast16_t PWMTimerMSP432_setDuty(PWM_Handle handle, uint32_t dutyValue)
 {
-    uintptr_t                       key;
-    int32_t                         result;
-    uint32_t                        duty;
-    uint32_t                        period;
-    uint32_t                        clockFreq;
-    PowerMSP432_Freqs               powerFreqs;
     PWMTimerMSP432_Object          *object = handle->object;
     PWMTimerMSP432_HWAttrsV2 const *hwAttrs = handle->hwAttrs;
+    PowerMSP432_Freqs               powerFreqs;
+    uintptr_t                       key;
+    int32_t                         result;
+    uint32_t                        period, duty, clockFreq;
 
     PowerMSP432_getFreqs(Power_getPerformanceLevel(), &powerFreqs);
     clockFreq = (hwAttrs->clockSource == TIMER_A_CLOCKSOURCE_SMCLK) ?
@@ -531,9 +656,10 @@ int_fast16_t PWMTimerMSP432_setDuty(PWM_Handle handle, uint32_t dutyValue)
 
     key = HwiP_disable();
 
-    period = (object->timerStatusStruct)->period;
+    period = object->timerStatus->periodCounts;
     duty = getDutyCounts(object->dutyUnits, dutyValue, period, clockFreq);
     result = corroborateDuty(handle, period, duty);
+
     if (result != PWM_STATUS_SUCCESS) {
         HwiP_restore(key);
 
@@ -544,20 +670,21 @@ int_fast16_t PWMTimerMSP432_setDuty(PWM_Handle handle, uint32_t dutyValue)
      * Set & store the new duty.  IMPORTANT: this must be saved before the
      * duty is divided by the prescalar & the duty = period corner case.
      */
-    (object->timerStatusStruct)->duties[object->compareOutputNum] = duty;
+    object->timerStatus->duties[object->compareOutputNum] = duty;
+
+    duty /= object->timerStatus->prescalar;
+    period /= object->timerStatus->prescalar;
 
     /*
      * This condition ensures that the output will remain active if the duty
      * is equal to the period.
      */
-    duty /= (object->timerStatusStruct)->prescalar;
-    period /= (object->timerStatusStruct)->prescalar;
     if (duty == period) {
         duty++;
     }
 
-    MAP_Timer_A_setCompareValue(object->timerBaseAddr,
-            PinConfigCompareRegister(hwAttrs->pwmPin), duty);
+    MAP_Timer_A_setCompareValue(object->baseAddress,
+        PinConfigCompareRegister(hwAttrs->pwmPin), duty);
 
     HwiP_restore(key);
 
@@ -576,8 +703,9 @@ int_fast16_t PWMTimerMSP432_setPeriod(PWM_Handle handle, uint32_t periodValue)
     int8_t                          i;
     uint8_t                         prescalar;
     int32_t                         result;
-    uint32_t                        period;
+    uint32_t                        periodCounts;
     uint32_t                        clockFreq;
+    Timer_A_PWMConfig               pwmConfig;
     PowerMSP432_Freqs               powerFreqs;
     PWMTimerMSP432_Object          *object = handle->object;
     PWMTimerMSP432_HWAttrsV2 const *hwAttrs = handle->hwAttrs;
@@ -588,44 +716,73 @@ int_fast16_t PWMTimerMSP432_setPeriod(PWM_Handle handle, uint32_t periodValue)
 
     key = HwiP_disable();
 
-    period = getPeriodCounts(object->periodUnits, periodValue, clockFreq);
-    prescalar = calculatePrescalar(period);
+    periodCounts = getPeriodCounts(object->timerStatus->periodUnits, periodValue,
+        clockFreq);
+    prescalar = calculatePrescalar(periodCounts);
+    result = corroboratePeriod(handle, periodCounts, prescalar);
 
-    result = corroboratePeriod(handle, period, prescalar);
     if (result != PWM_STATUS_SUCCESS) {
         HwiP_restore(key);
 
         return (result);
     }
 
-    /* Ensure the new period can be generated with the current prescalar. */
-    if (prescalar != (object->timerStatusStruct)->prescalar) {
-        HwiP_restore(key);
+    /* If more than one PWM is active on this->timerPeripheral */
+    if (object->timerStatus->openMask != (1 << object->compareOutputNum)) {
 
-        DebugP_log1("PWM:(%p) period is out of range.", (uintptr_t) handle);
-
-        return (PWM_STATUS_INVALID_PERIOD);
-    }
-
-    /*
-     * Due to Timer_A peripherals generating multiple PWM outputs on a single
-     * timer, we need to ensure the new period is greater than all the duties
-     * currently set on the timer peripheral.
-     */
-    for (i = 0; i < PWMTimerMSP432_NUM_PWM_OUTPUTS; i++) {
-        if ((object->timerStatusStruct)->duties[i] &&
-            period <= (object->timerStatusStruct)->duties[i]) {
+        /* Ensure the new period can be generated with the current prescalar */
+        if (prescalar != object->timerStatus->prescalar) {
             HwiP_restore(key);
 
             DebugP_log1("PWM:(%p) period is out of range.", (uintptr_t) handle);
 
             return (PWM_STATUS_INVALID_PERIOD);
         }
+
+        /*
+         * Due to Timer_A peripherals generating multiple PWM outputs on a single
+         * timer, we need to ensure the new period is greater than all the duties
+         * currently set on the timer peripheral.
+         */
+        for (i = 0; i < PWMTimerMSP432_NUM_PWM_OUTPUTS; i++) {
+
+            if (object->timerStatus->duties[i] &&
+                    (periodCounts <= object->timerStatus->duties[i])) {
+
+                HwiP_restore(key);
+                DebugP_log1("PWM:(%p) period is out of range.", (uintptr_t) handle);
+
+                return (PWM_STATUS_INVALID_PERIOD);
+            }
+        }
+    }
+    else {
+        if (periodCounts <= object->timerStatus->duties[object->compareOutputNum]) {
+
+            HwiP_restore(key);
+            DebugP_log1("PWM:(%p) period is out of range.", (uintptr_t) handle);
+
+            return (PWM_STATUS_INVALID_PERIOD);
+        }
     }
 
-    (object->timerStatusStruct)->period = period;
-    MAP_Timer_A_setCompareValue(object->timerBaseAddr,
-        TIMER_A_CAPTURECOMPARE_REGISTER_0, period/prescalar);
+    /* Set new power performance constraints based on new period */
+    releaseConstraints(handle);
+    setConstraints(handle, object->timerStatus->periodUnits, periodValue);
+
+    /* Update static object */
+    object->timerStatus->prescalar = prescalar;
+    object->timerStatus->periodCounts = periodCounts;
+    object->timerStatus->period = periodValue;
+
+    pwmConfig.clockSource = hwAttrs->clockSource;
+    pwmConfig.clockSourceDivider = prescalar;
+    pwmConfig.timerPeriod = (periodCounts / prescalar);
+    pwmConfig.compareRegister = PinConfigCompareRegister(hwAttrs->pwmPin);
+    pwmConfig.compareOutputMode = TIMER_A_OUTPUTMODE_RESET_SET;
+    pwmConfig.dutyCycle = ((object->timerStatus->duties[object->compareOutputNum]) / prescalar);
+
+    MAP_Timer_A_generatePWM(object->baseAddress, &pwmConfig);
 
     HwiP_restore(key);
 
@@ -649,31 +806,39 @@ void PWMTimerMSP432_start(PWM_Handle handle)
 
     key = HwiP_disable();
 
-    /*
-     * Power management - do not allow low power modes or shutdown while PWM
-     * is started.
-     */
-    if (!(object->pwmStarted)) {
+    /* If this PWM CCR output is not active */
+    if ((object->timerStatus->activeOutputsMask &
+        (1 << object->compareOutputNum)) == 0) {
+
+        object->timerStatus->activeOutputsMask |=
+            (1 << object->compareOutputNum);
+
+        /* If this is the only active PWM on this Timer_A peripheral */
+        if (object->timerStatus->activeOutputsMask ==
+            (1 << object->compareOutputNum)) {
+
+            MAP_Timer_A_startCounter(object->baseAddress, TIMER_A_UP_MODE);
+        }
+
+        port = PinConfigPort(hwAttrs->pwmPin);
+        moduleFunction = (PinConfigValue(hwAttrs->pwmPin) == 0) ?
+            PinConfigModuleFunction(hwAttrs->pwmPin) :
+            GPIO_PRIMARY_MODULE_FUNCTION;
+        pin  = PinConfigPin(hwAttrs->pwmPin);
+
+        MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(port, pin,
+            moduleFunction);
+
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
         Power_setConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
-        Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-        Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
-        object->pwmStarted = true;
+#endif
+        Power_setConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+
+        DebugP_log1("PWM:(%p) started.", (uintptr_t) handle);
     }
-
-    /* Start the timer & set pinmux to PWM mode */
-    MAP_Timer_A_startCounter(object->timerBaseAddr, TIMER_A_UP_MODE);
-
-    port = PinConfigPort(hwAttrs->pwmPin);
-    moduleFunction = (PinConfigValue(hwAttrs->pwmPin) == 0) ?
-        PinConfigModuleFunction(hwAttrs->pwmPin) :
-        GPIO_PRIMARY_MODULE_FUNCTION;
-    pin  = PinConfigPin(hwAttrs->pwmPin);
-
-    MAP_GPIO_setAsPeripheralModuleFunctionOutputPin(port, pin, moduleFunction);
 
     HwiP_restore(key);
 
-    DebugP_log1("PWM:(%p) started.", (uintptr_t) handle);
 }
 
 /*
@@ -688,56 +853,62 @@ void PWMTimerMSP432_stop(PWM_Handle handle)
     uint16_t                        pin;
     uint16_t                        port;
 
-    key = HwiP_disable();
-
-    /* Remove the dependency to allow low power modes & shutdown */
-    if (object->pwmStarted) {
-        Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
-        Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
-        Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
-        object->pwmStarted = false;
-    }
-
-    /* Set pin as GPIO with IdleLevel value & stop the timer */
     pin = PinConfigPin(hwAttrs->pwmPin);
     port = PinConfigPort(hwAttrs->pwmPin);
 
-    MAP_GPIO_setAsOutputPin(port, pin);
-    MAP_GPIO_setDriveStrengthHigh(port, pin);
-    if (object->idleLevel) {
-        MAP_GPIO_setOutputHighOnPin(port, pin);
-    }
-    else {
-        MAP_GPIO_setOutputLowOnPin(port, pin);
+    key = HwiP_disable();
+
+    if ((object->timerStatus->activeOutputsMask &
+            (1 << object->compareOutputNum))) {
+
+        object->timerStatus->activeOutputsMask &=
+                ~(1 << object->compareOutputNum);
+
+        /* If all PWMs stopped */
+        if (object->timerStatus->activeOutputsMask == 0x00) {
+            MAP_Timer_A_stopTimer(object->baseAddress);
+        }
+
+        /* Set idleLevel */
+        MAP_GPIO_setAsOutputPin(port, pin);
+        MAP_GPIO_setDriveStrengthHigh(port, pin);
+
+        if (object->idleLevel) {
+            MAP_GPIO_setOutputHighOnPin(port, pin);
+        }
+        else {
+            MAP_GPIO_setOutputLowOnPin(port, pin);
+        }
+
+#if DeviceFamily_ID == DeviceFamily_ID_MSP432P401x
+        Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
+#endif
+        Power_releaseConstraint(PowerMSP432_DISALLOW_PERF_CHANGES);
+
+        DebugP_log1("PWM:(%p) stopped.", (uintptr_t) handle);
     }
 
     HwiP_restore(key);
-
-    DebugP_log1("PWM:(%p) stopped.", (uintptr_t) handle);
 }
 
-/*
- *  ======== mapPin ========
- *  NOTE: This function may go away when DriverLib supports mapping
- *  an individual pin.
- */
 static void mapPin(uint8_t port, uint8_t pin, uint8_t value)
 {
-    volatile uint8_t                     pmap;
+    volatile uint8_t pmap;
 
-    pmap = port * 0x8;  // 2 -> 0x10, 3 -> 0x18, 7 -> 0x38
+    /*
+     * Port 2 = 0x10 (2 * 8)
+     * Port 3 = 0x18 (3 * 8)
+     * Port 7 = 0x38 (7 * 8)
+     */
+    pmap = port * 0x08;
 
-    //portMapReconfigure = PMAP_DISABLE_RECONFIGURATION; // ?
-
-    /*  Code from pmap.c: */
-    //Get write-access to port mapping registers:
+    /* Enable write-access to port mapping registers */
     PMAP->KEYID = PMAP_KEYID_VAL;
 
-    //Enable/Disable reconfiguration during runtime
-//    PMAP->CTL = (PMAP->CTL & ~PMAP_CTL_PRECFG) | PMAP_DISABLE_RECONFIGURATION;
+    /* Configure port mapping */
     PMAP->CTL = (PMAP->CTL & ~PMAP_CTL_PRECFG) | PMAP_ENABLE_RECONFIGURATION;
-    HWREG8((uint32_t)PMAP_BASE + pin + pmap) = value;
-    //Disable write-access to port mapping registers:
+    HWREG8((uint32_t) (PMAP_BASE + pin + pmap)) = value;
 
+    /* Disable write-access to port mapping registers */
     PMAP->KEYID = 0;
 }

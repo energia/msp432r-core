@@ -47,10 +47,10 @@ var BIOS = null;
 function getCFiles(targetName)
 {
     if (BIOS.smpEnabled) {
-        return (["Swi_smp.c", "Swi_andn.c"]);
+        return (["Swi_smp.c"]);
     }
     else {
-        return (["Swi.c", "Swi_andn.c"]);
+        return (["Swi.c"]);
     }
 }
 

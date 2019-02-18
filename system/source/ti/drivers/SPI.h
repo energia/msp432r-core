@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -79,7 +79,7 @@
  *  calls the following APIs:
  *    - SPI_init(): Initialize the SPI driver.
  *    - SPI_Params_init():  Initialize a #SPI_Params structure with default
- *      vaules.  Then change the parameters from non-default values as
+ *      values.  Then change the parameters from non-default values as
  *      needed.
  *    - SPI_open():  Open an instance of the SPI driver, passing the
  *      initialized parameters, or NULL, and an index (described later).
@@ -187,12 +187,14 @@
  *  is to close and re-open the SPI instance with the new transfer mode.
  *
  *  In blocking mode, a task's code execution is blocked until a SPI
- *  transaction has completed. This ensures that only one SPI transaction
- *  operates at a given time. Other tasks requesting SPI transactions while
- *  a transaction is currently taking place are also placed into a blocked
- *  state. SPI transactions are executed in the order in which they were
- *  received.  In blocking mode, you cannot perform SPI transactions
- *  in the context of a software or hardware ISR.
+ *  transaction has completed or a timeout has occurred. This ensures
+ *  that only one SPI transfer operates at a given time. Other tasks requesting
+ *  SPI transfers while a transfer is currently taking place will receive
+ *  a FALSE return value.  If a timeout occurs the transfer is canceled, the
+ *  task is unblocked & will receive a FALSE return value. The transaction
+ *  count field will have the amount of frames which were transferred
+ *  successfully before the timeout.  In blocking mode, transfers cannot be
+ *  performed in software or hardware ISR context.
  *
  *  In callback mode, a SPI transaction functions asynchronously, which
  *  means that it does not block code execution. After a SPI transaction
@@ -202,11 +204,15 @@
  *  requested while a transaction is taking place, SPI_transfer() returns
  *  FALSE.
  *
- *
  *  #### SPI Frame Formats and Data Size
- *  The SPI driver can configure the device's SPI peripheral with various
- *  SPI format options: SPI (with various polarity and phase settings),
- *  TI, and Micro-wire.  The frame format is set with SPI_Params.frameFormat.
+ *  The SPI driver can configure the device's SPI peripheral to transfer
+ *  data in several SPI format options: SPI (with various polarity and phase
+ *  settings), TI, and Micro-wire. The frame format is set with
+ *  SPI_Params.frameFormat. Some SPI implementations may not support all frame
+ *  formats & the SPI driver will fail to opened.  Refer to the device specific
+ *  implementation documentation for details on which frame formats are
+ *  supported.
+ *
  *  The smallest single unit of data transmitted onto the SPI bus is called
  *  a SPI frame and is of size SPI_Params.dataSize.  A series of SPI frames
  *  transmitted/received on a SPI bus is known as a SPI transaction.
@@ -217,7 +223,7 @@
  *  takes an index into the SPI_config[] array, and a SPI parameters data
  *  structure.   The SPI instance is specified by the index of the SPI in
  *  SPI_config[].  Only one SPI index can be used at a time;
- *  calling SPI_open() a second time with the same index previosly
+ *  calling SPI_open() a second time with the same index previously
  *  passed to SPI_open() will result in an error.  You can,
  *  though, re-use the index if the instance is closed via SPI_close().
  *
@@ -263,15 +269,20 @@
  *  sent and received.
  *  The SPI_Transaction.txBuf and SPI_Transaction.rxBuf are both pointers
  *  to data buffers.  If txBuf is NULL, the driver sends SPI frames with all
- *  data bits set to 0. If rxBuf is NULL, the driver discards all SPI frames
- *  received.
- *  A SPI_transfer() of a SPI transaction is performed atomically.
+ *  data set to the default value specified in the hardware attributes. If
+ *  rxBuf is NULL, the driver discards all SPI frames received. SPI_transfer()
+ *  of a SPI transaction is performed atomically.
  *
  *  When the SPI is opened, the dataSize value determines the element types
  *  of txBuf and rxBuf. If the dataSize is from 4 to 8 bits, the driver
  *  assumes the data buffers are of type uint8_t (unsigned char). If the
- *  dataSize is larger than 8 bits, the driver assumes the data buffers are
- *  of type uint16_t (unsigned short).
+ *  dataSize is from 8 to 16 bits, the driver assumes the data buffers are
+ *  of type uint16_t (unsigned short).  If the dataSize is greater than
+ *  16 bits, the driver assumes the data buffers are uint32_t (unsigned long).
+ *  Some SPI driver implementations may not support all data sizes; refer
+ *  to device specific SPI implementation documentation for details on
+ *  what data sizes are supported.
+ *
  *  The optional SPI_Transaction.arg variable can only be used when the
  *  SPI driver has been opened in callback mode. This variable is used to
  *  pass a user-defined value into the user-defined callback function.
@@ -301,9 +312,9 @@
  *  spiTransaction.txBuf = transmitBuffer;
  *  spiTransaction.rxBuf = receiveBuffer;
  *
- *  ret = SPI_transfer(spi, &spiTransaction);
+ *  transferOK = SPI_transfer(spi, &spiTransaction);
  *  if (!transferOK) {
- *      // Unsuccessful SPI transfer
+ *      // Error in SPI or transfer already in progress.
  *  }
  *  @endcode
  *
@@ -323,9 +334,9 @@
  *  spiTransaction.txBuf = transmitBuffer;
  *  spiTransaction.rxBuf = receiveBuffer;
  *
- *  ret = SPI_transfer(spi, &spiTransaction);
+ *  transferOK = SPI_transfer(spi, &spiTransaction);
  *  if (!transferOK) {
- *      // Unsuccessful SPI transfer
+ *      // Error in SPI or transfer already in progress.
  *  }
  *  @endcode
  *
@@ -372,7 +383,9 @@
  *  transparently to the SPI chip select. When the hardware chip
  *  select is used, the peripheral automatically selects/enables the
  *  peripheral. When using a software chip select, the application needs to
- *  handle the proper chip select and pin configuration.
+ *  handle the proper chip select and pin configuration.  Chip select support
+ *  will vary per SPI peripheral, refer to the device specific implementation
+ *  documentation for details on chip select support.
  *
  *  - _Hardware chip select_  No additional action by the application is
  *    required.
@@ -406,9 +419,9 @@
 extern "C" {
 #endif
 
-#include <stdint.h>
 #include <stdbool.h>
 #include <stddef.h>
+#include <stdint.h>
 
 /**
  *  @defgroup SPI_CONTROL SPI_control command and status codes
@@ -557,8 +570,10 @@ typedef enum SPI_FrameFormat_ {
     SPI_POL0_PHA1 = 1,    /*!< SPI mode Polarity 0 Phase 1 */
     SPI_POL1_PHA0 = 2,    /*!< SPI mode Polarity 1 Phase 0 */
     SPI_POL1_PHA1 = 3,    /*!< SPI mode Polarity 1 Phase 1 */
-    SPI_TI        = 4,    /*!< TI mode */
-    SPI_MW        = 5     /*!< Micro-wire mode */
+    SPI_TI        = 4,    /*!< TI mode (not supported on all
+                               implementations) */
+    SPI_MW        = 5     /*!< Micro-wire mode (not supported on all
+                               implementations) */
 } SPI_FrameFormat;
 
 /*!
@@ -579,7 +594,8 @@ typedef enum SPI_TransferMode_ {
     SPI_MODE_BLOCKING,
     /*!
      * SPI_transfer() does not block code execution and will call a
-     * ::SPI_CallbackFxn. This mode can be used in a Task, Swi, or Hwi context.
+     * ::SPI_CallbackFxn. This mode can be used in a Task, software or hardware
+     * interrupt context.
      */
     SPI_MODE_CALLBACK
 } SPI_TransferMode;
@@ -595,8 +611,7 @@ typedef enum SPI_TransferMode_ {
 typedef struct SPI_Params_ {
     SPI_TransferMode transferMode;       /*!< Blocking or Callback mode */
     uint32_t         transferTimeout;    /*!< Transfer timeout in system
-                                              ticks (Not supported with all
-                                              implementations */
+                                              ticks */
     SPI_CallbackFxn  transferCallbackFxn;/*!< Callback function pointer */
     SPI_Mode         mode;               /*!< Master or Slave mode */
     uint32_t         bitRate;            /*!< SPI bit rate in Hz */
@@ -793,16 +808,25 @@ extern void SPI_Params_init(SPI_Params *params);
  *  @brief  Function to perform SPI transactions
  *
  *  If the SPI is in ::SPI_MASTER mode, it will immediately start the
- *  transaction. If the SPI is in ::SPI_SLAVE mode, it prepares itself for a
- *  transaction with a SPI master.
+ *  transaction. If the SPI is in ::SPI_SLAVE mode, it prepares the driver for
+ *  a transaction with a SPI master device. The device will then wait until
+ *  the master begins the transfer.
  *
- *  In ::SPI_MODE_BLOCKING, SPI_transfer will block task execution until the
- *  transaction has completed.
+ *  In ::SPI_MODE_BLOCKING, %SPI_transfer() will block task execution until the
+ *  transaction has completed or a timeout has occurred.
  *
- *  In ::SPI_MODE_CALLBACK, SPI_transfer() does not block task execution and
- *  calls a ::SPI_CallbackFxn. This makes the SPI_tranfer() safe to be used
- *  within a Task, Swi, or Hwi context. The ::SPI_Transaction structure must
- *  stay persistent until the SPI_transfer function has completed!
+ *  In ::SPI_MODE_CALLBACK, %SPI_transfer() does not block task execution, but
+ *  calls a ::SPI_CallbackFxn once the transfer has finished. This makes
+ *  %SPI_tranfer() safe to be used within a Task, software or hardware
+ *  interrupt context.
+ *
+ *  From calling %SPI_transfer() until transfer completion, the SPI_Transaction
+ *  structure must stay persistent and must not be altered by application code.
+ *  It is also forbidden to modify the content of the SPI_Transaction.txBuffer
+ *  during a transaction, even though the physical transfer might not have
+ *  started yet. Doing this can result in data corruption. This is especially
+ *  important for slave operations where %SPI_transfer() might be called a long
+ *  time before the actual data transfer begins.
  *
  *  @param  handle      A SPI_Handle
  *
@@ -812,6 +836,9 @@ extern void SPI_Params_init(SPI_Params *params);
  *                      otherwise noted in the driver implementations. If a
  *                      transaction timeout has occurred, SPI_Transaction.count
  *                      will contain the number of frames that were transferred.
+ *                      Neither is it allowed to modify the transaction object nor
+ *                      the content of SPI_Transaction.txBuffer until the transfer
+ *                      has completed.
  *
  *  @return true if started successfully; else false
  *

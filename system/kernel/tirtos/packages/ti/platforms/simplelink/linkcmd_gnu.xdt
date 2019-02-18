@@ -92,9 +92,10 @@ SECTIONS {
 
 %    var _utils = xdc.loadCapsule("gnu/targets/linkUtils.xs");
     `_utils.genSections(prog)`
-
 %var platform = xdc.module('ti.platforms.simplelink.Platform');
-%if (!platform.useGnuRomLinkCmd) {
+%if ((prog.cpu.deviceName.toUpperCase().match(/CC13.*/) ||
+%     prog.cpu.deviceName.toUpperCase().match(/CC26.*/)) &&
+%     !platform.useGnuRomLinkCmd) {
     .data : ALIGN(4) {
         *(.data*)
         . = ALIGN(4);
@@ -102,7 +103,6 @@ SECTIONS {
     __data_end__ = __data_start__ + SIZEOF(.data);
 
 %}
-
     /*
      * Linker command file contributions from all loaded packages:
      */

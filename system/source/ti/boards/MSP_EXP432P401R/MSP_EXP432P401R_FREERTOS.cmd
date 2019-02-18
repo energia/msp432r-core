@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,7 +30,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*
- *  ======== MSP_EXP432P401R.cmd ========
+ *  ======== MSP_EXP432P401R_FREERTOS.cmd ========
  *  Define the memory block start/length for the MSP_EXP432P401R M4
  */
 
@@ -42,8 +42,11 @@ MEMORY
 {
     MAIN       (RX) : origin = 0x00000000, length = 0x00040000
     INFO       (RX) : origin = 0x00200000, length = 0x00004000
-    SRAM_CODE  (RWX): origin = 0x01000000, length = 0x00010000
-    SRAM_DATA  (RW) : origin = 0x20000000, length = 0x00010000
+    ALIAS
+    {
+    SRAM_CODE  (RWX): origin = 0x01000000
+    SRAM_DATA  (RW) : origin = 0x20000000
+    } length = 0x00010000
 }
 
 /* Section allocation in memory */

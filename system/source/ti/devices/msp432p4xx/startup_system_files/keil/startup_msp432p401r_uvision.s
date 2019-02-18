@@ -1,6 +1,6 @@
 ;//*****************************************************************************
 ;//
-;// Copyright (C) 2012 - 2015 Texas Instruments Incorporated - http://www.ti.com/
+;// Copyright (C) 2012 - 2017 Texas Instruments Incorporated - http://www.ti.com/
 ;//
 ;// Redistribution and use in source and binary forms, with or without
 ;// modification, are permitted provided that the following conditions
@@ -89,11 +89,11 @@ __Vectors       DCD     __initial_sp              ; Top of Stack
 
                 ; External Interrupts
                 DCD     PSS_IRQHandler            ;  0:  PSS Interrupt
-                DCD     CS_IRQHandler             ;  1:  CS Interrupt
+                DCD     CS_IRQHandler             ;  1:  CS Interrupt 
                 DCD     PCM_IRQHandler            ;  2:  PCM Interrupt
                 DCD     WDT_A_IRQHandler          ;  3:  WDT_A Interrupt
                 DCD     FPU_IRQHandler            ;  4:  FPU Interrupt
-                DCD     FLCTL_IRQHandler          ;  5:  FLCTL Interrupt
+                DCD     FLCTL_IRQHandler          ;  5:  Flash Controller Interrupt
                 DCD     COMP_E0_IRQHandler        ;  6:  COMP_E0 Interrupt
                 DCD     COMP_E1_IRQHandler        ;  7:  COMP_E1 Interrupt
                 DCD     TA0_0_IRQHandler          ;  8:  TA0_0 Interrupt
@@ -123,36 +123,37 @@ __Vectors       DCD     __initial_sp              ; Top of Stack
                 DCD     DMA_INT2_IRQHandler       ; 32:  DMA_INT2 Interrupt
                 DCD     DMA_INT1_IRQHandler       ; 33:  DMA_INT1 Interrupt
                 DCD     DMA_INT0_IRQHandler       ; 34:  DMA_INT0 Interrupt
-                DCD     PORT1_IRQHandler          ; 35:  PORT1 Interrupt
-                DCD     PORT2_IRQHandler          ; 36:  PORT2 Interrupt
-                DCD     PORT3_IRQHandler          ; 37:  PORT3 Interrupt
-                DCD     PORT4_IRQHandler          ; 38:  PORT4 Interrupt
-                DCD     PORT5_IRQHandler          ; 39:  PORT5 Interrupt
-                DCD     PORT6_IRQHandler          ; 40:  PORT6 Interrupt
-                DCD     0                         ; 41:  Reserved
-                DCD     0                         ; 42:  Reserved
-                DCD     0                         ; 43:  Reserved
-                DCD     0                         ; 44:  Reserved
-                DCD     0                         ; 45:  Reserved
-                DCD     0                         ; 46:  Reserved
-                DCD     0                         ; 47:  Reserved
-                DCD     0                         ; 48:  Reserved
-                DCD     0                         ; 49:  Reserved
-                DCD     0                         ; 50:  Reserved
-                DCD     0                         ; 51:  Reserved
-                DCD     0                         ; 52:  Reserved
-                DCD     0                         ; 53:  Reserved
-                DCD     0                         ; 54:  Reserved
-                DCD     0                         ; 55:  Reserved
-                DCD     0                         ; 56:  Reserved
-                DCD     0                         ; 57:  Reserved
-                DCD     0                         ; 58:  Reserved
-                DCD     0                         ; 59:  Reserved
-                DCD     0                         ; 60:  Reserved
-                DCD     0                         ; 61:  Reserved
-                DCD     0                         ; 62:  Reserved
-                DCD     0                         ; 63:  Reserved
-                DCD     0                         ; 64:  Reserved
+                DCD     PORT1_IRQHandler          ; 35:  Port1 Interrupt
+                DCD     PORT2_IRQHandler          ; 36:  Port2 Interrupt
+                DCD     PORT3_IRQHandler          ; 37:  Port3 Interrupt
+                DCD     PORT4_IRQHandler          ; 38:  Port4 Interrupt
+                DCD     PORT5_IRQHandler          ; 39:  Port5 Interrupt
+                DCD     PORT6_IRQHandler          ; 40:  Port6 Interrupt
+                DCD     0                         ; 41:  Reserved     
+                DCD     0                         ; 42:  Reserved     
+                DCD     0                         ; 43:  Reserved     
+                DCD     0                         ; 44:  Reserved     
+                DCD     0                         ; 45:  Reserved     
+                DCD     0                         ; 46:  Reserved     
+                DCD     0                         ; 47:  Reserved     
+                DCD     0                         ; 48:  Reserved     
+                DCD     0                         ; 49:  Reserved     
+                DCD     0                         ; 50:  Reserved     
+                DCD     0                         ; 51:  Reserved     
+                DCD     0                         ; 52:  Reserved     
+                DCD     0                         ; 53:  Reserved     
+                DCD     0                         ; 54:  Reserved     
+                DCD     0                         ; 55:  Reserved     
+                DCD     0                         ; 56:  Reserved     
+                DCD     0                         ; 57:  Reserved     
+                DCD     0                         ; 58:  Reserved     
+                DCD     0                         ; 59:  Reserved     
+                DCD     0                         ; 60:  Reserved     
+                DCD     0                         ; 61:  Reserved     
+                DCD     0                         ; 62:  Reserved     
+                DCD     0                         ; 63:  Reserved     
+                DCD     0                         ; 64:  Reserved     
+
 __Vectors_End
 
 __Vectors_Size  EQU     __Vectors_End - __Vectors

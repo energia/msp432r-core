@@ -46,7 +46,8 @@ function module$use()
 
     if (Program.build.target.$name.match(/gnu/) &&
        (BIOS.taskEnabled == true) &&
-       (BIOS.heapSize != 0)) {
+       (BIOS.heapSize != 0) &&
+       !Program.build.target.$name.match(/A53F/)) {
         xdc.useModule('ti.sysbios.rts.gnu.ReentSupport');
     }
     else if (Program.build.target.$name.match(/iar/)

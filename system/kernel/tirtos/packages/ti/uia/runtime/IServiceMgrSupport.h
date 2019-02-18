@@ -2,19 +2,19 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     VIRTUAL FUNCTIONS
  *     FUNCTION STUBS
  *     FUNCTION SELECTORS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -68,11 +68,11 @@
 struct ti_uia_runtime_IServiceMgrSupport_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_Void (*freePacket)(ti_uia_runtime_UIAPacket_Hdr*);
-    ti_uia_runtime_UIAPacket_Hdr *(*getFreePacket)(ti_uia_runtime_UIAPacket_HdrType, xdc_UInt);
-    xdc_Void (*requestEnergy)(xdc_Int);
-    xdc_Bool (*sendPacket)(ti_uia_runtime_UIAPacket_Hdr*);
-    xdc_Void (*setPeriod)(xdc_Int, xdc_UInt32);
+    xdc_Void (*freePacket)(ti_uia_runtime_UIAPacket_Hdr* packet);
+    ti_uia_runtime_UIAPacket_Hdr *(*getFreePacket)(ti_uia_runtime_UIAPacket_HdrType type, xdc_UInt timeout);
+    xdc_Void (*requestEnergy)(xdc_Int id);
+    xdc_Bool (*sendPacket)(ti_uia_runtime_UIAPacket_Hdr* packet);
+    xdc_Void (*setPeriod)(xdc_Int id, xdc_UInt32 periodInMs);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_uia_runtime_IServiceMgrSupport_Module__BASE__CR
@@ -89,36 +89,42 @@ __extern const xdc_runtime_Types_Base ti_uia_runtime_IServiceMgrSupport_Interfac
  */
 
 /* Module_id */
-static inline xdc_runtime_Types_ModuleId ti_uia_runtime_IServiceMgrSupport_Module_id( ti_uia_runtime_IServiceMgrSupport_Module mod )
+static inline xdc_runtime_Types_ModuleId ti_uia_runtime_IServiceMgrSupport_Module_id(ti_uia_runtime_IServiceMgrSupport_Module mod);
+static inline xdc_runtime_Types_ModuleId ti_uia_runtime_IServiceMgrSupport_Module_id(ti_uia_runtime_IServiceMgrSupport_Module mod)
 {
     return mod->__sysp->__mid;
 }
 
 /* freePacket */
+static inline xdc_Void ti_uia_runtime_IServiceMgrSupport_freePacket(ti_uia_runtime_IServiceMgrSupport_Module __mod, ti_uia_runtime_UIAPacket_Hdr *packet);
 static inline xdc_Void ti_uia_runtime_IServiceMgrSupport_freePacket( ti_uia_runtime_IServiceMgrSupport_Module __mod, ti_uia_runtime_UIAPacket_Hdr *packet )
 {
     __mod->freePacket(packet);
 }
 
 /* getFreePacket */
+static inline ti_uia_runtime_UIAPacket_Hdr *ti_uia_runtime_IServiceMgrSupport_getFreePacket(ti_uia_runtime_IServiceMgrSupport_Module __mod, ti_uia_runtime_UIAPacket_HdrType type, xdc_UInt timeout);
 static inline ti_uia_runtime_UIAPacket_Hdr *ti_uia_runtime_IServiceMgrSupport_getFreePacket( ti_uia_runtime_IServiceMgrSupport_Module __mod, ti_uia_runtime_UIAPacket_HdrType type, xdc_UInt timeout )
 {
     return __mod->getFreePacket(type, timeout);
 }
 
 /* requestEnergy */
+static inline xdc_Void ti_uia_runtime_IServiceMgrSupport_requestEnergy(ti_uia_runtime_IServiceMgrSupport_Module __mod, xdc_Int id);
 static inline xdc_Void ti_uia_runtime_IServiceMgrSupport_requestEnergy( ti_uia_runtime_IServiceMgrSupport_Module __mod, xdc_Int id )
 {
     __mod->requestEnergy(id);
 }
 
 /* sendPacket */
+static inline xdc_Bool ti_uia_runtime_IServiceMgrSupport_sendPacket(ti_uia_runtime_IServiceMgrSupport_Module __mod, ti_uia_runtime_UIAPacket_Hdr *packet);
 static inline xdc_Bool ti_uia_runtime_IServiceMgrSupport_sendPacket( ti_uia_runtime_IServiceMgrSupport_Module __mod, ti_uia_runtime_UIAPacket_Hdr *packet )
 {
     return __mod->sendPacket(packet);
 }
 
 /* setPeriod */
+static inline xdc_Void ti_uia_runtime_IServiceMgrSupport_setPeriod(ti_uia_runtime_IServiceMgrSupport_Module __mod, xdc_Int id, xdc_UInt32 periodInMs);
 static inline xdc_Void ti_uia_runtime_IServiceMgrSupport_setPeriod( ti_uia_runtime_IServiceMgrSupport_Module __mod, xdc_Int id, xdc_UInt32 periodInMs )
 {
     __mod->setPeriod(id, periodInMs);
@@ -137,36 +143,41 @@ static inline xdc_Void ti_uia_runtime_IServiceMgrSupport_setPeriod( ti_uia_runti
  */
 
 /* freePacket_{FxnT,fxnP} */
-typedef xdc_Void (*ti_uia_runtime_IServiceMgrSupport_freePacket_FxnT)(ti_uia_runtime_UIAPacket_Hdr*);
-static inline ti_uia_runtime_IServiceMgrSupport_freePacket_FxnT ti_uia_runtime_IServiceMgrSupport_freePacket_fxnP( ti_uia_runtime_IServiceMgrSupport_Module __mod )
+typedef xdc_Void (*ti_uia_runtime_IServiceMgrSupport_freePacket_FxnT)(ti_uia_runtime_UIAPacket_Hdr* packet);
+static inline ti_uia_runtime_IServiceMgrSupport_freePacket_FxnT ti_uia_runtime_IServiceMgrSupport_freePacket_fxnP(ti_uia_runtime_IServiceMgrSupport_Module __mod);
+static inline ti_uia_runtime_IServiceMgrSupport_freePacket_FxnT ti_uia_runtime_IServiceMgrSupport_freePacket_fxnP(ti_uia_runtime_IServiceMgrSupport_Module __mod)
 {
     return (ti_uia_runtime_IServiceMgrSupport_freePacket_FxnT)__mod->freePacket;
 }
 
 /* getFreePacket_{FxnT,fxnP} */
-typedef ti_uia_runtime_UIAPacket_Hdr *(*ti_uia_runtime_IServiceMgrSupport_getFreePacket_FxnT)(ti_uia_runtime_UIAPacket_HdrType, xdc_UInt);
-static inline ti_uia_runtime_IServiceMgrSupport_getFreePacket_FxnT ti_uia_runtime_IServiceMgrSupport_getFreePacket_fxnP( ti_uia_runtime_IServiceMgrSupport_Module __mod )
+typedef ti_uia_runtime_UIAPacket_Hdr *(*ti_uia_runtime_IServiceMgrSupport_getFreePacket_FxnT)(ti_uia_runtime_UIAPacket_HdrType type, xdc_UInt timeout);
+static inline ti_uia_runtime_IServiceMgrSupport_getFreePacket_FxnT ti_uia_runtime_IServiceMgrSupport_getFreePacket_fxnP(ti_uia_runtime_IServiceMgrSupport_Module __mod);
+static inline ti_uia_runtime_IServiceMgrSupport_getFreePacket_FxnT ti_uia_runtime_IServiceMgrSupport_getFreePacket_fxnP(ti_uia_runtime_IServiceMgrSupport_Module __mod)
 {
     return (ti_uia_runtime_IServiceMgrSupport_getFreePacket_FxnT)__mod->getFreePacket;
 }
 
 /* requestEnergy_{FxnT,fxnP} */
-typedef xdc_Void (*ti_uia_runtime_IServiceMgrSupport_requestEnergy_FxnT)(xdc_Int);
-static inline ti_uia_runtime_IServiceMgrSupport_requestEnergy_FxnT ti_uia_runtime_IServiceMgrSupport_requestEnergy_fxnP( ti_uia_runtime_IServiceMgrSupport_Module __mod )
+typedef xdc_Void (*ti_uia_runtime_IServiceMgrSupport_requestEnergy_FxnT)(xdc_Int id);
+static inline ti_uia_runtime_IServiceMgrSupport_requestEnergy_FxnT ti_uia_runtime_IServiceMgrSupport_requestEnergy_fxnP(ti_uia_runtime_IServiceMgrSupport_Module __mod);
+static inline ti_uia_runtime_IServiceMgrSupport_requestEnergy_FxnT ti_uia_runtime_IServiceMgrSupport_requestEnergy_fxnP(ti_uia_runtime_IServiceMgrSupport_Module __mod)
 {
     return (ti_uia_runtime_IServiceMgrSupport_requestEnergy_FxnT)__mod->requestEnergy;
 }
 
 /* sendPacket_{FxnT,fxnP} */
-typedef xdc_Bool (*ti_uia_runtime_IServiceMgrSupport_sendPacket_FxnT)(ti_uia_runtime_UIAPacket_Hdr*);
-static inline ti_uia_runtime_IServiceMgrSupport_sendPacket_FxnT ti_uia_runtime_IServiceMgrSupport_sendPacket_fxnP( ti_uia_runtime_IServiceMgrSupport_Module __mod )
+typedef xdc_Bool (*ti_uia_runtime_IServiceMgrSupport_sendPacket_FxnT)(ti_uia_runtime_UIAPacket_Hdr* packet);
+static inline ti_uia_runtime_IServiceMgrSupport_sendPacket_FxnT ti_uia_runtime_IServiceMgrSupport_sendPacket_fxnP(ti_uia_runtime_IServiceMgrSupport_Module __mod);
+static inline ti_uia_runtime_IServiceMgrSupport_sendPacket_FxnT ti_uia_runtime_IServiceMgrSupport_sendPacket_fxnP(ti_uia_runtime_IServiceMgrSupport_Module __mod)
 {
     return (ti_uia_runtime_IServiceMgrSupport_sendPacket_FxnT)__mod->sendPacket;
 }
 
 /* setPeriod_{FxnT,fxnP} */
-typedef xdc_Void (*ti_uia_runtime_IServiceMgrSupport_setPeriod_FxnT)(xdc_Int, xdc_UInt32);
-static inline ti_uia_runtime_IServiceMgrSupport_setPeriod_FxnT ti_uia_runtime_IServiceMgrSupport_setPeriod_fxnP( ti_uia_runtime_IServiceMgrSupport_Module __mod )
+typedef xdc_Void (*ti_uia_runtime_IServiceMgrSupport_setPeriod_FxnT)(xdc_Int id, xdc_UInt32 periodInMs);
+static inline ti_uia_runtime_IServiceMgrSupport_setPeriod_FxnT ti_uia_runtime_IServiceMgrSupport_setPeriod_fxnP(ti_uia_runtime_IServiceMgrSupport_Module __mod);
+static inline ti_uia_runtime_IServiceMgrSupport_setPeriod_FxnT ti_uia_runtime_IServiceMgrSupport_setPeriod_fxnP(ti_uia_runtime_IServiceMgrSupport_Module __mod)
 {
     return (ti_uia_runtime_IServiceMgrSupport_setPeriod_FxnT)__mod->setPeriod;
 }

@@ -2,20 +2,20 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
  *     FUNCTION DECLARATIONS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -103,7 +103,7 @@ typedef enum ti_sysbios_BIOS_LibType ti_sysbios_BIOS_LibType;
 typedef xdc_Void (*ti_sysbios_BIOS_StartupFuncPtr)(xdc_Void);
 
 /* version */
-#define ti_sysbios_BIOS_version (0x65000)
+#define ti_sysbios_BIOS_version (0x65200)
 
 
 /*
@@ -119,7 +119,7 @@ struct ti_sysbios_BIOS_intSize {
 typedef xdc_Void (*ti_sysbios_BIOS_StartFuncPtr)(xdc_Void);
 
 /* ExitFuncPtr */
-typedef xdc_Void (*ti_sysbios_BIOS_ExitFuncPtr)(xdc_Int);
+typedef xdc_Void (*ti_sysbios_BIOS_ExitFuncPtr)(xdc_Int __arg1);
 
 /* Module_State */
 typedef ti_sysbios_BIOS_ThreadType __T1_ti_sysbios_BIOS_Module_State__smpThreadType;
@@ -421,7 +421,7 @@ __extern __FAR__ const CT__ti_sysbios_BIOS_useSK ti_sysbios_BIOS_useSK__C;
 #endif
 
 /* installedErrorHook */
-typedef xdc_Void (*CT__ti_sysbios_BIOS_installedErrorHook)(xdc_runtime_Error_Block*);
+typedef xdc_Void (*CT__ti_sysbios_BIOS_installedErrorHook)(xdc_runtime_Error_Block* __arg1);
 __extern __FAR__ const CT__ti_sysbios_BIOS_installedErrorHook ti_sysbios_BIOS_installedErrorHook__C;
 #ifdef ti_sysbios_BIOS_installedErrorHook__CR
 #define ti_sysbios_BIOS_installedErrorHook (*((CT__ti_sysbios_BIOS_installedErrorHook*)(xdcRomConstPtr + ti_sysbios_BIOS_installedErrorHook__C_offset)))
@@ -536,25 +536,29 @@ __extern xdc_Void ti_sysbios_BIOS_nullFunc__I( void );
 #define ti_sysbios_BIOS_Module_heap() ti_sysbios_BIOS_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_BIOS_Module__id ti_sysbios_BIOS_Module_id(void);
 static inline CT__ti_sysbios_BIOS_Module__id ti_sysbios_BIOS_Module_id( void ) 
 {
     return ti_sysbios_BIOS_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_sysbios_BIOS_Module_hasMask( void ) 
+static inline xdc_Bool ti_sysbios_BIOS_Module_hasMask(void);
+static inline xdc_Bool ti_sysbios_BIOS_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_sysbios_BIOS_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_sysbios_BIOS_Module_getMask(void);
 static inline xdc_Bits16 ti_sysbios_BIOS_Module_getMask( void ) 
 {
     return ti_sysbios_BIOS_Module__diagsMask__C != NULL ? *ti_sysbios_BIOS_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_sysbios_BIOS_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_sysbios_BIOS_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_sysbios_BIOS_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_sysbios_BIOS_Module__diagsMask__C != NULL) {
         *ti_sysbios_BIOS_Module__diagsMask__C = mask;

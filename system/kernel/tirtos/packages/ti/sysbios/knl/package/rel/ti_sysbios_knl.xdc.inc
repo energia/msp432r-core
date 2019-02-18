@@ -27,7 +27,6 @@ Clock.c
 Idle.c
 Intrinsics.c
 Swi.c
-Swi_andn.c
 Task.c
 Event.c
 Semaphore.c

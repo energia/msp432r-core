@@ -17,13 +17,14 @@ A8Fv.xdc
 A8Fnv.xdc
 IR4.xdc
 R4F.xdc
+R4Ft.xdc
 IR5.xdc
 R5F.xdc
 package/ti.targets.arm.elf.sch
 package/.vers_g200
 package/.vers_r200
 package/.vers_b200
-package/.xdc-D05
+package/.xdc-D20
 package/ti_targets_arm_elf.java
 package/ti_targets_arm_elf.class
 package/package_ti.targets.arm.elf.c
@@ -44,6 +45,7 @@ A8Fv.h
 A8Fnv.h
 IR4.h
 R4F.h
+R4Ft.h
 IR5.h
 R5F.h
 package/ti.targets.arm.elf.ccs

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014, Texas Instruments Incorporated
+ * Copyright (c) 2015-2016, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -30,11 +30,11 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 /*
- *  ======== asm_macros.h ========
+ *  ======== AsmMacros.h ========
  *  Assembly macros
  */
-#ifndef __ASM_MACROS_H__
-#define __ASM_MACROS_H__
+#ifndef ti_sysbios_family_AsmMacros__include
+#define ti_sysbios_family_AsmMacros__include
 
 #if defined(__ASSEMBLER__) && defined(__GNUC__) && !defined(__ti__)
 
@@ -50,4 +50,4 @@ X                                            ;  \
 
 #endif /* __ASSEMBLER__ && __GNUC__ && !__ti__ */
 
-#endif /* __ASM_MACROS_H__ */
+#endif /* ti_sysbios_family_AsmMacros__include */

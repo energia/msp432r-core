@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -37,8 +37,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#include <ti/drivers/I2C.h>
 #include <ti/drivers/dpl/HwiP.h>
+#include <ti/drivers/I2C.h>
 
 extern const I2C_Config I2C_config[];
 extern const uint_least8_t I2C_count;

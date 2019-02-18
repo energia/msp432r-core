@@ -2,20 +2,20 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
  *     FUNCTION DECLARATIONS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -64,10 +64,10 @@
  */
 
 /* LogMemoryRangeFxn */
-typedef xdc_Void (*ti_uia_runtime_LoggerTypes_LogMemoryRangeFxn)(xdc_Ptr, xdc_runtime_Log_Event, xdc_UInt32, xdc_UInt32, xdc_IArg, xdc_IArg, xdc_IArg, xdc_IArg, xdc_IArg);
+typedef xdc_Void (*ti_uia_runtime_LoggerTypes_LogMemoryRangeFxn)(xdc_Ptr __arg1, xdc_runtime_Log_Event __arg2, xdc_UInt32 __arg3, xdc_UInt32 __arg4, xdc_IArg __arg5, xdc_IArg __arg6, xdc_IArg __arg7, xdc_IArg __arg8, xdc_IArg __arg9);
 
 /* InjectIntoTraceFxn */
-typedef xdc_Void (*ti_uia_runtime_LoggerTypes_InjectIntoTraceFxn)(xdc_UInt32, ti_uia_runtime_IUIATraceSyncProvider_ContextType);
+typedef xdc_Void (*ti_uia_runtime_LoggerTypes_InjectIntoTraceFxn)(xdc_UInt32 __arg1, ti_uia_runtime_IUIATraceSyncProvider_ContextType __arg2);
 
 
 /*
@@ -259,25 +259,29 @@ __extern xdc_Bool ti_uia_runtime_LoggerTypes_Module__startupDone__S( void );
 #define ti_uia_runtime_LoggerTypes_Module_heap() ti_uia_runtime_LoggerTypes_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_uia_runtime_LoggerTypes_Module__id ti_uia_runtime_LoggerTypes_Module_id(void);
 static inline CT__ti_uia_runtime_LoggerTypes_Module__id ti_uia_runtime_LoggerTypes_Module_id( void ) 
 {
     return ti_uia_runtime_LoggerTypes_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_uia_runtime_LoggerTypes_Module_hasMask( void ) 
+static inline xdc_Bool ti_uia_runtime_LoggerTypes_Module_hasMask(void);
+static inline xdc_Bool ti_uia_runtime_LoggerTypes_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_uia_runtime_LoggerTypes_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_uia_runtime_LoggerTypes_Module_getMask(void);
 static inline xdc_Bits16 ti_uia_runtime_LoggerTypes_Module_getMask( void ) 
 {
     return ti_uia_runtime_LoggerTypes_Module__diagsMask__C != NULL ? *ti_uia_runtime_LoggerTypes_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_uia_runtime_LoggerTypes_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_uia_runtime_LoggerTypes_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_uia_runtime_LoggerTypes_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_uia_runtime_LoggerTypes_Module__diagsMask__C != NULL) {
         *ti_uia_runtime_LoggerTypes_Module__diagsMask__C = mask;

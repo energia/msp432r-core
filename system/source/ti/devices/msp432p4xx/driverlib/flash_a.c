@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -43,8 +38,11 @@
 #include <ti/devices/msp432p4xx/driverlib/interrupt.h>
 #include <ti/devices/msp432p4xx/inc/msp.h>
 #include <ti/devices/msp432p4xx/driverlib/cpu.h>
-#include <ti/devices/msp432p4xx/driverlib/rom.h>
 #include <ti/devices/msp432p4xx/driverlib/sysctl_a.h>
+
+/* Define to ensure that our current MSP432 has the FLCTL_A module. This
+    definition is included in the device specific header file */
+#ifdef __MCU_HAS_FLCTL_A__
 
 static const uint32_t MAX_ERASE_NO_TLV = 50;
 static const uint32_t MAX_PROGRAM_NO_TLV = 5;
@@ -103,8 +101,8 @@ static void __restoreProtectionRegisters(__FlashCtl_ProtectionRegister *pReg)
     FLCTL_A->BANK1_MAIN_WEPROT7 = pReg->B1_MAIN_R7;
 }
 
-void FlashCtl_A_getMemoryInfo(uint32_t addr, uint32_t *sectorNum,
-        uint32_t *bankNum)
+void FlashCtl_A_getMemoryInfo(uint32_t addr, uint32_t *bankNum,
+            uint32_t *sectorNum)
 {
     uint32_t bankLimit;
 
@@ -112,14 +110,14 @@ void FlashCtl_A_getMemoryInfo(uint32_t addr, uint32_t *sectorNum,
 
     if (addr > bankLimit)
     {
-        *(sectorNum) = FLASH_A_BANK1;
+        *(bankNum) = FLASH_A_BANK1;
         addr = (addr - bankLimit);
     } else
     {
-        *(sectorNum) = FLASH_A_BANK0;
+        *(bankNum) = FLASH_A_BANK0;
     }
 
-    *(bankNum) = (addr) / FLASH_A_SECTOR_SIZE;
+    *(sectorNum) = (addr) / FLASH_A_SECTOR_SIZE;
 }
 
 static bool _FlashCtl_A_Program8(uint32_t src, uint32_t dest, uint32_t mTries)
@@ -1774,3 +1772,6 @@ void __FlashCtl_A_remaskBurstDataPost(uint32_t addr, uint32_t size)
         FlashCtl_A_setWaitState(bankProgramEnd, b1WaitState);
     }
 }
+
+#endif /* __MCU_HAS_FLCTL_A__ */
+

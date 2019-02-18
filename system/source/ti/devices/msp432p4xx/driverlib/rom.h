@@ -1139,26 +1139,6 @@
 #endif
 #if defined(TARGET_IS_MSP432P4XX) ||                                          \
     defined(TARGET_IS_MSP432P4XX_NEXT)
-#define ROM_I2C_masterSendSingleByteWithTimeout                               \
-        ((bool (*)(uint32_t moduleInstance,                                   \
-                   uint8_t txData,                                            \
-                   uint32_t timeout))ROM_I2CTABLE[10])
-#endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
-#define ROM_I2C_masterSendMultiByteStart                                      \
-        ((void (*)(uint32_t moduleInstance,                                   \
-                   uint8_t txData))ROM_I2CTABLE[11])
-#endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
-#define ROM_I2C_masterSendMultiByteStartWithTimeout                           \
-        ((bool (*)(uint32_t moduleInstance,                                   \
-                   uint8_t txData,                                            \
-                   uint32_t timeout))ROM_I2CTABLE[12])
-#endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
 #define ROM_I2C_masterSendMultiByteNext                                       \
         ((void (*)(uint32_t moduleInstance,                                   \
                    uint8_t txData))ROM_I2CTABLE[13])
@@ -1444,51 +1424,42 @@
 // Macros for calling ROM functions in the PCM API.
 //
 //*****************************************************************************
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_setCoreVoltageLevel                                           \
         ((bool (*)(uint_fast8_t voltageLevel))ROM_PCMTABLE[0])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_getCoreVoltageLevel                                           \
         ((uint8_t (*)(void))ROM_PCMTABLE[1])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_setCoreVoltageLevelWithTimeout                                \
         ((bool (*)(uint_fast8_t voltageLevel,                                 \
                    uint32_t timeOut))ROM_PCMTABLE[2])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_setPowerMode                                                  \
         ((bool (*)(uint_fast8_t powerMode))ROM_PCMTABLE[3])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_setPowerModeWithTimeout                                       \
         ((bool (*)(uint_fast8_t powerMode,                                    \
                    uint32_t timeOut))ROM_PCMTABLE[4])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_getPowerMode                                                  \
         ((uint8_t (*)(void))ROM_PCMTABLE[5])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_setPowerState                                                 \
         ((bool (*)(uint_fast8_t powerState))ROM_PCMTABLE[6])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_setPowerStateWithTimeout                                      \
         ((bool (*)(uint_fast8_t powerState,                                   \
                    uint32_t timeout))ROM_PCMTABLE[7])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_getPowerState                                                 \
         ((uint8_t (*)(void))ROM_PCMTABLE[8])
 #endif
@@ -1502,8 +1473,7 @@
 #define ROM_PCM_gotoLPM0                                                      \
         ((bool (*)(void))ROM_PCMTABLE[10])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_gotoLPM3                                                      \
         ((bool (*)(void))ROM_PCMTABLE[11])
 #endif
@@ -1547,33 +1517,27 @@
 #define ROM_PCM_gotoLPM0InterruptSafe                                         \
         ((bool (*)(void))ROM_PCMTABLE[19])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_gotoLPM3InterruptSafe                                         \
         ((bool (*)(void))ROM_PCMTABLE[20])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_setCoreVoltageLevelNonBlocking                                \
         ((bool (*)(uint_fast8_t voltageLevel))ROM_PCMTABLE[23])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_setPowerModeNonBlocking                                       \
         ((bool (*)(uint_fast8_t powerMode))ROM_PCMTABLE[24])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_setPowerStateNonBlocking                                      \
         ((bool (*)(uint_fast8_t powerState))ROM_PCMTABLE[25])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_gotoLPM4                                                      \
         ((bool (*)(void))ROM_PCMTABLE[26])
 #endif
-#if defined(TARGET_IS_MSP432P4XX) ||                                          \
-    defined(TARGET_IS_MSP432P4XX_NEXT)
+#if defined(TARGET_IS_MSP432P4XX)
 #define ROM_PCM_gotoLPM4InterruptSafe                                         \
         ((bool (*)(void))ROM_PCMTABLE[27])
 #endif

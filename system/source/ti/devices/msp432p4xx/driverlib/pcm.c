@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -541,7 +536,7 @@ bool PCM_gotoLPM3InterruptSafe(void)
 
 uint8_t PCM_getPowerState(void)
 {
-    return (PCM->CTL0 | PCM_CTL0_CPM_MASK);
+    return (PCM->CTL0 & PCM_CTL0_CPM_MASK) >> PCM_CTL0_CPM_OFS;
 }
 
 void PCM_enableRudeMode(void)

@@ -9,6 +9,7 @@
         <module name="TDA3XX"/>
         <module name="CC32xx"/>
         <module name="MSP432"/>
+        <module name="MSP432E"/>
         <module name="CC13xx"/>
         <module name="CC26xx"/>
     </units>

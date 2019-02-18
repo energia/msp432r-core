@@ -9,12 +9,17 @@
         <srcFile name="package/package_ti.drivers.c"/>
         <srcFile name="ADC.c"/>
         <srcFile name="ADCBuf.c"/>
+        <srcFile name="AESCCM.c"/>
         <srcFile name="Camera.c"/>
         <srcFile name="Capture.c"/>
+        <srcFile name="ECDH.c"/>
+        <srcFile name="EMAC.c"/>
         <srcFile name="I2C.c"/>
         <srcFile name="I2CSlave.c"/>
         <srcFile name="I2S.c"/>
         <srcFile name="NVS.c"/>
+        <srcFile name="./nvs/NVSRAM.c"/>
+        <srcFile name="./nvs/NVSSPI25X.c"/>
         <srcFile name="PWM.c"/>
         <srcFile name="SDSPI.c"/>
         <srcFile name="SD.c"/>
@@ -51,12 +56,17 @@
         <srcFile name="package/lib/lib/drivers_msp432p4xx/package/package_ti.drivers.oem4f.dep" src="package/package_ti.drivers.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/ADC.oem4f.dep" src="ADC.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/ADCBuf.oem4f.dep" src="ADCBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/AESCCM.oem4f.dep" src="AESCCM.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/Camera.oem4f.dep" src="Camera.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/Capture.oem4f.dep" src="Capture.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/ECDH.oem4f.dep" src="ECDH.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/EMAC.oem4f.dep" src="EMAC.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/I2C.oem4f.dep" src="I2C.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/I2CSlave.oem4f.dep" src="I2CSlave.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/I2S.oem4f.dep" src="I2S.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/NVS.oem4f.dep" src="NVS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/./nvs/NVSRAM.oem4f.dep" src="./nvs/NVSRAM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/./nvs/NVSSPI25X.oem4f.dep" src="./nvs/NVSSPI25X.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/PWM.oem4f.dep" src="PWM.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/SDSPI.oem4f.dep" src="SDSPI.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/SD.oem4f.dep" src="SD.c"/>
@@ -86,12 +96,17 @@
         <srcFile name="package/lib/lib/drivers_msp432p4xx/package/package_ti.drivers.om4fg.dep" src="package/package_ti.drivers.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/ADC.om4fg.dep" src="ADC.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/ADCBuf.om4fg.dep" src="ADCBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/AESCCM.om4fg.dep" src="AESCCM.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/Camera.om4fg.dep" src="Camera.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/Capture.om4fg.dep" src="Capture.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/ECDH.om4fg.dep" src="ECDH.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/EMAC.om4fg.dep" src="EMAC.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/I2C.om4fg.dep" src="I2C.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/I2CSlave.om4fg.dep" src="I2CSlave.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/I2S.om4fg.dep" src="I2S.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/NVS.om4fg.dep" src="NVS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/./nvs/NVSRAM.om4fg.dep" src="./nvs/NVSRAM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/./nvs/NVSSPI25X.om4fg.dep" src="./nvs/NVSSPI25X.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/PWM.om4fg.dep" src="PWM.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/SDSPI.om4fg.dep" src="SDSPI.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/SD.om4fg.dep" src="SD.c"/>
@@ -121,12 +136,17 @@
         <srcFile name="package/lib/lib/drivers_msp432p4xx/package/package_ti.drivers.orm4f.dep" src="package/package_ti.drivers.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/ADC.orm4f.dep" src="ADC.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/ADCBuf.orm4f.dep" src="ADCBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/AESCCM.orm4f.dep" src="AESCCM.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/Camera.orm4f.dep" src="Camera.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/Capture.orm4f.dep" src="Capture.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/ECDH.orm4f.dep" src="ECDH.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/EMAC.orm4f.dep" src="EMAC.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/I2C.orm4f.dep" src="I2C.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/I2CSlave.orm4f.dep" src="I2CSlave.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/I2S.orm4f.dep" src="I2S.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/NVS.orm4f.dep" src="NVS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/./nvs/NVSRAM.orm4f.dep" src="./nvs/NVSRAM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4xx/./nvs/NVSSPI25X.orm4f.dep" src="./nvs/NVSSPI25X.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/PWM.orm4f.dep" src="PWM.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/SDSPI.orm4f.dep" src="SDSPI.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/SD.orm4f.dep" src="SD.c"/>
@@ -152,16 +172,376 @@
         <srcFile name="package/lib/lib/drivers_msp432p4xx/./timer/TimerMSP432.orm4f.dep" src="./timer/TimerMSP432.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/./uart/UARTMSP432.orm4f.dep" src="./uart/UARTMSP432.c"/>
         <srcFile name="package/lib/lib/drivers_msp432p4xx/./watchdog/WatchdogMSP432.orm4f.dep" src="./watchdog/WatchdogMSP432.c"/>
+        <srcFile name="lib/drivers_msp432p401x.aem4f.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/package/package_ti.drivers.oem4f.dep" src="package/package_ti.drivers.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/ADC.oem4f.dep" src="ADC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/ADCBuf.oem4f.dep" src="ADCBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/AESCCM.oem4f.dep" src="AESCCM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/Camera.oem4f.dep" src="Camera.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/Capture.oem4f.dep" src="Capture.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/ECDH.oem4f.dep" src="ECDH.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/EMAC.oem4f.dep" src="EMAC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/I2C.oem4f.dep" src="I2C.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/I2CSlave.oem4f.dep" src="I2CSlave.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/I2S.oem4f.dep" src="I2S.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/NVS.oem4f.dep" src="NVS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./nvs/NVSRAM.oem4f.dep" src="./nvs/NVSRAM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./nvs/NVSSPI25X.oem4f.dep" src="./nvs/NVSSPI25X.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/PWM.oem4f.dep" src="PWM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/SDSPI.oem4f.dep" src="SDSPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/SD.oem4f.dep" src="SD.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/SDFatFS.oem4f.dep" src="SDFatFS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/SPI.oem4f.dep" src="SPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/Timer.oem4f.dep" src="Timer.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/UART.oem4f.dep" src="UART.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/Watchdog.oem4f.dep" src="Watchdog.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./utils/List.oem4f.dep" src="./utils/List.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./utils/RingBuf.oem4f.dep" src="./utils/RingBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./adc/ADCMSP432.oem4f.dep" src="./adc/ADCMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./adcbuf/ADCBufMSP432.oem4f.dep" src="./adcbuf/ADCBufMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./capture/CaptureMSP432.oem4f.dep" src="./capture/CaptureMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./dma/UDMAMSP432.oem4f.dep" src="./dma/UDMAMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./gpio/GPIOMSP432.oem4f.dep" src="./gpio/GPIOMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./i2c/I2CMSP432.oem4f.dep" src="./i2c/I2CMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./i2cslave/I2CSlaveMSP432.oem4f.dep" src="./i2cslave/I2CSlaveMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./nvs/NVSMSP432.oem4f.dep" src="./nvs/NVSMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./power/PowerMSP432.oem4f.dep" src="./power/PowerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./pwm/PWMTimerMSP432.oem4f.dep" src="./pwm/PWMTimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./sdspi/SDSPIMSP432.oem4f.dep" src="./sdspi/SDSPIMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./spi/SPIMSP432DMA.oem4f.dep" src="./spi/SPIMSP432DMA.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./timer/TimerMSP432.oem4f.dep" src="./timer/TimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./uart/UARTMSP432.oem4f.dep" src="./uart/UARTMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./watchdog/WatchdogMSP432.oem4f.dep" src="./watchdog/WatchdogMSP432.c"/>
+        <srcFile name="lib/drivers_msp432p401x.am4fg.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/package/package_ti.drivers.om4fg.dep" src="package/package_ti.drivers.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/ADC.om4fg.dep" src="ADC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/ADCBuf.om4fg.dep" src="ADCBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/AESCCM.om4fg.dep" src="AESCCM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/Camera.om4fg.dep" src="Camera.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/Capture.om4fg.dep" src="Capture.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/ECDH.om4fg.dep" src="ECDH.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/EMAC.om4fg.dep" src="EMAC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/I2C.om4fg.dep" src="I2C.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/I2CSlave.om4fg.dep" src="I2CSlave.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/I2S.om4fg.dep" src="I2S.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/NVS.om4fg.dep" src="NVS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./nvs/NVSRAM.om4fg.dep" src="./nvs/NVSRAM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./nvs/NVSSPI25X.om4fg.dep" src="./nvs/NVSSPI25X.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/PWM.om4fg.dep" src="PWM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/SDSPI.om4fg.dep" src="SDSPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/SD.om4fg.dep" src="SD.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/SDFatFS.om4fg.dep" src="SDFatFS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/SPI.om4fg.dep" src="SPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/Timer.om4fg.dep" src="Timer.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/UART.om4fg.dep" src="UART.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/Watchdog.om4fg.dep" src="Watchdog.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./utils/List.om4fg.dep" src="./utils/List.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./utils/RingBuf.om4fg.dep" src="./utils/RingBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./adc/ADCMSP432.om4fg.dep" src="./adc/ADCMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./adcbuf/ADCBufMSP432.om4fg.dep" src="./adcbuf/ADCBufMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./capture/CaptureMSP432.om4fg.dep" src="./capture/CaptureMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./dma/UDMAMSP432.om4fg.dep" src="./dma/UDMAMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./gpio/GPIOMSP432.om4fg.dep" src="./gpio/GPIOMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./i2c/I2CMSP432.om4fg.dep" src="./i2c/I2CMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./i2cslave/I2CSlaveMSP432.om4fg.dep" src="./i2cslave/I2CSlaveMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./nvs/NVSMSP432.om4fg.dep" src="./nvs/NVSMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./power/PowerMSP432.om4fg.dep" src="./power/PowerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./pwm/PWMTimerMSP432.om4fg.dep" src="./pwm/PWMTimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./sdspi/SDSPIMSP432.om4fg.dep" src="./sdspi/SDSPIMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./spi/SPIMSP432DMA.om4fg.dep" src="./spi/SPIMSP432DMA.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./timer/TimerMSP432.om4fg.dep" src="./timer/TimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./uart/UARTMSP432.om4fg.dep" src="./uart/UARTMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./watchdog/WatchdogMSP432.om4fg.dep" src="./watchdog/WatchdogMSP432.c"/>
+        <srcFile name="lib/drivers_msp432p401x.arm4f.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/package/package_ti.drivers.orm4f.dep" src="package/package_ti.drivers.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/ADC.orm4f.dep" src="ADC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/ADCBuf.orm4f.dep" src="ADCBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/AESCCM.orm4f.dep" src="AESCCM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/Camera.orm4f.dep" src="Camera.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/Capture.orm4f.dep" src="Capture.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/ECDH.orm4f.dep" src="ECDH.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/EMAC.orm4f.dep" src="EMAC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/I2C.orm4f.dep" src="I2C.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/I2CSlave.orm4f.dep" src="I2CSlave.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/I2S.orm4f.dep" src="I2S.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/NVS.orm4f.dep" src="NVS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./nvs/NVSRAM.orm4f.dep" src="./nvs/NVSRAM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./nvs/NVSSPI25X.orm4f.dep" src="./nvs/NVSSPI25X.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/PWM.orm4f.dep" src="PWM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/SDSPI.orm4f.dep" src="SDSPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/SD.orm4f.dep" src="SD.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/SDFatFS.orm4f.dep" src="SDFatFS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/SPI.orm4f.dep" src="SPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/Timer.orm4f.dep" src="Timer.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/UART.orm4f.dep" src="UART.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/Watchdog.orm4f.dep" src="Watchdog.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./utils/List.orm4f.dep" src="./utils/List.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./utils/RingBuf.orm4f.dep" src="./utils/RingBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./adc/ADCMSP432.orm4f.dep" src="./adc/ADCMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./adcbuf/ADCBufMSP432.orm4f.dep" src="./adcbuf/ADCBufMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./capture/CaptureMSP432.orm4f.dep" src="./capture/CaptureMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./dma/UDMAMSP432.orm4f.dep" src="./dma/UDMAMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./gpio/GPIOMSP432.orm4f.dep" src="./gpio/GPIOMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./i2c/I2CMSP432.orm4f.dep" src="./i2c/I2CMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./i2cslave/I2CSlaveMSP432.orm4f.dep" src="./i2cslave/I2CSlaveMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./nvs/NVSMSP432.orm4f.dep" src="./nvs/NVSMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./power/PowerMSP432.orm4f.dep" src="./power/PowerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./pwm/PWMTimerMSP432.orm4f.dep" src="./pwm/PWMTimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./sdspi/SDSPIMSP432.orm4f.dep" src="./sdspi/SDSPIMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./spi/SPIMSP432DMA.orm4f.dep" src="./spi/SPIMSP432DMA.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./timer/TimerMSP432.orm4f.dep" src="./timer/TimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./uart/UARTMSP432.orm4f.dep" src="./uart/UARTMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p401x/./watchdog/WatchdogMSP432.orm4f.dep" src="./watchdog/WatchdogMSP432.c"/>
+        <srcFile name="lib/drivers_msp432p4x1xi.aem4f.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/package/package_ti.drivers.oem4f.dep" src="package/package_ti.drivers.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/ADC.oem4f.dep" src="ADC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/ADCBuf.oem4f.dep" src="ADCBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/AESCCM.oem4f.dep" src="AESCCM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/Camera.oem4f.dep" src="Camera.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/Capture.oem4f.dep" src="Capture.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/ECDH.oem4f.dep" src="ECDH.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/EMAC.oem4f.dep" src="EMAC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/I2C.oem4f.dep" src="I2C.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/I2CSlave.oem4f.dep" src="I2CSlave.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/I2S.oem4f.dep" src="I2S.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/NVS.oem4f.dep" src="NVS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./nvs/NVSRAM.oem4f.dep" src="./nvs/NVSRAM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./nvs/NVSSPI25X.oem4f.dep" src="./nvs/NVSSPI25X.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/PWM.oem4f.dep" src="PWM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/SDSPI.oem4f.dep" src="SDSPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/SD.oem4f.dep" src="SD.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/SDFatFS.oem4f.dep" src="SDFatFS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/SPI.oem4f.dep" src="SPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/Timer.oem4f.dep" src="Timer.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/UART.oem4f.dep" src="UART.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/Watchdog.oem4f.dep" src="Watchdog.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./utils/List.oem4f.dep" src="./utils/List.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./utils/RingBuf.oem4f.dep" src="./utils/RingBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./adc/ADCMSP432.oem4f.dep" src="./adc/ADCMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./adcbuf/ADCBufMSP432.oem4f.dep" src="./adcbuf/ADCBufMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./capture/CaptureMSP432.oem4f.dep" src="./capture/CaptureMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./dma/UDMAMSP432.oem4f.dep" src="./dma/UDMAMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./gpio/GPIOMSP432.oem4f.dep" src="./gpio/GPIOMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./i2c/I2CMSP432.oem4f.dep" src="./i2c/I2CMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./i2cslave/I2CSlaveMSP432.oem4f.dep" src="./i2cslave/I2CSlaveMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./nvs/NVSMSP432.oem4f.dep" src="./nvs/NVSMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./power/PowerMSP432.oem4f.dep" src="./power/PowerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./pwm/PWMTimerMSP432.oem4f.dep" src="./pwm/PWMTimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./sdspi/SDSPIMSP432.oem4f.dep" src="./sdspi/SDSPIMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./spi/SPIMSP432DMA.oem4f.dep" src="./spi/SPIMSP432DMA.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./timer/TimerMSP432.oem4f.dep" src="./timer/TimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./uart/UARTMSP432.oem4f.dep" src="./uart/UARTMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./watchdog/WatchdogMSP432.oem4f.dep" src="./watchdog/WatchdogMSP432.c"/>
+        <srcFile name="lib/drivers_msp432p4x1xi.am4fg.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/package/package_ti.drivers.om4fg.dep" src="package/package_ti.drivers.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/ADC.om4fg.dep" src="ADC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/ADCBuf.om4fg.dep" src="ADCBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/AESCCM.om4fg.dep" src="AESCCM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/Camera.om4fg.dep" src="Camera.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/Capture.om4fg.dep" src="Capture.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/ECDH.om4fg.dep" src="ECDH.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/EMAC.om4fg.dep" src="EMAC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/I2C.om4fg.dep" src="I2C.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/I2CSlave.om4fg.dep" src="I2CSlave.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/I2S.om4fg.dep" src="I2S.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/NVS.om4fg.dep" src="NVS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./nvs/NVSRAM.om4fg.dep" src="./nvs/NVSRAM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./nvs/NVSSPI25X.om4fg.dep" src="./nvs/NVSSPI25X.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/PWM.om4fg.dep" src="PWM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/SDSPI.om4fg.dep" src="SDSPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/SD.om4fg.dep" src="SD.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/SDFatFS.om4fg.dep" src="SDFatFS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/SPI.om4fg.dep" src="SPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/Timer.om4fg.dep" src="Timer.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/UART.om4fg.dep" src="UART.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/Watchdog.om4fg.dep" src="Watchdog.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./utils/List.om4fg.dep" src="./utils/List.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./utils/RingBuf.om4fg.dep" src="./utils/RingBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./adc/ADCMSP432.om4fg.dep" src="./adc/ADCMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./adcbuf/ADCBufMSP432.om4fg.dep" src="./adcbuf/ADCBufMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./capture/CaptureMSP432.om4fg.dep" src="./capture/CaptureMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./dma/UDMAMSP432.om4fg.dep" src="./dma/UDMAMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./gpio/GPIOMSP432.om4fg.dep" src="./gpio/GPIOMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./i2c/I2CMSP432.om4fg.dep" src="./i2c/I2CMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./i2cslave/I2CSlaveMSP432.om4fg.dep" src="./i2cslave/I2CSlaveMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./nvs/NVSMSP432.om4fg.dep" src="./nvs/NVSMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./power/PowerMSP432.om4fg.dep" src="./power/PowerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./pwm/PWMTimerMSP432.om4fg.dep" src="./pwm/PWMTimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./sdspi/SDSPIMSP432.om4fg.dep" src="./sdspi/SDSPIMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./spi/SPIMSP432DMA.om4fg.dep" src="./spi/SPIMSP432DMA.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./timer/TimerMSP432.om4fg.dep" src="./timer/TimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./uart/UARTMSP432.om4fg.dep" src="./uart/UARTMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./watchdog/WatchdogMSP432.om4fg.dep" src="./watchdog/WatchdogMSP432.c"/>
+        <srcFile name="lib/drivers_msp432p4x1xi.arm4f.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/package/package_ti.drivers.orm4f.dep" src="package/package_ti.drivers.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/ADC.orm4f.dep" src="ADC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/ADCBuf.orm4f.dep" src="ADCBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/AESCCM.orm4f.dep" src="AESCCM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/Camera.orm4f.dep" src="Camera.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/Capture.orm4f.dep" src="Capture.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/ECDH.orm4f.dep" src="ECDH.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/EMAC.orm4f.dep" src="EMAC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/I2C.orm4f.dep" src="I2C.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/I2CSlave.orm4f.dep" src="I2CSlave.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/I2S.orm4f.dep" src="I2S.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/NVS.orm4f.dep" src="NVS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./nvs/NVSRAM.orm4f.dep" src="./nvs/NVSRAM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./nvs/NVSSPI25X.orm4f.dep" src="./nvs/NVSSPI25X.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/PWM.orm4f.dep" src="PWM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/SDSPI.orm4f.dep" src="SDSPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/SD.orm4f.dep" src="SD.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/SDFatFS.orm4f.dep" src="SDFatFS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/SPI.orm4f.dep" src="SPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/Timer.orm4f.dep" src="Timer.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/UART.orm4f.dep" src="UART.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/Watchdog.orm4f.dep" src="Watchdog.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./utils/List.orm4f.dep" src="./utils/List.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./utils/RingBuf.orm4f.dep" src="./utils/RingBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./adc/ADCMSP432.orm4f.dep" src="./adc/ADCMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./adcbuf/ADCBufMSP432.orm4f.dep" src="./adcbuf/ADCBufMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./capture/CaptureMSP432.orm4f.dep" src="./capture/CaptureMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./dma/UDMAMSP432.orm4f.dep" src="./dma/UDMAMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./gpio/GPIOMSP432.orm4f.dep" src="./gpio/GPIOMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./i2c/I2CMSP432.orm4f.dep" src="./i2c/I2CMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./i2cslave/I2CSlaveMSP432.orm4f.dep" src="./i2cslave/I2CSlaveMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./nvs/NVSMSP432.orm4f.dep" src="./nvs/NVSMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./power/PowerMSP432.orm4f.dep" src="./power/PowerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./pwm/PWMTimerMSP432.orm4f.dep" src="./pwm/PWMTimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./sdspi/SDSPIMSP432.orm4f.dep" src="./sdspi/SDSPIMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./spi/SPIMSP432DMA.orm4f.dep" src="./spi/SPIMSP432DMA.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./timer/TimerMSP432.orm4f.dep" src="./timer/TimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./uart/UARTMSP432.orm4f.dep" src="./uart/UARTMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xi/./watchdog/WatchdogMSP432.orm4f.dep" src="./watchdog/WatchdogMSP432.c"/>
+        <srcFile name="lib/drivers_msp432p4x1xt.aem4f.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/package/package_ti.drivers.oem4f.dep" src="package/package_ti.drivers.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/ADC.oem4f.dep" src="ADC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/ADCBuf.oem4f.dep" src="ADCBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/AESCCM.oem4f.dep" src="AESCCM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/Camera.oem4f.dep" src="Camera.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/Capture.oem4f.dep" src="Capture.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/ECDH.oem4f.dep" src="ECDH.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/EMAC.oem4f.dep" src="EMAC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/I2C.oem4f.dep" src="I2C.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/I2CSlave.oem4f.dep" src="I2CSlave.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/I2S.oem4f.dep" src="I2S.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/NVS.oem4f.dep" src="NVS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./nvs/NVSRAM.oem4f.dep" src="./nvs/NVSRAM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./nvs/NVSSPI25X.oem4f.dep" src="./nvs/NVSSPI25X.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/PWM.oem4f.dep" src="PWM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/SDSPI.oem4f.dep" src="SDSPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/SD.oem4f.dep" src="SD.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/SDFatFS.oem4f.dep" src="SDFatFS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/SPI.oem4f.dep" src="SPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/Timer.oem4f.dep" src="Timer.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/UART.oem4f.dep" src="UART.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/Watchdog.oem4f.dep" src="Watchdog.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./utils/List.oem4f.dep" src="./utils/List.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./utils/RingBuf.oem4f.dep" src="./utils/RingBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./adc/ADCMSP432.oem4f.dep" src="./adc/ADCMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./adcbuf/ADCBufMSP432.oem4f.dep" src="./adcbuf/ADCBufMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./capture/CaptureMSP432.oem4f.dep" src="./capture/CaptureMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./dma/UDMAMSP432.oem4f.dep" src="./dma/UDMAMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./gpio/GPIOMSP432.oem4f.dep" src="./gpio/GPIOMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./i2c/I2CMSP432.oem4f.dep" src="./i2c/I2CMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./i2cslave/I2CSlaveMSP432.oem4f.dep" src="./i2cslave/I2CSlaveMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./nvs/NVSMSP432.oem4f.dep" src="./nvs/NVSMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./power/PowerMSP432.oem4f.dep" src="./power/PowerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./pwm/PWMTimerMSP432.oem4f.dep" src="./pwm/PWMTimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./sdspi/SDSPIMSP432.oem4f.dep" src="./sdspi/SDSPIMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./spi/SPIMSP432DMA.oem4f.dep" src="./spi/SPIMSP432DMA.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./timer/TimerMSP432.oem4f.dep" src="./timer/TimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./uart/UARTMSP432.oem4f.dep" src="./uart/UARTMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./watchdog/WatchdogMSP432.oem4f.dep" src="./watchdog/WatchdogMSP432.c"/>
+        <srcFile name="lib/drivers_msp432p4x1xt.am4fg.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/package/package_ti.drivers.om4fg.dep" src="package/package_ti.drivers.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/ADC.om4fg.dep" src="ADC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/ADCBuf.om4fg.dep" src="ADCBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/AESCCM.om4fg.dep" src="AESCCM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/Camera.om4fg.dep" src="Camera.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/Capture.om4fg.dep" src="Capture.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/ECDH.om4fg.dep" src="ECDH.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/EMAC.om4fg.dep" src="EMAC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/I2C.om4fg.dep" src="I2C.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/I2CSlave.om4fg.dep" src="I2CSlave.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/I2S.om4fg.dep" src="I2S.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/NVS.om4fg.dep" src="NVS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./nvs/NVSRAM.om4fg.dep" src="./nvs/NVSRAM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./nvs/NVSSPI25X.om4fg.dep" src="./nvs/NVSSPI25X.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/PWM.om4fg.dep" src="PWM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/SDSPI.om4fg.dep" src="SDSPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/SD.om4fg.dep" src="SD.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/SDFatFS.om4fg.dep" src="SDFatFS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/SPI.om4fg.dep" src="SPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/Timer.om4fg.dep" src="Timer.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/UART.om4fg.dep" src="UART.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/Watchdog.om4fg.dep" src="Watchdog.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./utils/List.om4fg.dep" src="./utils/List.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./utils/RingBuf.om4fg.dep" src="./utils/RingBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./adc/ADCMSP432.om4fg.dep" src="./adc/ADCMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./adcbuf/ADCBufMSP432.om4fg.dep" src="./adcbuf/ADCBufMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./capture/CaptureMSP432.om4fg.dep" src="./capture/CaptureMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./dma/UDMAMSP432.om4fg.dep" src="./dma/UDMAMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./gpio/GPIOMSP432.om4fg.dep" src="./gpio/GPIOMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./i2c/I2CMSP432.om4fg.dep" src="./i2c/I2CMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./i2cslave/I2CSlaveMSP432.om4fg.dep" src="./i2cslave/I2CSlaveMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./nvs/NVSMSP432.om4fg.dep" src="./nvs/NVSMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./power/PowerMSP432.om4fg.dep" src="./power/PowerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./pwm/PWMTimerMSP432.om4fg.dep" src="./pwm/PWMTimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./sdspi/SDSPIMSP432.om4fg.dep" src="./sdspi/SDSPIMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./spi/SPIMSP432DMA.om4fg.dep" src="./spi/SPIMSP432DMA.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./timer/TimerMSP432.om4fg.dep" src="./timer/TimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./uart/UARTMSP432.om4fg.dep" src="./uart/UARTMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./watchdog/WatchdogMSP432.om4fg.dep" src="./watchdog/WatchdogMSP432.c"/>
+        <srcFile name="lib/drivers_msp432p4x1xt.arm4f.mak" src="package.bld"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/package/package_ti.drivers.orm4f.dep" src="package/package_ti.drivers.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/ADC.orm4f.dep" src="ADC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/ADCBuf.orm4f.dep" src="ADCBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/AESCCM.orm4f.dep" src="AESCCM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/Camera.orm4f.dep" src="Camera.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/Capture.orm4f.dep" src="Capture.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/ECDH.orm4f.dep" src="ECDH.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/EMAC.orm4f.dep" src="EMAC.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/I2C.orm4f.dep" src="I2C.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/I2CSlave.orm4f.dep" src="I2CSlave.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/I2S.orm4f.dep" src="I2S.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/NVS.orm4f.dep" src="NVS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./nvs/NVSRAM.orm4f.dep" src="./nvs/NVSRAM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./nvs/NVSSPI25X.orm4f.dep" src="./nvs/NVSSPI25X.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/PWM.orm4f.dep" src="PWM.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/SDSPI.orm4f.dep" src="SDSPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/SD.orm4f.dep" src="SD.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/SDFatFS.orm4f.dep" src="SDFatFS.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/SPI.orm4f.dep" src="SPI.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/Timer.orm4f.dep" src="Timer.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/UART.orm4f.dep" src="UART.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/Watchdog.orm4f.dep" src="Watchdog.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./utils/List.orm4f.dep" src="./utils/List.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./utils/RingBuf.orm4f.dep" src="./utils/RingBuf.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./adc/ADCMSP432.orm4f.dep" src="./adc/ADCMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./adcbuf/ADCBufMSP432.orm4f.dep" src="./adcbuf/ADCBufMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./capture/CaptureMSP432.orm4f.dep" src="./capture/CaptureMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./dma/UDMAMSP432.orm4f.dep" src="./dma/UDMAMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./gpio/GPIOMSP432.orm4f.dep" src="./gpio/GPIOMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./i2c/I2CMSP432.orm4f.dep" src="./i2c/I2CMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./i2cslave/I2CSlaveMSP432.orm4f.dep" src="./i2cslave/I2CSlaveMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./nvs/NVSMSP432.orm4f.dep" src="./nvs/NVSMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./power/PowerMSP432.orm4f.dep" src="./power/PowerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./pwm/PWMTimerMSP432.orm4f.dep" src="./pwm/PWMTimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./sdspi/SDSPIMSP432.orm4f.dep" src="./sdspi/SDSPIMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./spi/SPIMSP432DMA.orm4f.dep" src="./spi/SPIMSP432DMA.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./timer/TimerMSP432.orm4f.dep" src="./timer/TimerMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./uart/UARTMSP432.orm4f.dep" src="./uart/UARTMSP432.c"/>
+        <srcFile name="package/lib/lib/drivers_msp432p4x1xt/./watchdog/WatchdogMSP432.orm4f.dep" src="./watchdog/WatchdogMSP432.c"/>
         <srcFile name="package/rel/ti_drivers.tar.dep" src="package/rel/ti_drivers.xdc.inc"/>
     </makefiles>
     <targets>
         <target name="ti.targets.arm.elf.M4F"
-            version="ti.targets.arm.elf.M4F{1,0,16.9,1"
-            rawVersion="16.9.1"
+            version="ti.targets.arm.elf.M4F{1,0,16.9,4"
+            rawVersion="16.9.4"
             platform="ti.platforms.tiva:TM4C1294NCPDT:1"
             isa="v7M4"
             suffix="em4f"
-            rootDir="/db/vendors/ti/arm/16.9.1.LTS/Linux"
+            rootDir="/db/vendors/ti/arm/16.9.4.LTS/Linux"
             os="undefined"
             rts="ti.targets.arm.rtsarm">
             <model endian="little"
@@ -169,12 +549,12 @@
                 dataModel="undefined"/>
         </target>
         <target name="gnu.targets.arm.M4F"
-            version="gnu.targets.arm.M4F{1,0,4.9,3"
-            rawVersion="4.9.3"
+            version="gnu.targets.arm.M4F{1,0,6.3,1"
+            rawVersion="6.3.1"
             platform="ti.platforms.tiva:TM4C1294NCPDT"
             isa="v7M4"
             suffix="m4fg"
-            rootDir="/db/vendors/linaro/gcc-arm-none-eabi-4_9-2015q3"
+            rootDir="/db/vendors/linaro/gcc-arm-none-eabi-6-2017-q1-update"
             os="undefined"
             rts="gnu.targets.arm.rtsv7M">
             <model endian="little"
@@ -182,12 +562,12 @@
                 dataModel="undefined"/>
         </target>
         <target name="iar.targets.arm.M4F"
-            version="iar.targets.arm.M4F{1,0,7.80,1"
-            rawVersion="7.80.1.28"
+            version="iar.targets.arm.M4F{1,0,8.11,1"
+            rawVersion="8.11.1.47"
             platform="ti.platforms.tiva:TM4C1294NCPDT:1"
             isa="v7M4"
             suffix="rm4f"
-            rootDir="/db/vendors/iar/arm/7.80.1/Linux"
+            rootDir="/db/vendors/iar/arm/8.11.1.47/Linux"
             os="undefined"
             rts="iar.targets.arm.rts">
             <model endian="little"
@@ -206,6 +586,42 @@
         target="gnu.targets.arm.M4F"/>
     <library name="lib/drivers_msp432p4xx"
         pname="lib/drivers_msp432p4xx.arm4f"
+        profile="release"
+        target="iar.targets.arm.M4F"/>
+    <library name="lib/drivers_msp432p401x"
+        pname="lib/drivers_msp432p401x.aem4f"
+        profile="release"
+        target="ti.targets.arm.elf.M4F"/>
+    <library name="lib/drivers_msp432p401x"
+        pname="lib/drivers_msp432p401x.am4fg"
+        profile="release"
+        target="gnu.targets.arm.M4F"/>
+    <library name="lib/drivers_msp432p401x"
+        pname="lib/drivers_msp432p401x.arm4f"
+        profile="release"
+        target="iar.targets.arm.M4F"/>
+    <library name="lib/drivers_msp432p4x1xi"
+        pname="lib/drivers_msp432p4x1xi.aem4f"
+        profile="release"
+        target="ti.targets.arm.elf.M4F"/>
+    <library name="lib/drivers_msp432p4x1xi"
+        pname="lib/drivers_msp432p4x1xi.am4fg"
+        profile="release"
+        target="gnu.targets.arm.M4F"/>
+    <library name="lib/drivers_msp432p4x1xi"
+        pname="lib/drivers_msp432p4x1xi.arm4f"
+        profile="release"
+        target="iar.targets.arm.M4F"/>
+    <library name="lib/drivers_msp432p4x1xt"
+        pname="lib/drivers_msp432p4x1xt.aem4f"
+        profile="release"
+        target="ti.targets.arm.elf.M4F"/>
+    <library name="lib/drivers_msp432p4x1xt"
+        pname="lib/drivers_msp432p4x1xt.am4fg"
+        profile="release"
+        target="gnu.targets.arm.M4F"/>
+    <library name="lib/drivers_msp432p4x1xt"
+        pname="lib/drivers_msp432p4x1xt.arm4f"
         profile="release"
         target="iar.targets.arm.M4F"/>
     </libraries>
@@ -229,13 +645,21 @@
         <file name="xdcArgParser.xs"/>
         <file name="ADC.h"/>
         <file name="ADCBuf.h"/>
+        <file name="AESCCM.h"/>
         <file name="Camera.h"/>
         <file name="Capture.h"/>
+        <file name="./cryptoutils/cryptokey/CryptoKey.h"/>
+        <file name="./cryptoutils/cryptokey/CryptoKeyPlaintext.h"/>
+        <file name="./cryptoutils/ecc/ECCParams.h"/>
+        <file name="ECDH.h"/>
+        <file name="EMAC.h"/>
         <file name="GPIO.h"/>
         <file name="I2C.h"/>
         <file name="I2CSlave.h"/>
         <file name="I2S.h"/>
         <file name="NVS.h"/>
+        <file name="./nvs/NVSRAM.h"/>
+        <file name="./nvs/NVSSPI25X.h"/>
         <file name="PIN.h"/>
         <file name="Power.h"/>
         <file name="PWM.h"/>
@@ -275,12 +699,17 @@
         <file name="package/package_ti.drivers.c"/>
         <file name="ADC.c"/>
         <file name="ADCBuf.c"/>
+        <file name="AESCCM.c"/>
         <file name="Camera.c"/>
         <file name="Capture.c"/>
+        <file name="ECDH.c"/>
+        <file name="EMAC.c"/>
         <file name="I2C.c"/>
         <file name="I2CSlave.c"/>
         <file name="I2S.c"/>
         <file name="NVS.c"/>
+        <file name="./nvs/NVSRAM.c"/>
+        <file name="./nvs/NVSSPI25X.c"/>
         <file name="PWM.c"/>
         <file name="SDSPI.c"/>
         <file name="SD.c"/>
@@ -308,6 +737,15 @@
         <file name="./watchdog/WatchdogMSP432.c"/>
         <file name="lib/drivers_msp432p4xx.am4fg"/>
         <file name="lib/drivers_msp432p4xx.arm4f"/>
+        <file name="lib/drivers_msp432p401x.aem4f"/>
+        <file name="lib/drivers_msp432p401x.am4fg"/>
+        <file name="lib/drivers_msp432p401x.arm4f"/>
+        <file name="lib/drivers_msp432p4x1xi.aem4f"/>
+        <file name="lib/drivers_msp432p4x1xi.am4fg"/>
+        <file name="lib/drivers_msp432p4x1xi.arm4f"/>
+        <file name="lib/drivers_msp432p4x1xt.aem4f"/>
+        <file name="lib/drivers_msp432p4x1xt.am4fg"/>
+        <file name="lib/drivers_msp432p4x1xt.arm4f"/>
     </release>
     </releases>
     <repositories>

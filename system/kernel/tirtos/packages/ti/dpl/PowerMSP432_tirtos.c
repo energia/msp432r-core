@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -40,10 +40,12 @@
 #include <ti/sysbios/BIOS.h>
 #include <ti/sysbios/family/arm/msp432/ClockFreqs.h>
 
-#include <ti/devices/msp432p4xx/driverlib/cpu.h>
+#include <ti/devices/DeviceFamily.h>
 
 #include <ti/drivers/Power.h>
 #include <ti/drivers/power/PowerMSP432.h>
+
+#include <ti/devices/msp432p4xx/driverlib/cpu.h>
 
 UInt PowerMSP432_taskKey;
 UInt PowerMSP432_swiKey;
@@ -114,7 +116,7 @@ void PowerMSP432_deepSleepPolicy()
     CPU_cpsie();
 
     /* restore Swi scheduling */
-    if (Hwi_swiRestoreHwi != NULL) {
+    if ((Hwi_swiRestoreHwi != NULL) && (Hwi_swiDisable != NULL)) {
         Hwi_swiRestoreHwi(swiKey);
     }
 
@@ -165,7 +167,7 @@ void PowerMSP432_sleepPolicy()
     CPU_cpsie();
 
     /* restore Swi scheduling */
-    if (Hwi_swiRestoreHwi != NULL) {
+    if ((Hwi_swiRestoreHwi != NULL) && (Hwi_swiDisable != NULL)) {
         Hwi_swiRestoreHwi(swiKey);
     }
 
@@ -201,7 +203,7 @@ void PowerMSP432_schedulerDisable()
  */
 void PowerMSP432_schedulerRestore()
 {
-    if (Hwi_swiRestoreHwi != NULL) {
+    if ((Hwi_swiRestoreHwi != NULL) && (Hwi_swiDisable != NULL)) {
         Hwi_swiRestoreHwi(PowerMSP432_swiKey);
     }
     Task_restore(PowerMSP432_taskKey);

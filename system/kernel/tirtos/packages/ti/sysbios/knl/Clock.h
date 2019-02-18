@@ -2,22 +2,22 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     CREATE ARGS
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
  *     PER-INSTANCE TYPES
  *     FUNCTION DECLARATIONS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -86,7 +86,7 @@ enum ti_sysbios_knl_Clock_TickMode {
 typedef enum ti_sysbios_knl_Clock_TickMode ti_sysbios_knl_Clock_TickMode;
 
 /* FuncPtr */
-typedef xdc_Void (*ti_sysbios_knl_Clock_FuncPtr)(xdc_UArg);
+typedef xdc_Void (*ti_sysbios_knl_Clock_FuncPtr)(xdc_UArg __arg1);
 
 
 /*
@@ -365,7 +365,7 @@ __extern __FAR__ const CT__ti_sysbios_knl_Clock_tickPeriod ti_sysbios_knl_Clock_
 #endif
 
 /* doTickFunc */
-typedef xdc_Void (*CT__ti_sysbios_knl_Clock_doTickFunc)(xdc_UArg);
+typedef xdc_Void (*CT__ti_sysbios_knl_Clock_doTickFunc)(xdc_UArg __arg1);
 __extern __FAR__ const CT__ti_sysbios_knl_Clock_doTickFunc ti_sysbios_knl_Clock_doTickFunc__C;
 #ifdef ti_sysbios_knl_Clock_doTickFunc__CR
 #define ti_sysbios_knl_Clock_doTickFunc (*((CT__ti_sysbios_knl_Clock_doTickFunc*)(xdcRomConstPtr + ti_sysbios_knl_Clock_doTickFunc__C_offset)))
@@ -425,11 +425,11 @@ __extern xdc_Int ti_sysbios_knl_Clock_Module_startup__F( xdc_Int state );
 
 /* Instance_init__E */
 xdc__CODESECT(ti_sysbios_knl_Clock_Instance_init__E, "ti_sysbios_knl_Clock_Instance_init")
-__extern xdc_Void ti_sysbios_knl_Clock_Instance_init__E(ti_sysbios_knl_Clock_Object *, ti_sysbios_knl_Clock_FuncPtr clockFxn, xdc_UInt timeout, const ti_sysbios_knl_Clock_Params *);
+__extern xdc_Void ti_sysbios_knl_Clock_Instance_init__E(ti_sysbios_knl_Clock_Object *__obj, ti_sysbios_knl_Clock_FuncPtr clockFxn, xdc_UInt timeout, const ti_sysbios_knl_Clock_Params *__prms);
 
 /* Instance_finalize__E */
 xdc__CODESECT(ti_sysbios_knl_Clock_Instance_finalize__E, "ti_sysbios_knl_Clock_Instance_finalize")
-__extern void ti_sysbios_knl_Clock_Instance_finalize__E( ti_sysbios_knl_Clock_Object* );
+__extern void ti_sysbios_knl_Clock_Instance_finalize__E(ti_sysbios_knl_Clock_Object *__obj);
 
 /* create */
 xdc__CODESECT(ti_sysbios_knl_Clock_create, "ti_sysbios_knl_Clock_create")
@@ -644,25 +644,29 @@ __extern xdc_Void ti_sysbios_knl_Clock_triggerFunc__I( xdc_UArg arg );
 #define ti_sysbios_knl_Clock_Module_heap() ti_sysbios_knl_Clock_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_knl_Clock_Module__id ti_sysbios_knl_Clock_Module_id(void);
 static inline CT__ti_sysbios_knl_Clock_Module__id ti_sysbios_knl_Clock_Module_id( void ) 
 {
     return ti_sysbios_knl_Clock_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_sysbios_knl_Clock_Module_hasMask( void ) 
+static inline xdc_Bool ti_sysbios_knl_Clock_Module_hasMask(void);
+static inline xdc_Bool ti_sysbios_knl_Clock_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_sysbios_knl_Clock_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_sysbios_knl_Clock_Module_getMask(void);
 static inline xdc_Bits16 ti_sysbios_knl_Clock_Module_getMask( void ) 
 {
     return ti_sysbios_knl_Clock_Module__diagsMask__C != NULL ? *ti_sysbios_knl_Clock_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_sysbios_knl_Clock_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_sysbios_knl_Clock_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_sysbios_knl_Clock_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_sysbios_knl_Clock_Module__diagsMask__C != NULL) {
         *ti_sysbios_knl_Clock_Module__diagsMask__C = mask;
@@ -670,6 +674,7 @@ static inline xdc_Void ti_sysbios_knl_Clock_Module_setMask( xdc_Bits16 mask )
 }
 
 /* Params_init */
+static inline void ti_sysbios_knl_Clock_Params_init(ti_sysbios_knl_Clock_Params *prms);
 static inline void ti_sysbios_knl_Clock_Params_init( ti_sysbios_knl_Clock_Params *prms ) 
 {
     if (prms) {
@@ -678,6 +683,7 @@ static inline void ti_sysbios_knl_Clock_Params_init( ti_sysbios_knl_Clock_Params
 }
 
 /* Params_copy */
+static inline void ti_sysbios_knl_Clock_Params_copy(ti_sysbios_knl_Clock_Params *dst, const ti_sysbios_knl_Clock_Params *src);
 static inline void ti_sysbios_knl_Clock_Params_copy(ti_sysbios_knl_Clock_Params *dst, const ti_sysbios_knl_Clock_Params *src) 
 {
     if (dst) {
@@ -692,44 +698,51 @@ static inline void ti_sysbios_knl_Clock_Params_copy(ti_sysbios_knl_Clock_Params 
 #define ti_sysbios_knl_Clock_Object_sizeof() ti_sysbios_knl_Clock_Object__sizeof__C
 
 /* Object_get */
+static inline ti_sysbios_knl_Clock_Handle ti_sysbios_knl_Clock_Object_get(ti_sysbios_knl_Clock_Instance_State *oarr, int i);
 static inline ti_sysbios_knl_Clock_Handle ti_sysbios_knl_Clock_Object_get(ti_sysbios_knl_Clock_Instance_State *oarr, int i) 
 {
     return (ti_sysbios_knl_Clock_Handle)ti_sysbios_knl_Clock_Object__get__S(oarr, i);
 }
 
 /* Object_first */
-static inline ti_sysbios_knl_Clock_Handle ti_sysbios_knl_Clock_Object_first( void )
+static inline ti_sysbios_knl_Clock_Handle ti_sysbios_knl_Clock_Object_first(void);
+static inline ti_sysbios_knl_Clock_Handle ti_sysbios_knl_Clock_Object_first(void)
 {
     return (ti_sysbios_knl_Clock_Handle)ti_sysbios_knl_Clock_Object__first__S();
 }
 
 /* Object_next */
-static inline ti_sysbios_knl_Clock_Handle ti_sysbios_knl_Clock_Object_next( ti_sysbios_knl_Clock_Object *obj )
+static inline ti_sysbios_knl_Clock_Handle ti_sysbios_knl_Clock_Object_next(ti_sysbios_knl_Clock_Object *obj);
+static inline ti_sysbios_knl_Clock_Handle ti_sysbios_knl_Clock_Object_next(ti_sysbios_knl_Clock_Object *obj)
 {
     return (ti_sysbios_knl_Clock_Handle)ti_sysbios_knl_Clock_Object__next__S(obj);
 }
 
 /* Handle_label */
-static inline xdc_runtime_Types_Label *ti_sysbios_knl_Clock_Handle_label( ti_sysbios_knl_Clock_Handle inst, xdc_runtime_Types_Label *lab )
+static inline xdc_runtime_Types_Label *ti_sysbios_knl_Clock_Handle_label(ti_sysbios_knl_Clock_Handle inst, xdc_runtime_Types_Label *lab);
+static inline xdc_runtime_Types_Label *ti_sysbios_knl_Clock_Handle_label(ti_sysbios_knl_Clock_Handle inst, xdc_runtime_Types_Label *lab)
 {
     return ti_sysbios_knl_Clock_Handle__label__S(inst, lab);
 }
 
 /* Handle_name */
-static inline xdc_String ti_sysbios_knl_Clock_Handle_name( ti_sysbios_knl_Clock_Handle inst )
+static inline xdc_String ti_sysbios_knl_Clock_Handle_name(ti_sysbios_knl_Clock_Handle inst);
+static inline xdc_String ti_sysbios_knl_Clock_Handle_name(ti_sysbios_knl_Clock_Handle inst)
 {
     xdc_runtime_Types_Label lab;
     return ti_sysbios_knl_Clock_Handle__label__S(inst, &lab)->iname;
 }
 
 /* handle */
-static inline ti_sysbios_knl_Clock_Handle ti_sysbios_knl_Clock_handle( ti_sysbios_knl_Clock_Struct *str )
+static inline ti_sysbios_knl_Clock_Handle ti_sysbios_knl_Clock_handle(ti_sysbios_knl_Clock_Struct *str);
+static inline ti_sysbios_knl_Clock_Handle ti_sysbios_knl_Clock_handle(ti_sysbios_knl_Clock_Struct *str)
 {
     return (ti_sysbios_knl_Clock_Handle)str;
 }
 
 /* struct */
-static inline ti_sysbios_knl_Clock_Struct *ti_sysbios_knl_Clock_struct( ti_sysbios_knl_Clock_Handle inst )
+static inline ti_sysbios_knl_Clock_Struct *ti_sysbios_knl_Clock_struct(ti_sysbios_knl_Clock_Handle inst);
+static inline ti_sysbios_knl_Clock_Struct *ti_sysbios_knl_Clock_struct(ti_sysbios_knl_Clock_Handle inst)
 {
     return (ti_sysbios_knl_Clock_Struct*)inst;
 }
@@ -792,6 +805,7 @@ struct ti_sysbios_knl_Clock_Object {
 #ifndef ti_sysbios_knl_Clock_Module_State_clockQ__OR
 __extern __FAR__ const xdc_SizeT ti_sysbios_knl_Clock_Module_State_clockQ__O;
 #endif
+static inline ti_sysbios_knl_Queue_Handle ti_sysbios_knl_Clock_Module_State_clockQ();
 static inline ti_sysbios_knl_Queue_Handle ti_sysbios_knl_Clock_Module_State_clockQ()
 {
     return (ti_sysbios_knl_Queue_Handle)(((char*)&ti_sysbios_knl_Clock_Module__state__V) + ti_sysbios_knl_Clock_Module_State_clockQ__O);

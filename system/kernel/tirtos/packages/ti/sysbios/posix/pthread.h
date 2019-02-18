@@ -183,7 +183,11 @@ extern int pthread_barrier_wait(pthread_barrier_t *barrier);
  *************************************************************************
  */
 extern int pthread_condattr_destroy(pthread_condattr_t *attr);
+extern int pthread_condattr_getclock(const pthread_condattr_t *attr,
+        clockid_t *clock_id);
 extern int pthread_condattr_init(pthread_condattr_t * attr);
+extern int pthread_condattr_setclock(pthread_condattr_t *attr,
+        clockid_t clock_id);
 
 /*
  *************************************************************************

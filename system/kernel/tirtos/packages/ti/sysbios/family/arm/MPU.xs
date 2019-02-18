@@ -39,6 +39,7 @@ var Cache = null;
 var device = null;
 var MPU = null;
 var Settings = null;
+var Startup = null;
 
 /*
  * ======== getAsmFiles ========
@@ -49,6 +50,7 @@ function getAsmFiles(targetName)
 {
     switch(targetName) {
         case "ti.targets.arm.elf.R4F":
+        case "ti.targets.arm.elf.R4Ft":
         case "ti.targets.arm.elf.R5F":
             return (["MPU_asm.sv7R"]);
             break;
@@ -65,7 +67,7 @@ if (xdc.om.$name == "cfg" || typeof(genCdoc) != "undefined") {
             isMemoryMapped  : false,
             numRegions      : 16
         },
-        "AR16XX": {
+        "AWR16XX": {
             isMemoryMapped  : false,
             numRegions      : 12
         },
@@ -76,10 +78,10 @@ if (xdc.om.$name == "cfg" || typeof(genCdoc) != "undefined") {
     };
 
     /* Cortex-R devices */
-    deviceTable["AR14XX"]        = deviceTable["AR16XX"];
-    deviceTable["IR14XX"]        = deviceTable["AR16XX"];
-    deviceTable["IR16XX"]        = deviceTable["AR16XX"];
-    deviceTable["RM48L.*"]       = deviceTable["AR16XX"];
+    deviceTable["AWR14XX"]       = deviceTable["AWR16XX"];
+    deviceTable["IWR14XX"]       = deviceTable["AWR16XX"];
+    deviceTable["IWR16XX"]       = deviceTable["AWR16XX"];
+    deviceTable["RM48L.*"]       = deviceTable["AWR16XX"];
     deviceTable["RM57D8.*"]      = deviceTable["RM57D8XX"];
     deviceTable["RM57L8XX"]      = deviceTable["RM57D8XX"];
     deviceTable["RM57L8.*"]      = deviceTable["RM57D8XX"];
@@ -159,11 +161,7 @@ function module$use()
     BIOS = xdc.module('ti.sysbios.BIOS');
     Build = xdc.useModule('ti.sysbios.Build');
     Cache = xdc.useModule('ti.sysbios.hal.Cache');
-
-    if (Cache.CacheProxy.delegate$.$name.match(/ti\.sysbios\.hal\.CacheNull/)) {
-        Startup = xdc.useModule('xdc.runtime.Startup');
-        Startup.firstFxns.$add(MPU.startup);
-    }
+    Startup = xdc.useModule('xdc.runtime.Startup');
 
     if (device == null) {
         /*
@@ -227,6 +225,10 @@ function module$static$init(mod, params)
             MPU.regionEntry[i].sizeAndEnable;
         mod.regionEntry[i].regionAttrs =
             MPU.regionEntry[i].regionAttrs;
+    }
+
+    if (Cache.CacheProxy.delegate$.$name.match(/ti\.sysbios\.hal\.CacheNull/)) {
+        Startup.firstFxns.$add(MPU.startup);
     }
 }
 

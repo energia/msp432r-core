@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -41,6 +36,10 @@
 /* DriverLib Includes */
 #include <ti/devices/msp432p4xx/driverlib/sysctl.h>
 #include <ti/devices/msp432p4xx/driverlib/debug.h>
+
+/* Define to ensure that our current MSP432 has the SYSCTL module. This
+    definition is included in the device specific header file */
+#ifdef __MCU_HAS_SYSCTL__
 
 #ifdef DEBUG
 
@@ -281,3 +280,5 @@ uint_fast16_t SysCtl_getTempCalibrationConstant(uint32_t refVoltage,
 {
     return HWREG16(TLV_BASE + refVoltage + temperature);
 }
+
+#endif /* __MCU_HAS_SYSCTL__ */

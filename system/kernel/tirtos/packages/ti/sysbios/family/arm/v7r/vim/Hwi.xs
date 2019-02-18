@@ -63,7 +63,7 @@ if (xdc.om.$name == "cfg") {
             errataInitEsm       : false,
             resetVIM            : false,
         },
-        "AR14XX": {
+        "AWR14XX": {
             lockstepDevice      : true,
             vimBaseAddress      : 0xFFFFFDEC,
             vimRamAddress       : 0xFFF82000,
@@ -77,9 +77,9 @@ if (xdc.om.$name == "cfg") {
     deviceTable["RM57D8.*"] = deviceTable["RM57D8xx"];
     deviceTable["RM57L8.*"] = deviceTable["RM57L8xx"];
     deviceTable["RM48L.*"] = deviceTable["RM57L8xx"];
-    deviceTable["AR16XX"] = deviceTable["AR14XX"];
-    deviceTable["IR14XX"] = deviceTable["AR14XX"];
-    deviceTable["IR16XX"] = deviceTable["AR14XX"];
+    deviceTable["AWR16XX"] = deviceTable["AWR14XX"];
+    deviceTable["IWR14XX"] = deviceTable["AWR14XX"];
+    deviceTable["IWR16XX"] = deviceTable["AWR14XX"];
 }
 
 /*
@@ -91,6 +91,7 @@ function getAsmFiles(targetName)
 {
     switch(targetName) {
         case "ti.targets.arm.elf.R4F":
+        case "ti.targets.arm.elf.R4Ft":
         case "ti.targets.arm.elf.R5F":
             if ((Core.id == 0) && (!Hwi.lockstepDevice)) {
                 return (["Hwi_asm.sv7R", "Hwi_asm_vecs.sv7R",

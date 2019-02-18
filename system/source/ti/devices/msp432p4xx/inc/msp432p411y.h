@@ -1,6 +1,6 @@
 /******************************************************************************
 *
-* Copyright (C) 2012 - 2016 Texas Instruments Incorporated - http://www.ti.com/
+* Copyright (C) 2012 - 2017 Texas Instruments Incorporated - http://www.ti.com/
 *
 * Redistribution and use in source and binary forms, with or without
 * modification, are permitted provided that the following conditions
@@ -45,7 +45,7 @@
 *  - ADC14->CTL0 |= ADC14_CTL0_ENC;
 *  - BITBAND_PERI(ADC14->CTL0, ADC14_CTL0_ENC_OFS) = 1;
 *
-* File creation date: 2016-12-14
+* File creation date: 2017-08-03
 *
 ******************************************************************************/
 
@@ -59,7 +59,7 @@
  extern "C" {
 #endif
 
-#define __MSP432_HEADER_VERSION__ 3000
+#define __MSP432_HEADER_VERSION__ 3202
 
 /* Remap MSP432 intrinsics to ARM equivalents */
 #include "msp_compatibility.h"
@@ -100,49 +100,48 @@ typedef enum IRQn
   PendSV_IRQn                 = -2,     /* 14 Pend SV Interrupt */
   SysTick_IRQn                = -1,     /* 15 System Tick Interrupt */
   /*  Peripheral Exceptions Numbers */
-  PSS_IRQn                    =  0,     /* 16 PSS Interrupt */
-  CS_IRQn                     =  1,     /* 17 CS Interrupt */
-  PCM_IRQn                    =  2,     /* 18 PCM Interrupt */
-  WDT_A_IRQn                  =  3,     /* 19 WDT_A Interrupt */
-  FPU_IRQn                    =  4,     /* 20 FPU Interrupt */
-  FLCTL_A_IRQn                =  5,     /* 21 FLCTL_A Interrupt */
-  COMP_E0_IRQn                =  6,     /* 22 COMP_E0 Interrupt */
-  COMP_E1_IRQn                =  7,     /* 23 COMP_E1 Interrupt */
-  TA0_0_IRQn                  =  8,     /* 24 TA0_0 Interrupt */
-  TA0_N_IRQn                  =  9,     /* 25 TA0_N Interrupt */
-  TA1_0_IRQn                  = 10,     /* 26 TA1_0 Interrupt */
-  TA1_N_IRQn                  = 11,     /* 27 TA1_N Interrupt */
-  TA2_0_IRQn                  = 12,     /* 28 TA2_0 Interrupt */
-  TA2_N_IRQn                  = 13,     /* 29 TA2_N Interrupt */
-  TA3_0_IRQn                  = 14,     /* 30 TA3_0 Interrupt */
-  TA3_N_IRQn                  = 15,     /* 31 TA3_N Interrupt */
-  EUSCIA0_IRQn                = 16,     /* 32 EUSCIA0 Interrupt */
-  EUSCIA1_IRQn                = 17,     /* 33 EUSCIA1 Interrupt */
-  EUSCIA2_IRQn                = 18,     /* 34 EUSCIA2 Interrupt */
-  EUSCIA3_IRQn                = 19,     /* 35 EUSCIA3 Interrupt */
-  EUSCIB0_IRQn                = 20,     /* 36 EUSCIB0 Interrupt */
-  EUSCIB1_IRQn                = 21,     /* 37 EUSCIB1 Interrupt */
-  EUSCIB2_IRQn                = 22,     /* 38 EUSCIB2 Interrupt */
-  EUSCIB3_IRQn                = 23,     /* 39 EUSCIB3 Interrupt */
-  ADC14_IRQn                  = 24,     /* 40 ADC14 Interrupt */
-  T32_INT1_IRQn               = 25,     /* 41 T32_INT1 Interrupt */
-  T32_INT2_IRQn               = 26,     /* 42 T32_INT2 Interrupt */
-  T32_INTC_IRQn               = 27,     /* 43 T32_INTC Interrupt */
-  AES256_IRQn                 = 28,     /* 44 AES256 Interrupt */
-  RTC_C_IRQn                  = 29,     /* 45 RTC_C Interrupt */
-  DMA_ERR_IRQn                = 30,     /* 46 DMA_ERR Interrupt */
-  DMA_INT3_IRQn               = 31,     /* 47 DMA_INT3 Interrupt */
-  DMA_INT2_IRQn               = 32,     /* 48 DMA_INT2 Interrupt */
-  DMA_INT1_IRQn               = 33,     /* 49 DMA_INT1 Interrupt */
-  DMA_INT0_IRQn               = 34,     /* 50 DMA_INT0 Interrupt */
-  PORT1_IRQn                  = 35,     /* 51 PORT1 Interrupt */
-  PORT2_IRQn                  = 36,     /* 52 PORT2 Interrupt */
-  PORT3_IRQn                  = 37,     /* 53 PORT3 Interrupt */
-  PORT4_IRQn                  = 38,     /* 54 PORT4 Interrupt */
-  PORT5_IRQn                  = 39,     /* 55 PORT5 Interrupt */
-  PORT6_IRQn                  = 40,     /* 56 PORT6 Interrupt */
-  LCD_F_IRQn                  = 41      /* 57 LCD_F Interrupt */
-
+  PSS_IRQn                    = 0,     /* 16 PSS Interrupt             */
+  CS_IRQn                     = 1,     /* 17 CS Interrupt              */
+  PCM_IRQn                    = 2,     /* 18 PCM Interrupt             */
+  WDT_A_IRQn                  = 3,     /* 19 WDT_A Interrupt           */
+  FPU_IRQn                    = 4,     /* 20 FPU Interrupt             */
+  FLCTL_A_IRQn                = 5,     /* 21 Flash Controller Interrupt*/
+  COMP_E0_IRQn                = 6,     /* 22 COMP_E0 Interrupt         */
+  COMP_E1_IRQn                = 7,     /* 23 COMP_E1 Interrupt         */
+  TA0_0_IRQn                  = 8,     /* 24 TA0_0 Interrupt           */
+  TA0_N_IRQn                  = 9,     /* 25 TA0_N Interrupt           */
+  TA1_0_IRQn                  = 10,     /* 26 TA1_0 Interrupt           */
+  TA1_N_IRQn                  = 11,     /* 27 TA1_N Interrupt           */
+  TA2_0_IRQn                  = 12,     /* 28 TA2_0 Interrupt           */
+  TA2_N_IRQn                  = 13,     /* 29 TA2_N Interrupt           */
+  TA3_0_IRQn                  = 14,     /* 30 TA3_0 Interrupt           */
+  TA3_N_IRQn                  = 15,     /* 31 TA3_N Interrupt           */
+  EUSCIA0_IRQn                = 16,     /* 32 EUSCIA0 Interrupt         */
+  EUSCIA1_IRQn                = 17,     /* 33 EUSCIA1 Interrupt         */
+  EUSCIA2_IRQn                = 18,     /* 34 EUSCIA2 Interrupt         */
+  EUSCIA3_IRQn                = 19,     /* 35 EUSCIA3 Interrupt         */
+  EUSCIB0_IRQn                = 20,     /* 36 EUSCIB0 Interrupt         */
+  EUSCIB1_IRQn                = 21,     /* 37 EUSCIB1 Interrupt         */
+  EUSCIB2_IRQn                = 22,     /* 38 EUSCIB2 Interrupt         */
+  EUSCIB3_IRQn                = 23,     /* 39 EUSCIB3 Interrupt         */
+  ADC14_IRQn                  = 24,     /* 40 ADC14 Interrupt           */
+  T32_INT1_IRQn               = 25,     /* 41 T32_INT1 Interrupt        */
+  T32_INT2_IRQn               = 26,     /* 42 T32_INT2 Interrupt        */
+  T32_INTC_IRQn               = 27,     /* 43 T32_INTC Interrupt        */
+  AES256_IRQn                 = 28,     /* 44 AES256 Interrupt          */
+  RTC_C_IRQn                  = 29,     /* 45 RTC_C Interrupt           */
+  DMA_ERR_IRQn                = 30,     /* 46 DMA_ERR Interrupt         */
+  DMA_INT3_IRQn               = 31,     /* 47 DMA_INT3 Interrupt        */
+  DMA_INT2_IRQn               = 32,     /* 48 DMA_INT2 Interrupt        */
+  DMA_INT1_IRQn               = 33,     /* 49 DMA_INT1 Interrupt        */
+  DMA_INT0_IRQn               = 34,     /* 50 DMA_INT0 Interrupt        */
+  PORT1_IRQn                  = 35,     /* 51 Port1 Interrupt           */
+  PORT2_IRQn                  = 36,     /* 52 Port2 Interrupt           */
+  PORT3_IRQn                  = 37,     /* 53 Port3 Interrupt           */
+  PORT4_IRQn                  = 38,     /* 54 Port4 Interrupt           */
+  PORT5_IRQn                  = 39,     /* 55 Port5 Interrupt           */
+  PORT6_IRQn                  = 40,     /* 56 Port6 Interrupt           */
+  LCD_F_IRQn                  = 41      /* 57 LCD_F Interrupt           */
 } IRQn_Type;
 
 /******************************************************************************
@@ -318,9 +317,9 @@ typedef enum IRQn
 #define BITBAND_PERI_BASE                     ((uint32_t)(0x42000000))
 
 /* SRAM allows 32 bit bit band access */
-#define BITBAND_SRAM(x, b)  (*((__IO uint32_t *) (BITBAND_SRAM_BASE +  (((uint32_t)(uint32_t *)&x) - SRAM_BASE  )*32 + b*4)))
+#define BITBAND_SRAM(x, b)  (*((__IO uint32_t *) (BITBAND_SRAM_BASE +  (((uint32_t)(uint32_t *)&(x)) - SRAM_BASE  )*32 + (b)*4)))
 /* peripherals with 8 bit or 16 bit register access allow only 8 bit or 16 bit bit band access, so cast to 8 bit always */
-#define BITBAND_PERI(x, b)  (*((__IO  uint8_t *) (BITBAND_PERI_BASE +  (((uint32_t)(uint32_t *)&x) - PERIPH_BASE)*32 + b*4)))
+#define BITBAND_PERI(x, b)  (*((__IO  uint8_t *) (BITBAND_PERI_BASE +  (((uint32_t)(uint32_t *)&(x)) - PERIPH_BASE)*32 + (b)*4)))
 
 /******************************************************************************
 * Peripheral register definitions                                             *
@@ -703,7 +702,7 @@ typedef struct {
   __I  uint32_t STAT;                                                            /*!< Status Register */
   __O  uint32_t CFG;                                                             /*!< Configuration Register */
   __IO uint32_t CTLBASE;                                                         /*!< Channel Control Data Base Pointer Register */
-  __I  uint32_t ATLBASE;                                                         /*!< Channel Alternate Control Data Base Pointer Register */
+  __I  uint32_t ALTBASE;                                                         /*!< Channel Alternate Control Data Base Pointer Register */
   __I  uint32_t WAITSTAT;                                                        /*!< Channel Wait on Request Status Register */
   __O  uint32_t SWREQ;                                                           /*!< Channel Software Request Register */
   __IO uint32_t USEBURSTSET;                                                     /*!< Channel Useburst Set Register */
@@ -756,7 +755,7 @@ typedef struct {
        uint16_t RESERVED0[2];
   __IO uint16_t BRW;                                                             /*!< eUSCI_Ax Bit Rate Control Register 1 */
        uint16_t RESERVED1;
-  __IO uint16_t STATW;                                                           
+  __IO uint16_t STATW; 
   __I  uint16_t RXBUF;                                                           /*!< eUSCI_Ax Receive Buffer Register */
   __IO uint16_t TXBUF;                                                           /*!< eUSCI_Ax Transmit Buffer Register */
        uint16_t RESERVED2[5];
@@ -806,7 +805,7 @@ typedef struct {
   __IO uint16_t CTLW0;                                                           /*!< eUSCI_Bx Control Word Register 0 */
        uint16_t RESERVED0[2];
   __IO uint16_t BRW;                                                             /*!< eUSCI_Bx Bit Rate Control Register 1 */
-  __IO uint16_t STATW;                                                           
+  __IO uint16_t STATW; 
        uint16_t RESERVED1;
   __I  uint16_t RXBUF;                                                           /*!< eUSCI_Bx Receive Buffer Register */
   __IO uint16_t TXBUF;                                                           /*!< eUSCI_Bx Transmit Buffer Register */
@@ -1001,6 +1000,11 @@ typedef struct {
   __I  uint32_t IFG;                                                             /*!< LCD_F interrupt flag register */
   __O  uint32_t SETIFG;                                                          /*!< LCD_F set interrupt flag register */
   __O  uint32_t CLRIFG;                                                          /*!< LCD_F clear interrupt flag register */
+  __IO uint8_t M[48];                                                           /*!< LCD memory registers */
+       uint8_t  RESERVED1[16];
+  __IO uint8_t BM[48];                                                          /*!< LCD Blinking memory registers */
+       uint8_t  RESERVED2[16];
+  __IO uint8_t ANM[8];                                                          /*!< LCD Animation memory registers */
 } LCD_F_Type;
 
 /*@}*/ /* end of group LCD_F */
@@ -2721,9 +2725,6 @@ typedef struct {
 #define CS_CTL2_LFXTDRIVE_1                      ((uint32_t)0x00000001)          /*!< Increased drive strength LFXT oscillator. */
 #define CS_CTL2_LFXTDRIVE_2                      ((uint32_t)0x00000002)          /*!< Increased drive strength LFXT oscillator. */
 #define CS_CTL2_LFXTDRIVE_3                      ((uint32_t)0x00000003)          /*!< Maximum drive strength and maximum current consumption LFXT oscillator. */
-/* CS_CTL2[LFXTAGCOFF] Bits */
-#define CS_CTL2_LFXTAGCOFF_OFS                   ( 7)                            /*!< LFXTAGCOFF Bit Offset */
-#define CS_CTL2_LFXTAGCOFF                       ((uint32_t)0x00000080)          /*!< Disables the automatic gain control of the LFXT crystal */
 /* CS_CTL2[LFXT_EN] Bits */
 #define CS_CTL2_LFXT_EN_OFS                      ( 8)                            /*!< LFXT_EN Bit Offset */
 #define CS_CTL2_LFXT_EN                          ((uint32_t)0x00000100)          /*!< Turns on the LFXT oscillator regardless if used as a clock resource */
@@ -2791,25 +2792,6 @@ typedef struct {
 /* CS_CTL3[FCNTHF_EN] Bits */
 #define CS_CTL3_FCNTHF_EN_OFS                    ( 7)                            /*!< FCNTHF_EN Bit Offset */
 #define CS_CTL3_FCNTHF_EN                        ((uint32_t)0x00000080)          /*!< Enable start fault counter for HFXT */
-/* CS_CTL3[FCNTHF2] Bits */
-#define CS_CTL3_FCNTHF2_OFS                      ( 8)                            /*!< FCNTHF2 Bit Offset */
-#define CS_CTL3_FCNTHF2_MASK                     ((uint32_t)0x00000300)          /*!< FCNTHF2 Bit Mask */
-#define CS_CTL3_FCNTHF20                         ((uint32_t)0x00000100)          /*!< FCNTHF2 Bit 0 */
-#define CS_CTL3_FCNTHF21                         ((uint32_t)0x00000200)          /*!< FCNTHF2 Bit 1 */
-#define CS_CTL3_FCNTHF2_0                        ((uint32_t)0x00000000)          /*!< 2048 cycles */
-#define CS_CTL3_FCNTHF2_1                        ((uint32_t)0x00000100)          /*!< 4096 cycles */
-#define CS_CTL3_FCNTHF2_2                        ((uint32_t)0x00000200)          /*!< 8192 cycles */
-#define CS_CTL3_FCNTHF2_3                        ((uint32_t)0x00000300)          /*!< 16384 cycles */
-#define CS_CTL3_FCNTHF2__2048                    ((uint32_t)0x00000000)          /*!< 2048 cycles */
-#define CS_CTL3_FCNTHF2__4096                    ((uint32_t)0x00000100)          /*!< 4096 cycles */
-#define CS_CTL3_FCNTHF2__8192                    ((uint32_t)0x00000200)          /*!< 8192 cycles */
-#define CS_CTL3_FCNTHF2__16384                   ((uint32_t)0x00000300)          /*!< 16384 cycles */
-/* CS_CTL3[RFCNTHF2] Bits */
-#define CS_CTL3_RFCNTHF2_OFS                     (10)                            /*!< RFCNTHF2 Bit Offset */
-#define CS_CTL3_RFCNTHF2                         ((uint32_t)0x00000400)          /*!< Reset start fault counter for HFXT2 */
-/* CS_CTL3[FCNTHF2_EN] Bits */
-#define CS_CTL3_FCNTHF2_EN_OFS                   (11)                            /*!< FCNTHF2_EN Bit Offset */
-#define CS_CTL3_FCNTHF2_EN                       ((uint32_t)0x00000800)          /*!< Enable start fault counter for HFXT2 */
 /* CS_CLKEN[ACLK_EN] Bits */
 #define CS_CLKEN_ACLK_EN_OFS                     ( 0)                            /*!< ACLK_EN Bit Offset */
 #define CS_CLKEN_ACLK_EN                         ((uint32_t)0x00000001)          /*!< ACLK system clock conditional request enable */
@@ -2843,9 +2825,6 @@ typedef struct {
 /* CS_STAT[HFXT_ON] Bits */
 #define CS_STAT_HFXT_ON_OFS                      ( 2)                            /*!< HFXT_ON Bit Offset */
 #define CS_STAT_HFXT_ON                          ((uint32_t)0x00000004)          /*!< HFXT status */
-/* CS_STAT[HFXT2_ON] Bits */
-#define CS_STAT_HFXT2_ON_OFS                     ( 3)                            /*!< HFXT2_ON Bit Offset */
-#define CS_STAT_HFXT2_ON                         ((uint32_t)0x00000008)          /*!< HFXT2 status */
 /* CS_STAT[MODOSC_ON] Bits */
 #define CS_STAT_MODOSC_ON_OFS                    ( 4)                            /*!< MODOSC_ON Bit Offset */
 #define CS_STAT_MODOSC_ON                        ((uint32_t)0x00000010)          /*!< MODOSC status */
@@ -2903,9 +2882,6 @@ typedef struct {
 /* CS_IE[HFXTIE] Bits */
 #define CS_IE_HFXTIE_OFS                         ( 1)                            /*!< HFXTIE Bit Offset */
 #define CS_IE_HFXTIE                             ((uint32_t)0x00000002)          /*!< HFXT oscillator fault flag interrupt enable */
-/* CS_IE[HFXT2IE] Bits */
-#define CS_IE_HFXT2IE_OFS                        ( 2)                            /*!< HFXT2IE Bit Offset */
-#define CS_IE_HFXT2IE                            ((uint32_t)0x00000004)          /*!< HFXT2 oscillator fault flag interrupt enable */
 /* CS_IE[DCOR_OPNIE] Bits */
 #define CS_IE_DCOR_OPNIE_OFS                     ( 6)                            /*!< DCOR_OPNIE Bit Offset */
 #define CS_IE_DCOR_OPNIE                         ((uint32_t)0x00000040)          /*!< DCO external resistor open circuit fault flag interrupt enable. */
@@ -2915,30 +2891,12 @@ typedef struct {
 /* CS_IE[FCNTHFIE] Bits */
 #define CS_IE_FCNTHFIE_OFS                       ( 9)                            /*!< FCNTHFIE Bit Offset */
 #define CS_IE_FCNTHFIE                           ((uint32_t)0x00000200)          /*!< Start fault counter interrupt enable HFXT */
-/* CS_IE[FCNTHF2IE] Bits */
-#define CS_IE_FCNTHF2IE_OFS                      (10)                            /*!< FCNTHF2IE Bit Offset */
-#define CS_IE_FCNTHF2IE                          ((uint32_t)0x00000400)          /*!< Start fault counter interrupt enable HFXT2 */
-/* CS_IE[PLLOOLIE] Bits */
-#define CS_IE_PLLOOLIE_OFS                       (12)                            /*!< PLLOOLIE Bit Offset */
-#define CS_IE_PLLOOLIE                           ((uint32_t)0x00001000)          /*!< PLL out-of-lock interrupt enable */
-/* CS_IE[PLLLOSIE] Bits */
-#define CS_IE_PLLLOSIE_OFS                       (13)                            /*!< PLLLOSIE Bit Offset */
-#define CS_IE_PLLLOSIE                           ((uint32_t)0x00002000)          /*!< PLL loss-of-signal interrupt enable */
-/* CS_IE[PLLOORIE] Bits */
-#define CS_IE_PLLOORIE_OFS                       (14)                            /*!< PLLOORIE Bit Offset */
-#define CS_IE_PLLOORIE                           ((uint32_t)0x00004000)          /*!< PLL out-of-range interrupt enable */
-/* CS_IE[CALIE] Bits */
-#define CS_IE_CALIE_OFS                          (15)                            /*!< CALIE Bit Offset */
-#define CS_IE_CALIE                              ((uint32_t)0x00008000)          /*!< REFCNT period counter interrupt enable */
 /* CS_IFG[LFXTIFG] Bits */
 #define CS_IFG_LFXTIFG_OFS                       ( 0)                            /*!< LFXTIFG Bit Offset */
 #define CS_IFG_LFXTIFG                           ((uint32_t)0x00000001)          /*!< LFXT oscillator fault flag */
 /* CS_IFG[HFXTIFG] Bits */
 #define CS_IFG_HFXTIFG_OFS                       ( 1)                            /*!< HFXTIFG Bit Offset */
 #define CS_IFG_HFXTIFG                           ((uint32_t)0x00000002)          /*!< HFXT oscillator fault flag */
-/* CS_IFG[HFXT2IFG] Bits */
-#define CS_IFG_HFXT2IFG_OFS                      ( 2)                            /*!< HFXT2IFG Bit Offset */
-#define CS_IFG_HFXT2IFG                          ((uint32_t)0x00000004)          /*!< HFXT2 oscillator fault flag */
 /* CS_IFG[DCOR_SHTIFG] Bits */
 #define CS_IFG_DCOR_SHTIFG_OFS                   ( 5)                            /*!< DCOR_SHTIFG Bit Offset */
 #define CS_IFG_DCOR_SHTIFG                       ((uint32_t)0x00000020)          /*!< DCO external resistor short circuit fault flag. */
@@ -2951,87 +2909,36 @@ typedef struct {
 /* CS_IFG[FCNTHFIFG] Bits */
 #define CS_IFG_FCNTHFIFG_OFS                     ( 9)                            /*!< FCNTHFIFG Bit Offset */
 #define CS_IFG_FCNTHFIFG                         ((uint32_t)0x00000200)          /*!< Start fault counter interrupt flag HFXT */
-/* CS_IFG[FCNTHF2IFG] Bits */
-#define CS_IFG_FCNTHF2IFG_OFS                    (11)                            /*!< FCNTHF2IFG Bit Offset */
-#define CS_IFG_FCNTHF2IFG                        ((uint32_t)0x00000800)          /*!< Start fault counter interrupt flag HFXT2 */
-/* CS_IFG[PLLOOLIFG] Bits */
-#define CS_IFG_PLLOOLIFG_OFS                     (12)                            /*!< PLLOOLIFG Bit Offset */
-#define CS_IFG_PLLOOLIFG                         ((uint32_t)0x00001000)          /*!< PLL out-of-lock interrupt flag */
-/* CS_IFG[PLLLOSIFG] Bits */
-#define CS_IFG_PLLLOSIFG_OFS                     (13)                            /*!< PLLLOSIFG Bit Offset */
-#define CS_IFG_PLLLOSIFG                         ((uint32_t)0x00002000)          /*!< PLL loss-of-signal interrupt flag */
-/* CS_IFG[PLLOORIFG] Bits */
-#define CS_IFG_PLLOORIFG_OFS                     (14)                            /*!< PLLOORIFG Bit Offset */
-#define CS_IFG_PLLOORIFG                         ((uint32_t)0x00004000)          /*!< PLL out-of-range interrupt flag */
-/* CS_IFG[CALIFG] Bits */
-#define CS_IFG_CALIFG_OFS                        (15)                            /*!< CALIFG Bit Offset */
-#define CS_IFG_CALIFG                            ((uint32_t)0x00008000)          /*!< REFCNT period counter expired */
 /* CS_CLRIFG[CLR_LFXTIFG] Bits */
 #define CS_CLRIFG_CLR_LFXTIFG_OFS                ( 0)                            /*!< CLR_LFXTIFG Bit Offset */
 #define CS_CLRIFG_CLR_LFXTIFG                    ((uint32_t)0x00000001)          /*!< Clear LFXT oscillator fault interrupt flag */
 /* CS_CLRIFG[CLR_HFXTIFG] Bits */
 #define CS_CLRIFG_CLR_HFXTIFG_OFS                ( 1)                            /*!< CLR_HFXTIFG Bit Offset */
 #define CS_CLRIFG_CLR_HFXTIFG                    ((uint32_t)0x00000002)          /*!< Clear HFXT oscillator fault interrupt flag */
-/* CS_CLRIFG[CLR_HFXT2IFG] Bits */
-#define CS_CLRIFG_CLR_HFXT2IFG_OFS               ( 2)                            /*!< CLR_HFXT2IFG Bit Offset */
-#define CS_CLRIFG_CLR_HFXT2IFG                   ((uint32_t)0x00000004)          /*!< Clear HFXT2 oscillator fault interrupt flag */
 /* CS_CLRIFG[CLR_DCOR_OPNIFG] Bits */
 #define CS_CLRIFG_CLR_DCOR_OPNIFG_OFS            ( 6)                            /*!< CLR_DCOR_OPNIFG Bit Offset */
 #define CS_CLRIFG_CLR_DCOR_OPNIFG                ((uint32_t)0x00000040)          /*!< Clear DCO external resistor open circuit fault interrupt flag. */
-/* CS_CLRIFG[CLR_CALIFG] Bits */
-#define CS_CLRIFG_CLR_CALIFG_OFS                 (15)                            /*!< CLR_CALIFG Bit Offset */
-#define CS_CLRIFG_CLR_CALIFG                     ((uint32_t)0x00008000)          /*!< REFCNT period counter clear interrupt flag */
 /* CS_CLRIFG[CLR_FCNTLFIFG] Bits */
 #define CS_CLRIFG_CLR_FCNTLFIFG_OFS              ( 8)                            /*!< CLR_FCNTLFIFG Bit Offset */
 #define CS_CLRIFG_CLR_FCNTLFIFG                  ((uint32_t)0x00000100)          /*!< Start fault counter clear interrupt flag LFXT */
 /* CS_CLRIFG[CLR_FCNTHFIFG] Bits */
 #define CS_CLRIFG_CLR_FCNTHFIFG_OFS              ( 9)                            /*!< CLR_FCNTHFIFG Bit Offset */
 #define CS_CLRIFG_CLR_FCNTHFIFG                  ((uint32_t)0x00000200)          /*!< Start fault counter clear interrupt flag HFXT */
-/* CS_CLRIFG[CLR_FCNTHF2IFG] Bits */
-#define CS_CLRIFG_CLR_FCNTHF2IFG_OFS             (10)                            /*!< CLR_FCNTHF2IFG Bit Offset */
-#define CS_CLRIFG_CLR_FCNTHF2IFG                 ((uint32_t)0x00000400)          /*!< Start fault counter clear interrupt flag HFXT2 */
-/* CS_CLRIFG[CLR_PLLOOLIFG] Bits */
-#define CS_CLRIFG_CLR_PLLOOLIFG_OFS              (12)                            /*!< CLR_PLLOOLIFG Bit Offset */
-#define CS_CLRIFG_CLR_PLLOOLIFG                  ((uint32_t)0x00001000)          /*!< PLL out-of-lock clear interrupt flag */
-/* CS_CLRIFG[CLR_PLLLOSIFG] Bits */
-#define CS_CLRIFG_CLR_PLLLOSIFG_OFS              (13)                            /*!< CLR_PLLLOSIFG Bit Offset */
-#define CS_CLRIFG_CLR_PLLLOSIFG                  ((uint32_t)0x00002000)          /*!< PLL loss-of-signal clear interrupt flag */
-/* CS_CLRIFG[CLR_PLLOORIFG] Bits */
-#define CS_CLRIFG_CLR_PLLOORIFG_OFS              (14)                            /*!< CLR_PLLOORIFG Bit Offset */
-#define CS_CLRIFG_CLR_PLLOORIFG                  ((uint32_t)0x00004000)          /*!< PLL out-of-range clear interrupt flag */
 /* CS_SETIFG[SET_LFXTIFG] Bits */
 #define CS_SETIFG_SET_LFXTIFG_OFS                ( 0)                            /*!< SET_LFXTIFG Bit Offset */
 #define CS_SETIFG_SET_LFXTIFG                    ((uint32_t)0x00000001)          /*!< Set LFXT oscillator fault interrupt flag */
 /* CS_SETIFG[SET_HFXTIFG] Bits */
 #define CS_SETIFG_SET_HFXTIFG_OFS                ( 1)                            /*!< SET_HFXTIFG Bit Offset */
 #define CS_SETIFG_SET_HFXTIFG                    ((uint32_t)0x00000002)          /*!< Set HFXT oscillator fault interrupt flag */
-/* CS_SETIFG[SET_HFXT2IFG] Bits */
-#define CS_SETIFG_SET_HFXT2IFG_OFS               ( 2)                            /*!< SET_HFXT2IFG Bit Offset */
-#define CS_SETIFG_SET_HFXT2IFG                   ((uint32_t)0x00000004)          /*!< Set HFXT2 oscillator fault interrupt flag */
 /* CS_SETIFG[SET_DCOR_OPNIFG] Bits */
 #define CS_SETIFG_SET_DCOR_OPNIFG_OFS            ( 6)                            /*!< SET_DCOR_OPNIFG Bit Offset */
 #define CS_SETIFG_SET_DCOR_OPNIFG                ((uint32_t)0x00000040)          /*!< Set DCO external resistor open circuit fault interrupt flag. */
-/* CS_SETIFG[SET_CALIFG] Bits */
-#define CS_SETIFG_SET_CALIFG_OFS                 (15)                            /*!< SET_CALIFG Bit Offset */
-#define CS_SETIFG_SET_CALIFG                     ((uint32_t)0x00008000)          /*!< REFCNT period counter set interrupt flag */
 /* CS_SETIFG[SET_FCNTHFIFG] Bits */
 #define CS_SETIFG_SET_FCNTHFIFG_OFS              ( 9)                            /*!< SET_FCNTHFIFG Bit Offset */
 #define CS_SETIFG_SET_FCNTHFIFG                  ((uint32_t)0x00000200)          /*!< Start fault counter set interrupt flag HFXT */
-/* CS_SETIFG[SET_FCNTHF2IFG] Bits */
-#define CS_SETIFG_SET_FCNTHF2IFG_OFS             (10)                            /*!< SET_FCNTHF2IFG Bit Offset */
-#define CS_SETIFG_SET_FCNTHF2IFG                 ((uint32_t)0x00000400)          /*!< Start fault counter set interrupt flag HFXT2 */
 /* CS_SETIFG[SET_FCNTLFIFG] Bits */
 #define CS_SETIFG_SET_FCNTLFIFG_OFS              ( 8)                            /*!< SET_FCNTLFIFG Bit Offset */
 #define CS_SETIFG_SET_FCNTLFIFG                  ((uint32_t)0x00000100)          /*!< Start fault counter set interrupt flag LFXT */
-/* CS_SETIFG[SET_PLLOOLIFG] Bits */
-#define CS_SETIFG_SET_PLLOOLIFG_OFS              (12)                            /*!< SET_PLLOOLIFG Bit Offset */
-#define CS_SETIFG_SET_PLLOOLIFG                  ((uint32_t)0x00001000)          /*!< PLL out-of-lock set interrupt flag */
-/* CS_SETIFG[SET_PLLLOSIFG] Bits */
-#define CS_SETIFG_SET_PLLLOSIFG_OFS              (13)                            /*!< SET_PLLLOSIFG Bit Offset */
-#define CS_SETIFG_SET_PLLLOSIFG                  ((uint32_t)0x00002000)          /*!< PLL loss-of-signal set interrupt flag */
-/* CS_SETIFG[SET_PLLOORIFG] Bits */
-#define CS_SETIFG_SET_PLLOORIFG_OFS              (14)                            /*!< SET_PLLOORIFG Bit Offset */
-#define CS_SETIFG_SET_PLLOORIFG                  ((uint32_t)0x00004000)          /*!< PLL out-of-range set interrupt flag */
 /* CS_DCOERCAL0[DCO_TCCAL] Bits */
 #define CS_DCOERCAL0_DCO_TCCAL_OFS               ( 0)                            /*!< DCO_TCCAL Bit Offset */
 #define CS_DCOERCAL0_DCO_TCCAL_MASK              ((uint32_t)0x00000003)          /*!< DCO_TCCAL Bit Mask */
@@ -3686,6 +3593,9 @@ typedef struct {
 /* EUSCI_A_MCTLW[BRS] Bits */
 #define EUSCI_A_MCTLW_BRS_OFS                    ( 8)                            /*!< UCBRS Bit Offset */
 #define EUSCI_A_MCTLW_BRS_MASK                   ((uint16_t)0xFF00)              /*!< UCBRS Bit Mask */
+/* EUSCI_A_STATW[BUSY] Bits */
+#define EUSCI_A_STATW_BUSY_OFS                   ( 0)                            /*!< UCBUSY Bit Offset */
+#define EUSCI_A_STATW_BUSY                       ((uint16_t)0x0001)              /*!< eUSCI_A busy */
 /* EUSCI_A_STATW[ADDR_IDLE] Bits */
 #define EUSCI_A_STATW_ADDR_IDLE_OFS              ( 1)                            /*!< UCADDR_UCIDLE Bit Offset */
 #define EUSCI_A_STATW_ADDR_IDLE                  ((uint16_t)0x0002)              /*!< Address received / Idle line detected */
@@ -3707,6 +3617,9 @@ typedef struct {
 /* EUSCI_A_STATW[LISTEN] Bits */
 #define EUSCI_A_STATW_LISTEN_OFS                 ( 7)                            /*!< UCLISTEN Bit Offset */
 #define EUSCI_A_STATW_LISTEN                     ((uint16_t)0x0080)              /*!< Listen enable */
+/* EUSCI_A_STATW[SPI_BUSY] Bits */
+#define EUSCI_A_STATW_SPI_BUSY_OFS               ( 0)                            /*!< UCBUSY Bit Offset */
+#define EUSCI_A_STATW_SPI_BUSY                   ((uint16_t)0x0001)              /*!< eUSCI_A busy */
 /* EUSCI_A_RXBUF[RXBUF] Bits */
 #define EUSCI_A_RXBUF_RXBUF_OFS                  ( 0)                            /*!< UCRXBUF Bit Offset */
 #define EUSCI_A_RXBUF_RXBUF_MASK                 ((uint16_t)0x00FF)              /*!< UCRXBUF Bit Mask */
@@ -3903,6 +3816,9 @@ typedef struct {
 /* EUSCI_B_STATW[BCNT] Bits */
 #define EUSCI_B_STATW_BCNT_OFS                   ( 8)                            /*!< UCBCNT Bit Offset */
 #define EUSCI_B_STATW_BCNT_MASK                  ((uint16_t)0xFF00)              /*!< UCBCNT Bit Mask */
+/* EUSCI_B_STATW[SPI_BUSY] Bits */
+#define EUSCI_B_STATW_SPI_BUSY_OFS               ( 0)                            /*!< UCBUSY Bit Offset */
+#define EUSCI_B_STATW_SPI_BUSY                   ((uint16_t)0x0001)              /*!< eUSCI_B busy */
 /* EUSCI_B_STATW[OE] Bits */
 #define EUSCI_B_STATW_OE_OFS                     ( 5)                            /*!< UCOE Bit Offset */
 #define EUSCI_B_STATW_OE                         ((uint16_t)0x0020)              /*!< Overrun error flag */
@@ -7852,9 +7768,6 @@ typedef struct {
 /* RSTCTL_PSSRESET_STAT[VCCDET] Bits */
 #define RSTCTL_PSSRESET_STAT_VCCDET_OFS          ( 3)                            /*!< VCCDET Bit Offset */
 #define RSTCTL_PSSRESET_STAT_VCCDET              ((uint32_t)0x00000008)          /*!< Indicates if POR was caused by a VCCDET trip condition in the PSS */
-/* RSTCTL_PSSRESET_STAT[SVSL] Bits */
-#define RSTCTL_PSSRESET_STAT_SVSL_OFS            ( 0)                            /*!< SVSL Bit Offset */
-#define RSTCTL_PSSRESET_STAT_SVSL                ((uint32_t)0x00000001)          /*!< Indicates if POR was caused by an SVSL trip condition in the PSS */
 /* RSTCTL_PSSRESET_CLR[CLR] Bits */
 #define RSTCTL_PSSRESET_CLR_CLR_OFS              ( 0)                            /*!< CLR Bit Offset */
 #define RSTCTL_PSSRESET_CLR_CLR                  ((uint32_t)0x00000001)          /*!< Write 1 clears all PSS Reset Flags in the RSTCTL_PSSRESET_STAT */

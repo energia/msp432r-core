@@ -7,7 +7,7 @@ package/ti.sysbios.posix.sch
 package/.vers_g200
 package/.vers_r200
 package/.vers_b200
-package/.xdc-D05
+package/.xdc-D20
 package/ti_sysbios_posix.java
 package/ti_sysbios_posix.class
 package/package_ti.sysbios.posix.c

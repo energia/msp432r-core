@@ -1,5 +1,5 @@
 /* 
- *  Copyright (c) 2012 Texas Instruments and others.
+ *  Copyright (c) 2012-2017 Texas Instruments and others.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
@@ -73,7 +73,7 @@ metaonly module A15F inherits gnu.targets.arm.ITarget {
 
     override config ITarget2.Options lnkOpts = {
         prefix: "-mfloat-abi=hard -nostartfiles -Wl,-static -Wl,--gc-sections",
-        suffix: "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group -Wl,-Map=$(XDCCFGDIR)/$@.map"
+        suffix: "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group --specs=nano.specs -Wl,-Map=$(XDCCFGDIR)/$@.map"
     };
 
     readonly config ITarget2.Command arBin = {
@@ -143,7 +143,7 @@ metaonly module A15F inherits gnu.targets.arm.ITarget {
     };
 }
 /*
- *  @(#) gnu.targets.arm; 1, 0, 0,0; 2-10-2017 09:06:31; /db/ztree/library/trees/xdctargets/xdctargets-m11/src/ xlibrary
+ *  @(#) gnu.targets.arm; 1, 0, 0,1; 7-27-2017 11:46:57; /db/ztree/library/trees/xdctargets/xdctargets-o04/src/ xlibrary
 
  */
 

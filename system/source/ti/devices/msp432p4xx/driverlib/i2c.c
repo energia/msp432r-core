@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -201,9 +196,11 @@ void I2C_masterSendSingleByte(uint32_t moduleInstance, uint8_t txData)
     EUSCI_B_CMSIS(moduleInstance)->CTLW0 |= EUSCI_B_CTLW0_TR
             + EUSCI_B_CTLW0_TXSTT;
 
-    //Poll for transmit interrupt flag.
-    while (!(EUSCI_B_CMSIS(moduleInstance)->IFG & EUSCI_B_IFG_TXIFG))
-        ;
+    //Poll for transmit interrupt flag and start condition flag.
+    while ((BITBAND_PERI(EUSCI_B_CMSIS(moduleInstance)->CTLW0,
+                EUSCI_B_CTLW0_TXSTT_OFS)
+                || !BITBAND_PERI(EUSCI_B_CMSIS(moduleInstance)->IFG,
+                        EUSCI_B_IFG_TXIFG0_OFS)));
 
     //Send single byte data.
     EUSCI_B_CMSIS(moduleInstance)->TXBUF = txData;
@@ -287,10 +284,11 @@ void I2C_masterSendMultiByteStart(uint32_t moduleInstance, uint8_t txData)
     EUSCI_B_CMSIS(moduleInstance)->CTLW0 |= EUSCI_B_CTLW0_TR
             + EUSCI_B_CTLW0_TXSTT;
 
-    //Poll for transmit interrupt flag.
-    while (!BITBAND_PERI(EUSCI_B_CMSIS(moduleInstance)->IFG,
-            EUSCI_B_IFG_TXIFG0_OFS))
-        ;
+    //Poll for transmit interrupt flag and start condition flag.
+    while (BITBAND_PERI(EUSCI_B_CMSIS(moduleInstance)->CTLW0,
+                EUSCI_B_CTLW0_TXSTT_OFS)
+                || !BITBAND_PERI(EUSCI_B_CMSIS(moduleInstance)->IFG,
+                        EUSCI_B_IFG_TXIFG0_OFS));
 
     //Send single byte data.
     EUSCI_B_CMSIS(moduleInstance)->TXBUF = txData;
@@ -316,10 +314,12 @@ bool I2C_masterSendMultiByteStartWithTimeout(uint32_t moduleInstance,
     EUSCI_B_CMSIS(moduleInstance)->CTLW0 |= EUSCI_B_CTLW0_TR
             + EUSCI_B_CTLW0_TXSTT;
 
-    //Poll for transmit interrupt flag.
-    while ((!(BITBAND_PERI(EUSCI_B_CMSIS(moduleInstance)->IFG,
-            EUSCI_B_IFG_TXIFG0_OFS)) && --timeout))
-        ;
+    //Poll for transmit interrupt flag and start condition flag.
+    while ((BITBAND_PERI(EUSCI_B_CMSIS(moduleInstance)->CTLW0,
+                EUSCI_B_CTLW0_TXSTT_OFS)
+                || !BITBAND_PERI(EUSCI_B_CMSIS(moduleInstance)->IFG,
+                        EUSCI_B_IFG_TXIFG0_OFS)) && --timeout);
+
 
     //Check if transfer timed out
     if (timeout == 0)

@@ -113,7 +113,7 @@
  *  You will need to check the device specific timer driver implementation's
  *  header file for example configuration.
  *
- *  ### Initializing the timer Driver #
+ *  ### Initializing the Timer Driver #
  *
  *  Timer_init() must be called before any other timer APIs. This function
  *  calls the device implementation's timer initialization function, for each
@@ -122,7 +122,9 @@
  *  ### Modes of Operation #
  *
  *  The timer driver supports four modes of operation which may be specified in
- *  the Timer_Params.
+ *  the Timer_Params. The device specific implementation may configure the timer
+ *  peripheral as an up or down counter. In any case, Timer_getCount() will
+ *  return a value characteristic of an up counter.
  *
  *  #Timer_ONESHOT_CALLBACK is non-blocking. After Timer_start() is called,
  *  the calling thread will continue execution. When the timer interrupt
@@ -133,7 +135,7 @@
  *  invoked.
  *
  *  #Timer_ONESHOT_BLOCKING is a blocking call. A semaphore is used to block
- *  the calling thead's execution until the timer generates an interrupt. If
+ *  the calling thread's execution until the timer generates an interrupt. If
  *  Timer_stop() is called, the calling thread will become unblocked
  *  immediately. The behavior of the timer in this mode is similar to a sleep
  *  function.
@@ -171,17 +173,18 @@
  *  #include <ti/drivers/timer/TimerMSP432.h>
  *  @endcode
  *
- *******************************************************************************
+ *  ============================================================================
  */
+
 #ifndef ti_drivers_Timer__include
 #define ti_drivers_Timer__include
-
-#include <stdint.h>
 
 #ifdef __cplusplus
 extern "C"
 {
 #endif
+
+#include <stdint.h>
 
 /*!
  * Common Timer_control command code reservation offset.
@@ -255,7 +258,7 @@ typedef enum Timer_Mode_ {
  *  @brief Timer period unit enum
  *
  *  This enum defines the units that may be specified for the period
- *  in #Timer_Params.
+ *  in #Timer_Params. This unit has no effect with Timer_getCounts.
  */
 typedef enum Timer_PeriodUnits_ {
     Timer_PERIOD_US,      /*!< Period specified in micro seconds. */
@@ -382,7 +385,7 @@ typedef struct Timer_FxnTable_ {
  *  @sa     Timer_init()
  */
 typedef struct Timer_Config_ {
-    /*! Pointer to a table of driver-specific implementations of Timer APIs. */
+    /*! Pointer to a table of driver-specific implementations of timer APIs. */
     Timer_FxnTable const *fxnTablePtr;
 
     /*! Pointer to a driver specific data object. */
@@ -391,6 +394,18 @@ typedef struct Timer_Config_ {
     /*! Pointer to a driver specific hardware attributes structure. */
     void           const *hwAttrs;
 } Timer_Config;
+
+/*!
+ *  @brief  Function to close a timer. The corresponding timer to the
+ *          Timer_Handle becomes an available timer resource.
+ *
+ *  @pre    Timer_open() has been called.
+ *
+ *  @param  handle  A Timer_Handle returned from Timer_open().
+ *
+ *  @sa     Timer_open()
+ */
+extern void Timer_close(Timer_Handle handle);
 
 /*!
  *  @brief  Function performs device specific features on a given
@@ -415,19 +430,11 @@ extern int_fast16_t Timer_control(Timer_Handle handle, uint_fast16_t cmd,
     void *arg);
 
 /*!
- *  @brief  Function to close a timer. The corresponding timer to the
- *          Timer_Handle becomes an available timer resource.
- *
- *  @pre    Timer_open() has been called.
- *
- *  @param  handle  A Timer_Handle returned from Timer_open().
- *
- *  @sa     Timer_open()
- */
-extern void Timer_close(Timer_Handle handle);
-
-/*!
- *  @brief  Function to get the current count of a timer.
+ *  @brief  Function to get the current count of a timer. The value returned
+ *          represents timer counts. The value returned is always
+ *          characteristic of an up counter. This is true even if the timer
+ *          peripheral is counting down. Some device specific implementations
+ *          may employ a prescaler in addition to this timer count.
  *
  *  @pre    Timer_open() has been called.
  *
@@ -435,7 +442,7 @@ extern void Timer_close(Timer_Handle handle);
  *
  *  @sa     Timer_open()
  *
- *  @return The current count of the timer.
+ *  @return The current count of the timer in timer ticks.
  *
  */
 extern uint32_t Timer_getCount(Timer_Handle handle);
@@ -447,7 +454,7 @@ extern uint32_t Timer_getCount(Timer_Handle handle);
  *
  *  @pre    The Timer_config structure must exist and be persistent before this
  *          function can be called. This function must also be called before
- *          any other UART driver APIs.
+ *          any other timer driver APIs.
  *
  *  @sa     Timer_open()
  */
@@ -464,7 +471,7 @@ extern void Timer_init(void);
  *
  *  @pre    Timer_init() has been called.
  *
- *  @param  index         Logical peripheral number for the Timer indexed into
+ *  @param  index         Logical peripheral number for the timer indexed into
  *                        the Timer_config table.
  *
  *  @param  params        Pointer to an parameter block, if NULL it will use
@@ -489,7 +496,7 @@ extern Timer_Handle Timer_open(uint_least8_t index, Timer_Params *params);
  *      timerMode = Timer_ONESHOT_BLOCKING
  *      periodUnit = Timer_PERIOD_COUNTS
  *      timerCallback = NULL
- *      period = ~0
+ *      period = (uint16_t) ~0
  */
 extern void Timer_Params_init(Timer_Params *params);
 

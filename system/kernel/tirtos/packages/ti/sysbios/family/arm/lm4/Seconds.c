@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2014-2015, Texas Instruments Incorporated
+ * Copyright (c) 2014-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -82,22 +82,25 @@ UInt32 Seconds_get(Void)
  */
 UInt32 Seconds_getTime(Seconds_Time *ts)
 {
-    UInt32 seconds;
+    UInt32 seconds_1, seconds_2;
     UInt32 subSeconds;
-    UInt64 nsecs;
+    UInt32 nsecs;
     UInt   key;
 
     key = Hwi_disable();
 
-    seconds = HWREG(HIB_RTCC);
-    subSeconds = HWREG(HIB_RTCSS) & 0x7fff;
+    do {
+        seconds_1 = HWREG(HIB_RTCC);
+        subSeconds = HWREG(HIB_RTCSS) & 0x7fff;
+        seconds_2 = HWREG(HIB_RTCC);
+    } while (seconds_1 != seconds_2);
 
     Hwi_restore(key);
 
-    nsecs = (1000000000 * (UInt64)subSeconds) / 32768;
-    ts->secs = seconds - Seconds_module->refSeconds +
+    nsecs = (1000000000 / 32768) * subSeconds;
+    ts->secs = seconds_1 - Seconds_module->refSeconds +
             Seconds_module->setSeconds;
-    ts->nsecs = (UInt32)nsecs;
+    ts->nsecs = nsecs;
 
     return (0);
 }

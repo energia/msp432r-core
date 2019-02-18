@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -266,11 +261,12 @@ extern bool RTC_C_setTemperatureCompensation(uint_fast16_t offsetDirection,
 //!        following members and corresponding values:
 //!        - \b   seconds between 0-59
 //!        - \b   minutes between 0-59
-//!        - \b   hours between 0-24
+//!        - \b   hours between 0-23
 //!        - \b   dayOfWeek between 0-6
-//!        - \b   dayOfmonth between 0-31
+//!        - \b   dayOfmonth between 1-31
+//!        - \b   month between 1-12
 //!        - \b   year between 0-4095
-//!        \note Values beyond the ones specified may result in eradic behavior.
+//!        \note Values beyond the ones specified may result in erratic behavior.
 //! \param formatSelect is the format for the Calendar registers to use.
 //!        Valid values are
 //!        - \b   RTC_C_FORMAT_BINARY [Default]

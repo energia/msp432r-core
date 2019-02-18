@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 import java.util.*;
 import org.mozilla.javascript.*;
@@ -11,7 +11,7 @@ import xdc.services.spec.Session;
 
 public class ti_sysbios_family_arm_cc26xx
 {
-    static final String VERS = "@(#) xdc-D05\n";
+    static final String VERS = "@(#) xdc-D20\n";
 
     static final Proto.Elm $$T_Bool = Proto.Elm.newBool();
     static final Proto.Elm $$T_Num = Proto.Elm.newNum();
@@ -807,7 +807,6 @@ public class ti_sysbios_family_arm_cc26xx
                 po.addFld("label", $$T_Str, $$UNDEF, "w");
                 po.addFld("id", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
                 po.addFld("startMode", $$T_Str, $$UNDEF, "w");
-                po.addFld("period", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
                 po.addFld("tickFxn", new Proto.Arr($$T_Str, false), $$DEFAULT, "w");
                 po.addFld("arg", new Proto.Adr("xdc_UArg", "Pv"), $$UNDEF, "w");
                 po.addFld("hwiHandle", $$T_Str, $$UNDEF, "w");
@@ -820,12 +819,9 @@ public class ti_sysbios_family_arm_cc26xx
                 po.addFld("device", $$T_Str, $$UNDEF, "w");
                 po.addFld("devAddr", $$T_Str, $$UNDEF, "w");
                 po.addFld("intNum", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
-                po.addFld("period", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
-                po.addFld("period64", Proto.Elm.newCNum("(xdc_UInt64)"), $$UNDEF, "w");
-                po.addFld("currCount", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
-                po.addFld("remainingCount", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
-                po.addFld("prevThreshold", Proto.Elm.newCNum("(xdc_UInt64)"), $$UNDEF, "w");
-                po.addFld("nextThreshold", Proto.Elm.newCNum("(xdc_UInt64)"), $$UNDEF, "w");
+                po.addFld("currCount", Proto.Elm.newCNum("(xdc_UInt32)"), $$UNDEF, "w");
+                po.addFld("nextCompareCount", Proto.Elm.newCNum("(xdc_UInt32)"), $$UNDEF, "w");
+                po.addFld("remainingCount", Proto.Elm.newCNum("(xdc_UInt32)"), $$UNDEF, "w");
                 po.addFld("state", $$T_Str, $$UNDEF, "w");
         // struct Timer.ModuleView
         po = (Proto.Obj)om.findStrict("ti.sysbios.family.arm.cc26xx.Timer$$ModuleView", "ti.sysbios.family.arm.cc26xx");

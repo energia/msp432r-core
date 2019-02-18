@@ -2,22 +2,22 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
  *     VIRTUAL FUNCTIONS
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -348,7 +348,8 @@ __extern xdc_UInt ti_uia_events_UIAThreadCtx_setOldValue__E( xdc_UInt newValue )
  */
 
 /* Module_upCast */
-static inline ti_uia_events_IUIACtx_Module ti_uia_events_UIAThreadCtx_Module_upCast( void )
+static inline ti_uia_events_IUIACtx_Module ti_uia_events_UIAThreadCtx_Module_upCast(void);
+static inline ti_uia_events_IUIACtx_Module ti_uia_events_UIAThreadCtx_Module_upCast(void)
 {
     return (ti_uia_events_IUIACtx_Module)&ti_uia_events_UIAThreadCtx_Module__FXNS__C;
 }
@@ -357,7 +358,8 @@ static inline ti_uia_events_IUIACtx_Module ti_uia_events_UIAThreadCtx_Module_upC
 #define ti_uia_events_UIAThreadCtx_Module_to_ti_uia_events_IUIACtx ti_uia_events_UIAThreadCtx_Module_upCast
 
 /* Module_upCast2 */
-static inline ti_uia_events_IUIAEvent_Module ti_uia_events_UIAThreadCtx_Module_upCast2( void )
+static inline ti_uia_events_IUIAEvent_Module ti_uia_events_UIAThreadCtx_Module_upCast2(void);
+static inline ti_uia_events_IUIAEvent_Module ti_uia_events_UIAThreadCtx_Module_upCast2(void)
 {
     return (ti_uia_events_IUIAEvent_Module)&ti_uia_events_UIAThreadCtx_Module__FXNS__C;
 }
@@ -380,25 +382,29 @@ static inline ti_uia_events_IUIAEvent_Module ti_uia_events_UIAThreadCtx_Module_u
 #define ti_uia_events_UIAThreadCtx_Module_heap() ti_uia_events_UIAThreadCtx_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_uia_events_UIAThreadCtx_Module__id ti_uia_events_UIAThreadCtx_Module_id(void);
 static inline CT__ti_uia_events_UIAThreadCtx_Module__id ti_uia_events_UIAThreadCtx_Module_id( void ) 
 {
     return ti_uia_events_UIAThreadCtx_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_uia_events_UIAThreadCtx_Module_hasMask( void ) 
+static inline xdc_Bool ti_uia_events_UIAThreadCtx_Module_hasMask(void);
+static inline xdc_Bool ti_uia_events_UIAThreadCtx_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_uia_events_UIAThreadCtx_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_uia_events_UIAThreadCtx_Module_getMask(void);
 static inline xdc_Bits16 ti_uia_events_UIAThreadCtx_Module_getMask( void ) 
 {
     return ti_uia_events_UIAThreadCtx_Module__diagsMask__C != NULL ? *ti_uia_events_UIAThreadCtx_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_uia_events_UIAThreadCtx_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_uia_events_UIAThreadCtx_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_uia_events_UIAThreadCtx_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_uia_events_UIAThreadCtx_Module__diagsMask__C != NULL) {
         *ti_uia_events_UIAThreadCtx_Module__diagsMask__C = mask;

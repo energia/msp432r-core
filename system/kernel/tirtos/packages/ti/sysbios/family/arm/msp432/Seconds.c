@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -155,6 +155,9 @@ UInt32 Seconds_get(Void)
     currTime.tm_mday = RTCDAY;
     currTime.tm_mon = RTCMON;
     currTime.tm_year = RTCYEAR;
+
+    /* Daylight savings time information is not available */
+    currTime.tm_isdst = -1;
 
     Hwi_restore(key);
 

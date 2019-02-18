@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 import java.util.*;
 import org.mozilla.javascript.*;
@@ -11,7 +11,7 @@ import xdc.services.spec.Session;
 
 public class ti_sysbios_knl
 {
-    static final String VERS = "@(#) xdc-D05\n";
+    static final String VERS = "@(#) xdc-D20\n";
 
     static final Proto.Elm $$T_Bool = Proto.Elm.newBool();
     static final Proto.Elm $$T_Num = Proto.Elm.newNum();
@@ -251,6 +251,8 @@ public class ti_sysbios_knl
         // decls 
         spo = (Proto.Obj)om.bind("ti.sysbios.knl.Swi$$HookSet", new Proto.Obj());
         om.bind("ti.sysbios.knl.Swi.HookSet", new Proto.Str(spo, false));
+        spo = (Proto.Obj)om.bind("ti.sysbios.knl.Swi$$Struct2__", new Proto.Obj());
+        om.bind("ti.sysbios.knl.Swi.Struct2__", new Proto.Str(spo, false));
         spo = (Proto.Obj)om.bind("ti.sysbios.knl.Swi$$BasicView", new Proto.Obj());
         om.bind("ti.sysbios.knl.Swi.BasicView", new Proto.Str(spo, false));
         spo = (Proto.Obj)om.bind("ti.sysbios.knl.Swi$$ModuleView", new Proto.Obj());
@@ -488,6 +490,7 @@ public class ti_sysbios_knl
     void Swi$$CONSTS()
     {
         // module Swi
+        om.bind("ti.sysbios.knl.Swi.construct2", new Extern("ti_sysbios_knl_Swi_construct2__E", "ti_sysbios_knl_Swi_Handle(*)(ti_sysbios_knl_Swi_Struct2__*,xdc_Void(*)(xdc_UArg,xdc_UArg),ti_sysbios_knl_Swi_Params*)", true, false));
         om.bind("ti.sysbios.knl.Swi.startup", new Extern("ti_sysbios_knl_Swi_startup__E", "xdc_Void(*)(xdc_Void)", true, false));
         om.bind("ti.sysbios.knl.Swi.enabled", new Extern("ti_sysbios_knl_Swi_enabled__E", "xdc_Bool(*)(xdc_Void)", true, false));
         om.bind("ti.sysbios.knl.Swi.unlockSched", new Extern("ti_sysbios_knl_Swi_unlockSched__E", "xdc_Void(*)(xdc_Void)", true, false));
@@ -1421,6 +1424,27 @@ public class ti_sysbios_knl
         fxn = Global.eval("function() { return $$alignof(xdc.om['ti.sysbios.knl.Swi.HookSet']); }");
         so.bind("$alignof", fxn);
         fxn = Global.eval("function(fld) { return $$offsetof(xdc.om['ti.sysbios.knl.Swi.HookSet'], fld); }");
+        so.bind("$offsetof", fxn);
+        so = (Proto.Str)om.findStrict("ti.sysbios.knl.Swi.Struct2__", "ti.sysbios.knl");
+        sizes.clear();
+        sizes.add(Global.newArray("qElem", "Sti.sysbios.knl.Queue;Elem"));
+        sizes.add(Global.newArray("fxn", "UFxn"));
+        sizes.add(Global.newArray("arg0", "UIArg"));
+        sizes.add(Global.newArray("arg1", "UIArg"));
+        sizes.add(Global.newArray("priority", "UInt"));
+        sizes.add(Global.newArray("mask", "UInt"));
+        sizes.add(Global.newArray("posted", "UShort"));
+        sizes.add(Global.newArray("initTrigger", "UInt"));
+        sizes.add(Global.newArray("trigger", "UInt"));
+        sizes.add(Global.newArray("readyQ", "UPtr"));
+        sizes.add(Global.newArray("hookEnv", "UPtr"));
+        sizes.add(Global.newArray("name", "UPtr"));
+        so.bind("$$sizes", Global.newArray(sizes.toArray()));
+        fxn = Global.eval("function() { return $$sizeof(xdc.om['ti.sysbios.knl.Swi.Struct2__']); }");
+        so.bind("$sizeof", fxn);
+        fxn = Global.eval("function() { return $$alignof(xdc.om['ti.sysbios.knl.Swi.Struct2__']); }");
+        so.bind("$alignof", fxn);
+        fxn = Global.eval("function(fld) { return $$offsetof(xdc.om['ti.sysbios.knl.Swi.Struct2__'], fld); }");
         so.bind("$offsetof", fxn);
         so = (Proto.Str)om.findStrict("ti.sysbios.knl.Swi.Instance_State", "ti.sysbios.knl");
         sizes.clear();
@@ -2372,6 +2396,24 @@ public class ti_sysbios_knl
                 po.addFld("beginFxn", new Proto.Adr("xdc_Void(*)(ti_sysbios_knl_Swi_Handle)", "PFv"), $$UNDEF, "w");
                 po.addFld("endFxn", new Proto.Adr("xdc_Void(*)(ti_sysbios_knl_Swi_Handle)", "PFv"), $$UNDEF, "w");
                 po.addFld("deleteFxn", new Proto.Adr("xdc_Void(*)(ti_sysbios_knl_Swi_Handle)", "PFv"), $$UNDEF, "w");
+        // struct Swi.Struct2__
+        po = (Proto.Obj)om.findStrict("ti.sysbios.knl.Swi$$Struct2__", "ti.sysbios.knl");
+        po.init("ti.sysbios.knl.Swi.Struct2__", null);
+                po.addFld("$hostonly", $$T_Num, 0, "r");
+                po.addFld("qElem", (Proto)om.findStrict("ti.sysbios.knl.Queue.Elem", "ti.sysbios.knl"), $$DEFAULT, "w");
+                po.addFld("fxn", new Proto.Adr("xdc_Void(*)(xdc_UArg,xdc_UArg)", "PFv"), $$UNDEF, "w");
+                po.addFld("arg0", new Proto.Adr("xdc_UArg", "Pv"), $$UNDEF, "w");
+                po.addFld("arg1", new Proto.Adr("xdc_UArg", "Pv"), $$UNDEF, "w");
+                po.addFld("priority", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
+                po.addFld("mask", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
+                po.addFld("posted", $$T_Bool, $$UNDEF, "w");
+                po.addFld("initTrigger", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
+                po.addFld("trigger", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
+                po.addFld("readyQ", (Proto)om.findStrict("ti.sysbios.knl.Queue.Handle", "ti.sysbios.knl"), $$UNDEF, "w");
+                po.addFld("hookEnv", new Proto.Arr(new Proto.Adr("xdc_Ptr", "Pv"), false), $$DEFAULT, "w");
+                po.addFld("name", new Proto.Adr("xdc_runtime_Types_CordAddr__*", "PE"), $$UNDEF, "w");
+        // typedef Swi.Struct2
+        om.bind("ti.sysbios.knl.Swi.Struct2", (Proto)om.findStrict("ti.sysbios.knl.Swi.Struct2__", "ti.sysbios.knl"));
         // struct Swi.BasicView
         po = (Proto.Obj)om.findStrict("ti.sysbios.knl.Swi$$BasicView", "ti.sysbios.knl");
         po.init("ti.sysbios.knl.Swi.BasicView", null);
@@ -2899,6 +2941,8 @@ public class ti_sysbios_knl
         vo = (Value.Obj)om.findStrict("ti.sysbios.knl.Swi", "ti.sysbios.knl");
         vo.bind("HookSet$fetchDesc", Global.newObject("type", "ti.sysbios.knl.Swi.HookSet", "isScalar", false));
         po = (Proto.Obj)om.findStrict("ti.sysbios.knl.Swi$$HookSet", "ti.sysbios.knl");
+        vo.bind("Struct2__$fetchDesc", Global.newObject("type", "ti.sysbios.knl.Swi.Struct2__", "isScalar", false));
+        po = (Proto.Obj)om.findStrict("ti.sysbios.knl.Swi$$Struct2__", "ti.sysbios.knl");
         vo.bind("Instance_State$fetchDesc", Global.newObject("type", "ti.sysbios.knl.Swi.Instance_State", "isScalar", false));
         po = (Proto.Obj)om.findStrict("ti.sysbios.knl.Swi$$Instance_State", "ti.sysbios.knl");
         vo.bind("Module_State$fetchDesc", Global.newObject("type", "ti.sysbios.knl.Swi.Module_State", "isScalar", false));
@@ -3860,6 +3904,9 @@ public class ti_sysbios_knl
         vo.bind("FuncPtr", om.findStrict("ti.sysbios.knl.Swi.FuncPtr", "ti.sysbios.knl"));
         vo.bind("HookSet", om.findStrict("ti.sysbios.knl.Swi.HookSet", "ti.sysbios.knl"));
         tdefs.add(om.findStrict("ti.sysbios.knl.Swi.HookSet", "ti.sysbios.knl"));
+        vo.bind("Struct2__", om.findStrict("ti.sysbios.knl.Swi.Struct2__", "ti.sysbios.knl"));
+        tdefs.add(om.findStrict("ti.sysbios.knl.Swi.Struct2__", "ti.sysbios.knl"));
+        vo.bind("Struct2", om.findStrict("ti.sysbios.knl.Swi.Struct2", "ti.sysbios.knl"));
         vo.bind("BasicView", om.findStrict("ti.sysbios.knl.Swi.BasicView", "ti.sysbios.knl"));
         tdefs.add(om.findStrict("ti.sysbios.knl.Swi.BasicView", "ti.sysbios.knl"));
         vo.bind("ModuleView", om.findStrict("ti.sysbios.knl.Swi.ModuleView", "ti.sysbios.knl"));
@@ -3904,6 +3951,7 @@ public class ti_sysbios_knl
             vo.bind("$$meta_iobj", om.has("ti.sysbios.knl.Swi$$instance$static$init", null) ? 1 : 0);
             vo.bind("__initObject", Global.get("ti$sysbios$knl$Swi$$__initObject"));
         }//isCFG
+        vo.bind("construct2", om.findStrict("ti.sysbios.knl.Swi.construct2", "ti.sysbios.knl"));
         vo.bind("startup", om.findStrict("ti.sysbios.knl.Swi.startup", "ti.sysbios.knl"));
         vo.bind("enabled", om.findStrict("ti.sysbios.knl.Swi.enabled", "ti.sysbios.knl"));
         vo.bind("unlockSched", om.findStrict("ti.sysbios.knl.Swi.unlockSched", "ti.sysbios.knl"));
@@ -3920,7 +3968,7 @@ public class ti_sysbios_knl
         vo.bind("run", om.findStrict("ti.sysbios.knl.Swi.run", "ti.sysbios.knl"));
         vo.bind("postInit", om.findStrict("ti.sysbios.knl.Swi.postInit", "ti.sysbios.knl"));
         vo.bind("restoreSMP", om.findStrict("ti.sysbios.knl.Swi.restoreSMP", "ti.sysbios.knl"));
-        vo.bind("$$fxntab", Global.newArray("ti_sysbios_knl_Swi_Handle__label__E", "ti_sysbios_knl_Swi_Module__startupDone__E", "ti_sysbios_knl_Swi_Object__create__E", "ti_sysbios_knl_Swi_Object__delete__E", "ti_sysbios_knl_Swi_Object__get__E", "ti_sysbios_knl_Swi_Object__first__E", "ti_sysbios_knl_Swi_Object__next__E", "ti_sysbios_knl_Swi_Params__init__E", "ti_sysbios_knl_Swi_startup__E", "ti_sysbios_knl_Swi_enabled__E", "ti_sysbios_knl_Swi_unlockSched__E", "ti_sysbios_knl_Swi_disable__E", "ti_sysbios_knl_Swi_enable__E", "ti_sysbios_knl_Swi_restore__E", "ti_sysbios_knl_Swi_restoreHwi__E", "ti_sysbios_knl_Swi_self__E", "ti_sysbios_knl_Swi_getTrigger__E", "ti_sysbios_knl_Swi_raisePri__E", "ti_sysbios_knl_Swi_restorePri__E", "ti_sysbios_knl_Swi_andn__E", "ti_sysbios_knl_Swi_dec__E", "ti_sysbios_knl_Swi_getHookContext__E", "ti_sysbios_knl_Swi_setHookContext__E", "ti_sysbios_knl_Swi_getPri__E", "ti_sysbios_knl_Swi_getFunc__E", "ti_sysbios_knl_Swi_getAttrs__E", "ti_sysbios_knl_Swi_setAttrs__E", "ti_sysbios_knl_Swi_inc__E", "ti_sysbios_knl_Swi_or__E", "ti_sysbios_knl_Swi_post__E"));
+        vo.bind("$$fxntab", Global.newArray("ti_sysbios_knl_Swi_Handle__label__E", "ti_sysbios_knl_Swi_Module__startupDone__E", "ti_sysbios_knl_Swi_Object__create__E", "ti_sysbios_knl_Swi_Object__delete__E", "ti_sysbios_knl_Swi_Object__get__E", "ti_sysbios_knl_Swi_Object__first__E", "ti_sysbios_knl_Swi_Object__next__E", "ti_sysbios_knl_Swi_Params__init__E", "ti_sysbios_knl_Swi_construct2__E", "ti_sysbios_knl_Swi_startup__E", "ti_sysbios_knl_Swi_enabled__E", "ti_sysbios_knl_Swi_unlockSched__E", "ti_sysbios_knl_Swi_disable__E", "ti_sysbios_knl_Swi_enable__E", "ti_sysbios_knl_Swi_restore__E", "ti_sysbios_knl_Swi_restoreHwi__E", "ti_sysbios_knl_Swi_self__E", "ti_sysbios_knl_Swi_getTrigger__E", "ti_sysbios_knl_Swi_raisePri__E", "ti_sysbios_knl_Swi_restorePri__E", "ti_sysbios_knl_Swi_andn__E", "ti_sysbios_knl_Swi_dec__E", "ti_sysbios_knl_Swi_getHookContext__E", "ti_sysbios_knl_Swi_setHookContext__E", "ti_sysbios_knl_Swi_getPri__E", "ti_sysbios_knl_Swi_getFunc__E", "ti_sysbios_knl_Swi_getAttrs__E", "ti_sysbios_knl_Swi_setAttrs__E", "ti_sysbios_knl_Swi_setPri__E", "ti_sysbios_knl_Swi_inc__E", "ti_sysbios_knl_Swi_or__E", "ti_sysbios_knl_Swi_post__E"));
         vo.bind("$$logEvtCfgs", Global.newArray("LM_begin", "LD_end", "LM_post"));
         vo.bind("$$errorDescCfgs", Global.newArray());
         vo.bind("$$assertDescCfgs", Global.newArray("A_swiDisabled", "A_badPriority"));

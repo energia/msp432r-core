@@ -64,6 +64,26 @@ extern "C" {
 #include <stddef.h>
 
 /*!
+ *  @brief    Number of bytes greater than or equal to the size of any RTOS
+ *            MutexP object.
+ *
+ *  nortos:   12
+ *  SysBIOS:  40
+ */
+#define MutexP_STRUCT_SIZE   (40)
+
+/*!
+ *  @brief    MutexP structure.
+ *
+ *  Opaque structure that should be large enough to hold any of the
+ *  RTOS specific MutexP objects.
+ */
+typedef union MutexP_Struct {
+    uint32_t dummy;  /*!< Align object */
+    char     data[MutexP_STRUCT_SIZE];
+} MutexP_Struct;
+
+/*!
  *  @brief    Status codes for MutexP APIs
  */
 typedef enum MutexP_Status {
@@ -72,16 +92,6 @@ typedef enum MutexP_Status {
     /*! API failed */
     MutexP_FAILURE = -1
 } MutexP_Status;
-
-/*!
- *  @brief    Number of bytes greater than or equal to the size of any RTOS
- *            MutexP object.
- *
- *  nortos:   12
- *  FreeRTOS: 84
- *  SysBIOS:  40
- */
-#define MutexP_STRUCT_SIZE   (84)
 
 /*!
  *  @brief    Opaque client reference to an instance of a MutexP
@@ -102,23 +112,9 @@ typedef void *MutexP_Handle;
  *  ::MutexP_Params_init.
  */
 typedef struct MutexP_Params {
-    char *name;           /*!< Name of the mutex instance. Memory must persist
-                               for the life of the mutex instance */
     void (*callback)(void); /*!< Callback while waiting for mutex unlock */
 } MutexP_Params;
 
-/*!
- *  @brief    MutexP structure.
- *
- *  Opaque structure that should be large enough to hold any of the
- *  RTOS specific MutexP objects.
- */
-typedef struct MutexP_Struct {
-    union {
-        double d;  /*!< Align object */
-        char   data[MutexP_STRUCT_SIZE];
-    } mutex;
-} MutexP_Struct;
 
 /*!
  *  @brief  Function to construct a mutex.
@@ -135,6 +131,16 @@ extern MutexP_Handle MutexP_construct(MutexP_Struct *handle,
         MutexP_Params *params);
 
 /*!
+ *  @brief  Function to destruct a mutex object
+ *
+ *  @param  mutexP  Pointer to a MutexP_Struct object that was passed to
+ *                  MutexP_construct().
+ *
+ *  @return
+ */
+extern void MutexP_destruct(MutexP_Struct *mutexP);
+
+/*!
  *  @brief  Function to create a mutex.
  *
  *  @param  params  Pointer to the instance configuration parameters. NULL
@@ -149,28 +155,14 @@ extern MutexP_Handle MutexP_create(MutexP_Params *params);
  *  @brief  Function to delete a mutex.
  *
  *  @param  handle  A MutexP_Handle returned from MutexP_create
- *
- *  @return Status of the functions
- *    - MutexP_OK: Deleted the mutex instance
- *    - MutexP_FAILED: Failed to delete the mutex instance
  */
-extern MutexP_Status MutexP_delete(MutexP_Handle handle);
-
-/*!
- *  @brief  Function to destruct a mutex object
- *
- *  @param  mutexP  Pointer to a MutexP_Struct object that was passed to
- *                  MutexP_construct().
- *
- *  @return
- */
-extern void MutexP_destruct(MutexP_Struct *mutexP);
+extern void MutexP_delete(MutexP_Handle handle);
 
 /*!
  *  @brief  Initialize params structure to default values.
  *
  *  The default parameters are:
- *   - name: NULL
+ *      callback - NULL.
  *
  *  @param params  Pointer to the instance configuration parameters.
  */

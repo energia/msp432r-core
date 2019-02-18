@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -41,6 +36,10 @@
 /* DriverLib Includes */
 #include <ti/devices/msp432p4xx/driverlib/sysctl_a.h>
 #include <ti/devices/msp432p4xx/driverlib/debug.h>
+
+/* Define to ensure that our current MSP432 has the SYSCTL_A module. This
+    definition is included in the device specific header file */
+#ifdef __MCU_HAS_SYSCTL_A__
 
 void SysCtl_A_getTLVInfo(uint_fast8_t tag, uint_fast8_t instance,
         uint_fast8_t *length, uint32_t **data_address)
@@ -410,3 +409,5 @@ bool SysCtl_A_disableSRAMRetention(uint32_t startAddr,
 
     return true;
 }
+
+#endif /* __MCU_HAS_SYSCTL_A__ */

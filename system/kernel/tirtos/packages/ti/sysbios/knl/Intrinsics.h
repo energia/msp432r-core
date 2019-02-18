@@ -2,22 +2,22 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
  *     VIRTUAL FUNCTIONS
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -236,7 +236,7 @@ __extern __FAR__ const CT__ti_sysbios_knl_Intrinsics_Object__table ti_sysbios_kn
 struct ti_sysbios_knl_Intrinsics_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_UInt (*maxbit)(xdc_UInt);
+    xdc_UInt (*maxbit)(xdc_UInt bits);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_knl_Intrinsics_Module__FXNS__CR
@@ -265,7 +265,8 @@ __extern xdc_Bool ti_sysbios_knl_Intrinsics_Module__startupDone__S( void );
  */
 
 /* Module_upCast */
-static inline ti_sysbios_interfaces_IIntrinsicsSupport_Module ti_sysbios_knl_Intrinsics_Module_upCast( void )
+static inline ti_sysbios_interfaces_IIntrinsicsSupport_Module ti_sysbios_knl_Intrinsics_Module_upCast(void);
+static inline ti_sysbios_interfaces_IIntrinsicsSupport_Module ti_sysbios_knl_Intrinsics_Module_upCast(void)
 {
     return (ti_sysbios_interfaces_IIntrinsicsSupport_Module)&ti_sysbios_knl_Intrinsics_Module__FXNS__C;
 }
@@ -288,25 +289,29 @@ static inline ti_sysbios_interfaces_IIntrinsicsSupport_Module ti_sysbios_knl_Int
 #define ti_sysbios_knl_Intrinsics_Module_heap() ti_sysbios_knl_Intrinsics_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_knl_Intrinsics_Module__id ti_sysbios_knl_Intrinsics_Module_id(void);
 static inline CT__ti_sysbios_knl_Intrinsics_Module__id ti_sysbios_knl_Intrinsics_Module_id( void ) 
 {
     return ti_sysbios_knl_Intrinsics_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_sysbios_knl_Intrinsics_Module_hasMask( void ) 
+static inline xdc_Bool ti_sysbios_knl_Intrinsics_Module_hasMask(void);
+static inline xdc_Bool ti_sysbios_knl_Intrinsics_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_sysbios_knl_Intrinsics_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_sysbios_knl_Intrinsics_Module_getMask(void);
 static inline xdc_Bits16 ti_sysbios_knl_Intrinsics_Module_getMask( void ) 
 {
     return ti_sysbios_knl_Intrinsics_Module__diagsMask__C != NULL ? *ti_sysbios_knl_Intrinsics_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_sysbios_knl_Intrinsics_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_sysbios_knl_Intrinsics_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_sysbios_knl_Intrinsics_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_sysbios_knl_Intrinsics_Module__diagsMask__C != NULL) {
         *ti_sysbios_knl_Intrinsics_Module__diagsMask__C = mask;

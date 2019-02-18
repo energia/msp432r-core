@@ -2,15 +2,15 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
  *     PER-INSTANCE TYPES
@@ -18,7 +18,7 @@
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -276,8 +276,8 @@ struct ti_uia_family_c64p_TimestampC64XLocal_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
     xdc_Bits32 (*get32)(void);
-    xdc_Void (*get64)(xdc_runtime_Types_Timestamp64*);
-    xdc_Void (*getFreq)(xdc_runtime_Types_FreqHz*);
+    xdc_Void (*get64)(xdc_runtime_Types_Timestamp64* result);
+    xdc_Void (*getFreq)(xdc_runtime_Types_FreqHz* freq);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_uia_family_c64p_TimestampC64XLocal_Module__FXNS__CR
@@ -302,7 +302,7 @@ __extern xdc_Int ti_uia_family_c64p_TimestampC64XLocal_Module_startup__F( xdc_In
 
 /* Instance_init__E */
 xdc__CODESECT(ti_uia_family_c64p_TimestampC64XLocal_Instance_init__E, "ti_uia_family_c64p_TimestampC64XLocal_Instance_init")
-__extern xdc_Void ti_uia_family_c64p_TimestampC64XLocal_Instance_init__E(ti_uia_family_c64p_TimestampC64XLocal_Object *, const ti_uia_family_c64p_TimestampC64XLocal_Params *);
+__extern xdc_Void ti_uia_family_c64p_TimestampC64XLocal_Instance_init__E(ti_uia_family_c64p_TimestampC64XLocal_Object *__obj, const ti_uia_family_c64p_TimestampC64XLocal_Params *__prms);
 
 /* create */
 xdc__CODESECT(ti_uia_family_c64p_TimestampC64XLocal_create, "ti_uia_family_c64p_TimestampC64XLocal_create")
@@ -378,7 +378,8 @@ __extern xdc_Void ti_uia_family_c64p_TimestampC64XLocal_setFreq__E( xdc_runtime_
  */
 
 /* Module_upCast */
-static inline ti_uia_runtime_IUIATimestampProvider_Module ti_uia_family_c64p_TimestampC64XLocal_Module_upCast( void )
+static inline ti_uia_runtime_IUIATimestampProvider_Module ti_uia_family_c64p_TimestampC64XLocal_Module_upCast(void);
+static inline ti_uia_runtime_IUIATimestampProvider_Module ti_uia_family_c64p_TimestampC64XLocal_Module_upCast(void)
 {
     return (ti_uia_runtime_IUIATimestampProvider_Module)&ti_uia_family_c64p_TimestampC64XLocal_Module__FXNS__C;
 }
@@ -387,7 +388,8 @@ static inline ti_uia_runtime_IUIATimestampProvider_Module ti_uia_family_c64p_Tim
 #define ti_uia_family_c64p_TimestampC64XLocal_Module_to_ti_uia_runtime_IUIATimestampProvider ti_uia_family_c64p_TimestampC64XLocal_Module_upCast
 
 /* Module_upCast2 */
-static inline xdc_runtime_ITimestampProvider_Module ti_uia_family_c64p_TimestampC64XLocal_Module_upCast2( void )
+static inline xdc_runtime_ITimestampProvider_Module ti_uia_family_c64p_TimestampC64XLocal_Module_upCast2(void);
+static inline xdc_runtime_ITimestampProvider_Module ti_uia_family_c64p_TimestampC64XLocal_Module_upCast2(void)
 {
     return (xdc_runtime_ITimestampProvider_Module)&ti_uia_family_c64p_TimestampC64XLocal_Module__FXNS__C;
 }
@@ -396,7 +398,8 @@ static inline xdc_runtime_ITimestampProvider_Module ti_uia_family_c64p_Timestamp
 #define ti_uia_family_c64p_TimestampC64XLocal_Module_to_xdc_runtime_ITimestampProvider ti_uia_family_c64p_TimestampC64XLocal_Module_upCast2
 
 /* Module_upCast3 */
-static inline xdc_runtime_ITimestampClient_Module ti_uia_family_c64p_TimestampC64XLocal_Module_upCast3( void )
+static inline xdc_runtime_ITimestampClient_Module ti_uia_family_c64p_TimestampC64XLocal_Module_upCast3(void);
+static inline xdc_runtime_ITimestampClient_Module ti_uia_family_c64p_TimestampC64XLocal_Module_upCast3(void)
 {
     return (xdc_runtime_ITimestampClient_Module)&ti_uia_family_c64p_TimestampC64XLocal_Module__FXNS__C;
 }
@@ -419,25 +422,29 @@ static inline xdc_runtime_ITimestampClient_Module ti_uia_family_c64p_TimestampC6
 #define ti_uia_family_c64p_TimestampC64XLocal_Module_heap() ti_uia_family_c64p_TimestampC64XLocal_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_uia_family_c64p_TimestampC64XLocal_Module__id ti_uia_family_c64p_TimestampC64XLocal_Module_id(void);
 static inline CT__ti_uia_family_c64p_TimestampC64XLocal_Module__id ti_uia_family_c64p_TimestampC64XLocal_Module_id( void ) 
 {
     return ti_uia_family_c64p_TimestampC64XLocal_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_uia_family_c64p_TimestampC64XLocal_Module_hasMask( void ) 
+static inline xdc_Bool ti_uia_family_c64p_TimestampC64XLocal_Module_hasMask(void);
+static inline xdc_Bool ti_uia_family_c64p_TimestampC64XLocal_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_uia_family_c64p_TimestampC64XLocal_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_uia_family_c64p_TimestampC64XLocal_Module_getMask(void);
 static inline xdc_Bits16 ti_uia_family_c64p_TimestampC64XLocal_Module_getMask( void ) 
 {
     return ti_uia_family_c64p_TimestampC64XLocal_Module__diagsMask__C != NULL ? *ti_uia_family_c64p_TimestampC64XLocal_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_uia_family_c64p_TimestampC64XLocal_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_uia_family_c64p_TimestampC64XLocal_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_uia_family_c64p_TimestampC64XLocal_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_uia_family_c64p_TimestampC64XLocal_Module__diagsMask__C != NULL) {
         *ti_uia_family_c64p_TimestampC64XLocal_Module__diagsMask__C = mask;
@@ -445,6 +452,7 @@ static inline xdc_Void ti_uia_family_c64p_TimestampC64XLocal_Module_setMask( xdc
 }
 
 /* Params_init */
+static inline void ti_uia_family_c64p_TimestampC64XLocal_Params_init(ti_uia_family_c64p_TimestampC64XLocal_Params *prms);
 static inline void ti_uia_family_c64p_TimestampC64XLocal_Params_init( ti_uia_family_c64p_TimestampC64XLocal_Params *prms ) 
 {
     if (prms) {
@@ -453,6 +461,7 @@ static inline void ti_uia_family_c64p_TimestampC64XLocal_Params_init( ti_uia_fam
 }
 
 /* Params_copy */
+static inline void ti_uia_family_c64p_TimestampC64XLocal_Params_copy(ti_uia_family_c64p_TimestampC64XLocal_Params *dst, const ti_uia_family_c64p_TimestampC64XLocal_Params *src);
 static inline void ti_uia_family_c64p_TimestampC64XLocal_Params_copy(ti_uia_family_c64p_TimestampC64XLocal_Params *dst, const ti_uia_family_c64p_TimestampC64XLocal_Params *src) 
 {
     if (dst) {
@@ -467,44 +476,51 @@ static inline void ti_uia_family_c64p_TimestampC64XLocal_Params_copy(ti_uia_fami
 #define ti_uia_family_c64p_TimestampC64XLocal_Object_sizeof() ti_uia_family_c64p_TimestampC64XLocal_Object__sizeof__C
 
 /* Object_get */
+static inline ti_uia_family_c64p_TimestampC64XLocal_Handle ti_uia_family_c64p_TimestampC64XLocal_Object_get(ti_uia_family_c64p_TimestampC64XLocal_Instance_State *oarr, int i);
 static inline ti_uia_family_c64p_TimestampC64XLocal_Handle ti_uia_family_c64p_TimestampC64XLocal_Object_get(ti_uia_family_c64p_TimestampC64XLocal_Instance_State *oarr, int i) 
 {
     return (ti_uia_family_c64p_TimestampC64XLocal_Handle)ti_uia_family_c64p_TimestampC64XLocal_Object__get__S(oarr, i);
 }
 
 /* Object_first */
-static inline ti_uia_family_c64p_TimestampC64XLocal_Handle ti_uia_family_c64p_TimestampC64XLocal_Object_first( void )
+static inline ti_uia_family_c64p_TimestampC64XLocal_Handle ti_uia_family_c64p_TimestampC64XLocal_Object_first(void);
+static inline ti_uia_family_c64p_TimestampC64XLocal_Handle ti_uia_family_c64p_TimestampC64XLocal_Object_first(void)
 {
     return (ti_uia_family_c64p_TimestampC64XLocal_Handle)ti_uia_family_c64p_TimestampC64XLocal_Object__first__S();
 }
 
 /* Object_next */
-static inline ti_uia_family_c64p_TimestampC64XLocal_Handle ti_uia_family_c64p_TimestampC64XLocal_Object_next( ti_uia_family_c64p_TimestampC64XLocal_Object *obj )
+static inline ti_uia_family_c64p_TimestampC64XLocal_Handle ti_uia_family_c64p_TimestampC64XLocal_Object_next(ti_uia_family_c64p_TimestampC64XLocal_Object *obj);
+static inline ti_uia_family_c64p_TimestampC64XLocal_Handle ti_uia_family_c64p_TimestampC64XLocal_Object_next(ti_uia_family_c64p_TimestampC64XLocal_Object *obj)
 {
     return (ti_uia_family_c64p_TimestampC64XLocal_Handle)ti_uia_family_c64p_TimestampC64XLocal_Object__next__S(obj);
 }
 
 /* Handle_label */
-static inline xdc_runtime_Types_Label *ti_uia_family_c64p_TimestampC64XLocal_Handle_label( ti_uia_family_c64p_TimestampC64XLocal_Handle inst, xdc_runtime_Types_Label *lab )
+static inline xdc_runtime_Types_Label *ti_uia_family_c64p_TimestampC64XLocal_Handle_label(ti_uia_family_c64p_TimestampC64XLocal_Handle inst, xdc_runtime_Types_Label *lab);
+static inline xdc_runtime_Types_Label *ti_uia_family_c64p_TimestampC64XLocal_Handle_label(ti_uia_family_c64p_TimestampC64XLocal_Handle inst, xdc_runtime_Types_Label *lab)
 {
     return ti_uia_family_c64p_TimestampC64XLocal_Handle__label__S(inst, lab);
 }
 
 /* Handle_name */
-static inline xdc_String ti_uia_family_c64p_TimestampC64XLocal_Handle_name( ti_uia_family_c64p_TimestampC64XLocal_Handle inst )
+static inline xdc_String ti_uia_family_c64p_TimestampC64XLocal_Handle_name(ti_uia_family_c64p_TimestampC64XLocal_Handle inst);
+static inline xdc_String ti_uia_family_c64p_TimestampC64XLocal_Handle_name(ti_uia_family_c64p_TimestampC64XLocal_Handle inst)
 {
     xdc_runtime_Types_Label lab;
     return ti_uia_family_c64p_TimestampC64XLocal_Handle__label__S(inst, &lab)->iname;
 }
 
 /* handle */
-static inline ti_uia_family_c64p_TimestampC64XLocal_Handle ti_uia_family_c64p_TimestampC64XLocal_handle( ti_uia_family_c64p_TimestampC64XLocal_Struct *str )
+static inline ti_uia_family_c64p_TimestampC64XLocal_Handle ti_uia_family_c64p_TimestampC64XLocal_handle(ti_uia_family_c64p_TimestampC64XLocal_Struct *str);
+static inline ti_uia_family_c64p_TimestampC64XLocal_Handle ti_uia_family_c64p_TimestampC64XLocal_handle(ti_uia_family_c64p_TimestampC64XLocal_Struct *str)
 {
     return (ti_uia_family_c64p_TimestampC64XLocal_Handle)str;
 }
 
 /* struct */
-static inline ti_uia_family_c64p_TimestampC64XLocal_Struct *ti_uia_family_c64p_TimestampC64XLocal_struct( ti_uia_family_c64p_TimestampC64XLocal_Handle inst )
+static inline ti_uia_family_c64p_TimestampC64XLocal_Struct *ti_uia_family_c64p_TimestampC64XLocal_struct(ti_uia_family_c64p_TimestampC64XLocal_Handle inst);
+static inline ti_uia_family_c64p_TimestampC64XLocal_Struct *ti_uia_family_c64p_TimestampC64XLocal_struct(ti_uia_family_c64p_TimestampC64XLocal_Handle inst)
 {
     return (ti_uia_family_c64p_TimestampC64XLocal_Struct*)inst;
 }

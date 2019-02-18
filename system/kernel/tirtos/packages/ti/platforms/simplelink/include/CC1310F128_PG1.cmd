@@ -65,19 +65,19 @@ MEMORY
 
 SECTIONS
 {
-    .text           :   > FLASH
+    .text           :   >> FLASH
 #ifdef __TI_COMPILER_VERSION__
 #if __TI_COMPILER_VERSION__ >= 15009000
     .TI.ramfunc     : {} load=FLASH, run=SRAM, table(BINIT)
 #endif
 #endif
-    .const          :   > FLASH
-    .constdata      :   > FLASH
-    .rodata         :   > FLASH
+    .const          :   >> FLASH
+    .constdata      :   >> FLASH
+    .rodata         :   >> FLASH
     .cinit          :   > FLASH
     .pinit          :   > FLASH
     .init_array     :   > FLASH
-    .emb_text       :   > FLASH
+    .emb_text       :   >> FLASH
     .ccfg           :   > FLASH (HIGH)
 
     .data           :   > SRAM

@@ -186,6 +186,7 @@ UInt32 ti_sysbios_family_arm_m3_Hwi_dispatchTable[`Hwi.NUM_INTERRUPTS`];
 Void ti_sysbios_family_arm_m3_Hwi_initIsrStackSize()
 {
     #pragma section = "CSTACK"
-        ti_sysbios_family_arm_m3_Hwi_Module__state__V.isrStackSize = (Void *)__section_size("CSTACK");
+    ti_sysbios_family_arm_m3_Hwi_Module__state__V.isrStackBase = (Void *)__section_begin("CSTACK");
+    ti_sysbios_family_arm_m3_Hwi_Module__state__V.isrStackSize = (Void *)__section_size("CSTACK");
 }
 #endif

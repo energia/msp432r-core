@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--  This file conforms to the DTD xdc/bld/release.dtd -->
-<release name="ti_targets_omf_elf" label="default" date="1486747570973" buildCount="1" producerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src/">
+<release name="ti_targets_omf_elf" label="default" date="1501183858292" buildCount="1" producerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src/">
 <package name="ti.targets.omf.elf"
     version=""/>
 <imports>
@@ -49,8 +49,8 @@
         <file name="package.xs"/>
     </package>
     <package name="ti.targets"
-        version="1, 0, 3, 1486746373000"
-        providerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src">
+        version="1, 0, 3, 1501181177000"
+        providerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src">
         <file name="C28_float.xs"/>
         <file name="C28_large.xs"/>
         <file name="ITarget.xs"/>
@@ -58,20 +58,20 @@
         <file name="select.h"/>
     </package>
     <package name="ti.targets.elf"
-        version="1, 0, 0, 1486746377000"
-        providerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src">
+        version="1, 0, 0, 1501181190000"
+        providerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src">
         <file name="C28_float.xs"/>
         <file name="ITarget.xs"/>
         <file name="package.xs"/>
     </package>
     <package name="ti.targets.elf.nda"
-        version="1, 0, 0, 1486746379000"
-        providerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src">
+        version="1, 0, 0, 1501181194000"
+        providerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src">
         <file name="package.xs"/>
     </package>
     <package name="ti.targets.msp430"
-        version="1, 0, 0, 1486746380000"
-        providerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src">
+        version="1, 0, 0, 1501181197000"
+        providerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src">
         <file name="Generic.xs"/>
         <file name="MSP430.xs"/>
         <file name="MSP430X.xs"/>
@@ -79,28 +79,28 @@
         <file name="package.xs"/>
     </package>
     <package name="ti.targets.msp430.elf"
-        version="1, 0, 0, 1486746382000"
-        providerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src">
+        version="1, 0, 0, 1501181201000"
+        providerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src">
         <file name="MSP430.xs"/>
         <file name="MSP430X.xs"/>
         <file name="MSP430X_small.xs"/>
         <file name="package.xs"/>
     </package>
     <package name="ti.targets.arp32.elf"
-        version="1, 0, 0, 1486746375000"
-        providerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src">
+        version="1, 0, 0, 1501181187000"
+        providerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src">
         <file name="IARP32.xs"/>
         <file name="package.xs"/>
     </package>
     <package name="ti.targets.arm.elf"
-        version="1, 0, 0, 1486746375000"
-        providerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src">
+        version="1, 0, 0, 1501181182000"
+        providerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src">
         <file name="IArm.xs"/>
         <file name="package.xs"/>
     </package>
     <package name="gnu.targets"
-        version="1, 0, 1, 1486746367000"
-        providerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src">
+        version="1, 0, 1, 1501181156000"
+        providerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src">
         <file name="ITarget.xs"/>
         <file name="Linux86.xs"/>
         <file name="Linux86_64.h"/>
@@ -111,8 +111,8 @@
         <file name="std.h"/>
     </package>
     <package name="gnu.targets.arm"
-        version="1, 0, 0, 1486746367000"
-        providerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src">
+        version="1, 0, 0, 1501181160000"
+        providerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src">
         <file name="A15F.xs"/>
         <file name="A53F.xs"/>
         <file name="A8F.xs"/>
@@ -127,8 +127,8 @@
         <file name="package.xs"/>
     </package>
     <package name="microsoft.targets"
-        version="1, 0, 2, 0, 1486746371000"
-        providerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src">
+        version="1, 0, 2, 0, 1501181174000"
+        providerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src">
         <file name="ITarget.xs"/>
         <file name="Win32.xs"/>
         <file name="_utils.xs"/>
@@ -136,14 +136,14 @@
         <file name="std.h"/>
     </package>
     <package name="iar.targets.arm"
-        version="1, 0, 0, 1486746367000"
-        providerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src">
+        version="1, 0, 0, 1501181167000"
+        providerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src">
         <file name="ITarget.xs"/>
         <file name="package.xs"/>
     </package>
     <package name="iar.targets.msp430"
-        version="1, 0, 0, 1486746371000"
-        providerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src">
+        version="1, 0, 0, 1501181170000"
+        providerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src">
         <file name="ITarget.xs"/>
         <file name="MSP430X_large.xs"/>
         <file name="MSP430X_small.xs"/>
@@ -219,7 +219,7 @@
     </targetRoot>
     <package name="ti.targets.omf.elf"
         version=""
-        providerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src">
+        providerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src">
         <file name="elf.h"/>
     </package>
     <targetRoot base="/db/toolsrc/library/vendors2005/msvc/6.0sp3/"
@@ -230,14 +230,18 @@
         <file name="vc98/include/stdlib.h"/>
         <file name="vc98/include/string.h"/>
     </targetRoot>
+    <package name="iar.targets"
+        version="1, 0, 1, 1501181165000"
+        providerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src">
+        <file name="select.h"/>
+    </package>
     <xdcRoot base="/db/rtree/library/trees/xdcprod/xdcprod-x10/product/xdccore/Linux/xdctools_3_50_00_10_core/">
         <file name="/packages/xdc/package.xdc"/>
         <xdcCorePkg version="16, 0, 2, 1486592098662" producerId="/db/ztree/library/trees/xdc/xdc-D05/src/packages" buildCount="1" releaseName="xdc_corevers" label="default" date="1486592098662"/>
     </xdcRoot>
 </references>
 <orphans>
-    <file name="/db/ztree/library/trees/xdctargets/xdctargets-m11/src/config.bld"/>
-    <file name="/db/ztree/library/trees/xdctargets/xdctargets-m11/src/common.bld"/>
-    <file name="/db/ztree/library/trees/xdctargets/xdctargets-m11/src/iar/targets/select.h"/>
+    <file name="/db/ztree/library/trees/xdctargets/xdctargets-o04/src/config.bld"/>
+    <file name="/db/ztree/library/trees/xdctargets/xdctargets-o04/src/common.bld"/>
 </orphans>
 </release>

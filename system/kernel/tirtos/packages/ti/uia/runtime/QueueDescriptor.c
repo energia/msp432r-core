@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013, Texas Instruments Incorporated
+ * Copyright (c) 2013-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -152,7 +152,7 @@ Void QueueDescriptor_addToList(QueueDescriptor_Header *pHdrToAdd)
  */
 Void QueueDescriptor_initHeader(QueueDescriptor_Header *pHdr, Ptr start,
         SizeT size, UInt loggerModuleId, UInt loggerInstanceId,
-        UInt loggerPriority, QueueDescriptor_QueueType type, Ptr pNumDroppedCtr)
+        UInt loggerPriority, UInt type, Ptr pNumDroppedCtr)
 {
     pHdr->structSize = sizeof(ti_uia_runtime_QueueDescriptor_Header);
     pHdr->next = NULL;

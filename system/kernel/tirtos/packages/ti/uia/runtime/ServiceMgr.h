@@ -2,20 +2,20 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
  *     FUNCTION DECLARATIONS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -82,7 +82,7 @@ enum ti_uia_runtime_ServiceMgr_Topology {
 typedef enum ti_uia_runtime_ServiceMgr_Topology ti_uia_runtime_ServiceMgr_Topology;
 
 /* ProcessCallback */
-typedef xdc_Void (*ti_uia_runtime_ServiceMgr_ProcessCallback)(ti_uia_runtime_ServiceMgr_Reason, ti_uia_runtime_UIAPacket_Hdr*);
+typedef xdc_Void (*ti_uia_runtime_ServiceMgr_ProcessCallback)(ti_uia_runtime_ServiceMgr_Reason __arg1, ti_uia_runtime_UIAPacket_Hdr* __arg2);
 
 /* WAIT_FOREVER */
 #define ti_uia_runtime_ServiceMgr_WAIT_FOREVER (~(0))
@@ -448,7 +448,7 @@ __extern __FAR__ const CT__ti_uia_runtime_ServiceMgr_masterProcId ti_uia_runtime
 typedef ti_uia_runtime_ServiceMgr_ProcessCallback __T1_ti_uia_runtime_ServiceMgr_processCallbackFxn;
 typedef ti_uia_runtime_ServiceMgr_ProcessCallback *__ARRAY1_ti_uia_runtime_ServiceMgr_processCallbackFxn;
 typedef const ti_uia_runtime_ServiceMgr_ProcessCallback *__CARRAY1_ti_uia_runtime_ServiceMgr_processCallbackFxn;
-typedef __ARRAY1_ti_uia_runtime_ServiceMgr_processCallbackFxn __TA_ti_uia_runtime_ServiceMgr_processCallbackFxn;
+typedef __CARRAY1_ti_uia_runtime_ServiceMgr_processCallbackFxn __TA_ti_uia_runtime_ServiceMgr_processCallbackFxn;
 typedef __CARRAY1_ti_uia_runtime_ServiceMgr_processCallbackFxn CT__ti_uia_runtime_ServiceMgr_processCallbackFxn;
 __extern __FAR__ const CT__ti_uia_runtime_ServiceMgr_processCallbackFxn ti_uia_runtime_ServiceMgr_processCallbackFxn__C;
 #ifdef ti_uia_runtime_ServiceMgr_processCallbackFxn__CR
@@ -533,25 +533,29 @@ __extern xdc_Void ti_uia_runtime_ServiceMgr_setPeriod__F( ti_uia_runtime_Service
 #define ti_uia_runtime_ServiceMgr_Module_heap() ti_uia_runtime_ServiceMgr_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_uia_runtime_ServiceMgr_Module__id ti_uia_runtime_ServiceMgr_Module_id(void);
 static inline CT__ti_uia_runtime_ServiceMgr_Module__id ti_uia_runtime_ServiceMgr_Module_id( void ) 
 {
     return ti_uia_runtime_ServiceMgr_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_uia_runtime_ServiceMgr_Module_hasMask( void ) 
+static inline xdc_Bool ti_uia_runtime_ServiceMgr_Module_hasMask(void);
+static inline xdc_Bool ti_uia_runtime_ServiceMgr_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_uia_runtime_ServiceMgr_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_uia_runtime_ServiceMgr_Module_getMask(void);
 static inline xdc_Bits16 ti_uia_runtime_ServiceMgr_Module_getMask( void ) 
 {
     return ti_uia_runtime_ServiceMgr_Module__diagsMask__C != NULL ? *ti_uia_runtime_ServiceMgr_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_uia_runtime_ServiceMgr_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_uia_runtime_ServiceMgr_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_uia_runtime_ServiceMgr_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_uia_runtime_ServiceMgr_Module__diagsMask__C != NULL) {
         *ti_uia_runtime_ServiceMgr_Module__diagsMask__C = mask;

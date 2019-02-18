@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,6 +44,8 @@
 #define DebugP_LOG_ENABLED 0
 #endif
 
+#include <ti/devices/DeviceFamily.h>
+
 #include <ti/drivers/dpl/DebugP.h>
 #include <ti/drivers/dpl/HwiP.h>
 #include <ti/drivers/Power.h>
@@ -65,7 +67,8 @@ void WatchdogMSP432_init(Watchdog_Handle handle);
 Watchdog_Handle WatchdogMSP432_open(Watchdog_Handle handle,
     Watchdog_Params *params);
 int_fast16_t WatchdogMSP432_setReload(Watchdog_Handle handle, uint32_t value);
-uint32_t WatchdogMSP432_convertMsToTicks(uint32_t milliseconds);
+uint32_t WatchdogMSP432_convertMsToTicks(Watchdog_Handle handle,
+    uint32_t milliseconds);
 
 /* Watchdog function table for MSP432 implementation */
 const Watchdog_FxnTable WatchdogMSP432_fxnTable = {
@@ -106,12 +109,10 @@ void WatchdogMSP432_close(Watchdog_Handle handle)
         hwAttrs->clockSource == WDT_A_CLOCKSOURCE_SMCLK ||
         hwAttrs->clockSource == WDT_A_CLOCKSOURCE_ACLK) {
         Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
-        Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
     }
     else {
         Power_releaseConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_1);
     }
-    Power_releaseConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
 
     object->isOpen = false;
 }
@@ -178,19 +179,10 @@ Watchdog_Handle WatchdogMSP432_open(Watchdog_Handle handle,
          * Additionally, LPM3.5 cannot be reached.
          */
         Power_setConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_0);
-        Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_0);
     }
     else {
-        /*
-         * Interval mode and not using SMCLK and ACLK as clock sources.  Can
-         * be configured as a LPM3.5 wake up source, so we do not set the
-         * SHUTDOWN_0 constraint.
-         */
         Power_setConstraint(PowerMSP432_DISALLOW_DEEPSLEEP_1);
     }
-
-    /* SHUTDOWN_1 (LPM4.5) not supported while driver is open */
-    Power_setConstraint(PowerMSP432_DISALLOW_SHUTDOWN_1);
 
     /* Construct Hwi object for watchdog */
     if (params->callbackFxn) {
@@ -239,7 +231,8 @@ int_fast16_t WatchdogMSP432_setReload(Watchdog_Handle handle, uint32_t value)
 /*
  *  ======== WatchdogMSP432_convertMsToTicks ========
  */
-uint32_t WatchdogMSP432_convertMsToTicks(uint32_t milliseconds)
+uint32_t WatchdogMSP432_convertMsToTicks(Watchdog_Handle handle,
+    uint32_t milliseconds)
 {
     /* Not supported for MSP432 */
     return (0);

@@ -2580,7 +2580,7 @@ void* DMA_getControlAlternateBase(void)
     // Read the current value of the control base register and return it to
     // the caller.
     //
-    return ((void *) DMA->rATLBASE);
+    return ((void *) DMA->rALTBASE);
 }
 
 

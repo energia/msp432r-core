@@ -1,5 +1,5 @@
 /* 
- *  Copyright (c) 2012 Texas Instruments and others.
+ *  Copyright (c) 2012-2017 Texas Instruments and others.
  *  All rights reserved. This program and the accompanying materials
  *  are made available under the terms of the Eclipse Public License v1.0
  *  which accompanies this distribution, and is available at
@@ -53,9 +53,13 @@ function compile(goal) {
     }
 
     goal.opts.copts += " -I" + A15F.targetPkgPath +
+        "/libs/install-native/$(GCCTARG)/include/newlib-nano " +
+        " -I" + A15F.targetPkgPath +
         "/libs/install-native/$(GCCTARG)/include ";
 
     goal.opts.cfgcopts += " -I" + A15F.targetPkgPath +
+        "/libs/install-native/$(GCCTARG)/include/newlib-nano " +
+        " -I" + A15F.targetPkgPath +
         "/libs/install-native/$(GCCTARG)/include ";
 
     return (this.$super.compile(goal));
@@ -71,12 +75,12 @@ function link(goal)
     }
 
     goal.opts += " -L" + A15F.targetPkgPath +
-        "/libs/install-native/$(GCCTARG)/lib/fpu ";
+        "/libs/install-native/$(GCCTARG)/lib/hard ";
 
     return(this.$super.link(goal));
 }
 /*
- *  @(#) gnu.targets.arm; 1, 0, 0,0; 2-10-2017 09:06:32; /db/ztree/library/trees/xdctargets/xdctargets-m11/src/ xlibrary
+ *  @(#) gnu.targets.arm; 1, 0, 0,1; 7-27-2017 11:46:57; /db/ztree/library/trees/xdctargets/xdctargets-o04/src/ xlibrary
 
  */
 

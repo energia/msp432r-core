@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,10 +29,10 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
-/*! ============================================================================
+/*!****************************************************************************
  * @file       PWMTimerMSP432.h
  *
- * @brief      PWM driver implementation using the MSP432 Timer_A peripherals
+ * @brief      PWM driver implementation using MSP432 Timer_A peripherals.
  *
  * The PWM header file should be included in an application as follows:
  * @code
@@ -43,17 +43,24 @@
  * *  Refer to @ref PWM.h for a complete description of APIs & example of use.
  *
  * ## Overview #
- * This driver configures an MSP432 Timer_A peripheral for PWM. If the
+ * This driver configures a MSP432 Timer_A peripheral for PWM. If the
  * timer is already in use (by the kernel for instance), PWM instances will
  * not be opened.
  *
  * When used for PWM generation, each Timer_A can produce up to 6 PWM outputs
- * and this driver manages each output as an independent PWM instance.  However
- * since a single period and prescalar are used for all Timer outputs, there are
- * limitations in place to ensure proper operation:
- *     - The PWM period and prescalar are calculated and set based on the first
+ * and this driver manages each output as an independent PWM instance. However
+ * since a single period, prescalar, and clock source are used for all PWM
+ * outputs, there are limitations in place to ensure proper operation:
+ *     * The PWM period and prescalar are calculated and set based on the first
  *       instance opened. Opening a second instance will fail if the period
- *       is not the same as what was set by the first instance.
+ *       is not the same as what was set by the first instance. The PWM period
+ *       unit and clock source are set based on the first
+ *       instance opened. Opening a second instance will fail if either
+ *       are not the same.
+ *     * PWM_setPeriod() will fail if the calculated period is less than
+ *       any calculated duty currently open on the Timer_A peripheral.
+ *     * PWM_setPeriod() will fail if the calculated prescalar is not
+ *       equal to the prescalar currently set on the Timer_A peripheral.
  *
  * The timer is automatically configured in count-up mode using the clock
  * source specified in the hwAttrs structure.  In PWM mode, the timer
@@ -71,9 +78,7 @@
  *
  * After opening, the PWM_setPeriod() API can be used to change the PWM period.
  * Keep in mind the period is shared by all other PWMs on the timer, so all
- * other PWM outputs on the timer will change.  Additionally, a call to
- * PWM_setPeriod() will fail if the new period requires a prescalar different
- * than the one set when initially configured.
+ * other PWM outputs on the timer will change.
  *
  *  ### MPS432 PWM Driver Configuration #
  *
@@ -82,22 +87,22 @@
  *
  *  1.  An array of PWMTimerMSP432_Object elements, which will be used by
  *  by the driver to maintain instance state.
- *  Below is an example PWMTimerMSP432_Object array appropriate for the MSP432 Launchpad
- *  board:
+ *  Below is an example PWMTimerMSP432_Object array appropriate for the MSP432
+ *  Launchpad board:
  *  @code
  *    #include <ti/drivers/PWM.h>
  *    #include <ti/drivers/pwm/PWMTimerMSP432.h>
  *
- *    PWMTimerMSP432_Object pwmTimerMSP432Objects[MSP_EXP432P401R_PWMCOUNT];
+ *    PWMTimerMSP432_Object pwmTimerMSP432Objects[2];
  *  @endcode
  *
  *  2.  An array of PWMTimerMSP432_HWAttrsV2 elements that defines which
  *  pin will be used by the corresponding PWM instance
  *  (see @ref pwmPinIdentifiersMSP432).
- *  Below is an example PWMTimerMSP432_HWAttrsV2 array appropriate for the MSP432 Launchpad
- *  board:
+ *  Below is an example PWMTimerMSP432_HWAttrsV2 array appropriate for the
+ *  MSP432 Launchpad board:
  *  @code
- *    const PWMTimerMSP432_HWAttrsV2 pwmTimerMSP432HWAttrs[MSP_EXP432P401R_PWMCOUNT] = {
+ *  const PWMTimerMSP432_HWAttrsV2 pwmTimerMSP432HWAttrs[2] = {
  *      {
  *          .clockSource = TIMER_A_CLOCKSOURCE_SMCLK,
  *          .pwmPin = PWMTimerMSP432_P2_1_TA1CCR1A
@@ -106,26 +111,26 @@
  *          .clockSource = TIMER_A_CLOCKSOURCE_SMCLK,
  *          .pwmPin = PWMTimerMSP432_P2_2_TA1CCR2A
  *      }
- *    };
+ *  };
  *  @endcode
  *
  *  3.  An array of @ref PWM_Config elements, one for each PWM instance. Each
  *  element of this array identifies the device-specific API function table,
  *  the device specific PWM object instance, and the device specific Hardware
  *  Attributes to be used for each PWM channel.
- *  Below is an example @ref PWM_Config array appropriate for the MSP432 Launchpad
- *  board:
+ *  Below is an example @ref PWM_Config array appropriate for the MSP432
+ *  Launchpad board:
  *  @code
- *    const PWM_Config PWM_config[MSP_EXP432P401R_PWMCOUNT] = {
+ *    const PWM_Config PWM_config[2] = {
  *      {
  *          .fxnTablePtr = &PWMTimerMSP432_fxnTable,
- *          .object = &pwmTimerMSP432Objects[MSP_EXP432P401R_PWM_TA1_1],
- *          .hwAttrs = &pwmTimerMSP432HWAttrs[MSP_EXP432P401R_PWM_TA1_1]
+ *          .object = &pwmTimerMSP432Objects[0],
+ *          .hwAttrs = &pwmTimerMSP432HWAttrs[0]
  *      },
  *      {
  *          .fxnTablePtr = &PWMTimerMSP432_fxnTable,
- *          .object = &pwmTimerMSP432Objects[MSP_EXP432P401R_PWM_TA1_2],
- *          .hwAttrs = &pwmTimerMSP432HWAttrs[MSP_EXP432P401R_PWM_TA1_2]
+ *          .object = &pwmTimerMSP432Objects[1],
+ *          .hwAttrs = &pwmTimerMSP432HWAttrs[1]
  *      }
  *    };
  *  @endcode
@@ -133,29 +138,53 @@
  *  4.  A global variable, PWM_count, that informs the driver how many PWM
  *  instances are defined:
  *  @code
- *    const uint_least8_t PWM_count = MSP_EXP432P401R_PWMCOUNT;
+ *    const uint_least8_t PWM_count = 2;
  *  @endcode
  *
- * ### Power Management #
- * The TI-RTOS power management framework will try to put the device into the most
- * power efficient mode whenever possible. Please see the technical reference
- * manual for further details on each power mode.
+ *  # Resource Allocation #
+ *  Allocation of each timer peripheral is managed through a set of resource
+ *  allocation APIs. For example, the TimerMSP432_allocateTimerResource API
+ *  will allocate a timer for exclusive use. Any attempt to allocate this
+ *  resource in the future will result in a false value being returned from the
+ *  allocation API. To free a timer resource, the TimerMSP432_freeTimerResource
+ *  is used. The application is not responsible for calling these allocation
+ *  APIs directly.
  *
- *  The PWMTimerMSP432 driver explicitly sets a power constraint when the
- *  PWM is running to prevent LPDS and SHUTDOWN Power modes.
+ * ### Power Management #
+ * The TI-RTOS power management framework will try to put the device into the
+ * most power efficient mode whenever possible. Please see the technical
+ * reference manual for further details on each power mode.
+ *
+ * This driver supports dynamic power performance levels. The driver will
+ * determine which power performance levels are compatible with the desired
+ * period and period units. The driver prevents transitions to performance
+ * levels in which the period cannot be generated. When PWM_setPeriod() is
+ * called, the compatible performance levels are re-calculated and set.
+ *
+ * After a performance level change, the period is recalculated such that the
+ * generated period will remain the same. The duty cycle is not recalculated.
+ * The application is responsible for calling PWM_setDuty() after a performance
+ * level change. The exact period may vary after a performance level transition.
+ * This is due to a change in clock frequency and hence period per clock cycle.
+ *
+ *  @code
+ *    PWM_stop(pwmHandle);
+ *    // Change performance level code
+ *    PWM_setDuty(pwmHandle, duty);
+ *    PWM_start(pwmHandle);
+ *  @endcode
+ *
  *  The following statements are valid:
- *    - After PWM_open():  Clocks are enabled to the timer resource and the
- *                         configured pwmPin. The device is still allowed
- *                         to enter LPDS and SHUTDOWN. Dynamic performance
- *                         level changes are disallowed.
- *    - After PWM_start(): DEEPSLEEP, SHUTDOWN_0 and SHUTDOWN_1 modes are
- *                         disabled. The device
- *                         can only go to Idle power mode since the
- *                         high-frequency clock is needed for PWM operation:
- *    - After PWM_stop():  Conditions are equal as for after PWM_open
- *    - After PWM_close(): The underlying GPTimer is turned off, and the clocks
- *                         to the timer and pin are disabled..
- *  ============================================================================
+ *    - After PWM_open(): Clocks are enabled to the timer resource and the
+ *      configured pwmPin. Dynamic performance level changes are allowed.
+ *    - After PWM_start(): DEEPSLEEP mode is disabled. The device can only go
+ *      to Idle power mode since the high-frequency clock is needed for PWM
+ *      operation. Performance level changes are not allowed.
+ *    - After PWM_stop():  Conditions are equal as for after PWM_open().
+ *    - After PWM_close(): The underlying GPTimer is turned off, and the clock
+ *      to the timer and pin are disabled.
+ *
+ ******************************************************************************
  */
 
 #ifndef ti_driver_pwm_PWMTimerMSP432__include
@@ -166,6 +195,9 @@ extern "C" {
 #endif
 
 #include <stdbool.h>
+
+#include <ti/devices/DeviceFamily.h>
+
 #include <ti/drivers/PWM.h>
 
 #include <ti/devices/msp432p4xx/driverlib/pmap.h>
@@ -681,13 +713,14 @@ extern const PWM_FxnTable PWMTimerMSP432_fxnTable;
  *  const PWMTimerMSP432_HWAttrsV2 PWMTimerMSP432HWAttrs[] = {
  *      {
  *          .clockSource = TIMER_A_CLOCKSOURCE_SMCLK,
- *          .pwmPin = PWMTimerMSP432_P2_1_TA1CCR1A,
+ *          .pwmPin = PWMTimerMSP432_P2_1_TA1CCR1A
  *      },
  *  };
  *  @endcode
  */
 typedef struct PWMTimerMSP432_HWAttrsV2 {
-    uint16_t clockSource;          /*!< TIMER A Clock Source (see timer_a.h for options) */
+    uint16_t clockSource;          /*!< TIMER A Clock Source
+                                        (see timer_a.h for options) */
     uint32_t pwmPin;               /*!< Pin to output PWM signal on
                                         (see @ref pwmPinIdentifiersMSP432) */
 } PWMTimerMSP432_HWAttrsV2;
@@ -698,10 +731,16 @@ typedef struct PWMTimerMSP432_HWAttrsV2 {
  *  The application must not access any member variables of this structure!
  */
 typedef struct PWMTimerMSP432_Status {
+    Power_NotifyObj perfChangeNotify;
+    PWM_Period_Units periodUnits;
+    uint32_t perfConstraintMask;
+    uint32_t clockSource;
     uint32_t duties[PWMTimerMSP432_NUM_PWM_OUTPUTS];
+    uint32_t periodCounts;
     uint32_t period;
     uint8_t  prescalar;
     uint8_t  activeOutputsMask;
+    uint8_t  openMask;
 } PWMTimerMSP432_Status;
 
 /*!
@@ -710,17 +749,12 @@ typedef struct PWMTimerMSP432_Status {
  *  The application must not access any member variables of this structure!
  */
 typedef struct PWMTimerMSP432_Object {
-    PWMTimerMSP432_Status *timerStatusStruct;
-    uint32_t               timerBaseAddr;   /* PWMTimer base address */
-    PWM_Period_Units       periodUnits;     /* Current period unit */
+    PWMTimerMSP432_Status *timerStatus;
+    uint32_t               baseAddress;     /* PWMTimer base address */
     PWM_Duty_Units         dutyUnits;       /* Current duty cycle unit */
     PWM_IdleLevel          idleLevel;       /* PWM idle level when stopped */
     uint8_t                compareOutputNum; /* Timer's compare output */
                                              /* number */
-    bool                   pwmStarted;      /* Used to gate Power_setConstraint() */
-                                            /* and Power_releaseConstraint() calls */
-    bool                   isOpen;          /* open flag used to check if PWM */
-                                            /* is opened */
 } PWMTimerMSP432_Object;
 
 #ifdef __cplusplus

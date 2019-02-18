@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 import java.util.*;
 import org.mozilla.javascript.*;
@@ -11,7 +11,7 @@ import xdc.services.spec.Session;
 
 public class ti_sysbios_family_arm_msp432
 {
-    static final String VERS = "@(#) xdc-D05\n";
+    static final String VERS = "@(#) xdc-D20\n";
 
     static final Proto.Elm $$T_Bool = Proto.Elm.newBool();
     static final Proto.Elm $$T_Num = Proto.Elm.newNum();
@@ -88,8 +88,6 @@ public class ti_sysbios_family_arm_msp432
         om.bind("ti.sysbios.family.arm.msp432.Timer.Source", new Proto.Enm("ti.sysbios.family.arm.msp432.Timer.Source"));
         om.bind("ti.sysbios.family.arm.msp432.Timer.ID", new Proto.Enm("ti.sysbios.family.arm.msp432.Timer.ID"));
         om.bind("ti.sysbios.family.arm.msp432.Timer.IDEX", new Proto.Enm("ti.sysbios.family.arm.msp432.Timer.IDEX"));
-        spo = (Proto.Obj)om.bind("ti.sysbios.family.arm.msp432.Timer$$Control", new Proto.Obj());
-        om.bind("ti.sysbios.family.arm.msp432.Timer.Control", new Proto.Str(spo, false));
         spo = (Proto.Obj)om.bind("ti.sysbios.family.arm.msp432.Timer$$BasicView", new Proto.Obj());
         om.bind("ti.sysbios.family.arm.msp432.Timer.BasicView", new Proto.Str(spo, false));
         spo = (Proto.Obj)om.bind("ti.sysbios.family.arm.msp432.Timer$$DeviceView", new Proto.Obj());
@@ -341,16 +339,6 @@ public class ti_sysbios_family_arm_msp432
         Proto.Str so;
         Object fxn;
 
-        so = (Proto.Str)om.findStrict("ti.sysbios.family.arm.msp432.Timer.Control", "ti.sysbios.family.arm.msp432");
-        sizes.clear();
-        sizes.add(Global.newArray("source", "UInt"));
-        so.bind("$$sizes", Global.newArray(sizes.toArray()));
-        fxn = Global.eval("function() { return $$sizeof(xdc.om['ti.sysbios.family.arm.msp432.Timer.Control']); }");
-        so.bind("$sizeof", fxn);
-        fxn = Global.eval("function() { return $$alignof(xdc.om['ti.sysbios.family.arm.msp432.Timer.Control']); }");
-        so.bind("$alignof", fxn);
-        fxn = Global.eval("function(fld) { return $$offsetof(xdc.om['ti.sysbios.family.arm.msp432.Timer.Control'], fld); }");
-        so.bind("$offsetof", fxn);
         so = (Proto.Str)om.findStrict("ti.sysbios.family.arm.msp432.Timer.TimerDevice", "ti.sysbios.family.arm.msp432");
         sizes.clear();
         sizes.add(Global.newArray("intNum", "UInt"));
@@ -537,11 +525,6 @@ public class ti_sysbios_family_arm_msp432
         }//isCFG
         po = (Proto.Obj)om.findStrict("ti.sysbios.family.arm.msp432.Timer$$Object", "ti.sysbios.family.arm.msp432");
         po.init("ti.sysbios.family.arm.msp432.Timer.Object", om.findStrict("ti.sysbios.family.arm.msp432.Timer.Instance", "ti.sysbios.family.arm.msp432"));
-        // struct Timer.Control
-        po = (Proto.Obj)om.findStrict("ti.sysbios.family.arm.msp432.Timer$$Control", "ti.sysbios.family.arm.msp432");
-        po.init("ti.sysbios.family.arm.msp432.Timer.Control", null);
-                po.addFld("$hostonly", $$T_Num, 0, "r");
-                po.addFld("source", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
         // struct Timer.BasicView
         po = (Proto.Obj)om.findStrict("ti.sysbios.family.arm.msp432.Timer$$BasicView", "ti.sysbios.family.arm.msp432");
         po.init("ti.sysbios.family.arm.msp432.Timer.BasicView", null);
@@ -549,7 +532,6 @@ public class ti_sysbios_family_arm_msp432
                 po.addFld("halTimerHandle", new Proto.Adr("xdc_Ptr", "Pv"), $$UNDEF, "w");
                 po.addFld("label", $$T_Str, $$UNDEF, "w");
                 po.addFld("id", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
-                po.addFld("configuration", (Proto)om.findStrict("ti.sysbios.family.arm.msp432.Timer.Control", "ti.sysbios.family.arm.msp432"), $$DEFAULT, "w");
                 po.addFld("startMode", $$T_Str, $$UNDEF, "w");
                 po.addFld("runMode", $$T_Str, $$UNDEF, "w");
                 po.addFld("period", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
@@ -570,6 +552,7 @@ public class ti_sysbios_family_arm_msp432
                 po.addFld("devAddr", $$T_Str, $$UNDEF, "w");
                 po.addFld("intNum", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
                 po.addFld("runMode", $$T_Str, $$UNDEF, "w");
+                po.addFld("clockSource", $$T_Str, $$UNDEF, "w");
                 po.addFld("period", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
                 po.addFld("currCount", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
                 po.addFld("remainingCount", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
@@ -694,7 +677,6 @@ public class ti_sysbios_family_arm_msp432
         po.init("ti.sysbios.family.arm.msp432.ClockFreqs.ModuleView", null);
                 po.addFld("$hostonly", $$T_Num, 1, "r");
                 po.addFld("ACLK", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
-                po.addFld("MCLK", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
                 po.addFld("SMCLK", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
                 po.addFld("HSMCLK", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
         // struct ClockFreqs.Module_State
@@ -731,8 +713,6 @@ public class ti_sysbios_family_arm_msp432
         vo = (Value.Obj)om.findStrict("ti.sysbios.family.arm.msp432.Timer", "ti.sysbios.family.arm.msp432");
         po = (Proto.Obj)om.findStrict("ti.sysbios.family.arm.msp432.Timer$$Instance_State", "ti.sysbios.family.arm.msp432");
         po.addFld("__fxns", new Proto.Adr("xdc_Ptr", "Pv"), $$UNDEF, "w");
-        vo.bind("Control$fetchDesc", Global.newObject("type", "ti.sysbios.family.arm.msp432.Timer.Control", "isScalar", false));
-        po = (Proto.Obj)om.findStrict("ti.sysbios.family.arm.msp432.Timer$$Control", "ti.sysbios.family.arm.msp432");
         vo.bind("TimerDevice$fetchDesc", Global.newObject("type", "ti.sysbios.family.arm.msp432.Timer.TimerDevice", "isScalar", false));
         po = (Proto.Obj)om.findStrict("ti.sysbios.family.arm.msp432.Timer$$TimerDevice", "ti.sysbios.family.arm.msp432");
         vo.bind("Instance_State$fetchDesc", Global.newObject("type", "ti.sysbios.family.arm.msp432.Timer.Instance_State", "isScalar", false));
@@ -885,8 +865,6 @@ public class ti_sysbios_family_arm_msp432
         vo.bind("Source", om.findStrict("ti.sysbios.family.arm.msp432.Timer.Source", "ti.sysbios.family.arm.msp432"));
         vo.bind("ID", om.findStrict("ti.sysbios.family.arm.msp432.Timer.ID", "ti.sysbios.family.arm.msp432"));
         vo.bind("IDEX", om.findStrict("ti.sysbios.family.arm.msp432.Timer.IDEX", "ti.sysbios.family.arm.msp432"));
-        vo.bind("Control", om.findStrict("ti.sysbios.family.arm.msp432.Timer.Control", "ti.sysbios.family.arm.msp432"));
-        tdefs.add(om.findStrict("ti.sysbios.family.arm.msp432.Timer.Control", "ti.sysbios.family.arm.msp432"));
         vo.bind("BasicView", om.findStrict("ti.sysbios.family.arm.msp432.Timer.BasicView", "ti.sysbios.family.arm.msp432"));
         tdefs.add(om.findStrict("ti.sysbios.family.arm.msp432.Timer.BasicView", "ti.sysbios.family.arm.msp432"));
         vo.bind("DeviceView", om.findStrict("ti.sysbios.family.arm.msp432.Timer.DeviceView", "ti.sysbios.family.arm.msp432"));

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Texas Instruments Incorporated
+ * Copyright (c) 2016-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,125 +41,7 @@
  *  #include <ti/drivers/adc/ADCBufMSP432.h>
  *  @endcode
  *
- * # Overview #
- * This is a MSP432 specific implementation of the generic TI-RTOS ADC driver.
- * The generic ADC API specified in ti/drivers/ADCBuf.h should be called by the application.
- * The board file will define the device specific configuration, and casting in the general
- * API will ensure that the correct device specific functions are called. It is advised
- * to specify a ADCBufMSP432_ParamsExtension in the custom field of the ADCBuf_Params that suits
- * the application at hand. The default settings will work for many, but not all, usecases.
- *
- * # General Behavior #
- * The application should call ADCBuf_init() once by the application to set the isOpened
- * flag to false, indicating that the driver is ready to be used.
- *
- * The ADC driver is opened by calling ADCBuf_open() which in turn will
- * set up interrupts and configure the internal components of the driver.
- * However the ADC hardware or analog pins are not yet configured until the ADCBuf_convert() is
- * called.
- *
- * In order to perform an ADC conversion, the application should call
- * ADCBuf_convert(). This call will request the ADC resource, configure the ADC,
- * and perform the requested ADC conversion on the selected channel defined by the
- * ADCBuf_Conversion structure.
- *
- * # Error handling #
- * The following errors may occur when opening the ADC:
- * - The ADC handle is already open.
- *
- * The following errors may occur when requesing an ADC conversion:
- * - The ADC is currently already doing a conversion.
- * - When in ::ADCBuf_RETURN_MODE_BLOCKING, the timeout specified in the ADCBuf_Params was insufficient
- *   to make the necessary amount of conversions requested in the ADCBuf_Conversion settings.
- *
- * The following errors may occur when adjusting ADC results by calling ADCBuf_adjustRawValues():
- * - The ADC is currently runnning for the conversion. Usually it happens during the ADC
- *   continuous mode.
- *
- * # Power Management #
- * The power management framework will try to put the device into the most
- * power efficient mode whenever possible. Please see the technical reference
- * manual for further details on each power mode.
- *
- * The ADCBufMSP432 driver sets a power constraint during operation to keep
- * the device out of standby. When the operation has finished, the power
- * constraint is released.
- * The following statements are valid:
- *   - After ADCBuf_open(): the device cannot enter standby.
- *   - After ADCBuf_close(): the device can enter standby again.
- *
- *
- * # Supported Functions #
- * | API function               | Description                                          |
- * |----------------------------|------------------------------------------------------|
- * | ADCBuf_init()              | Initialize ADC driver                                |
- * | ADCBuf_open()              | Open the ADC driver and configure driver             |
- * | ADCBuf_convert()           | Perform ADC conversion                               |
- * | ADCBuf_convertCancel()     | Cancel ongoing ADC conversion                        |
- * | ADCBuf_close()             | Close ADC driver                                     |
- * | ADCBuf_Params_init()       | Initialise ADCBuf_Params structure to default values |
- * | ADCBuf_adjustRawValues()   | Adjust ADC raw values based on gain and offset       |
- * | ADCBuf_convertAdjustedToMicroVolts() | Convert adjusted values to micro volts unit|
- *
- *  # Not Supported Functionality #
- *  TBD
- *
- * # Use Cases #
- * ## Basic one-shot conversion #
- *  Perform one conversion on DIO30 in ::ADCBuf_RETURN_MODE_BLOCKING.
- *  @code
- *  // Code will go here when the API is stable
- *  // One shot and blocking mode
- *  ADCBuf_Params param = {0};
- *  param.returnMode = ADCBuf_RETURN_MODE_BLOCKING;
- *  param.recurrenceMode = ADCBuf_RECURRENCE_MODE_ONE_SHOT;
- *  param.samplingFrequency = 10000; //10K
- *  ADCBufHandle adc = ADCBuf_open(Board_ADCBuf0, &param);
- *
- *  ADCBuf_Conversion conversion = {0};
- *  conversion.samplesRequestedCount = 10;
- *  conversion.sampleBuf = adcBuf;
- *  conversion.adcChannel = Board_ADC0_CHANNEL_A0;
- *  ADCBuf_convert(adc, &conversion, 1);
- *
- *  //Recurrence and callback mode
- *  void myCallback(ADCBuf_Handle handle,
- *                  ADCBuf_Conversion *conversion,
-                    void *activeADCBuffer)
- *  {
- *     //Process activeADCBuffer
- *     for (i=0; i<conversion->sampleCount; i++) {
- *        sum += activeADCBuffer[i];
- *     }
- *     avg = sum / conversion->sampleCount;
- *  }
- *  ADCBuf_Params param = {0};
- *  param.returnMode = ADCBuf_RETURN_MODE_CALLBACK;
- *  param.recurrenceMode = ADCBuf_RECURRENCE_MODE_CONTINUOUS;
- *  param.samplingFrequency = 10000;
- *  param.callbackFxn = myCallBack;
- *  ADCBufHandle adc = ADCBuf_open(Board_ADCBuf0, &param);
- *
- *  ADCBuf_Conversion conversion[2] = {0};
- *  conversion[0].samplesRequestedCount = 10;
- *  conversion[0].sampleBuf = adcBuf0;
- *  conversion[0].adcChannel = Board_ADC0_CHANNEL_A0;
- *  conversion[1].samplesRequestedCount = 10;
- *  conversion[1].sampleBuf = adcBuf1;
- *  conversion[1].adcChannel = Board_ADC0_CHANNEL_A1;
- *
- *  ADCBuf_convert(adc, &conversion, 2);
- *  @endcode
- *
- *
- *  # Instrumentation #
- *  The ADC driver interface produces log statements if instrumentation is
- *  enabled.
- *
- *  Diagnostics Mask | Log details                          |
- *  ---------------- | -----------                          |
- *  Diags_USER1      | basic ADC operations performed       |
- *  Diags_USER2      | detailed ADC operations performed    |
+ *  Refer to @ref ADCBuf.h for a complete description of APIs & example of use.
  *
  *  ============================================================================
  */
@@ -174,6 +56,7 @@ extern "C" {
 #include <stdint.h>
 #include <stdbool.h>
 
+#include <ti/devices/DeviceFamily.h>
 
 #include <ti/drivers/ADCBuf.h>
 #include <ti/drivers/dpl/HwiP.h>

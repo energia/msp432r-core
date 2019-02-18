@@ -2,21 +2,21 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     MODULE-WIDE CONFIGS
  *     VIRTUAL FUNCTIONS
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -228,8 +228,8 @@ struct ti_uia_runtime_LogSync_GlobalTimestampProxy_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
     xdc_Bits32 (*get32)(void);
-    xdc_Void (*get64)(xdc_runtime_Types_Timestamp64*);
-    xdc_Void (*getFreq)(xdc_runtime_Types_FreqHz*);
+    xdc_Void (*get64)(xdc_runtime_Types_Timestamp64* result);
+    xdc_Void (*getFreq)(xdc_runtime_Types_FreqHz* freq);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_uia_runtime_LogSync_GlobalTimestampProxy_Module__FXNS__CR
@@ -301,7 +301,8 @@ __extern xdc_Void ti_uia_runtime_LogSync_GlobalTimestampProxy_getFreq__E( xdc_ru
  */
 
 /* Module_upCast */
-static inline xdc_runtime_ITimestampClient_Module ti_uia_runtime_LogSync_GlobalTimestampProxy_Module_upCast( void )
+static inline xdc_runtime_ITimestampClient_Module ti_uia_runtime_LogSync_GlobalTimestampProxy_Module_upCast(void);
+static inline xdc_runtime_ITimestampClient_Module ti_uia_runtime_LogSync_GlobalTimestampProxy_Module_upCast(void)
 {
     return (xdc_runtime_ITimestampClient_Module)ti_uia_runtime_LogSync_GlobalTimestampProxy_Proxy__delegate__S();
 }
@@ -324,6 +325,7 @@ static inline xdc_runtime_ITimestampClient_Module ti_uia_runtime_LogSync_GlobalT
 #define ti_uia_runtime_LogSync_GlobalTimestampProxy_Module_heap() ti_uia_runtime_LogSync_GlobalTimestampProxy_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_uia_runtime_LogSync_GlobalTimestampProxy_Module__id ti_uia_runtime_LogSync_GlobalTimestampProxy_Module_id(void);
 static inline CT__ti_uia_runtime_LogSync_GlobalTimestampProxy_Module__id ti_uia_runtime_LogSync_GlobalTimestampProxy_Module_id( void ) 
 {
     return ti_uia_runtime_LogSync_GlobalTimestampProxy_Module__id__C;

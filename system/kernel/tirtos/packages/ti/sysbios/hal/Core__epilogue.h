@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2106, Texas Instruments Incorporated
+ * Copyright (c) 2015-2016, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -233,6 +233,40 @@ static inline Void ti_sysbios_hal_Core_hwiRestore(UInt key)
             :: "r" (key)
             : "r0", "r12", "cc", "memory"
             );
+}
+
+#elif (!defined(__ti__) &&  \
+        defined(xdc_target__isaCompatible_v8A))
+
+#include <ti/sysbios/family/arm/gicv3/HwiMacros.h>
+
+/*
+ *  ======== Core_hwiDisable ========
+ */
+static inline UInt ti_sysbios_hal_Core_hwiDisable()
+{
+    UInt key;
+    ti_sysbios_family_arm_gicv3_HwiMacros_disable(key);
+    return (key);
+}
+
+/*
+ *  ======== Core_hwiEnable ========
+ */
+static inline UInt ti_sysbios_hal_Core_hwiEnable()
+{
+    UInt key;
+    ti_sysbios_family_arm_gicv3_HwiMacros_enable(key);
+    return (key);
+}
+
+
+/*
+ *  ======== Core_hwiRestore ========
+ */
+static inline Void ti_sysbios_hal_Core_hwiRestore(UInt key)
+{
+    ti_sysbios_family_arm_gicv3_HwiMacros_restore(key);
 }
 
 #else /* all other targets */

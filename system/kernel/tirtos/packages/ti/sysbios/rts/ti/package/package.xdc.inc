@@ -6,7 +6,7 @@ package/ti.sysbios.rts.ti.sch
 package/.vers_g200
 package/.vers_r200
 package/.vers_b200
-package/.xdc-D05
+package/.xdc-D20
 package/ti_sysbios_rts_ti.java
 package/ti_sysbios_rts_ti.class
 package/package_ti.sysbios.rts.ti.c

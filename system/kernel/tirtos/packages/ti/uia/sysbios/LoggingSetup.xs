@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2013-2015, Texas Instruments Incorporated
+ * Copyright (c) 2013-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -44,6 +44,7 @@ var Main = null;
 var Registry = null;
 var Timestamp = null;
 
+var BIOS = null;
 var Load = null;
 var Clock = null;
 var Event = null;
@@ -79,6 +80,14 @@ function dbgPrint(str)
 function module$use()
 {
     LoggingSetup = this;
+    BIOS = xdc.useModule('ti.sysbios.BIOS');
+
+    if (BIOS.logsEnabled == false) {
+        LoggingSetup.$logWarning("BIOS.logsEnabled must be set to true " +
+                "when using RTOS Analyzer.  Please edit " +
+                "the .cfg file and set BIOS.logsEnabled to true.",
+                BIOS, "logsEnabled");
+    }
 
     /* Check for deprecated config */
     if (LoggingSetup.$written("eventUploadMode")) {

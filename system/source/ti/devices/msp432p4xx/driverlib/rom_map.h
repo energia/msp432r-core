@@ -1292,6 +1292,13 @@
 #define MAP_FlashCtl_initiateMassErase                                        \
         FlashCtl_initiateMassErase
 #endif
+#ifdef ROM_FlashCtl_getMemoryInfo
+#define MAP_FlashCtl_getMemoryInfo                                            \
+        ROM_FlashCtl_getMemoryInfo
+#else
+#define MAP_FlashCtl_getMemoryInfo                                            \
+        FlashCtl_getMemoryInfo
+#endif
 
 //*****************************************************************************
 //
@@ -3994,6 +4001,13 @@
 #else
 #define MAP_FlashCtl_A_isMemoryProtected                                      \
         FlashCtl_A_isMemoryProtected
+#endif
+#ifdef ROM_FlashCtl_A_getMemoryInfo
+#define MAP_FlashCtl_A_getMemoryInfo                                          \
+        ROM_FlashCtl_A_getMemoryInfo
+#else
+#define MAP_FlashCtl_A_getMemoryInfo                                          \
+        FlashCtl_A_getMemoryInfo
 #endif
 
 //*****************************************************************************

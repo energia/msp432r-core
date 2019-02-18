@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D13
  */
 
 #define __nested__
@@ -65,6 +65,7 @@
 #include <ti/sysbios/knl/Semaphore.h>
 #include <ti/sysbios/knl/Swi.h>
 #include <ti/sysbios/knl/Task.h>
+#include <ti/sysbios/posix/Settings.h>
 #include <ti/sysbios/rts/gnu/ReentSupport.h>
 #include <ti/sysbios/utils/Load.h>
 #include <xdc/runtime/Assert.h>
@@ -738,6 +739,11 @@ typedef struct {
 
 /*
  * ======== ti.sysbios.knl.Task_SupportProxy INTERNALS ========
+ */
+
+
+/*
+ * ======== ti.sysbios.posix.Settings INTERNALS ========
  */
 
 
@@ -1508,6 +1514,11 @@ const __T1_ti_sysbios_knl_Task_hooks ti_sysbios_knl_Task_hooks__A[2];
 
 
 /*
+ * ======== ti.sysbios.posix.Settings DECLARATIONS ========
+ */
+
+
+/*
  * ======== ti.sysbios.rts.gnu.ReentSupport DECLARATIONS ========
  */
 
@@ -1874,7 +1885,7 @@ __FAR__ const xdc_SizeT ti_sysbios_utils_Load_Module_State_taskList__O = offseto
  *  Define absolute path prefix for this executable's
  *  configuration generated files.
  */
-xdc__META(__ASM__, "@(#)__ASM__ = /db/ztree/library/trees/emt/emt-d09/src/bundles/energia/msp432/configPkg/package/cfg/energia_pm4fg");
+xdc__META(__ASM__, "@(#)__ASM__ = /db/ztree/library/trees/emt/emt-e06/src/bundles/energia/msp432/configPkg/package/cfg/energia_pm4fg");
 
 /*
  *  ======== __ISA__ ========
@@ -2351,8 +2362,6 @@ Void ti_sysbios_family_arm_msp432_init_Boot_init()
 {
     ti_sysbios_family_arm_msp432_init_Boot_disableWatchdog();
 
-    ti_sysbios_family_arm_msp432_init_Boot_configureClocksHigh(CSCTL0_DCO48,
-        CSCTL1_H_DCO);
 }
 
 /*
@@ -2493,7 +2502,8 @@ UInt32 ti_sysbios_family_arm_m3_Hwi_dispatchTable[80];
 Void ti_sysbios_family_arm_m3_Hwi_initIsrStackSize()
 {
     #pragma section = "CSTACK"
-        ti_sysbios_family_arm_m3_Hwi_Module__state__V.isrStackSize = (Void *)__section_size("CSTACK");
+    ti_sysbios_family_arm_m3_Hwi_Module__state__V.isrStackBase = (Void *)__section_begin("CSTACK");
+    ti_sysbios_family_arm_m3_Hwi_Module__state__V.isrStackSize = (Void *)__section_size("CSTACK");
 }
 #endif
 
@@ -2517,6 +2527,43 @@ void ti_sysbios_family_arm_msp432_dummyFxn(void)
     /* Call one function from ClockFreqs.c */
     ti_sysbios_family_arm_msp432_ClockFreqs_getFrequency(
             (ti_sysbios_family_arm_msp432_ClockFreqs_Clock)0);
+}
+
+/*
+ * ======== ti.sysbios.posix.Settings TEMPLATE ========
+ */
+
+
+
+#include <xdc/std.h>
+
+#include <ti/sysbios/posix/pthread.h>
+#include <ti/sysbios/posix/mqueue.h>
+#include <ti/sysbios/posix/sched.h>
+#include <ti/sysbios/posix/semaphore.h>
+#include <ti/sysbios/posix/unistd.h>
+
+/*
+ *  ======== ti_sysbios_posix_dummyFxn ========
+ *  This function will ensure that posix functions will be linked in
+ *  if they are used.  It calls one function from each posix source file.
+ *  This function should never be called.
+ */
+void ti_sysbios_posix_dummyFxn(void)
+{
+    /* Call one function from each posix source file */
+    clock_gettime((clockid_t)0, NULL);       /* clock.c */
+    mq_close((mqd_t)NULL);                   /* mqueue.c */
+    pthread_attr_destroy(NULL);              /* pthread.c */
+    pthread_barrierattr_init(NULL);          /* pthread_barrier.c */
+    pthread_condattr_init(NULL);             /* pthread_cond.c */
+    pthread_key_delete(NULL);                /* pthread_key.c */
+    pthread_mutexattr_destroy(NULL);         /* pthread_mutex.c */
+    pthread_rwlockattr_destroy(NULL);        /* pthread_rwlock.c */
+    sched_yield();                           /* sched.c */
+    sem_destroy(NULL);                       /* semaphore.c */
+    sleep(0);                                /* sleep.c */
+    timer_delete((timer_t)NULL);             /* timer.c */
 }
 
 /*
@@ -2574,9 +2621,9 @@ typedef union Header {
 } Header;
 
 /*
- *  ======== malloc ========
+ *  ======== ti_sysbios_rts_gnu_MemAlloc_alloc ========
  */
-Void ATTRIBUTE *malloc(SizeT size)
+static Void *ti_sysbios_rts_gnu_MemAlloc_alloc(SizeT size)
 {
     Header *packet;
     xdc_runtime_Error_Block eb;
@@ -2598,6 +2645,14 @@ Void ATTRIBUTE *malloc(SizeT size)
     packet->header.size = size + sizeof(Header);
 
     return (packet + 1);
+}
+
+/*
+ *  ======== malloc ========
+ */
+Void ATTRIBUTE *malloc(SizeT size)
+{
+    return (ti_sysbios_rts_gnu_MemAlloc_alloc(size));
 }
 
 /*
@@ -2656,7 +2711,7 @@ Void ATTRIBUTE *calloc(SizeT nmemb, SizeT size)
         return (NULL);
     }
 
-    retval = malloc(nbytes);
+    retval = ti_sysbios_rts_gnu_MemAlloc_alloc(nbytes);
     if (retval != NULL) {
         (Void)memset(retval, (Int)'\0', nbytes);
     }
@@ -3059,7 +3114,7 @@ ti_sysbios_BIOS_Module_State__ ti_sysbios_BIOS_Module__state__V __attribute__ ((
 ti_sysbios_BIOS_Module_State__ ti_sysbios_BIOS_Module__state__V = {
     {
         (xdc_Bits32)0x0,  /* hi */
-        (xdc_Bits32)0x2dc6c00,  /* lo */
+        (xdc_Bits32)0x2dc6c0,  /* lo */
     },  /* cpuFreq */
     (xdc_UInt)0x0,  /* rtsGateCount */
     ((xdc_IArg)(0x0)),  /* rtsGateKey */
@@ -3146,7 +3201,7 @@ __FAR__ const CT__ti_sysbios_BIOS_smpEnabled ti_sysbios_BIOS_smpEnabled__C = 0;
 const CT__ti_sysbios_BIOS_cpuFreq ti_sysbios_BIOS_cpuFreq__C __attribute__ ((section (".rodata_ti_sysbios_BIOS_cpuFreq__C")));
 __FAR__ const CT__ti_sysbios_BIOS_cpuFreq ti_sysbios_BIOS_cpuFreq__C = {
     (xdc_Bits32)0x0,  /* hi */
-    (xdc_Bits32)0x2dc6c00,  /* lo */
+    (xdc_Bits32)0x2dc6c0,  /* lo */
 };
 
 /* runtimeCreatesEnabled__C */
@@ -3921,8 +3976,8 @@ ti_sysbios_family_arm_msp432_ClockFreqs_Module_State__ ti_sysbios_family_arm_msp
 #endif
 ti_sysbios_family_arm_msp432_ClockFreqs_Module_State__ ti_sysbios_family_arm_msp432_ClockFreqs_Module__state__V = {
     (xdc_UInt32)0x8000,  /* ACLK */
-    (xdc_UInt32)0xb71b00,  /* SMCLK */
-    (xdc_UInt32)0x16e3600,  /* HSMCLK */
+    (xdc_UInt32)0x2dc6c0,  /* SMCLK */
+    (xdc_UInt32)0x2dc6c0,  /* HSMCLK */
 };
 
 /* Module__diagsEnabled__C */
@@ -3999,11 +4054,11 @@ __FAR__ const CT__ti_sysbios_family_arm_msp432_ClockFreqs_ACLK ti_sysbios_family
 
 /* SMCLK__C */
 const CT__ti_sysbios_family_arm_msp432_ClockFreqs_SMCLK ti_sysbios_family_arm_msp432_ClockFreqs_SMCLK__C __attribute__ ((section (".rodata_ti_sysbios_family_arm_msp432_ClockFreqs_SMCLK__C")));
-__FAR__ const CT__ti_sysbios_family_arm_msp432_ClockFreqs_SMCLK ti_sysbios_family_arm_msp432_ClockFreqs_SMCLK__C = (xdc_UInt32)0xb71b00;
+__FAR__ const CT__ti_sysbios_family_arm_msp432_ClockFreqs_SMCLK ti_sysbios_family_arm_msp432_ClockFreqs_SMCLK__C = (xdc_UInt32)0x2dc6c0;
 
 /* HSMCLK__C */
 const CT__ti_sysbios_family_arm_msp432_ClockFreqs_HSMCLK ti_sysbios_family_arm_msp432_ClockFreqs_HSMCLK__C __attribute__ ((section (".rodata_ti_sysbios_family_arm_msp432_ClockFreqs_HSMCLK__C")));
-__FAR__ const CT__ti_sysbios_family_arm_msp432_ClockFreqs_HSMCLK ti_sysbios_family_arm_msp432_ClockFreqs_HSMCLK__C = (xdc_UInt32)0x16e3600;
+__FAR__ const CT__ti_sysbios_family_arm_msp432_ClockFreqs_HSMCLK ti_sysbios_family_arm_msp432_ClockFreqs_HSMCLK__C = (xdc_UInt32)0x2dc6c0;
 
 
 /*
@@ -6518,6 +6573,87 @@ __FAR__ const CT__ti_sysbios_knl_Task_startupHookFunc ti_sysbios_knl_Task_startu
 
 
 /*
+ * ======== ti.sysbios.posix.Settings INITIALIZERS ========
+ */
+
+/* Module__diagsEnabled__C */
+const CT__ti_sysbios_posix_Settings_Module__diagsEnabled ti_sysbios_posix_Settings_Module__diagsEnabled__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Module__diagsEnabled__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Module__diagsEnabled ti_sysbios_posix_Settings_Module__diagsEnabled__C = (xdc_Bits32)0x90;
+
+/* Module__diagsIncluded__C */
+const CT__ti_sysbios_posix_Settings_Module__diagsIncluded ti_sysbios_posix_Settings_Module__diagsIncluded__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Module__diagsIncluded__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Module__diagsIncluded ti_sysbios_posix_Settings_Module__diagsIncluded__C = (xdc_Bits32)0x90;
+
+/* Module__diagsMask__C */
+const CT__ti_sysbios_posix_Settings_Module__diagsMask ti_sysbios_posix_Settings_Module__diagsMask__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Module__diagsMask__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Module__diagsMask ti_sysbios_posix_Settings_Module__diagsMask__C = ((CT__ti_sysbios_posix_Settings_Module__diagsMask)0);
+
+/* Module__gateObj__C */
+const CT__ti_sysbios_posix_Settings_Module__gateObj ti_sysbios_posix_Settings_Module__gateObj__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Module__gateObj__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Module__gateObj ti_sysbios_posix_Settings_Module__gateObj__C = ((CT__ti_sysbios_posix_Settings_Module__gateObj)0);
+
+/* Module__gatePrms__C */
+const CT__ti_sysbios_posix_Settings_Module__gatePrms ti_sysbios_posix_Settings_Module__gatePrms__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Module__gatePrms__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Module__gatePrms ti_sysbios_posix_Settings_Module__gatePrms__C = ((CT__ti_sysbios_posix_Settings_Module__gatePrms)0);
+
+/* Module__id__C */
+const CT__ti_sysbios_posix_Settings_Module__id ti_sysbios_posix_Settings_Module__id__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Module__id__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Module__id ti_sysbios_posix_Settings_Module__id__C = (xdc_Bits16)0x37;
+
+/* Module__loggerDefined__C */
+const CT__ti_sysbios_posix_Settings_Module__loggerDefined ti_sysbios_posix_Settings_Module__loggerDefined__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Module__loggerDefined__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Module__loggerDefined ti_sysbios_posix_Settings_Module__loggerDefined__C = 0;
+
+/* Module__loggerObj__C */
+const CT__ti_sysbios_posix_Settings_Module__loggerObj ti_sysbios_posix_Settings_Module__loggerObj__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Module__loggerObj__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Module__loggerObj ti_sysbios_posix_Settings_Module__loggerObj__C = ((CT__ti_sysbios_posix_Settings_Module__loggerObj)0);
+
+/* Module__loggerFxn0__C */
+const CT__ti_sysbios_posix_Settings_Module__loggerFxn0 ti_sysbios_posix_Settings_Module__loggerFxn0__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Module__loggerFxn0__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Module__loggerFxn0 ti_sysbios_posix_Settings_Module__loggerFxn0__C = ((CT__ti_sysbios_posix_Settings_Module__loggerFxn0)0);
+
+/* Module__loggerFxn1__C */
+const CT__ti_sysbios_posix_Settings_Module__loggerFxn1 ti_sysbios_posix_Settings_Module__loggerFxn1__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Module__loggerFxn1__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Module__loggerFxn1 ti_sysbios_posix_Settings_Module__loggerFxn1__C = ((CT__ti_sysbios_posix_Settings_Module__loggerFxn1)0);
+
+/* Module__loggerFxn2__C */
+const CT__ti_sysbios_posix_Settings_Module__loggerFxn2 ti_sysbios_posix_Settings_Module__loggerFxn2__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Module__loggerFxn2__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Module__loggerFxn2 ti_sysbios_posix_Settings_Module__loggerFxn2__C = ((CT__ti_sysbios_posix_Settings_Module__loggerFxn2)0);
+
+/* Module__loggerFxn4__C */
+const CT__ti_sysbios_posix_Settings_Module__loggerFxn4 ti_sysbios_posix_Settings_Module__loggerFxn4__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Module__loggerFxn4__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Module__loggerFxn4 ti_sysbios_posix_Settings_Module__loggerFxn4__C = ((CT__ti_sysbios_posix_Settings_Module__loggerFxn4)0);
+
+/* Module__loggerFxn8__C */
+const CT__ti_sysbios_posix_Settings_Module__loggerFxn8 ti_sysbios_posix_Settings_Module__loggerFxn8__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Module__loggerFxn8__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Module__loggerFxn8 ti_sysbios_posix_Settings_Module__loggerFxn8__C = ((CT__ti_sysbios_posix_Settings_Module__loggerFxn8)0);
+
+/* Object__count__C */
+const CT__ti_sysbios_posix_Settings_Object__count ti_sysbios_posix_Settings_Object__count__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Object__count__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Object__count ti_sysbios_posix_Settings_Object__count__C = 0;
+
+/* Object__heap__C */
+const CT__ti_sysbios_posix_Settings_Object__heap ti_sysbios_posix_Settings_Object__heap__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Object__heap__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Object__heap ti_sysbios_posix_Settings_Object__heap__C = 0;
+
+/* Object__sizeof__C */
+const CT__ti_sysbios_posix_Settings_Object__sizeof ti_sysbios_posix_Settings_Object__sizeof__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Object__sizeof__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Object__sizeof ti_sysbios_posix_Settings_Object__sizeof__C = 0;
+
+/* Object__table__C */
+const CT__ti_sysbios_posix_Settings_Object__table ti_sysbios_posix_Settings_Object__table__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_Object__table__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_Object__table ti_sysbios_posix_Settings_Object__table__C = 0;
+
+/* supportsMutexPriority__C */
+const CT__ti_sysbios_posix_Settings_supportsMutexPriority ti_sysbios_posix_Settings_supportsMutexPriority__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_supportsMutexPriority__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_supportsMutexPriority ti_sysbios_posix_Settings_supportsMutexPriority__C = 0;
+
+/* debug__C */
+const CT__ti_sysbios_posix_Settings_debug ti_sysbios_posix_Settings_debug__C __attribute__ ((section (".rodata_ti_sysbios_posix_Settings_debug__C")));
+__FAR__ const CT__ti_sysbios_posix_Settings_debug ti_sysbios_posix_Settings_debug__C = 0;
+
+
+/*
  * ======== ti.sysbios.rts.gnu.ReentSupport INITIALIZERS ========
  */
 
@@ -6557,7 +6693,7 @@ __FAR__ const CT__ti_sysbios_rts_gnu_ReentSupport_Module__gatePrms ti_sysbios_rt
 
 /* Module__id__C */
 const CT__ti_sysbios_rts_gnu_ReentSupport_Module__id ti_sysbios_rts_gnu_ReentSupport_Module__id__C __attribute__ ((section (".rodata_ti_sysbios_rts_gnu_ReentSupport_Module__id__C")));
-__FAR__ const CT__ti_sysbios_rts_gnu_ReentSupport_Module__id ti_sysbios_rts_gnu_ReentSupport_Module__id__C = (xdc_Bits16)0x37;
+__FAR__ const CT__ti_sysbios_rts_gnu_ReentSupport_Module__id ti_sysbios_rts_gnu_ReentSupport_Module__id__C = (xdc_Bits16)0x38;
 
 /* Module__loggerDefined__C */
 const CT__ti_sysbios_rts_gnu_ReentSupport_Module__loggerDefined ti_sysbios_rts_gnu_ReentSupport_Module__loggerDefined__C __attribute__ ((section (".rodata_ti_sysbios_rts_gnu_ReentSupport_Module__loggerDefined__C")));
@@ -14161,6 +14297,18 @@ xdc_CPtr ti_sysbios_knl_Task_SupportProxy_Proxy__delegate__S( void )
 
 
 /*
+ * ======== ti.sysbios.posix.Settings SYSTEM FUNCTIONS ========
+ */
+
+/* Module__startupDone__S */
+xdc_Bool ti_sysbios_posix_Settings_Module__startupDone__S( void )
+{
+    return 1;
+}
+
+
+
+/*
  * ======== ti.sysbios.rts.gnu.ReentSupport SYSTEM FUNCTIONS ========
  */
 
@@ -15380,6 +15528,31 @@ xdc_Ptr ti_sysbios_knl_Task_Object__get__S(xdc_Ptr oarr, xdc_Int i) __attribute_
 xdc_Ptr ti_sysbios_knl_Task_Object__first__S(void) __attribute__ ((externally_visible));
 xdc_Ptr ti_sysbios_knl_Task_Object__next__S(xdc_Ptr obj) __attribute__ ((externally_visible));
 xdc_Void ti_sysbios_knl_Task_Params__init__S(xdc_Ptr dst, const xdc_Void *src, xdc_SizeT psz, xdc_SizeT isz) __attribute__ ((externally_visible));
+
+/*
+ * ======== ti.sysbios.posix.Settings PRAGMAS ========
+ */
+
+const CT__ti_sysbios_posix_Settings_Module__diagsEnabled ti_sysbios_posix_Settings_Module__diagsEnabled__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Module__diagsIncluded ti_sysbios_posix_Settings_Module__diagsIncluded__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Module__diagsMask ti_sysbios_posix_Settings_Module__diagsMask__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Module__gateObj ti_sysbios_posix_Settings_Module__gateObj__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Module__gatePrms ti_sysbios_posix_Settings_Module__gatePrms__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Module__id ti_sysbios_posix_Settings_Module__id__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Module__loggerDefined ti_sysbios_posix_Settings_Module__loggerDefined__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Module__loggerObj ti_sysbios_posix_Settings_Module__loggerObj__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Module__loggerFxn0 ti_sysbios_posix_Settings_Module__loggerFxn0__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Module__loggerFxn1 ti_sysbios_posix_Settings_Module__loggerFxn1__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Module__loggerFxn2 ti_sysbios_posix_Settings_Module__loggerFxn2__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Module__loggerFxn4 ti_sysbios_posix_Settings_Module__loggerFxn4__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Module__loggerFxn8 ti_sysbios_posix_Settings_Module__loggerFxn8__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Object__count ti_sysbios_posix_Settings_Object__count__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Object__heap ti_sysbios_posix_Settings_Object__heap__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Object__sizeof ti_sysbios_posix_Settings_Object__sizeof__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_Object__table ti_sysbios_posix_Settings_Object__table__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_supportsMutexPriority ti_sysbios_posix_Settings_supportsMutexPriority__C __attribute__ ((externally_visible));
+const CT__ti_sysbios_posix_Settings_debug ti_sysbios_posix_Settings_debug__C __attribute__ ((externally_visible));
+xdc_Bool ti_sysbios_posix_Settings_Module__startupDone__S(void) __attribute__ ((externally_visible));
 
 /*
  * ======== ti.sysbios.utils.Load PRAGMAS ========

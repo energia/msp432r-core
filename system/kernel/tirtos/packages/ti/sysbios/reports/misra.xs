@@ -12,6 +12,16 @@ Misra.misraRules["20.12"] = {
     disable: true
 };
 
+Misra.misraRules["20.8"] = {
+    brief: '20.8/R',
+    desc: 'The signal handling facilities of <signal.h> shall not be used.',
+    remark: 'Tool reports false positives. The use of <signal.h> is ' +
+            'mandated by POSIX spec and is limited to the POSIX ' +
+            'package in SYS/BIOS. If an application needs to conform ' +
+            'to this rule, then it should not use the POSIX package.',
+    disable: true
+};
+
 Misra.misraRules["19.17"] = {
     brief: '19.17/R',
     desc: 'All #else, #elif and #endif preprocessor directives shall ' +

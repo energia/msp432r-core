@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2012, Texas Instruments Incorporated
+ * Copyright (c) 2012-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -113,7 +113,7 @@ Ptr TransportNdk_start(UIAPacket_HdrType hdrType)
         msgSin.sin_port        = htons(TransportNdk_tcpPort);
 
         /* Bind to the local address */
-        status = bind(TransportNdk_msgSocket, (PSA)&msgSin,
+        status = bind(TransportNdk_msgSocket, (struct sockaddr *)&msgSin,
                       sizeof(struct sockaddr_in));
         if (status != 0) {
             System_printf("bind failed: fdError = %d\n", fdError());

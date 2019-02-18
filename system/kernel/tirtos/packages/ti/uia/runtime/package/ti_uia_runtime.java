@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 import java.util.*;
 import org.mozilla.javascript.*;
@@ -11,7 +11,7 @@ import xdc.services.spec.Session;
 
 public class ti_uia_runtime
 {
-    static final String VERS = "@(#) xdc-D05\n";
+    static final String VERS = "@(#) xdc-D20\n";
 
     static final Proto.Elm $$T_Bool = Proto.Elm.newBool();
     static final Proto.Elm $$T_Num = Proto.Elm.newNum();
@@ -288,7 +288,6 @@ public class ti_uia_runtime
         // decls 
         spo = (Proto.Obj)om.bind("ti.uia.runtime.QueueDescriptor$$ModuleView", new Proto.Obj());
         om.bind("ti.uia.runtime.QueueDescriptor.ModuleView", new Proto.Str(spo, false));
-        om.bind("ti.uia.runtime.QueueDescriptor.QueueType", new Proto.Enm("ti.uia.runtime.QueueDescriptor.QueueType"));
         spo = (Proto.Obj)om.bind("ti.uia.runtime.QueueDescriptor$$Header", new Proto.Obj());
         om.bind("ti.uia.runtime.QueueDescriptor.Header", new Proto.Str(spo, false));
         spo = (Proto.Obj)om.bind("ti.uia.runtime.QueueDescriptor$$Module_State", new Proto.Obj());
@@ -643,17 +642,17 @@ public class ti_uia_runtime
     void QueueDescriptor$$CONSTS()
     {
         // module QueueDescriptor
-        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_NONE", xdc.services.intern.xsr.Enum.make((Proto.Enm)om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType", "ti.uia.runtime"), "ti.uia.runtime.QueueDescriptor.QueueType_NONE", xdc.services.intern.xsr.Enum.intValue(0L)+0));
-        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_CMD_CIRCULAR_BUFFER", xdc.services.intern.xsr.Enum.make((Proto.Enm)om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType", "ti.uia.runtime"), "ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_CMD_CIRCULAR_BUFFER", xdc.services.intern.xsr.Enum.intValue(1L)+0));
-        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_FROMHOST_CMD_CIRCULAR_BUFFER", xdc.services.intern.xsr.Enum.make((Proto.Enm)om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType", "ti.uia.runtime"), "ti.uia.runtime.QueueDescriptor.QueueType_FROMHOST_CMD_CIRCULAR_BUFFER", xdc.services.intern.xsr.Enum.intValue(2L)+0));
-        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_CIRCULAR_BUFFER", xdc.services.intern.xsr.Enum.make((Proto.Enm)om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType", "ti.uia.runtime"), "ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_CIRCULAR_BUFFER", xdc.services.intern.xsr.Enum.intValue(3L)+0));
-        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_OVERFLOW_BUFFER", xdc.services.intern.xsr.Enum.make((Proto.Enm)om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType", "ti.uia.runtime"), "ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_OVERFLOW_BUFFER", xdc.services.intern.xsr.Enum.intValue(4L)+0));
-        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_DATA_CIRCULAR_BUFFER", xdc.services.intern.xsr.Enum.make((Proto.Enm)om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType", "ti.uia.runtime"), "ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_DATA_CIRCULAR_BUFFER", xdc.services.intern.xsr.Enum.intValue(5L)+0));
-        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_FROMHOST_DATA_CIRCULAR_BUFFER", xdc.services.intern.xsr.Enum.make((Proto.Enm)om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType", "ti.uia.runtime"), "ti.uia.runtime.QueueDescriptor.QueueType_FROMHOST_DATA_CIRCULAR_BUFFER", xdc.services.intern.xsr.Enum.intValue(6L)+0));
-        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_UIAPACKET_ARRAY", xdc.services.intern.xsr.Enum.make((Proto.Enm)om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType", "ti.uia.runtime"), "ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_UIAPACKET_ARRAY", xdc.services.intern.xsr.Enum.intValue(7L)+0));
-        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_UIAPACKET_STOPMODE", xdc.services.intern.xsr.Enum.make((Proto.Enm)om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType", "ti.uia.runtime"), "ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_UIAPACKET_STOPMODE", xdc.services.intern.xsr.Enum.intValue(8L)+0));
+        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_NONE", 0L);
+        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_CMD_CIRCULAR_BUFFER", 1L);
+        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_FROMHOST_CMD_CIRCULAR_BUFFER", 2L);
+        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_CIRCULAR_BUFFER", 3L);
+        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_OVERFLOW_BUFFER", 4L);
+        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_DATA_CIRCULAR_BUFFER", 5L);
+        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_FROMHOST_DATA_CIRCULAR_BUFFER", 6L);
+        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_UIAPACKET_ARRAY", 7L);
+        om.bind("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_UIAPACKET_STOPMODE", 8L);
         om.bind("ti.uia.runtime.QueueDescriptor.addToList", new Extern("ti_uia_runtime_QueueDescriptor_addToList__E", "xdc_Void(*)(ti_uia_runtime_QueueDescriptor_Header*)", true, false));
-        om.bind("ti.uia.runtime.QueueDescriptor.initHeader", new Extern("ti_uia_runtime_QueueDescriptor_initHeader__E", "xdc_Void(*)(ti_uia_runtime_QueueDescriptor_Header*,xdc_Ptr,xdc_SizeT,xdc_UInt,xdc_UInt,xdc_UInt,ti_uia_runtime_QueueDescriptor_QueueType,xdc_Ptr)", true, false));
+        om.bind("ti.uia.runtime.QueueDescriptor.initHeader", new Extern("ti_uia_runtime_QueueDescriptor_initHeader__E", "xdc_Void(*)(ti_uia_runtime_QueueDescriptor_Header*,xdc_Ptr,xdc_SizeT,xdc_UInt,xdc_UInt,xdc_UInt,xdc_UInt,xdc_Ptr)", true, false));
         om.bind("ti.uia.runtime.QueueDescriptor.removeFromList", new Extern("ti_uia_runtime_QueueDescriptor_removeFromList__E", "xdc_Void(*)(ti_uia_runtime_QueueDescriptor_Header*)", true, false));
     }
 
@@ -1653,7 +1652,7 @@ public class ti_uia_runtime
         sizes.clear();
         sizes.add(Global.newArray("structSize", "TInt"));
         sizes.add(Global.newArray("next", "UPtr"));
-        sizes.add(Global.newArray("queueType", "Nti.uia.runtime.QueueDescriptor.QueueType;;0;1;2;3;4;5;6;7;8"));
+        sizes.add(Global.newArray("queueType", "UInt"));
         sizes.add(Global.newArray("readPtr", "UPtr"));
         sizes.add(Global.newArray("writePtr", "UPtr"));
         sizes.add(Global.newArray("queueStartAdrs", "UPtr"));
@@ -2449,6 +2448,15 @@ public class ti_uia_runtime
         po = (Proto.Obj)om.findStrict("ti.uia.runtime.QueueDescriptor.Module", "ti.uia.runtime");
         po.init("ti.uia.runtime.QueueDescriptor.Module", om.findStrict("xdc.runtime.IModule.Module", "ti.uia.runtime"));
                 po.addFld("$hostonly", $$T_Num, 0, "r");
+                po.addFld("QueueType_NONE", Proto.Elm.newCNum("(xdc_UInt)"), 0L, "rh");
+                po.addFld("QueueType_TOHOST_CMD_CIRCULAR_BUFFER", Proto.Elm.newCNum("(xdc_UInt)"), 1L, "rh");
+                po.addFld("QueueType_FROMHOST_CMD_CIRCULAR_BUFFER", Proto.Elm.newCNum("(xdc_UInt)"), 2L, "rh");
+                po.addFld("QueueType_TOHOST_EVENT_CIRCULAR_BUFFER", Proto.Elm.newCNum("(xdc_UInt)"), 3L, "rh");
+                po.addFld("QueueType_TOHOST_EVENT_OVERFLOW_BUFFER", Proto.Elm.newCNum("(xdc_UInt)"), 4L, "rh");
+                po.addFld("QueueType_TOHOST_DATA_CIRCULAR_BUFFER", Proto.Elm.newCNum("(xdc_UInt)"), 5L, "rh");
+                po.addFld("QueueType_FROMHOST_DATA_CIRCULAR_BUFFER", Proto.Elm.newCNum("(xdc_UInt)"), 6L, "rh");
+                po.addFld("QueueType_TOHOST_EVENT_UIAPACKET_ARRAY", Proto.Elm.newCNum("(xdc_UInt)"), 7L, "rh");
+                po.addFld("QueueType_TOHOST_EVENT_UIAPACKET_STOPMODE", Proto.Elm.newCNum("(xdc_UInt)"), 8L, "rh");
         if (isCFG) {
             po.addFld("rovViewInfo", (Proto)om.findStrict("xdc.rov.ViewInfo.Instance", "ti.uia.runtime"), $$UNDEF, "wh");
             po.addFld("maxId", Proto.Elm.newCNum("(xdc_Int)"), 0L, "wh");
@@ -2479,7 +2487,7 @@ public class ti_uia_runtime
                 po.addFld("$hostonly", $$T_Num, 0, "r");
                 po.addFld("structSize", Proto.Elm.newCNum("(xdc_Int)"), $$UNDEF, "w");
                 po.addFld("next", new Proto.Adr("ti_uia_runtime_QueueDescriptor_Header*", "PS"), $$UNDEF, "w");
-                po.addFld("queueType", (Proto)om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType", "ti.uia.runtime"), $$UNDEF, "w");
+                po.addFld("queueType", Proto.Elm.newCNum("(xdc_UInt)"), $$UNDEF, "w");
                 po.addFld("readPtr", new Proto.Adr("xdc_Bits32*", "Pn"), $$UNDEF, "w");
                 po.addFld("writePtr", new Proto.Adr("xdc_Bits32*", "Pn"), $$UNDEF, "w");
                 po.addFld("queueStartAdrs", new Proto.Adr("xdc_Bits32*", "Pn"), $$UNDEF, "w");
@@ -4266,21 +4274,11 @@ public class ti_uia_runtime
         icfgs.add("Object__table");
         vo.bind("ModuleView", om.findStrict("ti.uia.runtime.QueueDescriptor.ModuleView", "ti.uia.runtime"));
         tdefs.add(om.findStrict("ti.uia.runtime.QueueDescriptor.ModuleView", "ti.uia.runtime"));
-        vo.bind("QueueType", om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType", "ti.uia.runtime"));
         vo.bind("Header", om.findStrict("ti.uia.runtime.QueueDescriptor.Header", "ti.uia.runtime"));
         tdefs.add(om.findStrict("ti.uia.runtime.QueueDescriptor.Header", "ti.uia.runtime"));
         icfgs.add("maxId");
         vo.bind("Module_State", om.findStrict("ti.uia.runtime.QueueDescriptor.Module_State", "ti.uia.runtime"));
         tdefs.add(om.findStrict("ti.uia.runtime.QueueDescriptor.Module_State", "ti.uia.runtime"));
-        vo.bind("QueueType_NONE", om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType_NONE", "ti.uia.runtime"));
-        vo.bind("QueueType_TOHOST_CMD_CIRCULAR_BUFFER", om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_CMD_CIRCULAR_BUFFER", "ti.uia.runtime"));
-        vo.bind("QueueType_FROMHOST_CMD_CIRCULAR_BUFFER", om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType_FROMHOST_CMD_CIRCULAR_BUFFER", "ti.uia.runtime"));
-        vo.bind("QueueType_TOHOST_EVENT_CIRCULAR_BUFFER", om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_CIRCULAR_BUFFER", "ti.uia.runtime"));
-        vo.bind("QueueType_TOHOST_EVENT_OVERFLOW_BUFFER", om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_OVERFLOW_BUFFER", "ti.uia.runtime"));
-        vo.bind("QueueType_TOHOST_DATA_CIRCULAR_BUFFER", om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_DATA_CIRCULAR_BUFFER", "ti.uia.runtime"));
-        vo.bind("QueueType_FROMHOST_DATA_CIRCULAR_BUFFER", om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType_FROMHOST_DATA_CIRCULAR_BUFFER", "ti.uia.runtime"));
-        vo.bind("QueueType_TOHOST_EVENT_UIAPACKET_ARRAY", om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_UIAPACKET_ARRAY", "ti.uia.runtime"));
-        vo.bind("QueueType_TOHOST_EVENT_UIAPACKET_STOPMODE", om.findStrict("ti.uia.runtime.QueueDescriptor.QueueType_TOHOST_EVENT_UIAPACKET_STOPMODE", "ti.uia.runtime"));
         vo.bind("$$tdefs", Global.newArray(tdefs.toArray()));
         vo.bind("$$proxies", Global.newArray(proxies.toArray()));
         vo.bind("$$mcfgs", Global.newArray(mcfgs.toArray()));

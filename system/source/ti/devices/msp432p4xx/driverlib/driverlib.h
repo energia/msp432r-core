@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -66,21 +61,25 @@
 #include <ti/devices/msp432p4xx/driverlib/uart.h>
 #include <ti/devices/msp432p4xx/driverlib/wdt_a.h>
 
-/* Specific modules for MSP432P4111 */
+/* Device specific modules */
 #if defined(__MCU_HAS_SYSCTL_A__)
-#include "sysctl_a.h"
-#else
+#include <ti/devices/msp432p4xx/driverlib/sysctl_a.h>
+#endif
+
+#if defined(__MCU_HAS_SYSCTL__)
 #include <ti/devices/msp432p4xx/driverlib/sysctl.h>
 #endif
 
 #if defined(__MCU_HAS_FLCTL_A__)
-#include "flash_a.h"
-#else
+#include <ti/devices/msp432p4xx/driverlib/flash_a.h>
+#endif
+
+#if defined(__MCU_HAS_FLCTL__)
 #include <ti/devices/msp432p4xx/driverlib/flash.h>
 #endif
 
 #if defined(__MCU_HAS_LCD_F__)
-#include "lcd_f.h"
+#include <ti/devices/msp432p4xx/driverlib/lcd_f.h>
 #endif
 
 /* Offset Definitions */

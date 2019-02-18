@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -38,8 +33,15 @@
 #include <stdint.h>
 
 /* DriverLib Includes */
-#include <ti/devices/msp432p4xx/driverlib/driverlib.h>
+#include <ti/devices/msp432p4xx/driverlib/flash.h>
+#include <ti/devices/msp432p4xx/driverlib/sysctl.h>
+#include <ti/devices/msp432p4xx/driverlib/interrupt.h>
+#include <ti/devices/msp432p4xx/driverlib/cpu.h>
 #include <ti/devices/msp432p4xx/driverlib/debug.h>
+
+/* Define to ensure that our current MSP432 has the FLCTL module. This
+    definition is included in the device specific header file */
+#ifdef __MCU_HAS_FLCTL__
 
 static const uint32_t MAX_ERASE_NO_TLV = 50;
 static const uint32_t MAX_PROGRAM_NO_TLV = 5;
@@ -133,8 +135,8 @@ static uint32_t getUserFlashSector(uint32_t addr)
     }
 }
 
-void FlashCtl_getMemoryInfo(uint32_t addr, uint32_t *sectorNum,
-        uint32_t *bankNum)
+void FlashCtl_getMemoryInfo(uint32_t addr, uint32_t *bankNum,
+                                   uint32_t *sectorNum)
 {
     uint32_t bankLimit;
 
@@ -142,14 +144,14 @@ void FlashCtl_getMemoryInfo(uint32_t addr, uint32_t *sectorNum,
 
     if (addr > bankLimit)
     {
-        *(sectorNum) = FLASH_BANK1;
+        *(bankNum) = FLASH_BANK1;
         addr = (addr - bankLimit);
     } else
     {
-        *(sectorNum) = FLASH_BANK0;
+        *(bankNum) = FLASH_BANK0;
     }
 
-    *(bankNum) = (addr) / 4096;
+    *(sectorNum) = (addr) / 4096;
 }
 
 static bool _FlashCtl_Program8(uint32_t src, uint32_t dest, uint32_t mTries)
@@ -1561,3 +1563,5 @@ void __FlashCtl_remaskBurstDataPost(uint32_t addr, uint32_t size)
         FlashCtl_setWaitState(bankProgramEnd, b1WaitState);
     }
 }
+
+#endif /* __MCU_HAS_FLCTL__ */

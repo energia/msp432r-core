@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -181,8 +181,22 @@ Void HeapTrack_free(HeapTrack_Object *obj, Ptr buf, SizeT size)
  */
 Void HeapTrack_getStats(HeapTrack_Object *obj, Memory_Stats *stats)
 {
-    /* Just call the heap's function */
+    /* call the heap's stats function */
     Memory_getStats(obj->internalHeap, stats);
+
+    /* update free sizes to account for a HeapTrack_Tracker structure */
+    if (stats->totalFreeSize > sizeof(HeapTrack_Tracker)) {
+        stats->totalFreeSize -= sizeof(HeapTrack_Tracker);
+    }
+    else {
+        stats->totalFreeSize = 0;
+    }
+    if (stats->largestFreeSize > sizeof(HeapTrack_Tracker)) {
+        stats->largestFreeSize -= sizeof(HeapTrack_Tracker);
+    }
+    else {
+        stats->largestFreeSize = 0;
+    }
 }
 
 /*

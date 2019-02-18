@@ -116,12 +116,12 @@
     </makefiles>
     <targets>
         <target name="gnu.targets.arm.M4F"
-            version="gnu.targets.arm.M4F{1,0,4.9,3"
-            rawVersion="4.9.3"
+            version="gnu.targets.arm.M4F{1,0,6.3,1"
+            rawVersion="6.3.1"
             platform="ti.platforms.tiva:TM4C1294NCPDT"
             isa="v7M4"
             suffix="m4fg"
-            rootDir="/db/vendors/linaro/gcc-arm-none-eabi-4_9-2015q3"
+            rootDir="/db/vendors/linaro/gcc-arm-none-eabi-6-2017-q1-update"
             os="undefined"
             rts="gnu.targets.arm.rtsv7M">
             <model endian="little"

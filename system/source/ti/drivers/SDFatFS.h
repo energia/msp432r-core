@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Texas Instruments Incorporated
+ * Copyright (c) 2016-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -94,6 +94,7 @@ extern "C" {
 #endif
 
 #include <stdint.h>
+
 #include <ti/drivers/SD.h>
 
 #include <third_party/fatfs/ff.h>

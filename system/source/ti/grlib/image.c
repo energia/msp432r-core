@@ -298,14 +298,14 @@ void Graphics_drawImage(const Graphics_Context *context,
                 }
 
                 //After original value, but it still needs to be written once
-                if((ucRunLength + uiLineCnt) >= width)
+                if((ucRunLength + uiLineCnt) > width)
                 {
                     //Run length runs past current line
 
                     //Set left over run length for next line to ucTempRun
                     ucTempRun = ucRunLength - (width - uiLineCnt);
                     //Set ucRunLength to finish this line
-                    ucRunLength = (width - uiLineCnt);
+                    ucRunLength = (width - uiLineCnt - 1);
                     //Set line overrun flag
                     ucNoOverrun = 0;
                 }

@@ -40,22 +40,19 @@
 
 #include <xdc/std.h>
 #include <xdc/runtime/Error.h>
-#include <xdc/runtime/Memory.h>
-#include <ti/sysbios/hal/Hwi.h>
-#include <ti/sysbios/knl/Semaphore.h>
 
+#include <ti/sysbios/knl/Semaphore.h>
 
 /*
  *  ======== SemaphoreP_construct ========
  */
-SemaphoreP_Handle SemaphoreP_construct(SemaphoreP_Struct *handle,
+SemaphoreP_Handle SemaphoreP_construct(SemaphoreP_Struct *semStruct,
         unsigned int count, SemaphoreP_Params *params)
 {
     Semaphore_Params semParams;
-    Semaphore_Struct *semStruct = (Semaphore_Struct *)handle;
 
     if (params == NULL) {
-        Semaphore_construct(semStruct, count, NULL);
+        Semaphore_construct((Semaphore_Struct *)semStruct, count, NULL);
     }
     else {
         Semaphore_Params_init(&semParams);
@@ -66,11 +63,36 @@ SemaphoreP_Handle SemaphoreP_construct(SemaphoreP_Struct *handle,
         if (params->mode == SemaphoreP_Mode_BINARY) {
             semParams.mode = Semaphore_Mode_BINARY;
         }
-        semParams.instance->name = params->name;
-        Semaphore_construct(semStruct, count, &semParams);
+        Semaphore_construct((Semaphore_Struct *)semStruct, count, &semParams);
     }
 
-    return ((SemaphoreP_Handle)(Semaphore_handle(semStruct)));
+    return ((SemaphoreP_Handle)(Semaphore_handle((Semaphore_Struct *)semStruct)));
+}
+
+/*
+ *  ======== SemaphoreP_constructBinary ========
+ */
+SemaphoreP_Handle SemaphoreP_constructBinary(SemaphoreP_Struct *semStruct,
+        unsigned int count)
+{
+    Semaphore_Params semParams;
+
+    Semaphore_Params_init(&semParams);
+
+    /* The default mode for TI-RTOS is counting. */
+    semParams.mode = Semaphore_Mode_BINARY;
+    Semaphore_construct((Semaphore_Struct *)semStruct, count, &semParams);
+
+    return ((SemaphoreP_Handle)(Semaphore_handle((Semaphore_Struct *)semStruct)));
+}
+
+/*
+ *  ======== SemaphoreP_constructBinaryCallback ========
+ */
+SemaphoreP_Handle SemaphoreP_constructBinaryCallback(
+    SemaphoreP_Struct *semStruct, unsigned int count, void (*callback)(void))
+{
+    return (SemaphoreP_constructBinary(semStruct, count));
 }
 
 /*
@@ -94,7 +116,6 @@ SemaphoreP_Handle SemaphoreP_create(unsigned int count,
         if (params->mode == SemaphoreP_Mode_BINARY) {
             semaphoreParams.mode = Semaphore_Mode_BINARY;
         }
-        semaphoreParams.instance->name = params->name;
         handle = Semaphore_create(count, &semaphoreParams, Error_IGNORE);
     }
 
@@ -102,15 +123,38 @@ SemaphoreP_Handle SemaphoreP_create(unsigned int count,
 }
 
 /*
+ *  ======== SemaphoreP_createBinary ========
+ */
+SemaphoreP_Handle SemaphoreP_createBinary(unsigned int count)
+{
+    Semaphore_Handle  handle;
+    Semaphore_Params  semaphoreParams;
+
+    Semaphore_Params_init(&semaphoreParams);
+
+    semaphoreParams.mode = Semaphore_Mode_BINARY;
+    handle = Semaphore_create(count, &semaphoreParams, Error_IGNORE);
+
+    return ((SemaphoreP_Handle)handle);
+}
+
+/*
+ *  ======== SemaphoreP_createBinaryCallback ========
+ */
+SemaphoreP_Handle SemaphoreP_createBinaryCallback(unsigned int count,
+        void (*callback)(void))
+{
+    return (SemaphoreP_createBinary(count));
+}
+
+/*
  *  ======== SemaphoreP_delete ========
  */
-SemaphoreP_Status SemaphoreP_delete(SemaphoreP_Handle handle)
+void SemaphoreP_delete(SemaphoreP_Handle handle)
 {
     Semaphore_Handle semaphore = (Semaphore_Handle)handle;
 
     Semaphore_delete(&semaphore);
-
-    return (SemaphoreP_OK);
 }
 
 /*
@@ -127,7 +171,6 @@ void SemaphoreP_destruct(SemaphoreP_Struct *semP)
 void SemaphoreP_Params_init(SemaphoreP_Params *params)
 {
     params->mode = SemaphoreP_Mode_COUNTING;
-    params->name = NULL;
     params->callback = NULL;
 }
 
@@ -149,18 +192,9 @@ SemaphoreP_Status SemaphoreP_pend(SemaphoreP_Handle handle, uint32_t timeout)
 /*
  *  ======== SemaphoreP_post ========
  */
-SemaphoreP_Status SemaphoreP_post(SemaphoreP_Handle handle)
+void SemaphoreP_post(SemaphoreP_Handle handle)
 {
     Semaphore_post((Semaphore_Handle)handle);
-    return (SemaphoreP_OK);
-}
-
-/*
- *  ======== SemaphoreP_postFromClock ========
- */
-SemaphoreP_Status SemaphoreP_postFromClock(SemaphoreP_Handle handle)
-{
-    return (SemaphoreP_post(handle));
 }
 
 /*

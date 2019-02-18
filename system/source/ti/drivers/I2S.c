@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -35,9 +35,10 @@
 
 #include <stdbool.h>
 #include <stdint.h>
+#include <stdlib.h>
 
-#include <ti/drivers/I2S.h>
 #include <ti/drivers/dpl/HwiP.h>
+#include <ti/drivers/I2S.h>
 
 extern const I2S_Config I2S_config[];
 extern const uint_least8_t I2S_count;

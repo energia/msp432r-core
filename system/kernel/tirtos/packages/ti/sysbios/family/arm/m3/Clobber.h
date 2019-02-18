@@ -2,20 +2,20 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
  *     FUNCTION DECLARATIONS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -278,25 +278,29 @@ __extern xdc_UInt ti_sysbios_family_arm_m3_Clobber_checkRegs__E( xdc_UInt value 
 #define ti_sysbios_family_arm_m3_Clobber_Module_heap() ti_sysbios_family_arm_m3_Clobber_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_family_arm_m3_Clobber_Module__id ti_sysbios_family_arm_m3_Clobber_Module_id(void);
 static inline CT__ti_sysbios_family_arm_m3_Clobber_Module__id ti_sysbios_family_arm_m3_Clobber_Module_id( void ) 
 {
     return ti_sysbios_family_arm_m3_Clobber_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_sysbios_family_arm_m3_Clobber_Module_hasMask( void ) 
+static inline xdc_Bool ti_sysbios_family_arm_m3_Clobber_Module_hasMask(void);
+static inline xdc_Bool ti_sysbios_family_arm_m3_Clobber_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_sysbios_family_arm_m3_Clobber_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_sysbios_family_arm_m3_Clobber_Module_getMask(void);
 static inline xdc_Bits16 ti_sysbios_family_arm_m3_Clobber_Module_getMask( void ) 
 {
     return ti_sysbios_family_arm_m3_Clobber_Module__diagsMask__C != NULL ? *ti_sysbios_family_arm_m3_Clobber_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_sysbios_family_arm_m3_Clobber_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_sysbios_family_arm_m3_Clobber_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_sysbios_family_arm_m3_Clobber_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_sysbios_family_arm_m3_Clobber_Module__diagsMask__C != NULL) {
         *ti_sysbios_family_arm_m3_Clobber_Module__diagsMask__C = mask;

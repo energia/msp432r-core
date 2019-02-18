@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,6 +34,8 @@
  *
  * OSAL Support for FatFS using ti/dpl and RTS malloc/free
  */
+
+#include <stddef.h>
 
 #include <ti/drivers/dpl/SemaphoreP.h>
 

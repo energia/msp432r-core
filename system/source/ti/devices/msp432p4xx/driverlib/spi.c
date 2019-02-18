@@ -1,9 +1,4 @@
-/*
- * -------------------------------------------
- *    MSP432 DriverLib - v4_00_00_11 
- * -------------------------------------------
- *
- * --COPYRIGHT--,BSD,BSD
+/* --COPYRIGHT--,BSD
  * Copyright (c) 2017, Texas Instruments Incorporated
  * All rights reserved.
  *
@@ -632,7 +627,7 @@ void EUSCI_B_SPI_masterChangeClock(uint32_t baseAddress,
 //! Modified bits are \b EUSCI_A_CTLW0_MSB, \b EUSCI_A_CTLW0_MST, \b EUSCI_A_CTLW0_SEVENBIT, \b EUSCI_A_CTLW0_CKPL, \b EUSCI_A_CTLW0_CKPH, \b
 //! UCMODE and \b UCSWRST of \b UCAxCTLW0 register.
 //!
-//! \return STATUS_SUCCESS
+//! \return true
 //
 //*****************************************************************************
 bool EUSCI_B_SPI_slaveInit(uint32_t baseAddress, uint16_t msbFirst,
@@ -1043,7 +1038,7 @@ void EUSCI_A_SPI_masterChangeClock(uint32_t baseAddress,
 //! Modified bits are \b EUSCI_A_CTLW0_MSB, \b EUSCI_A_CTLW0_MST, \b EUSCI_A_CTLW0_SEVENBIT, \b EUSCI_A_CTLW0_CKPL, \b EUSCI_A_CTLW0_CKPH, \b
 //! UCMODE and \b UCSWRST of \b UCAxCTLW0 register.
 //!
-//! \return STATUS_SUCCESS
+//! \return true
 //
 //*****************************************************************************
 bool EUSCI_A_SPI_slaveInit(uint32_t baseAddress, uint16_t msbFirst,

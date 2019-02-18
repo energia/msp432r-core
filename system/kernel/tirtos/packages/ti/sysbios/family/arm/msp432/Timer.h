@@ -2,15 +2,15 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     CREATE ARGS
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
@@ -19,7 +19,7 @@
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -122,11 +122,6 @@ typedef enum ti_sysbios_family_arm_msp432_Timer_IDEX ti_sysbios_family_arm_msp43
 
 /* MIN_SWEEP_PERIOD */
 #define ti_sysbios_family_arm_msp432_Timer_MIN_SWEEP_PERIOD (1)
-
-/* Control */
-struct ti_sysbios_family_arm_msp432_Timer_Control {
-    xdc_UInt source;
-};
 
 /* StartMode_AUTO */
 #define ti_sysbios_family_arm_msp432_Timer_StartMode_AUTO ti_sysbios_interfaces_ITimer_StartMode_AUTO
@@ -473,23 +468,23 @@ struct ti_sysbios_family_arm_msp432_Timer_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
     xdc_UInt (*getNumTimers)(void);
-    ti_sysbios_interfaces_ITimer_Status (*getStatus)(xdc_UInt);
+    ti_sysbios_interfaces_ITimer_Status (*getStatus)(xdc_UInt id);
     xdc_Void (*startup)(void);
-    xdc_UInt32 (*getMaxTicks)(ti_sysbios_family_arm_msp432_Timer_Handle);
-    xdc_Void (*setNextTick)(ti_sysbios_family_arm_msp432_Timer_Handle, xdc_UInt32);
-    xdc_Void (*start)(ti_sysbios_family_arm_msp432_Timer_Handle);
-    xdc_Void (*stop)(ti_sysbios_family_arm_msp432_Timer_Handle);
-    xdc_Void (*setPeriod)(ti_sysbios_family_arm_msp432_Timer_Handle, xdc_UInt32);
-    xdc_Bool (*setPeriodMicroSecs)(ti_sysbios_family_arm_msp432_Timer_Handle, xdc_UInt32);
-    xdc_UInt32 (*getPeriod)(ti_sysbios_family_arm_msp432_Timer_Handle);
-    xdc_UInt32 (*getCount)(ti_sysbios_family_arm_msp432_Timer_Handle);
-    xdc_Void (*getFreq)(ti_sysbios_family_arm_msp432_Timer_Handle, xdc_runtime_Types_FreqHz*);
-    ti_sysbios_interfaces_ITimer_FuncPtr (*getFunc)(ti_sysbios_family_arm_msp432_Timer_Handle, xdc_UArg*);
-    xdc_Void (*setFunc)(ti_sysbios_family_arm_msp432_Timer_Handle, ti_sysbios_interfaces_ITimer_FuncPtr, xdc_UArg);
-    xdc_Void (*trigger)(ti_sysbios_family_arm_msp432_Timer_Handle, xdc_UInt32);
-    xdc_UInt32 (*getExpiredCounts)(ti_sysbios_family_arm_msp432_Timer_Handle);
-    xdc_UInt32 (*getExpiredTicks)(ti_sysbios_family_arm_msp432_Timer_Handle, xdc_UInt32);
-    xdc_UInt32 (*getCurrentTick)(ti_sysbios_family_arm_msp432_Timer_Handle, xdc_Bool);
+    xdc_UInt32 (*getMaxTicks)(ti_sysbios_family_arm_msp432_Timer_Handle __inst);
+    xdc_Void (*setNextTick)(ti_sysbios_family_arm_msp432_Timer_Handle __inst, xdc_UInt32 ticks);
+    xdc_Void (*start)(ti_sysbios_family_arm_msp432_Timer_Handle __inst);
+    xdc_Void (*stop)(ti_sysbios_family_arm_msp432_Timer_Handle __inst);
+    xdc_Void (*setPeriod)(ti_sysbios_family_arm_msp432_Timer_Handle __inst, xdc_UInt32 period);
+    xdc_Bool (*setPeriodMicroSecs)(ti_sysbios_family_arm_msp432_Timer_Handle __inst, xdc_UInt32 microsecs);
+    xdc_UInt32 (*getPeriod)(ti_sysbios_family_arm_msp432_Timer_Handle __inst);
+    xdc_UInt32 (*getCount)(ti_sysbios_family_arm_msp432_Timer_Handle __inst);
+    xdc_Void (*getFreq)(ti_sysbios_family_arm_msp432_Timer_Handle __inst, xdc_runtime_Types_FreqHz* freq);
+    ti_sysbios_interfaces_ITimer_FuncPtr (*getFunc)(ti_sysbios_family_arm_msp432_Timer_Handle __inst, xdc_UArg* arg);
+    xdc_Void (*setFunc)(ti_sysbios_family_arm_msp432_Timer_Handle __inst, ti_sysbios_interfaces_ITimer_FuncPtr fxn, xdc_UArg arg);
+    xdc_Void (*trigger)(ti_sysbios_family_arm_msp432_Timer_Handle __inst, xdc_UInt32 cycles);
+    xdc_UInt32 (*getExpiredCounts)(ti_sysbios_family_arm_msp432_Timer_Handle __inst);
+    xdc_UInt32 (*getExpiredTicks)(ti_sysbios_family_arm_msp432_Timer_Handle __inst, xdc_UInt32 tickPeriod);
+    xdc_UInt32 (*getCurrentTick)(ti_sysbios_family_arm_msp432_Timer_Handle __inst, xdc_Bool save);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_family_arm_msp432_Timer_Module__FXNS__CR
@@ -514,11 +509,11 @@ __extern xdc_Int ti_sysbios_family_arm_msp432_Timer_Module_startup__F( xdc_Int s
 
 /* Instance_init__E */
 xdc__CODESECT(ti_sysbios_family_arm_msp432_Timer_Instance_init__E, "ti_sysbios_family_arm_msp432_Timer_Instance_init")
-__extern xdc_Int ti_sysbios_family_arm_msp432_Timer_Instance_init__E(ti_sysbios_family_arm_msp432_Timer_Object *, xdc_Int id, ti_sysbios_interfaces_ITimer_FuncPtr tickFxn, const ti_sysbios_family_arm_msp432_Timer_Params *, xdc_runtime_Error_Block *);
+__extern xdc_Int ti_sysbios_family_arm_msp432_Timer_Instance_init__E(ti_sysbios_family_arm_msp432_Timer_Object *__obj, xdc_Int id, ti_sysbios_interfaces_ITimer_FuncPtr tickFxn, const ti_sysbios_family_arm_msp432_Timer_Params *__prms, xdc_runtime_Error_Block *__eb);
 
 /* Instance_finalize__E */
 xdc__CODESECT(ti_sysbios_family_arm_msp432_Timer_Instance_finalize__E, "ti_sysbios_family_arm_msp432_Timer_Instance_finalize")
-__extern void ti_sysbios_family_arm_msp432_Timer_Instance_finalize__E( ti_sysbios_family_arm_msp432_Timer_Object* , int );
+__extern void ti_sysbios_family_arm_msp432_Timer_Instance_finalize__E(ti_sysbios_family_arm_msp432_Timer_Object *__obj, int __ec);
 
 /* create */
 xdc__CODESECT(ti_sysbios_family_arm_msp432_Timer_create, "ti_sysbios_family_arm_msp432_Timer_create")
@@ -719,7 +714,8 @@ __extern xdc_Bool ti_sysbios_family_arm_msp432_Timer_checkOverflow__I( xdc_UInt3
  */
 
 /* Module_upCast */
-static inline ti_sysbios_interfaces_ITimer_Module ti_sysbios_family_arm_msp432_Timer_Module_upCast( void )
+static inline ti_sysbios_interfaces_ITimer_Module ti_sysbios_family_arm_msp432_Timer_Module_upCast(void);
+static inline ti_sysbios_interfaces_ITimer_Module ti_sysbios_family_arm_msp432_Timer_Module_upCast(void)
 {
     return (ti_sysbios_interfaces_ITimer_Module)&ti_sysbios_family_arm_msp432_Timer_Module__FXNS__C;
 }
@@ -728,7 +724,8 @@ static inline ti_sysbios_interfaces_ITimer_Module ti_sysbios_family_arm_msp432_T
 #define ti_sysbios_family_arm_msp432_Timer_Module_to_ti_sysbios_interfaces_ITimer ti_sysbios_family_arm_msp432_Timer_Module_upCast
 
 /* Handle_upCast */
-static inline ti_sysbios_interfaces_ITimer_Handle ti_sysbios_family_arm_msp432_Timer_Handle_upCast( ti_sysbios_family_arm_msp432_Timer_Handle i )
+static inline ti_sysbios_interfaces_ITimer_Handle ti_sysbios_family_arm_msp432_Timer_Handle_upCast(ti_sysbios_family_arm_msp432_Timer_Handle i);
+static inline ti_sysbios_interfaces_ITimer_Handle ti_sysbios_family_arm_msp432_Timer_Handle_upCast(ti_sysbios_family_arm_msp432_Timer_Handle i)
 {
     return (ti_sysbios_interfaces_ITimer_Handle)i;
 }
@@ -737,7 +734,8 @@ static inline ti_sysbios_interfaces_ITimer_Handle ti_sysbios_family_arm_msp432_T
 #define ti_sysbios_family_arm_msp432_Timer_Handle_to_ti_sysbios_interfaces_ITimer ti_sysbios_family_arm_msp432_Timer_Handle_upCast
 
 /* Handle_downCast */
-static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_msp432_Timer_Handle_downCast( ti_sysbios_interfaces_ITimer_Handle i )
+static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_msp432_Timer_Handle_downCast(ti_sysbios_interfaces_ITimer_Handle i);
+static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_msp432_Timer_Handle_downCast(ti_sysbios_interfaces_ITimer_Handle i)
 {
     ti_sysbios_interfaces_ITimer_Handle i2 = (ti_sysbios_interfaces_ITimer_Handle)i;
     return (const void*)i2->__fxns == (const void*)&ti_sysbios_family_arm_msp432_Timer_Module__FXNS__C ? (ti_sysbios_family_arm_msp432_Timer_Handle)i : (ti_sysbios_family_arm_msp432_Timer_Handle)0;
@@ -761,25 +759,29 @@ static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_ms
 #define ti_sysbios_family_arm_msp432_Timer_Module_heap() ti_sysbios_family_arm_msp432_Timer_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_family_arm_msp432_Timer_Module__id ti_sysbios_family_arm_msp432_Timer_Module_id(void);
 static inline CT__ti_sysbios_family_arm_msp432_Timer_Module__id ti_sysbios_family_arm_msp432_Timer_Module_id( void ) 
 {
     return ti_sysbios_family_arm_msp432_Timer_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_sysbios_family_arm_msp432_Timer_Module_hasMask( void ) 
+static inline xdc_Bool ti_sysbios_family_arm_msp432_Timer_Module_hasMask(void);
+static inline xdc_Bool ti_sysbios_family_arm_msp432_Timer_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_sysbios_family_arm_msp432_Timer_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_sysbios_family_arm_msp432_Timer_Module_getMask(void);
 static inline xdc_Bits16 ti_sysbios_family_arm_msp432_Timer_Module_getMask( void ) 
 {
     return ti_sysbios_family_arm_msp432_Timer_Module__diagsMask__C != NULL ? *ti_sysbios_family_arm_msp432_Timer_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_sysbios_family_arm_msp432_Timer_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_sysbios_family_arm_msp432_Timer_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_sysbios_family_arm_msp432_Timer_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_sysbios_family_arm_msp432_Timer_Module__diagsMask__C != NULL) {
         *ti_sysbios_family_arm_msp432_Timer_Module__diagsMask__C = mask;
@@ -787,6 +789,7 @@ static inline xdc_Void ti_sysbios_family_arm_msp432_Timer_Module_setMask( xdc_Bi
 }
 
 /* Params_init */
+static inline void ti_sysbios_family_arm_msp432_Timer_Params_init(ti_sysbios_family_arm_msp432_Timer_Params *prms);
 static inline void ti_sysbios_family_arm_msp432_Timer_Params_init( ti_sysbios_family_arm_msp432_Timer_Params *prms ) 
 {
     if (prms) {
@@ -795,6 +798,7 @@ static inline void ti_sysbios_family_arm_msp432_Timer_Params_init( ti_sysbios_fa
 }
 
 /* Params_copy */
+static inline void ti_sysbios_family_arm_msp432_Timer_Params_copy(ti_sysbios_family_arm_msp432_Timer_Params *dst, const ti_sysbios_family_arm_msp432_Timer_Params *src);
 static inline void ti_sysbios_family_arm_msp432_Timer_Params_copy(ti_sysbios_family_arm_msp432_Timer_Params *dst, const ti_sysbios_family_arm_msp432_Timer_Params *src) 
 {
     if (dst) {
@@ -809,44 +813,51 @@ static inline void ti_sysbios_family_arm_msp432_Timer_Params_copy(ti_sysbios_fam
 #define ti_sysbios_family_arm_msp432_Timer_Object_sizeof() ti_sysbios_family_arm_msp432_Timer_Object__sizeof__C
 
 /* Object_get */
+static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_msp432_Timer_Object_get(ti_sysbios_family_arm_msp432_Timer_Instance_State *oarr, int i);
 static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_msp432_Timer_Object_get(ti_sysbios_family_arm_msp432_Timer_Instance_State *oarr, int i) 
 {
     return (ti_sysbios_family_arm_msp432_Timer_Handle)ti_sysbios_family_arm_msp432_Timer_Object__get__S(oarr, i);
 }
 
 /* Object_first */
-static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_msp432_Timer_Object_first( void )
+static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_msp432_Timer_Object_first(void);
+static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_msp432_Timer_Object_first(void)
 {
     return (ti_sysbios_family_arm_msp432_Timer_Handle)ti_sysbios_family_arm_msp432_Timer_Object__first__S();
 }
 
 /* Object_next */
-static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_msp432_Timer_Object_next( ti_sysbios_family_arm_msp432_Timer_Object *obj )
+static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_msp432_Timer_Object_next(ti_sysbios_family_arm_msp432_Timer_Object *obj);
+static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_msp432_Timer_Object_next(ti_sysbios_family_arm_msp432_Timer_Object *obj)
 {
     return (ti_sysbios_family_arm_msp432_Timer_Handle)ti_sysbios_family_arm_msp432_Timer_Object__next__S(obj);
 }
 
 /* Handle_label */
-static inline xdc_runtime_Types_Label *ti_sysbios_family_arm_msp432_Timer_Handle_label( ti_sysbios_family_arm_msp432_Timer_Handle inst, xdc_runtime_Types_Label *lab )
+static inline xdc_runtime_Types_Label *ti_sysbios_family_arm_msp432_Timer_Handle_label(ti_sysbios_family_arm_msp432_Timer_Handle inst, xdc_runtime_Types_Label *lab);
+static inline xdc_runtime_Types_Label *ti_sysbios_family_arm_msp432_Timer_Handle_label(ti_sysbios_family_arm_msp432_Timer_Handle inst, xdc_runtime_Types_Label *lab)
 {
     return ti_sysbios_family_arm_msp432_Timer_Handle__label__S(inst, lab);
 }
 
 /* Handle_name */
-static inline xdc_String ti_sysbios_family_arm_msp432_Timer_Handle_name( ti_sysbios_family_arm_msp432_Timer_Handle inst )
+static inline xdc_String ti_sysbios_family_arm_msp432_Timer_Handle_name(ti_sysbios_family_arm_msp432_Timer_Handle inst);
+static inline xdc_String ti_sysbios_family_arm_msp432_Timer_Handle_name(ti_sysbios_family_arm_msp432_Timer_Handle inst)
 {
     xdc_runtime_Types_Label lab;
     return ti_sysbios_family_arm_msp432_Timer_Handle__label__S(inst, &lab)->iname;
 }
 
 /* handle */
-static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_msp432_Timer_handle( ti_sysbios_family_arm_msp432_Timer_Struct *str )
+static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_msp432_Timer_handle(ti_sysbios_family_arm_msp432_Timer_Struct *str);
+static inline ti_sysbios_family_arm_msp432_Timer_Handle ti_sysbios_family_arm_msp432_Timer_handle(ti_sysbios_family_arm_msp432_Timer_Struct *str)
 {
     return (ti_sysbios_family_arm_msp432_Timer_Handle)str;
 }
 
 /* struct */
-static inline ti_sysbios_family_arm_msp432_Timer_Struct *ti_sysbios_family_arm_msp432_Timer_struct( ti_sysbios_family_arm_msp432_Timer_Handle inst )
+static inline ti_sysbios_family_arm_msp432_Timer_Struct *ti_sysbios_family_arm_msp432_Timer_struct(ti_sysbios_family_arm_msp432_Timer_Handle inst);
+static inline ti_sysbios_family_arm_msp432_Timer_Struct *ti_sysbios_family_arm_msp432_Timer_struct(ti_sysbios_family_arm_msp432_Timer_Handle inst)
 {
     return (ti_sysbios_family_arm_msp432_Timer_Struct*)inst;
 }
@@ -940,7 +951,6 @@ struct ti_sysbios_family_arm_msp432_Timer_Object {
 #define Timer_IDEX ti_sysbios_family_arm_msp432_Timer_IDEX
 #define Timer_MAX_PERIOD ti_sysbios_family_arm_msp432_Timer_MAX_PERIOD
 #define Timer_MIN_SWEEP_PERIOD ti_sysbios_family_arm_msp432_Timer_MIN_SWEEP_PERIOD
-#define Timer_Control ti_sysbios_family_arm_msp432_Timer_Control
 #define Timer_TimerDevice ti_sysbios_family_arm_msp432_Timer_TimerDevice
 #define Timer_Instance_State ti_sysbios_family_arm_msp432_Timer_Instance_State
 #define Timer_Module_State ti_sysbios_family_arm_msp432_Timer_Module_State

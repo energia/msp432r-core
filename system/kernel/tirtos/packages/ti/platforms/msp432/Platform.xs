@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Texas Instruments Incorporated
+ * Copyright (c) 2016-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -200,7 +200,12 @@ function instance$meta$init(name)
          */
         this.CPU.revision = this.deviceName;
 
-        if (this.deviceName.match(/^MSP432/)) {
+        if (this.deviceName.match(/^MSP432E/)) {
+            this.CPU.deviceName = "MSP432E";
+            this.CPU.catalogName = "ti.catalog.arm.cortexm4";
+            this.CPU.clockRate = 120;
+        }
+        else if (this.deviceName.match(/^MSP432/)) {
             this.CPU.catalogName = "ti.catalog.arm.cortexm4";
             this.CPU.clockRate = 48;
         }

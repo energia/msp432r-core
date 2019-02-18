@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--  This file conforms to the DTD xdc/bld/build.dtd -->
-<package name="ti.targets.omf.elf" version="" producerId="/db/ztree/library/trees/xdctargets/xdctargets-m11/src/">
+<package name="ti.targets.omf.elf" version="" producerId="/db/ztree/library/trees/xdctargets/xdctargets-o04/src/">
     <units>
     </units>
     <sources>

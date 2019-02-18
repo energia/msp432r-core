@@ -213,7 +213,6 @@ module Timer inherits ti.sysbios.interfaces.ITimer
         String      label;
         UInt        id;
         String      startMode;
-        UInt        period;
         String      tickFxn[];
         UArg        arg;
         String      hwiHandle;
@@ -224,13 +223,10 @@ module Timer inherits ti.sysbios.interfaces.ITimer
         UInt        id;
         String      device;
         String      devAddr;
-	UInt	    intNum;
-        UInt        period;
-        UInt64      period64;
-        UInt        currCount;
-        UInt        remainingCount;
-        UInt64      prevThreshold;
-        UInt64      nextThreshold;
+        UInt        intNum;
+        UInt32      currCount;
+        UInt32      nextCompareCount;
+        UInt32      remainingCount;
         String      state;
     };
 

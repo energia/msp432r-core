@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -139,7 +139,7 @@ internal:   /* not for client use */
 
     /* -------- Hook Functions -------- */
 
-    /*!
+    /*
      *  ======== getReent ========
      *  Return a pointer to the current thread's Reentrancy structure
      *
@@ -148,7 +148,13 @@ internal:   /* not for client use */
      */
     Ptr getReent();
 
-    /*!
+    /*
+     *  ======== initGlobalReent ========
+     *  Initialize global re-entrancy structure
+     */
+    Void initGlobalReent();
+
+    /*
      *  ======== taskCreateHook ========
      *  Create hook function used to create and initialize all task's
      *  hook context.
@@ -159,7 +165,7 @@ internal:   /* not for client use */
      */
     Void taskCreateHook(Task.Handle task, Error.Block *eb);
 
-    /*!
+    /*
      *  ======== taskDeleteHook ========
      *  Delete hook function used to remove the task's hook context.
      *           
@@ -168,7 +174,7 @@ internal:   /* not for client use */
      */
     Void taskDeleteHook(Task.Handle task);
 
-    /*!
+    /*
      *  ======== taskRegHook ========
      *  Registration function for the module's hook 
      *  

@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 #ifndef ti_sysbios_knl_Swi__INTERNAL__
@@ -20,6 +20,10 @@
 #else
 #define xdc_FILE__ xdc_FILE
 #endif
+
+/* construct2 */
+#undef ti_sysbios_knl_Swi_construct2
+#define ti_sysbios_knl_Swi_construct2 ti_sysbios_knl_Swi_construct2__E
 
 /* startup */
 #undef ti_sysbios_knl_Swi_startup
@@ -96,6 +100,10 @@
 /* setAttrs */
 #undef ti_sysbios_knl_Swi_setAttrs
 #define ti_sysbios_knl_Swi_setAttrs ti_sysbios_knl_Swi_setAttrs__E
+
+/* setPri */
+#undef ti_sysbios_knl_Swi_setPri
+#define ti_sysbios_knl_Swi_setPri ti_sysbios_knl_Swi_setPri__E
 
 /* inc */
 #undef ti_sysbios_knl_Swi_inc

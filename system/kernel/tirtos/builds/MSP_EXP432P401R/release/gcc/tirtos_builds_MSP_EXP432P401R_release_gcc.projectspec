@@ -18,7 +18,7 @@
         description="TI-RTOS release configuration project">
 
         <property name="products" value="com.ti.SIMPLELINK_MSP432_SDK"/>
-        <property name="xdcToolsVersion" value="3_50_00_10_core"/>
+        <property name="xdcToolsVersion" value="3_50_01_12_core"/>
         <property name="target" value="gnu.targets.arm.M4F"/>
         <property name="platform" value="ti.platforms.msp432:MSP432P401R"/>
         <property name="buildProfile" value="release"/>

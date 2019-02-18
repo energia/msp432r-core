@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -41,18 +41,19 @@ import xdc.runtime.Diags;
 import xdc.runtime.Log;
 import xdc.runtime.Assert;
 import xdc.runtime.Error;
+import xdc.runtime.Types;
 
 import ti.sysbios.BIOS;
 import ti.sysbios.interfaces.IHwi;
 
 /*!
  *  ======== Hwi ========
- *  Cortex M3 Hardware Interrupt Manager
+ *  Cortex M3/M4 Hardware Interrupt Manager
  *
- *  The Cortex M3's Nested Vectored Interrupt Controller (NVIC)
+ *  The Cortex-M devices' Nested Vectored Interrupt Controller (NVIC)
  *  supports up to 256 interrupts/exceptions. In practice, most
- *  devices support much fewer (ie the Stellaris family of devices
- *  have only 80 total interrupts defined).
+ *  devices support much fewer (ie the SimpleLink CC13XX/CC26XX
+ *  family of devices have only 50 total interrupts defined).
  *
  *  SYS/BIOS Interrupt IDs or interrupt numbers correspond
  *  to an interrupt's position in the interrupt vector table.
@@ -60,29 +61,49 @@ import ti.sysbios.interfaces.IHwi;
  *  ID 0 corresponds to vector 0 which is used by the NVIC
  *  to hold the initial (reset) stack pointer value.
  *
- *  ID 1 corresponds to vector 1 which is the reset vector (ie _c_int00)
+ *  ID 1 corresponds to vector 1 which is the reset vector which is
+ *  usually initialized to point to an application's entry point
+ *  (ie for the TI compiler tool chain, the entry point is "_c_int00")
  *
- *  IDs 2-14 are hardwired to exceptions.
+ *  IDs 2-13 are, by default, hard wired to the internal exception handler
+ *  which will save important context information that can be viewed
+ *  using the ROV tool within either the Code Composer Studio debugger
+ *  or the IAR Workbench debugger.
+ *
+ *  ID 14 is the "pendSV" handler which is used exclusively by the shared
+ *  interrupt dispatcher to orchestrate the execution of
+ *  {@link ti.sysbios.knl.Swi Swis} posted
+ *  from within interrupts, as well as to manage asynchronous
+ *  task pre-emption upon returning from interrupts which have
+ *  readied a task of higher priority than the task that
+ *  was interrupted.
  *
  *  ID 15 is the SysTick timer interrupt.
  *
- *  ID's 16-255 are mapped to the NVIC's user interrupts 0-239
+ *  ID's 16-255 are mapped to the NVIC's "User" interrupts 0-239
  *  which are tied to platform specific interrupt sources.
  *
  *  @a(Zero Latency Interrupts)
- *  The M3 Hwi module supports "zero latency" interrupts.
+ *  The M3/M4 Hwi module supports "zero latency" interrupts.
  *  Interrupts configured with priority greater (in actual
- *  hardware priority, but lower in number) than
+ *  hardware priority, but lower in number) than the configured
  *  {@link #disablePriority Hwi.disablePriority} are NOT
- *  disabled by Hwi_disable().
+ *  disabled by {@link #disable Hwi_disable()}, and they are not managed by
+ *  the internal interrupt dispatcher.
+ *
+ *  Zero Latency interrupts fall into the commonly used category
+ *  of "Unmanaged Interrupts". However they are somewhat distinct from
+ *  that definition in that in addition to being unmanaged, they are
+ *  also almost never disabled by SYS/BIOS code, thus gaining the
+ *  "Zero Latency" title.
  *
  *  Zero latency interrupts are distinguished from regular dispatched
- *  interrupts at create time by their priority being greater
- *  than Hwi.disablePriority.
+ *  interrupts at create time solely by their interrupt priority being
+ *  set greater than the configured Hwi.disablePriority.
  *
  *  Note that since zero latency interrupts don't use the dispatcher,
  *  the {@link ti.sysbios.interfaces.IHwi#arg arg} parameter is not
- *  functional. Also note that due to the M3's native automatic
+ *  functional. Also note that due to the Cortex-M's native automatic
  *  stacking of saved-by-caller C context on the way to an ISR, zero
  *  latency interrupt handlers are implemented using regular C functions
  *  (ie no 'interrupt' keyword is required).
@@ -134,36 +155,36 @@ import ti.sysbios.interfaces.IHwi;
  *  reserved for zero latency interrupts
  *  (see {@link #disablePriority Hwi.disablePriority}).
  *
- *  See the Cortex M3 architecture reference manual for details
- *  on the behavior of interrupt priorities and their relationship
+ *  See the {@link http://infocenter.arm.com/help/topic/com.arm.doc.dui0553a/CIHIGCIF.html Cortex M4 Devices Generic User Guide}
+ *  for details on the behavior of interrupt priorities and their relationship
  *  to the {@link #priGroup Hwi.priGroup} setting.
  *
  *  @a(Interrupt Vector Tables)
- *  Tiva devices:
+ *  SimpleLink CC13XX/CC26XX devices:
  *
- *  By default, two vector tables are created for Tiva devices:
+ *  By default, two vector tables are created for SimpleLink devices:
  *
- *  A 16 entry boot vector table is placed at address 0x00000000 in
+ *  A 15 entry boot vector table is placed at address 0x00000000 in
  *  FLASH.
  *
- *  An 80 entry vector table is placed at address 0x20000000 in RAM.
+ *  A 50 entry vector table is placed at address 0x20000000 in RAM.
  *
  *  The FLASH boot vector table contains the reset vector and exception
  *  handler vectors used until the RAM based vector table is initialized.
  *
- *  The RAM vector table contains the 16 exception vectors as well as all
- *  the 64 user interrupt vectors.
+ *  The RAM vector table contains those same first 15 vectors as well as
+ *  the SysTick vector and the remainder of the user interrupt vectors.
  *
  *  During system startup, the NVIC Vector Table Offset Registor is
- *  intialized to point to this vector table after the table has been
+ *  intialized to point to the RAM vector table after it has been
  *  initialized.
  *
  *  @a( )
- *  Dual M3 Core ('Ducati') devices:
+ *  Dual M3/M4 Core ('Ducati'/'Benelli') devices:
  *
- *  By default, Ducati core 0 places its runtime vector table at address
- *  0x00000400 and core 1 places its runtime vector table at address
- *  0x00000800.
+ *  By default, Ducati/Benelli core 0 places its runtime vector table at
+ *  address 0x00000400 and core 1 places its runtime vector table at
+ *  address 0x00000800.
  *
  *  Additionally, a boot vector table is placed at address
  *  0x00000000 which is shared by both cores.
@@ -182,12 +203,12 @@ import ti.sysbios.interfaces.IHwi;
  *  {@link #vectorTableAddress Hwi.vectorTableAddress} config parameters.
  *
  *  @a(Restrictions)
- *  When used within a dual M3 core (Ducati) arrangement, care must be
- *  taken when initializing this shared resource.
+ *  When used within a dual M3/M4 core (Ducati/Benelli) arrangement, care
+ *  must be taken when initializing this shared resource.
  *  The "Shared Resources" note provided
  *  in the {@link ti.sysbios.family.arm.ducati ducati} package discusses
  *  the management of the various hardware and software resources
- *  shared by the two M3 cores.
+ *  shared by the two M3/M4 cores.
  *  @a
  *
  *  @p(html)
@@ -246,7 +267,7 @@ module Hwi inherits ti.sysbios.interfaces.IHwi
     // -------- Module Constants --------
 
     /*!
-     *  The Cortex M3 NVIC supports up to 256 interrupts/exceptions.
+     *  The Cortex M3/M4 NVIC supports up to 256 interrupts/exceptions.
      *
      *  The actual number supported is device specific and provided by
      *  the catalog device specification.
@@ -254,10 +275,11 @@ module Hwi inherits ti.sysbios.interfaces.IHwi
     config Int NUM_INTERRUPTS;
 
     /*!
-     *  The Cortex M3 NVIC supports up to 256 interrupt priorities.
+     *  The Cortex M3/M4 NVIC supports up to 256 interrupt priorities.
      *
      *  The actual number supported is device specific and provided by
-     *  the catalog device specification.
+     *  the catalog device specification. For all TI SimpleLink devices,
+     *  8 priorities are supported.
      */
     config Int NUM_PRIORITIES;
 
@@ -417,6 +439,19 @@ module Hwi inherits ti.sysbios.interfaces.IHwi
         Ptr     BFAR;
         Ptr     AFSR;
     }
+
+    struct Struct2__ {
+        Ptr     fxns;    /* IHwi fxns - not used */
+        UArg    arg;
+        FuncPtr fxn;
+        Irp     irp;
+        UInt8   priority;
+        Int16   intNum;
+        Ptr     hookEnv;
+        Types.CordAddr  name;
+    };
+
+    typedef Struct2__ Struct2;
 
     /*! @_nodoc */
     metaonly struct BasicView {
@@ -646,7 +681,7 @@ module Hwi inherits ti.sysbios.interfaces.IHwi
      *
      *  Some systems require the runtime vector table to be placed at
      *  an address
-     *  other than 0 but still need a copy of the two M3 boot vectors
+     *  other than 0 but still need a copy of the two M3/M4 boot vectors
      *  (SP and reset PC), located there. To achieve this, a separate
      *  parameter {@link #resetVectorAdress} is provided. If the
      *  resetVectorAddress has a different value then the vectorTableAddress
@@ -677,31 +712,31 @@ module Hwi inherits ti.sysbios.interfaces.IHwi
      */
     metaonly config Ptr resetVectorAddress = 0x00000000;
 
-    /*! Reset Handler. Default is c_int00 */
+    /*! Reset Handler (ID/vector #1). Default is c_int00 */
     metaonly config VectorFuncPtr resetFunc;
 
-    /*! NMI Handler. Default is set to an internal exception handler */
+    /*! NMI Handler (ID/vector #2). Default is set to an internal exception handler */
     metaonly config VectorFuncPtr nmiFunc;
 
-    /*! Hard Fault Handler. Default is set to an internal exception handler */
+    /*! Hard Fault Handler (ID/vector #3). Default is set to an internal exception handler */
     metaonly config VectorFuncPtr hardFaultFunc;
 
-    /*! Hard Mem Handler. Default is set to an internal exception handler */
+    /*! Mem Fault Handler (ID/vector #4). Default is set to an internal exception handler */
     metaonly config VectorFuncPtr memFaultFunc;
 
-    /*! Bus Fault Handler. Default is set to an internal exception handler */
+    /*! Bus Fault Handler (ID/vector #5). Default is set to an internal exception handler */
     metaonly config VectorFuncPtr busFaultFunc;
 
-    /*! Usage Fault Handler. Default is set to an internal exception handler */
+    /*! Usage Fault Handler (ID/vector #6). Default is set to an internal exception handler */
     metaonly config VectorFuncPtr usageFaultFunc;
 
-    /*! SVCall Handler. Default is set to an internal exception handler */
+    /*! SVCall Handler (ID/vector #11). Default is set to an internal exception handler */
     metaonly config VectorFuncPtr svCallFunc;
 
-    /*! Debug Mon Handler. Default is set to an internal exception handler */
+    /*! Debug Mon Handler (ID/vector #12). Default is set to an internal exception handler */
     metaonly config VectorFuncPtr debugMonFunc;
 
-    /*! Reserved Exception Handler. Default is set to an internal exception handler */
+    /*! Reserved Exception Handler (ID/vector #13). Default is set to an internal exception handler */
     metaonly config VectorFuncPtr reservedFunc;
 
     /*! Uninitialized ISR Handler. Default is set to an internal exception handler */
@@ -837,7 +872,8 @@ module Hwi inherits ti.sysbios.interfaces.IHwi
      *
      *  These setting are written to Hwi_nvic.CCR at startup time.
      *
-     *  See the Cortex M3 architecture reference manual for details
+     *  See the {@link http://infocenter.arm.com/help/topic/com.arm.doc.dui0553a/Bhcjabhi.html Configuration and Control Register}
+     *  description provided by ARM for more details
      *  on the meanings of these parameters.
      */
     metaonly config CCR nvicCCR = {
@@ -886,10 +922,57 @@ module Hwi inherits ti.sysbios.interfaces.IHwi
      *  For most TI MCU devices, this means that each of the 8 supported
      *  priority values are unique pre-emption priorities and are not
      *  subdivided into priority groups.
+     *
+     *  For more details regarding priority groups see the
+     *  {@link http://infocenter.arm.com/help/topic/com.arm.doc.dui0553a/Cihehdge.html AIRCR}
+     *  register description provided by ARM.
      */
     config UInt priGroup = 0;
 
     // -------- Module Functions --------
+
+    /*!
+     *  ======== construct2 ========
+     *  Construct a Hwi object
+     *
+     *  Hwi_construct2 constructs a Hwi object.  This function is identical
+     *  to Hwi_construct(), but does not take an Error_Block parameter, and
+     *  returns a Hwi_Handle.
+     *
+     *  The following C code sets Hwi parameters and
+     *  constructs a Hwi object:
+     *
+     *  @p(code)
+     *
+     *  Hwi_Struct2 hwiStruct2;
+     *  Hwi_Handle  hwi;
+     *
+     *  Void main()
+     *  {
+     *      Hwi_Params hwiParams;
+     *
+     *      Hwi_Params_init(&hwiParams);
+     *      hwiParams.arg = (UArg)arg;
+     *      hwiParams.priority = intPriority;
+     *
+     *      hwi = Hwi_construct2(&hwiStruct2, intNum, hwiFxn, &hwiParams);
+     *      if (hwi == NULL) {
+     *          // Failure
+     *      }
+     *
+     *      BIOS_start();
+     *  }
+     *  @p
+     *
+     *  @param(hwi)        Pointer to Hwi_Struct2 object.
+     *  @param(intNum)     Interrupt priority
+     *  @param(hwiFxn)     Hwi Function
+     *  @param(prms)       Pointer to Hwi_Params structure
+     *
+     *  @b(returns)        A Hwi handle
+     */
+    Handle construct2(Struct2 *hwi, Int intNum, FuncPtr hwiFxn,
+            const Params *prms);
 
     /*!
      *  ======== disable ========

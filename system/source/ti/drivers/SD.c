@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Texas Instruments Incorporated
+ * Copyright (c) 2016-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,8 +34,8 @@
 #include <stdint.h>
 #include <stdlib.h>
 
-#include <ti/drivers/SD.h>
 #include <ti/drivers/dpl/HwiP.h>
+#include <ti/drivers/SD.h>
 
 extern const SD_Config SD_config[];
 extern const uint_least8_t SD_count;
@@ -76,7 +76,7 @@ uint_fast32_t SD_getNumSectors(SD_Handle handle)
  */
 uint_fast32_t SD_getSectorSize(SD_Handle handle)
 {
-    return (handle->fxnTablePtr->getSectorSizeFxn());
+    return (handle->fxnTablePtr->getSectorSizeFxn(handle));
 }
 
 /*

@@ -391,6 +391,11 @@ module BIOS
      *  linked into your application.  You must not change or add any options
      *  that can alter the runtime model specified by the default value of
      *  `BIOS.customCCOpts`.
+     *
+     *  @a(Warning)
+     *  Setting `BIOS.libType` overwrites `BIOS.customCCOpts`. Therefore, if an
+     *  application's *.cfg file sets both these config params, the libType must
+     *  be set before customCCOpts so the changes to customCCOpts persist.
      */
     metaonly config String customCCOpts;
 
@@ -703,7 +708,7 @@ module BIOS
      *  Example: A macro hex value of 0x64501 implies that the SYS/BIOS
      *  product version number is 6.45.01
      */
-    const UInt32 version = 0x65000;
+    const UInt32 version = 0x65200;
 
     /*!
      *  ======== addUserStartupFunction ========

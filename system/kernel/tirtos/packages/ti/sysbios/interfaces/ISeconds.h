@@ -2,19 +2,19 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     VIRTUAL FUNCTIONS
  *     FUNCTION STUBS
  *     FUNCTION SELECTORS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -74,8 +74,8 @@ struct ti_sysbios_interfaces_ISeconds_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
     xdc_UInt32 (*get)(void);
-    xdc_UInt32 (*getTime)(ti_sysbios_interfaces_ISeconds_Time*);
-    xdc_Void (*set)(xdc_UInt32);
+    xdc_UInt32 (*getTime)(ti_sysbios_interfaces_ISeconds_Time* ts);
+    xdc_Void (*set)(xdc_UInt32 seconds);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_interfaces_ISeconds_Module__BASE__CR
@@ -92,24 +92,28 @@ __extern const xdc_runtime_Types_Base ti_sysbios_interfaces_ISeconds_Interface__
  */
 
 /* Module_id */
-static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ISeconds_Module_id( ti_sysbios_interfaces_ISeconds_Module mod )
+static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ISeconds_Module_id(ti_sysbios_interfaces_ISeconds_Module mod);
+static inline xdc_runtime_Types_ModuleId ti_sysbios_interfaces_ISeconds_Module_id(ti_sysbios_interfaces_ISeconds_Module mod)
 {
     return mod->__sysp->__mid;
 }
 
 /* get */
+static inline xdc_UInt32 ti_sysbios_interfaces_ISeconds_get(ti_sysbios_interfaces_ISeconds_Module __mod);
 static inline xdc_UInt32 ti_sysbios_interfaces_ISeconds_get( ti_sysbios_interfaces_ISeconds_Module __mod )
 {
     return __mod->get();
 }
 
 /* getTime */
+static inline xdc_UInt32 ti_sysbios_interfaces_ISeconds_getTime(ti_sysbios_interfaces_ISeconds_Module __mod, ti_sysbios_interfaces_ISeconds_Time *ts);
 static inline xdc_UInt32 ti_sysbios_interfaces_ISeconds_getTime( ti_sysbios_interfaces_ISeconds_Module __mod, ti_sysbios_interfaces_ISeconds_Time *ts )
 {
     return __mod->getTime(ts);
 }
 
 /* set */
+static inline xdc_Void ti_sysbios_interfaces_ISeconds_set(ti_sysbios_interfaces_ISeconds_Module __mod, xdc_UInt32 seconds);
 static inline xdc_Void ti_sysbios_interfaces_ISeconds_set( ti_sysbios_interfaces_ISeconds_Module __mod, xdc_UInt32 seconds )
 {
     __mod->set(seconds);
@@ -129,21 +133,24 @@ static inline xdc_Void ti_sysbios_interfaces_ISeconds_set( ti_sysbios_interfaces
 
 /* get_{FxnT,fxnP} */
 typedef xdc_UInt32 (*ti_sysbios_interfaces_ISeconds_get_FxnT)(void);
-static inline ti_sysbios_interfaces_ISeconds_get_FxnT ti_sysbios_interfaces_ISeconds_get_fxnP( ti_sysbios_interfaces_ISeconds_Module __mod )
+static inline ti_sysbios_interfaces_ISeconds_get_FxnT ti_sysbios_interfaces_ISeconds_get_fxnP(ti_sysbios_interfaces_ISeconds_Module __mod);
+static inline ti_sysbios_interfaces_ISeconds_get_FxnT ti_sysbios_interfaces_ISeconds_get_fxnP(ti_sysbios_interfaces_ISeconds_Module __mod)
 {
     return (ti_sysbios_interfaces_ISeconds_get_FxnT)__mod->get;
 }
 
 /* getTime_{FxnT,fxnP} */
-typedef xdc_UInt32 (*ti_sysbios_interfaces_ISeconds_getTime_FxnT)(ti_sysbios_interfaces_ISeconds_Time*);
-static inline ti_sysbios_interfaces_ISeconds_getTime_FxnT ti_sysbios_interfaces_ISeconds_getTime_fxnP( ti_sysbios_interfaces_ISeconds_Module __mod )
+typedef xdc_UInt32 (*ti_sysbios_interfaces_ISeconds_getTime_FxnT)(ti_sysbios_interfaces_ISeconds_Time* ts);
+static inline ti_sysbios_interfaces_ISeconds_getTime_FxnT ti_sysbios_interfaces_ISeconds_getTime_fxnP(ti_sysbios_interfaces_ISeconds_Module __mod);
+static inline ti_sysbios_interfaces_ISeconds_getTime_FxnT ti_sysbios_interfaces_ISeconds_getTime_fxnP(ti_sysbios_interfaces_ISeconds_Module __mod)
 {
     return (ti_sysbios_interfaces_ISeconds_getTime_FxnT)__mod->getTime;
 }
 
 /* set_{FxnT,fxnP} */
-typedef xdc_Void (*ti_sysbios_interfaces_ISeconds_set_FxnT)(xdc_UInt32);
-static inline ti_sysbios_interfaces_ISeconds_set_FxnT ti_sysbios_interfaces_ISeconds_set_fxnP( ti_sysbios_interfaces_ISeconds_Module __mod )
+typedef xdc_Void (*ti_sysbios_interfaces_ISeconds_set_FxnT)(xdc_UInt32 seconds);
+static inline ti_sysbios_interfaces_ISeconds_set_FxnT ti_sysbios_interfaces_ISeconds_set_fxnP(ti_sysbios_interfaces_ISeconds_Module __mod);
+static inline ti_sysbios_interfaces_ISeconds_set_FxnT ti_sysbios_interfaces_ISeconds_set_fxnP(ti_sysbios_interfaces_ISeconds_Module __mod)
 {
     return (ti_sysbios_interfaces_ISeconds_set_FxnT)__mod->set;
 }

@@ -2,15 +2,15 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     CREATE ARGS
  *     MODULE-WIDE CONFIGS
  *     PER-INSTANCE TYPES
@@ -18,7 +18,7 @@
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -333,24 +333,24 @@ struct ti_sysbios_hal_Hwi_HwiProxy_Struct {
 struct ti_sysbios_hal_Hwi_HwiProxy_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_Bool (*getStackInfo)(ti_sysbios_interfaces_IHwi_StackInfo*, xdc_Bool);
-    xdc_Bool (*getCoreStackInfo)(ti_sysbios_interfaces_IHwi_StackInfo*, xdc_Bool, xdc_UInt);
+    xdc_Bool (*getStackInfo)(ti_sysbios_interfaces_IHwi_StackInfo* stkInfo, xdc_Bool computeStackDepth);
+    xdc_Bool (*getCoreStackInfo)(ti_sysbios_interfaces_IHwi_StackInfo* stkInfo, xdc_Bool computeStackDepth, xdc_UInt coreId);
     xdc_Void (*startup)(void);
     xdc_UInt (*disable)(void);
     xdc_UInt (*enable)(void);
-    xdc_Void (*restore)(xdc_UInt);
+    xdc_Void (*restore)(xdc_UInt key);
     xdc_Void (*switchFromBootStack)(void);
-    xdc_Void (*post)(xdc_UInt);
+    xdc_Void (*post)(xdc_UInt intNum);
     xdc_Char *(*getTaskSP)(void);
-    xdc_UInt (*disableInterrupt)(xdc_UInt);
-    xdc_UInt (*enableInterrupt)(xdc_UInt);
-    xdc_Void (*restoreInterrupt)(xdc_UInt, xdc_UInt);
-    xdc_Void (*clearInterrupt)(xdc_UInt);
-    ti_sysbios_interfaces_IHwi_FuncPtr (*getFunc)(ti_sysbios_hal_Hwi_HwiProxy_Handle, xdc_UArg*);
-    xdc_Void (*setFunc)(ti_sysbios_hal_Hwi_HwiProxy_Handle, ti_sysbios_interfaces_IHwi_FuncPtr, xdc_UArg);
-    xdc_Ptr (*getHookContext)(ti_sysbios_hal_Hwi_HwiProxy_Handle, xdc_Int);
-    xdc_Void (*setHookContext)(ti_sysbios_hal_Hwi_HwiProxy_Handle, xdc_Int, xdc_Ptr);
-    ti_sysbios_interfaces_IHwi_Irp (*getIrp)(ti_sysbios_hal_Hwi_HwiProxy_Handle);
+    xdc_UInt (*disableInterrupt)(xdc_UInt intNum);
+    xdc_UInt (*enableInterrupt)(xdc_UInt intNum);
+    xdc_Void (*restoreInterrupt)(xdc_UInt intNum, xdc_UInt key);
+    xdc_Void (*clearInterrupt)(xdc_UInt intNum);
+    ti_sysbios_interfaces_IHwi_FuncPtr (*getFunc)(ti_sysbios_hal_Hwi_HwiProxy_Handle __inst, xdc_UArg* arg);
+    xdc_Void (*setFunc)(ti_sysbios_hal_Hwi_HwiProxy_Handle __inst, ti_sysbios_interfaces_IHwi_FuncPtr fxn, xdc_UArg arg);
+    xdc_Ptr (*getHookContext)(ti_sysbios_hal_Hwi_HwiProxy_Handle __inst, xdc_Int id);
+    xdc_Void (*setHookContext)(ti_sysbios_hal_Hwi_HwiProxy_Handle __inst, xdc_Int id, xdc_Ptr hookContext);
+    ti_sysbios_interfaces_IHwi_Irp (*getIrp)(ti_sysbios_hal_Hwi_HwiProxy_Handle __inst);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_hal_Hwi_HwiProxy_Module__FXNS__CR
@@ -505,7 +505,8 @@ __extern ti_sysbios_interfaces_IHwi_Irp ti_sysbios_hal_Hwi_HwiProxy_getIrp__E( t
  */
 
 /* Module_upCast */
-static inline ti_sysbios_interfaces_IHwi_Module ti_sysbios_hal_Hwi_HwiProxy_Module_upCast( void )
+static inline ti_sysbios_interfaces_IHwi_Module ti_sysbios_hal_Hwi_HwiProxy_Module_upCast(void);
+static inline ti_sysbios_interfaces_IHwi_Module ti_sysbios_hal_Hwi_HwiProxy_Module_upCast(void)
 {
     return (ti_sysbios_interfaces_IHwi_Module)ti_sysbios_hal_Hwi_HwiProxy_Proxy__delegate__S();
 }
@@ -514,7 +515,8 @@ static inline ti_sysbios_interfaces_IHwi_Module ti_sysbios_hal_Hwi_HwiProxy_Modu
 #define ti_sysbios_hal_Hwi_HwiProxy_Module_to_ti_sysbios_interfaces_IHwi ti_sysbios_hal_Hwi_HwiProxy_Module_upCast
 
 /* Handle_upCast */
-static inline ti_sysbios_interfaces_IHwi_Handle ti_sysbios_hal_Hwi_HwiProxy_Handle_upCast( ti_sysbios_hal_Hwi_HwiProxy_Handle i )
+static inline ti_sysbios_interfaces_IHwi_Handle ti_sysbios_hal_Hwi_HwiProxy_Handle_upCast(ti_sysbios_hal_Hwi_HwiProxy_Handle i);
+static inline ti_sysbios_interfaces_IHwi_Handle ti_sysbios_hal_Hwi_HwiProxy_Handle_upCast(ti_sysbios_hal_Hwi_HwiProxy_Handle i)
 {
     return (ti_sysbios_interfaces_IHwi_Handle)i;
 }
@@ -523,7 +525,8 @@ static inline ti_sysbios_interfaces_IHwi_Handle ti_sysbios_hal_Hwi_HwiProxy_Hand
 #define ti_sysbios_hal_Hwi_HwiProxy_Handle_to_ti_sysbios_interfaces_IHwi ti_sysbios_hal_Hwi_HwiProxy_Handle_upCast
 
 /* Handle_downCast */
-static inline ti_sysbios_hal_Hwi_HwiProxy_Handle ti_sysbios_hal_Hwi_HwiProxy_Handle_downCast( ti_sysbios_interfaces_IHwi_Handle i )
+static inline ti_sysbios_hal_Hwi_HwiProxy_Handle ti_sysbios_hal_Hwi_HwiProxy_Handle_downCast(ti_sysbios_interfaces_IHwi_Handle i);
+static inline ti_sysbios_hal_Hwi_HwiProxy_Handle ti_sysbios_hal_Hwi_HwiProxy_Handle_downCast(ti_sysbios_interfaces_IHwi_Handle i)
 {
     ti_sysbios_interfaces_IHwi_Handle i2 = (ti_sysbios_interfaces_IHwi_Handle)i;
     if (ti_sysbios_hal_Hwi_HwiProxy_Proxy__abstract__S()) {
@@ -550,6 +553,7 @@ static inline ti_sysbios_hal_Hwi_HwiProxy_Handle ti_sysbios_hal_Hwi_HwiProxy_Han
 #define ti_sysbios_hal_Hwi_HwiProxy_Module_heap() ti_sysbios_hal_Hwi_HwiProxy_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_hal_Hwi_HwiProxy_Module__id ti_sysbios_hal_Hwi_HwiProxy_Module_id(void);
 static inline CT__ti_sysbios_hal_Hwi_HwiProxy_Module__id ti_sysbios_hal_Hwi_HwiProxy_Module_id( void ) 
 {
     return ti_sysbios_hal_Hwi_HwiProxy_Module__id__C;
@@ -562,6 +566,7 @@ static inline CT__ti_sysbios_hal_Hwi_HwiProxy_Module__id ti_sysbios_hal_Hwi_HwiP
 #define ti_sysbios_hal_Hwi_HwiProxy_Proxy_delegate() ((ti_sysbios_interfaces_IHwi_Module)ti_sysbios_hal_Hwi_HwiProxy_Proxy__delegate__S())
 
 /* Params_init */
+static inline void ti_sysbios_hal_Hwi_HwiProxy_Params_init(ti_sysbios_hal_Hwi_HwiProxy_Params *prms);
 static inline void ti_sysbios_hal_Hwi_HwiProxy_Params_init( ti_sysbios_hal_Hwi_HwiProxy_Params *prms ) 
 {
     if (prms) {
@@ -570,6 +575,7 @@ static inline void ti_sysbios_hal_Hwi_HwiProxy_Params_init( ti_sysbios_hal_Hwi_H
 }
 
 /* Params_copy */
+static inline void ti_sysbios_hal_Hwi_HwiProxy_Params_copy(ti_sysbios_hal_Hwi_HwiProxy_Params *dst, const ti_sysbios_hal_Hwi_HwiProxy_Params *src);
 static inline void ti_sysbios_hal_Hwi_HwiProxy_Params_copy(ti_sysbios_hal_Hwi_HwiProxy_Params *dst, const ti_sysbios_hal_Hwi_HwiProxy_Params *src) 
 {
     if (dst) {

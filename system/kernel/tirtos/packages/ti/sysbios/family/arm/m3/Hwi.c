@@ -127,6 +127,33 @@ Int Hwi_Module_startup(Int phase)
 }
 
 /*
+ *  ======== Hwi_construct2 ========
+ */
+Hwi_Handle Hwi_construct2(Hwi_Struct2 *hwiStruct2, Int intNum,
+        Hwi_FuncPtr hwiFxn, const Hwi_Params *prms)
+{
+    Hwi_Handle   hwi;
+
+    /* check vector table entry for already in use vector */
+    if (*((UInt32 *)Hwi_module->vectorTableBase + intNum) !=
+         (UInt32)Hwi_nullIsrFunc) {
+        return (NULL);
+    }
+
+    Hwi_construct((Hwi_Struct *)hwiStruct2, intNum, hwiFxn, prms,
+            Error_IGNORE);
+
+    /* check vector table entry for success */
+    if (*((UInt32 *)Hwi_module->vectorTableBase + intNum) ==
+         (UInt32)Hwi_nullIsrFunc) {
+        return (NULL);
+    }
+
+    hwi = Hwi_handle((Hwi_Struct *)hwiStruct2);
+    return (hwi);
+}
+
+/*
  *  ======== Hwi_Instance_init ========
  */
 Int Hwi_Instance_init(Hwi_Object *hwi, Int intNum,
@@ -214,13 +241,13 @@ Int Hwi_postInit (Hwi_Object *hwi, Error_Block *eb)
 
 #ifndef ti_sysbios_hal_Hwi_DISABLE_ALL_HOOKS
     Int i;
+    Error_Block localEB;
     Error_Block *leb;
 
     if (eb != Error_IGNORE) {
         leb = eb;
     }
     else {
-        Error_Block localEB;
         Error_init(&localEB);
         leb = &localEB;
     }

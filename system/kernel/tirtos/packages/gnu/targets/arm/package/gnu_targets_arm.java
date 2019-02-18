@@ -2,7 +2,7 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 import java.util.*;
 import org.mozilla.javascript.*;
@@ -11,7 +11,7 @@ import xdc.services.spec.Session;
 
 public class gnu_targets_arm
 {
-    static final String VERS = "@(#) xdc-D05\n";
+    static final String VERS = "@(#) xdc-D20\n";
 
     static final Proto.Elm $$T_Bool = Proto.Elm.newBool();
     static final Proto.Elm $$T_Num = Proto.Elm.newNum();
@@ -1036,7 +1036,7 @@ public class gnu_targets_arm
         po.addFld("ccBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/arm-none-eabi-gcc -c -MD -MF $@.dep", "opts", "-mcpu=cortex-m3 -mthumb -mabi=aapcs -g"), "rh");
         po.addFld("asm", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "$(rootDir)/bin/$(GCCTARG)-gcc -c -x assembler-with-cpp", "opts", "-Wa,-mcpu=cortex-m3 -Wa,-mthumb"), "rh");
         po.addFld("asmBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/arm-none-eabi-gcc -c -x assembler-with-cpp", "opts", "-Wa,-mcpu=cortex-m3 -Wa,-mthumb"), "rh");
-        po.addFld("lnkOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "-mthumb -march=armv7-m -nostartfiles -Wl,-static -Wl,--gc-sections", "suffix", "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group -Wl,-Map=$(XDCCFGDIR)/$@.map"), "wh");
+        po.addFld("lnkOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "-mthumb -march=armv7-m -nostartfiles -Wl,-static -Wl,--gc-sections", "suffix", "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group --specs=nano.specs -Wl,-Map=$(XDCCFGDIR)/$@.map"), "wh");
         fxn = Global.get(cap, "module$use");
         if (fxn != null) om.bind("gnu.targets.arm.M3$$module$use", true);
         if (fxn != null) po.addFxn("module$use", $$T_Met, fxn);
@@ -1098,7 +1098,7 @@ public class gnu_targets_arm
         po.addFld("ccBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/arm-none-eabi-gcc -c -MD -MF $@.dep", "opts", "-mcpu=cortex-m4 -mthumb -mfloat-abi=soft -mabi=aapcs -g"), "rh");
         po.addFld("asm", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "$(rootDir)/bin/$(GCCTARG)-gcc -c -x assembler-with-cpp", "opts", "-Wa,-mcpu=cortex-m4 -Wa,-mthumb"), "rh");
         po.addFld("asmBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/arm-none-eabi-gcc -c -x assembler-with-cpp", "opts", "-Wa,-mcpu=cortex-m4 -Wa,-mthumb"), "rh");
-        po.addFld("lnkOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "-mthumb -march=armv7e-m -nostartfiles -Wl,-static -Wl,--gc-sections ", "suffix", "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group -Wl,-Map=$(XDCCFGDIR)/$@.map"), "wh");
+        po.addFld("lnkOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "-mthumb -march=armv7e-m -nostartfiles -Wl,-static -Wl,--gc-sections ", "suffix", "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group --specs=nano.specs -Wl,-Map=$(XDCCFGDIR)/$@.map"), "wh");
         fxn = Global.get(cap, "module$use");
         if (fxn != null) om.bind("gnu.targets.arm.M4$$module$use", true);
         if (fxn != null) po.addFxn("module$use", $$T_Met, fxn);
@@ -1160,7 +1160,7 @@ public class gnu_targets_arm
         po.addFld("ccBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/arm-none-eabi-gcc -c -MD -MF $@.dep", "opts", "-mcpu=cortex-m4 -mthumb -mfloat-abi=hard -mfpu=fpv4-sp-d16 -mabi=aapcs -g"), "rh");
         po.addFld("asm", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "$(rootDir)/bin/$(GCCTARG)-gcc -c -x assembler-with-cpp", "opts", "-Wa,-mcpu=cortex-m4 -Wa,-mthumb -Wa,-mfloat-abi=hard -Wa,-mfpu=fpv4-sp-d16 "), "rh");
         po.addFld("asmBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/arm-none-eabi-gcc -c -x assembler-with-cpp", "opts", "-Wa,-mcpu=cortex-m4 -Wa,-mthumb -Wa,-mfloat-abi=hard -Wa,-mfpu=fpv4-sp-d16 "), "rh");
-        po.addFld("lnkOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "-mthumb -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16 -nostartfiles -Wl,-static -Wl,--gc-sections ", "suffix", "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group -Wl,-Map=$(XDCCFGDIR)/$@.map"), "wh");
+        po.addFld("lnkOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "-mthumb -march=armv7e-m -mfloat-abi=hard -mfpu=fpv4-sp-d16 -nostartfiles -Wl,-static -Wl,--gc-sections ", "suffix", "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group --specs=nano.specs -Wl,-Map=$(XDCCFGDIR)/$@.map"), "wh");
         fxn = Global.get(cap, "module$use");
         if (fxn != null) om.bind("gnu.targets.arm.M4F$$module$use", true);
         if (fxn != null) po.addFxn("module$use", $$T_Met, fxn);
@@ -1230,7 +1230,7 @@ public class gnu_targets_arm
         po.addFld("ccConfigOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "$(ccOpts.prefix)", "suffix", "$(ccOpts.suffix)"), "wh");
         po.addFld("asm", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "$(rootDir)/bin/$(GCCTARG)-gcc -c -x assembler-with-cpp", "opts", "-mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard"), "rh");
         po.addFld("asmBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/arm-none-eabi-gcc -c -x assembler-with-cpp", "opts", "-mcpu=cortex-a8 -mfpu=neon -mfloat-abi=hard"), "rh");
-        po.addFld("lnkOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "-mfloat-abi=hard -nostartfiles -Wl,-static -Wl,--gc-sections", "suffix", "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group -Wl,-Map=$(XDCCFGDIR)/$@.map"), "wh");
+        po.addFld("lnkOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "-mfloat-abi=hard -nostartfiles -Wl,-static -Wl,--gc-sections", "suffix", "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group --specs=nano.specs -Wl,-Map=$(XDCCFGDIR)/$@.map"), "wh");
         po.addFld("arBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/arm-none-eabi-ar ", "opts", ""), "rh");
         po.addFld("bspLib", $$T_Str, "nosys", "wh");
         po.addFld("targetPkgPath", $$T_Str, null, "wh");
@@ -1306,7 +1306,7 @@ public class gnu_targets_arm
         po.addFld("ccConfigOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "$(ccOpts.prefix)", "suffix", "$(ccOpts.suffix)"), "wh");
         po.addFld("asm", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "$(rootDir)/bin/$(GCCTARG)-gcc -c -x assembler-with-cpp", "opts", "-mcpu=cortex-a9 -mfpu=neon -mfloat-abi=hard"), "rh");
         po.addFld("asmBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/arm-none-eabi-gcc -c -x assembler-with-cpp", "opts", "-mcpu=cortex-a9 -mfpu=neon -mfloat-abi=hard"), "rh");
-        po.addFld("lnkOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "-mfloat-abi=hard -nostartfiles -Wl,-static -Wl,--gc-sections", "suffix", "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group -Wl,-Map=$(XDCCFGDIR)/$@.map"), "wh");
+        po.addFld("lnkOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "-mfloat-abi=hard -nostartfiles -Wl,-static -Wl,--gc-sections", "suffix", "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group --specs=nano.specs -Wl,-Map=$(XDCCFGDIR)/$@.map"), "wh");
         po.addFld("arBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/arm-none-eabi-ar ", "opts", ""), "rh");
         po.addFld("bspLib", $$T_Str, "nosys", "wh");
         po.addFld("targetPkgPath", $$T_Str, null, "wh");
@@ -1382,7 +1382,7 @@ public class gnu_targets_arm
         po.addFld("ccConfigOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "$(ccOpts.prefix)", "suffix", "$(ccOpts.suffix)"), "wh");
         po.addFld("asm", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "$(rootDir)/bin/$(GCCTARG)-gcc -c -x assembler-with-cpp", "opts", "-mcpu=cortex-a15 -mfpu=neon -mfloat-abi=hard"), "rh");
         po.addFld("asmBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/arm-none-eabi-gcc -c -x assembler-with-cpp", "opts", "-mcpu=cortex-a15 -mfpu=neon -mfloat-abi=hard"), "rh");
-        po.addFld("lnkOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "-mfloat-abi=hard -nostartfiles -Wl,-static -Wl,--gc-sections", "suffix", "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group -Wl,-Map=$(XDCCFGDIR)/$@.map"), "wh");
+        po.addFld("lnkOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "-mfloat-abi=hard -nostartfiles -Wl,-static -Wl,--gc-sections", "suffix", "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group --specs=nano.specs -Wl,-Map=$(XDCCFGDIR)/$@.map"), "wh");
         po.addFld("arBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/arm-none-eabi-ar ", "opts", ""), "rh");
         po.addFld("bspLib", $$T_Str, "nosys", "wh");
         po.addFld("targetPkgPath", $$T_Str, null, "wh");
@@ -1449,17 +1449,17 @@ public class gnu_targets_arm
         po.addFld("model", (Proto)om.findStrict("xdc.bld.ITarget.Model", "gnu.targets.arm"), Global.newObject("endian", "little", "shortEnums", true), "rh");
         po.addFld("alignDirectiveSupported", $$T_Bool, true, "rh");
         po.addFld("rts", $$T_Str, "gnu.targets.arm.rtsv8A", "rh");
-        po.addFld("platform", $$T_Str, "ti.platforms.cortexA", "wh");
+        po.addFld("platform", $$T_Str, "ti.platforms.cortexA:SIMMAXWELL", "wh");
         po.addFld("GCCTARG", $$T_Str, "aarch64-elf", "wh");
         po.addFld("stdInclude", $$T_Str, "gnu/targets/arm/std.h", "rh");
         po.addFld("cc", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "$(rootDir)/bin/$(GCCTARG)-gcc -c -MD -MF $@.dep", "opts", "-mcpu=cortex-a53+fp+simd -mabi=lp64 -mcmodel=large -mstrict-align -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -g"), "rh");
-        po.addFld("ccBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/$(GCCTARG)-gcc -c -MD -MF $@.dep", "opts", "-mcpu=cortex-a53+fp+simd -mabi=lp64 -mcmodel=large -mstrict-align -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -g"), "rh");
+        po.addFld("ccBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/aarch64-elf-gcc -c -MD -MF $@.dep", "opts", "-mcpu=cortex-a53+fp+simd -mabi=lp64 -mcmodel=large -mstrict-align -mfix-cortex-a53-835769 -mfix-cortex-a53-843419 -g"), "rh");
         po.addFld("ccOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "-Wunused -Wunknown-pragmas -ffunction-sections -fdata-sections ", "suffix", "-Dfar= -D__DYNAMIC_REENT__ "), "wh");
         po.addFld("ccConfigOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "$(ccOpts.prefix)", "suffix", "$(ccOpts.suffix)"), "wh");
         po.addFld("asm", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "$(rootDir)/bin/$(GCCTARG)-gcc -c -x assembler-with-cpp", "opts", "-mcpu=cortex-a53+fp+simd -mabi=lp64 -mcmodel=large -mstrict-align -mfix-cortex-a53-835769 -mfix-cortex-a53-843419"), "rh");
-        po.addFld("asmBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/$(GCCTARG)-gcc -c -x assembler-with-cpp", "opts", "-mcpu=cortex-a53+fp+simd -mabi=lp64 -mcmodel=large -mstrict-align -mfix-cortex-a53-835769 -mfix-cortex-a53-843419"), "rh");
+        po.addFld("asmBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/aarch64-elf-gcc -c -x assembler-with-cpp", "opts", "-mcpu=cortex-a53+fp+simd -mabi=lp64 -mcmodel=large -mstrict-align -mfix-cortex-a53-835769 -mfix-cortex-a53-843419"), "rh");
         po.addFld("lnkOpts", (Proto)om.findStrict("xdc.bld.ITarget2.Options", "gnu.targets.arm"), Global.newObject("prefix", "-nostartfiles -Wl,-static -Wl,--gc-sections", "suffix", "-Wl,--start-group -lgcc -lc -lm -Wl,--end-group -Wl,-Map=$(XDCCFGDIR)/$@.map"), "wh");
-        po.addFld("arBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/$(GCCTARG)-ar ", "opts", ""), "rh");
+        po.addFld("arBin", (Proto)om.findStrict("xdc.bld.ITarget2.Command", "gnu.targets.arm"), Global.newObject("cmd", "bin/aarch64-elf-ar ", "opts", ""), "rh");
         po.addFld("bspLib", $$T_Str, "nosys", "wh");
         po.addFld("targetPkgPath", $$T_Str, null, "wh");
         po.addFld("profiles", new Proto.Map((Proto)om.findStrict("xdc.bld.ITarget.OptionSet", "gnu.targets.arm")), Global.newArray(new Object[]{Global.newArray(new Object[]{"debug", Global.newObject("compileOpts", Global.newObject("copts", "-g", "defs", "-D_DEBUG_=1"), "linkOpts", "-g")}), Global.newArray(new Object[]{"release", Global.newObject("compileOpts", Global.newObject("copts", " -O2 "), "linkOpts", " ")})}), "wh");

@@ -2,15 +2,15 @@
 * @file     system_msp432p401r.c
 * @brief    CMSIS Cortex-M4F Device Peripheral Access Layer Source File for
 *           MSP432P401R
-* @version  3.000
-* @date     2017-01-20
+* @version  3.202
+* @date     08/03/17
 *
 * @note     View configuration instructions embedded in comments
 *
 ******************************************************************************/
 //*****************************************************************************
 //
-// Copyright (C) 2015 - 2016 Texas Instruments Incorporated - http://www.ti.com/
+// Copyright (C) 2015 - 2017 Texas Instruments Incorporated - http://www.ti.com/
 //
 // Redistribution and use in source and binary forms, with or without
 // modification, are permitted provided that the following conditions
@@ -384,9 +384,9 @@ void SystemInit(void)
     while((PCM->CTL1 & PCM_CTL1_PMR_BUSY));
     #endif
 
-    // 2 flash wait states (BANK0 VCORE1 max is 16 MHz, BANK1 VCORE1 max is 32 MHz)
-    FLCTL->BANK0_RDCTL = (FLCTL->BANK0_RDCTL & ~FLCTL_BANK0_RDCTL_WAIT_MASK) | FLCTL_BANK0_RDCTL_WAIT_2;
-    FLCTL->BANK1_RDCTL = (FLCTL->BANK1_RDCTL & ~FLCTL_BANK1_RDCTL_WAIT_MASK) | FLCTL_BANK1_RDCTL_WAIT_2;
+    // 1 flash wait states (BANK0 VCORE1 max is 16 MHz, BANK1 VCORE1 max is 32 MHz)
+    FLCTL->BANK0_RDCTL = (FLCTL->BANK0_RDCTL & ~FLCTL_BANK0_RDCTL_WAIT_MASK) | FLCTL_BANK0_RDCTL_WAIT_1;
+    FLCTL->BANK1_RDCTL = (FLCTL->BANK1_RDCTL & ~FLCTL_BANK1_RDCTL_WAIT_MASK) | FLCTL_BANK1_RDCTL_WAIT_1;
 
     // DCO = 48 MHz; MCLK = source
     CS->KEY = CS_KEY_VAL;                                  // Unlock CS module for register access

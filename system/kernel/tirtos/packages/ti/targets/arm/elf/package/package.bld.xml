@@ -19,6 +19,7 @@
         <module name="A8Fv"/>
         <module name="A8Fnv"/>
         <module name="R4F"/>
+        <module name="R4Ft"/>
         <module name="R5F"/>
     </units>
     <sources>

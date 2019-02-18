@@ -2,15 +2,15 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     CREATE ARGS
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
@@ -19,7 +19,7 @@
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -295,8 +295,8 @@ struct ti_sysbios_xdcruntime_SemProcessSupport_Struct {
 struct ti_sysbios_xdcruntime_SemProcessSupport_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_Int (*pend)(ti_sysbios_xdcruntime_SemProcessSupport_Handle, xdc_UInt, xdc_runtime_Error_Block*);
-    xdc_Bool (*post)(ti_sysbios_xdcruntime_SemProcessSupport_Handle, xdc_runtime_Error_Block*);
+    xdc_Int (*pend)(ti_sysbios_xdcruntime_SemProcessSupport_Handle __inst, xdc_UInt timeout, xdc_runtime_Error_Block* eb);
+    xdc_Bool (*post)(ti_sysbios_xdcruntime_SemProcessSupport_Handle __inst, xdc_runtime_Error_Block* eb);
     xdc_runtime_Types_SysFxns2 __sfxns;
 };
 #ifndef ti_sysbios_xdcruntime_SemProcessSupport_Module__FXNS__CR
@@ -317,11 +317,11 @@ __extern const ti_sysbios_xdcruntime_SemProcessSupport_Fxns__ ti_sysbios_xdcrunt
 
 /* Instance_init__E */
 xdc__CODESECT(ti_sysbios_xdcruntime_SemProcessSupport_Instance_init__E, "ti_sysbios_xdcruntime_SemProcessSupport_Instance_init")
-__extern xdc_Void ti_sysbios_xdcruntime_SemProcessSupport_Instance_init__E(ti_sysbios_xdcruntime_SemProcessSupport_Object *, xdc_Int count, xdc_Int key, const ti_sysbios_xdcruntime_SemProcessSupport_Params *);
+__extern xdc_Void ti_sysbios_xdcruntime_SemProcessSupport_Instance_init__E(ti_sysbios_xdcruntime_SemProcessSupport_Object *__obj, xdc_Int count, xdc_Int key, const ti_sysbios_xdcruntime_SemProcessSupport_Params *__prms);
 
 /* Instance_finalize__E */
 xdc__CODESECT(ti_sysbios_xdcruntime_SemProcessSupport_Instance_finalize__E, "ti_sysbios_xdcruntime_SemProcessSupport_Instance_finalize")
-__extern void ti_sysbios_xdcruntime_SemProcessSupport_Instance_finalize__E( ti_sysbios_xdcruntime_SemProcessSupport_Object* );
+__extern void ti_sysbios_xdcruntime_SemProcessSupport_Instance_finalize__E(ti_sysbios_xdcruntime_SemProcessSupport_Object *__obj);
 
 /* create */
 xdc__CODESECT(ti_sysbios_xdcruntime_SemProcessSupport_create, "ti_sysbios_xdcruntime_SemProcessSupport_create")
@@ -387,7 +387,8 @@ __extern xdc_Bool ti_sysbios_xdcruntime_SemProcessSupport_post__E( ti_sysbios_xd
  */
 
 /* Module_upCast */
-static inline xdc_runtime_knl_ISemProcessSupport_Module ti_sysbios_xdcruntime_SemProcessSupport_Module_upCast( void )
+static inline xdc_runtime_knl_ISemProcessSupport_Module ti_sysbios_xdcruntime_SemProcessSupport_Module_upCast(void);
+static inline xdc_runtime_knl_ISemProcessSupport_Module ti_sysbios_xdcruntime_SemProcessSupport_Module_upCast(void)
 {
     return (xdc_runtime_knl_ISemProcessSupport_Module)&ti_sysbios_xdcruntime_SemProcessSupport_Module__FXNS__C;
 }
@@ -396,7 +397,8 @@ static inline xdc_runtime_knl_ISemProcessSupport_Module ti_sysbios_xdcruntime_Se
 #define ti_sysbios_xdcruntime_SemProcessSupport_Module_to_xdc_runtime_knl_ISemProcessSupport ti_sysbios_xdcruntime_SemProcessSupport_Module_upCast
 
 /* Handle_upCast */
-static inline xdc_runtime_knl_ISemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Handle_upCast( ti_sysbios_xdcruntime_SemProcessSupport_Handle i )
+static inline xdc_runtime_knl_ISemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Handle_upCast(ti_sysbios_xdcruntime_SemProcessSupport_Handle i);
+static inline xdc_runtime_knl_ISemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Handle_upCast(ti_sysbios_xdcruntime_SemProcessSupport_Handle i)
 {
     return (xdc_runtime_knl_ISemProcessSupport_Handle)i;
 }
@@ -405,7 +407,8 @@ static inline xdc_runtime_knl_ISemProcessSupport_Handle ti_sysbios_xdcruntime_Se
 #define ti_sysbios_xdcruntime_SemProcessSupport_Handle_to_xdc_runtime_knl_ISemProcessSupport ti_sysbios_xdcruntime_SemProcessSupport_Handle_upCast
 
 /* Handle_downCast */
-static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Handle_downCast( xdc_runtime_knl_ISemProcessSupport_Handle i )
+static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Handle_downCast(xdc_runtime_knl_ISemProcessSupport_Handle i);
+static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Handle_downCast(xdc_runtime_knl_ISemProcessSupport_Handle i)
 {
     xdc_runtime_knl_ISemProcessSupport_Handle i2 = (xdc_runtime_knl_ISemProcessSupport_Handle)i;
     return (const void*)i2->__fxns == (const void*)&ti_sysbios_xdcruntime_SemProcessSupport_Module__FXNS__C ? (ti_sysbios_xdcruntime_SemProcessSupport_Handle)i : (ti_sysbios_xdcruntime_SemProcessSupport_Handle)0;
@@ -415,7 +418,8 @@ static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcrunti
 #define ti_sysbios_xdcruntime_SemProcessSupport_Handle_from_xdc_runtime_knl_ISemProcessSupport ti_sysbios_xdcruntime_SemProcessSupport_Handle_downCast
 
 /* Module_upCast2 */
-static inline xdc_runtime_knl_ISemaphore_Module ti_sysbios_xdcruntime_SemProcessSupport_Module_upCast2( void )
+static inline xdc_runtime_knl_ISemaphore_Module ti_sysbios_xdcruntime_SemProcessSupport_Module_upCast2(void);
+static inline xdc_runtime_knl_ISemaphore_Module ti_sysbios_xdcruntime_SemProcessSupport_Module_upCast2(void)
 {
     return (xdc_runtime_knl_ISemaphore_Module)&ti_sysbios_xdcruntime_SemProcessSupport_Module__FXNS__C;
 }
@@ -424,7 +428,8 @@ static inline xdc_runtime_knl_ISemaphore_Module ti_sysbios_xdcruntime_SemProcess
 #define ti_sysbios_xdcruntime_SemProcessSupport_Module_to_xdc_runtime_knl_ISemaphore ti_sysbios_xdcruntime_SemProcessSupport_Module_upCast2
 
 /* Handle_upCast2 */
-static inline xdc_runtime_knl_ISemaphore_Handle ti_sysbios_xdcruntime_SemProcessSupport_Handle_upCast2( ti_sysbios_xdcruntime_SemProcessSupport_Handle i )
+static inline xdc_runtime_knl_ISemaphore_Handle ti_sysbios_xdcruntime_SemProcessSupport_Handle_upCast2(ti_sysbios_xdcruntime_SemProcessSupport_Handle i);
+static inline xdc_runtime_knl_ISemaphore_Handle ti_sysbios_xdcruntime_SemProcessSupport_Handle_upCast2(ti_sysbios_xdcruntime_SemProcessSupport_Handle i)
 {
     return (xdc_runtime_knl_ISemaphore_Handle)i;
 }
@@ -433,7 +438,8 @@ static inline xdc_runtime_knl_ISemaphore_Handle ti_sysbios_xdcruntime_SemProcess
 #define ti_sysbios_xdcruntime_SemProcessSupport_Handle_to_xdc_runtime_knl_ISemaphore ti_sysbios_xdcruntime_SemProcessSupport_Handle_upCast2
 
 /* Handle_downCast2 */
-static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Handle_downCast2( xdc_runtime_knl_ISemaphore_Handle i )
+static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Handle_downCast2(xdc_runtime_knl_ISemaphore_Handle i);
+static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Handle_downCast2(xdc_runtime_knl_ISemaphore_Handle i)
 {
     xdc_runtime_knl_ISemaphore_Handle i2 = (xdc_runtime_knl_ISemaphore_Handle)i;
     return (const void*)i2->__fxns == (const void*)&ti_sysbios_xdcruntime_SemProcessSupport_Module__FXNS__C ? (ti_sysbios_xdcruntime_SemProcessSupport_Handle)i : (ti_sysbios_xdcruntime_SemProcessSupport_Handle)0;
@@ -457,25 +463,29 @@ static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcrunti
 #define ti_sysbios_xdcruntime_SemProcessSupport_Module_heap() ti_sysbios_xdcruntime_SemProcessSupport_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_xdcruntime_SemProcessSupport_Module__id ti_sysbios_xdcruntime_SemProcessSupport_Module_id(void);
 static inline CT__ti_sysbios_xdcruntime_SemProcessSupport_Module__id ti_sysbios_xdcruntime_SemProcessSupport_Module_id( void ) 
 {
     return ti_sysbios_xdcruntime_SemProcessSupport_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool ti_sysbios_xdcruntime_SemProcessSupport_Module_hasMask( void ) 
+static inline xdc_Bool ti_sysbios_xdcruntime_SemProcessSupport_Module_hasMask(void);
+static inline xdc_Bool ti_sysbios_xdcruntime_SemProcessSupport_Module_hasMask(void) 
 {
     return (xdc_Bool)(ti_sysbios_xdcruntime_SemProcessSupport_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 ti_sysbios_xdcruntime_SemProcessSupport_Module_getMask(void);
 static inline xdc_Bits16 ti_sysbios_xdcruntime_SemProcessSupport_Module_getMask( void ) 
 {
     return ti_sysbios_xdcruntime_SemProcessSupport_Module__diagsMask__C != NULL ? *ti_sysbios_xdcruntime_SemProcessSupport_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void ti_sysbios_xdcruntime_SemProcessSupport_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void ti_sysbios_xdcruntime_SemProcessSupport_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void ti_sysbios_xdcruntime_SemProcessSupport_Module_setMask(xdc_Bits16 mask)
 {
     if (ti_sysbios_xdcruntime_SemProcessSupport_Module__diagsMask__C != NULL) {
         *ti_sysbios_xdcruntime_SemProcessSupport_Module__diagsMask__C = mask;
@@ -483,6 +493,7 @@ static inline xdc_Void ti_sysbios_xdcruntime_SemProcessSupport_Module_setMask( x
 }
 
 /* Params_init */
+static inline void ti_sysbios_xdcruntime_SemProcessSupport_Params_init(ti_sysbios_xdcruntime_SemProcessSupport_Params *prms);
 static inline void ti_sysbios_xdcruntime_SemProcessSupport_Params_init( ti_sysbios_xdcruntime_SemProcessSupport_Params *prms ) 
 {
     if (prms) {
@@ -491,6 +502,7 @@ static inline void ti_sysbios_xdcruntime_SemProcessSupport_Params_init( ti_sysbi
 }
 
 /* Params_copy */
+static inline void ti_sysbios_xdcruntime_SemProcessSupport_Params_copy(ti_sysbios_xdcruntime_SemProcessSupport_Params *dst, const ti_sysbios_xdcruntime_SemProcessSupport_Params *src);
 static inline void ti_sysbios_xdcruntime_SemProcessSupport_Params_copy(ti_sysbios_xdcruntime_SemProcessSupport_Params *dst, const ti_sysbios_xdcruntime_SemProcessSupport_Params *src) 
 {
     if (dst) {
@@ -505,44 +517,51 @@ static inline void ti_sysbios_xdcruntime_SemProcessSupport_Params_copy(ti_sysbio
 #define ti_sysbios_xdcruntime_SemProcessSupport_Object_sizeof() ti_sysbios_xdcruntime_SemProcessSupport_Object__sizeof__C
 
 /* Object_get */
+static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Object_get(ti_sysbios_xdcruntime_SemProcessSupport_Instance_State *oarr, int i);
 static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Object_get(ti_sysbios_xdcruntime_SemProcessSupport_Instance_State *oarr, int i) 
 {
     return (ti_sysbios_xdcruntime_SemProcessSupport_Handle)ti_sysbios_xdcruntime_SemProcessSupport_Object__get__S(oarr, i);
 }
 
 /* Object_first */
-static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Object_first( void )
+static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Object_first(void);
+static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Object_first(void)
 {
     return (ti_sysbios_xdcruntime_SemProcessSupport_Handle)ti_sysbios_xdcruntime_SemProcessSupport_Object__first__S();
 }
 
 /* Object_next */
-static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Object_next( ti_sysbios_xdcruntime_SemProcessSupport_Object *obj )
+static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Object_next(ti_sysbios_xdcruntime_SemProcessSupport_Object *obj);
+static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_Object_next(ti_sysbios_xdcruntime_SemProcessSupport_Object *obj)
 {
     return (ti_sysbios_xdcruntime_SemProcessSupport_Handle)ti_sysbios_xdcruntime_SemProcessSupport_Object__next__S(obj);
 }
 
 /* Handle_label */
-static inline xdc_runtime_Types_Label *ti_sysbios_xdcruntime_SemProcessSupport_Handle_label( ti_sysbios_xdcruntime_SemProcessSupport_Handle inst, xdc_runtime_Types_Label *lab )
+static inline xdc_runtime_Types_Label *ti_sysbios_xdcruntime_SemProcessSupport_Handle_label(ti_sysbios_xdcruntime_SemProcessSupport_Handle inst, xdc_runtime_Types_Label *lab);
+static inline xdc_runtime_Types_Label *ti_sysbios_xdcruntime_SemProcessSupport_Handle_label(ti_sysbios_xdcruntime_SemProcessSupport_Handle inst, xdc_runtime_Types_Label *lab)
 {
     return ti_sysbios_xdcruntime_SemProcessSupport_Handle__label__S(inst, lab);
 }
 
 /* Handle_name */
-static inline xdc_String ti_sysbios_xdcruntime_SemProcessSupport_Handle_name( ti_sysbios_xdcruntime_SemProcessSupport_Handle inst )
+static inline xdc_String ti_sysbios_xdcruntime_SemProcessSupport_Handle_name(ti_sysbios_xdcruntime_SemProcessSupport_Handle inst);
+static inline xdc_String ti_sysbios_xdcruntime_SemProcessSupport_Handle_name(ti_sysbios_xdcruntime_SemProcessSupport_Handle inst)
 {
     xdc_runtime_Types_Label lab;
     return ti_sysbios_xdcruntime_SemProcessSupport_Handle__label__S(inst, &lab)->iname;
 }
 
 /* handle */
-static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_handle( ti_sysbios_xdcruntime_SemProcessSupport_Struct *str )
+static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_handle(ti_sysbios_xdcruntime_SemProcessSupport_Struct *str);
+static inline ti_sysbios_xdcruntime_SemProcessSupport_Handle ti_sysbios_xdcruntime_SemProcessSupport_handle(ti_sysbios_xdcruntime_SemProcessSupport_Struct *str)
 {
     return (ti_sysbios_xdcruntime_SemProcessSupport_Handle)str;
 }
 
 /* struct */
-static inline ti_sysbios_xdcruntime_SemProcessSupport_Struct *ti_sysbios_xdcruntime_SemProcessSupport_struct( ti_sysbios_xdcruntime_SemProcessSupport_Handle inst )
+static inline ti_sysbios_xdcruntime_SemProcessSupport_Struct *ti_sysbios_xdcruntime_SemProcessSupport_struct(ti_sysbios_xdcruntime_SemProcessSupport_Handle inst);
+static inline ti_sysbios_xdcruntime_SemProcessSupport_Struct *ti_sysbios_xdcruntime_SemProcessSupport_struct(ti_sysbios_xdcruntime_SemProcessSupport_Handle inst)
 {
     return (ti_sysbios_xdcruntime_SemProcessSupport_Struct*)inst;
 }
@@ -578,6 +597,7 @@ struct ti_sysbios_xdcruntime_SemProcessSupport_Object {
 #ifndef ti_sysbios_xdcruntime_SemProcessSupport_Instance_State_sem__OR
 __extern __FAR__ const xdc_SizeT ti_sysbios_xdcruntime_SemProcessSupport_Instance_State_sem__O;
 #endif
+static inline ti_sysbios_knl_Semaphore_Handle ti_sysbios_xdcruntime_SemProcessSupport_Instance_State_sem(ti_sysbios_xdcruntime_SemProcessSupport_Object *obj);
 static inline ti_sysbios_knl_Semaphore_Handle ti_sysbios_xdcruntime_SemProcessSupport_Instance_State_sem(ti_sysbios_xdcruntime_SemProcessSupport_Object *obj)
 {
     return (ti_sysbios_knl_Semaphore_Handle)(((char*)obj) + ti_sysbios_xdcruntime_SemProcessSupport_Instance_State_sem__O);

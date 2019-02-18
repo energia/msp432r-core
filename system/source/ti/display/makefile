@@ -49,4 +49,4 @@ all:
 
 clean:
 	@ echo cleaning packages ...
-	@ $(XDC) XDCARGS="$(XDCARGS)" clean -PR .
+	@ $(XDC) XDCARGS="$(XDCARGS)" XDCPATH="$(XDCPATH)" clean -PR .

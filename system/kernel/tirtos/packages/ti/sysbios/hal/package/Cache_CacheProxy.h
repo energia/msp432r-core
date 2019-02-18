@@ -2,21 +2,21 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     MODULE-WIDE CONFIGS
  *     VIRTUAL FUNCTIONS
  *     FUNCTION DECLARATIONS
  *     CONVERTORS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     PREFIX ALIASES
  */
@@ -230,11 +230,11 @@ __extern __FAR__ const CT__ti_sysbios_hal_Cache_CacheProxy_Object__table ti_sysb
 struct ti_sysbios_hal_Cache_CacheProxy_Fxns__ {
     const xdc_runtime_Types_Base* __base;
     const xdc_runtime_Types_SysFxns2* __sysp;
-    xdc_Void (*enable)(xdc_Bits16);
-    xdc_Void (*disable)(xdc_Bits16);
-    xdc_Void (*inv)(xdc_Ptr, xdc_SizeT, xdc_Bits16, xdc_Bool);
-    xdc_Void (*wb)(xdc_Ptr, xdc_SizeT, xdc_Bits16, xdc_Bool);
-    xdc_Void (*wbInv)(xdc_Ptr, xdc_SizeT, xdc_Bits16, xdc_Bool);
+    xdc_Void (*enable)(xdc_Bits16 type);
+    xdc_Void (*disable)(xdc_Bits16 type);
+    xdc_Void (*inv)(xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait);
+    xdc_Void (*wb)(xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait);
+    xdc_Void (*wbInv)(xdc_Ptr blockPtr, xdc_SizeT byteCnt, xdc_Bits16 type, xdc_Bool wait);
     xdc_Void (*wbAll)(void);
     xdc_Void (*wbInvAll)(void);
     xdc_Void (*wait)(void);
@@ -334,7 +334,8 @@ __extern xdc_Void ti_sysbios_hal_Cache_CacheProxy_wait__E( void );
  */
 
 /* Module_upCast */
-static inline ti_sysbios_interfaces_ICache_Module ti_sysbios_hal_Cache_CacheProxy_Module_upCast( void )
+static inline ti_sysbios_interfaces_ICache_Module ti_sysbios_hal_Cache_CacheProxy_Module_upCast(void);
+static inline ti_sysbios_interfaces_ICache_Module ti_sysbios_hal_Cache_CacheProxy_Module_upCast(void)
 {
     return (ti_sysbios_interfaces_ICache_Module)ti_sysbios_hal_Cache_CacheProxy_Proxy__delegate__S();
 }
@@ -357,6 +358,7 @@ static inline ti_sysbios_interfaces_ICache_Module ti_sysbios_hal_Cache_CacheProx
 #define ti_sysbios_hal_Cache_CacheProxy_Module_heap() ti_sysbios_hal_Cache_CacheProxy_Object__heap__C
 
 /* Module_id */
+static inline CT__ti_sysbios_hal_Cache_CacheProxy_Module__id ti_sysbios_hal_Cache_CacheProxy_Module_id(void);
 static inline CT__ti_sysbios_hal_Cache_CacheProxy_Module__id ti_sysbios_hal_Cache_CacheProxy_Module_id( void ) 
 {
     return ti_sysbios_hal_Cache_CacheProxy_Module__id__C;

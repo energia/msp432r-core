@@ -2,20 +2,20 @@
  *  Do not modify this file; it is automatically 
  *  generated and any modifications will be overwritten.
  *
- * @(#) xdc-D05
+ * @(#) xdc-D20
  */
 
 /*
  * ======== GENERATED SECTIONS ========
- *     
+ *
  *     PROLOGUE
  *     INCLUDES
- *     
+ *
  *     INTERNAL DEFINITIONS
  *     MODULE-WIDE CONFIGS
  *     FUNCTION DECLARATIONS
  *     SYSTEM FUNCTIONS
- *     
+ *
  *     EPILOGUE
  *     STATE STRUCTURES
  *     PREFIX ALIASES
@@ -250,25 +250,29 @@ __extern xdc_Bool gnu_targets_arm_rtsv7M_Settings_Module__startupDone__S( void )
 #define gnu_targets_arm_rtsv7M_Settings_Module_heap() gnu_targets_arm_rtsv7M_Settings_Object__heap__C
 
 /* Module_id */
+static inline CT__gnu_targets_arm_rtsv7M_Settings_Module__id gnu_targets_arm_rtsv7M_Settings_Module_id(void);
 static inline CT__gnu_targets_arm_rtsv7M_Settings_Module__id gnu_targets_arm_rtsv7M_Settings_Module_id( void ) 
 {
     return gnu_targets_arm_rtsv7M_Settings_Module__id__C;
 }
 
 /* Module_hasMask */
-static inline xdc_Bool gnu_targets_arm_rtsv7M_Settings_Module_hasMask( void ) 
+static inline xdc_Bool gnu_targets_arm_rtsv7M_Settings_Module_hasMask(void);
+static inline xdc_Bool gnu_targets_arm_rtsv7M_Settings_Module_hasMask(void) 
 {
     return (xdc_Bool)(gnu_targets_arm_rtsv7M_Settings_Module__diagsMask__C != NULL);
 }
 
 /* Module_getMask */
+static inline xdc_Bits16 gnu_targets_arm_rtsv7M_Settings_Module_getMask(void);
 static inline xdc_Bits16 gnu_targets_arm_rtsv7M_Settings_Module_getMask( void ) 
 {
     return gnu_targets_arm_rtsv7M_Settings_Module__diagsMask__C != NULL ? *gnu_targets_arm_rtsv7M_Settings_Module__diagsMask__C : (xdc_Bits16)0;
 }
 
 /* Module_setMask */
-static inline xdc_Void gnu_targets_arm_rtsv7M_Settings_Module_setMask( xdc_Bits16 mask ) 
+static inline xdc_Void gnu_targets_arm_rtsv7M_Settings_Module_setMask(xdc_Bits16 mask);
+static inline xdc_Void gnu_targets_arm_rtsv7M_Settings_Module_setMask(xdc_Bits16 mask)
 {
     if (gnu_targets_arm_rtsv7M_Settings_Module__diagsMask__C != NULL) {
         *gnu_targets_arm_rtsv7M_Settings_Module__diagsMask__C = mask;

@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -34,61 +34,423 @@
  *  ======== NVSMSP432.c ========
  */
 
-#include <stdbool.h>
 #include <stdint.h>
-#include <string.h>  /* for string support */
+#include <stddef.h>
+#include <stdbool.h>
+#include <string.h>
 #include <stdlib.h>
 
-#include <xdc/std.h>
-#include <xdc/runtime/Assert.h>
-#include <xdc/runtime/Diags.h>
-#include <xdc/runtime/Log.h>
+#include <ti/devices/DeviceFamily.h>
 
-#include <ti/sysbios/BIOS.h>
-#include <ti/sysbios/knl/Semaphore.h>
-
-/* driverlib header files */
-#include <ti/devices/msp432p4xx/driverlib/rom.h>
-#include <ti/devices/msp432p4xx/driverlib/rom_map.h>
-#include <ti/devices/msp432p4xx/driverlib/flash.h>
+#include <ti/drivers/dpl/HwiP.h>
+#include <ti/drivers/dpl/SemaphoreP.h>
 
 #include <ti/drivers/NVS.h>
 #include <ti/drivers/nvs/NVSMSP432.h>
 
-#define FLASH_PAGE_SIZE  (0x1000)  /* 4-KB */
+#include DeviceFamily_constructPath(driverlib/rom.h)
+#include DeviceFamily_constructPath(driverlib/rom_map.h)
 
-#define BANK0_END_ADDRESS (0x0001ffff)
-#define BANK1_END_ADDRESS (0x0003ffff)
+#if defined(DeviceFamily_MSP432P401x)
+ #include DeviceFamily_constructPath(driverlib/flash.h)
+ static uint32_t getFlashSector(uint32_t address);
+ static bool unprotectMemory(uint32_t startAddr, uint32_t endAddr);
+ static bool protectMemory(uint32_t startAddr, uint32_t endAddr);
+ #define eraseSector(a) MAP_FlashCtl_eraseSector(sectorBase)
+ #define programMemory(a, b, c) MAP_FlashCtl_programMemory(a, b, c)
+ #define FLASH_END_ADDRESS (0x0003ffff)
+#else
+ #include DeviceFamily_constructPath(driverlib/flash_a.h)
+ #define protectMemory(a, b) FlashCtl_A_protectMemory(a, b)
+ #define unprotectMemory(a, b) FlashCtl_A_unprotectMemory(a, b)
+ #define eraseSector(a) MAP_FlashCtl_A_eraseSector(sectorBase)
+ #define programMemory(a, b, c) MAP_FlashCtl_A_programMemory(a, b, c)
+ #define FLASH_END_ADDRESS (0x001fffff)
+#endif
 
-#define GET_BANK(address) ((address > BANK0_END_ADDRESS) ? \
-        FLASH_MAIN_MEMORY_SPACE_BANK1 : FLASH_MAIN_MEMORY_SPACE_BANK0)
+#define FLASH_SECTOR_SIZE  (0x1000)  /* 4-KB */
 
-/* NVSMSP432 functions */
-void        NVSMSP432_close(NVS_Handle handle);
-int         NVSMSP432_control(NVS_Handle handle, unsigned int cmd,
-                                uintptr_t arg);
-void        NVSMSP432_exit(NVS_Handle handle);
-int         NVSMSP432_getAttrs(NVS_Handle handle, NVS_Attrs *attrs);
-void        NVSMSP432_init(NVS_Handle handle);
-NVS_Handle  NVSMSP432_open(NVS_Handle handle, NVS_Params *params);
-int         NVSMSP432_read(NVS_Handle handle, size_t offset, void *buffer,
-                             size_t bufferSize);
-int         NVSMSP432_write(NVS_Handle handle, size_t offset, void *buffer,
-                              size_t bufferSize, unsigned int flags);
+static int_fast16_t checkEraseRange(NVS_Handle handle, size_t offset, size_t size);
+static int_fast16_t doErase(NVS_Handle handle, size_t offset, size_t size);
+
+extern NVS_Config NVS_config[];
+extern const uint8_t NVS_count;
 
 /* NVS function table for NVSMSP432 implementation */
 const NVS_FxnTable NVSMSP432_fxnTable = {
     NVSMSP432_close,
     NVSMSP432_control,
-    NVSMSP432_exit,
+    NVSMSP432_erase,
     NVSMSP432_getAttrs,
     NVSMSP432_init,
+    NVSMSP432_lock,
     NVSMSP432_open,
     NVSMSP432_read,
+    NVSMSP432_unlock,
     NVSMSP432_write
 };
 
-static uint32_t getFlashSector(uint32_t address);
+/*
+ *  Semaphore to synchronize access to flash region.
+ */
+static SemaphoreP_Handle  writeSem;
+
+static size_t sectorSize;         /* fetched during init() */
+static size_t sectorBaseMask;     /* for efficient argument checking */
+
+/*
+ *  ======== NVSMSP432_close ========
+ */
+void NVSMSP432_close(NVS_Handle handle)
+{
+    NVSMSP432_Object *object;
+
+    object = handle->object;
+    object->opened = false;
+}
+
+/*
+ *  ======== NVSMSP432_control ========
+ */
+int_fast16_t NVSMSP432_control(NVS_Handle handle, uint_fast16_t cmd, uintptr_t arg)
+{
+    return (NVS_STATUS_UNDEFINEDCMD);
+}
+
+/*
+ *  ======== NVSMSP432_erase ========
+ */
+int_fast16_t NVSMSP432_erase(NVS_Handle handle, size_t offset, size_t size)
+{
+    int_fast16_t status;
+
+    SemaphoreP_pend(writeSem, SemaphoreP_WAIT_FOREVER);
+
+    status = doErase(handle, offset, size);
+
+    SemaphoreP_post(writeSem);
+
+    return (status);
+}
+
+/*
+ *  ======== NVSMSP432_getAttrs ========
+ */
+void NVSMSP432_getAttrs(NVS_Handle handle, NVS_Attrs *attrs)
+{
+    NVSMSP432_HWAttrs const *hwAttrs;
+
+    hwAttrs = handle->hwAttrs;
+
+    /* FlashSectorSizeGet() returns the size of a flash sector in bytes. */
+    attrs->regionBase  = hwAttrs->regionBase;
+    attrs->regionSize  = hwAttrs->regionSize;
+    attrs->sectorSize  = sectorSize;
+}
+
+/*
+ *  ======== NVSMSP432_init ========
+ */
+void NVSMSP432_init()
+{
+    unsigned int key;
+    SemaphoreP_Handle sem;
+
+    /* initialize energy saving variables */
+    sectorSize = FLASH_SECTOR_SIZE;
+    sectorBaseMask = ~(sectorSize - 1);
+
+    /* speculatively create a binary semaphore for thread safety */
+    sem = SemaphoreP_createBinary(1);
+    /* sem == NULL will be detected in 'open' */
+
+    key = HwiP_disable();
+
+    if (writeSem == NULL) {
+        /* use the binary sem created above */
+        writeSem = sem;
+        HwiP_restore(key);
+    }
+    else {
+        /* init already called */
+        HwiP_restore(key);
+        /* delete unused Semaphore */
+        if (sem) SemaphoreP_delete(sem);
+    }
+}
+
+/*
+ *  ======== NVSMSP432_lock =======
+ */
+int_fast16_t NVSMSP432_lock(NVS_Handle handle, uint32_t timeout)
+{
+    switch (SemaphoreP_pend(writeSem, timeout)) {
+        case SemaphoreP_OK:
+            return (NVS_STATUS_SUCCESS);
+
+        case SemaphoreP_TIMEOUT:
+            return (NVS_STATUS_TIMEOUT);
+
+        case SemaphoreP_FAILURE:
+        default:
+            return (NVS_STATUS_ERROR);
+    }
+}
+
+/*
+ *  ======== NVSMSP432_open =======
+ */
+NVS_Handle NVSMSP432_open(uint_least8_t index, NVS_Params *params)
+{
+    NVSMSP432_Object *object;
+    NVSMSP432_HWAttrs const *hwAttrs;
+    NVS_Handle handle;
+
+    /* Confirm that 'init' has successfully completed */
+    if (writeSem == NULL) {
+        NVSMSP432_init();
+        if (writeSem == NULL) {
+            return (NULL);
+        }
+    }
+
+    /* verify NVS region index */
+    if (index >= NVS_count) {
+        return (NULL);
+    }
+
+    handle = &NVS_config[index];
+    object = NVS_config[index].object;
+    hwAttrs = NVS_config[index].hwAttrs;
+
+    SemaphoreP_pend(writeSem, SemaphoreP_WAIT_FOREVER);
+
+    if (object->opened == true) {
+        SemaphoreP_post(writeSem);
+        return (NULL);
+    }
+
+    /* The block must lie in the main memory (0 - 0x40000) */
+    if ((size_t)(hwAttrs->regionBase) > FLASH_END_ADDRESS) {
+        SemaphoreP_post(writeSem);
+        return (NULL);
+    }
+
+    /* The regionBase must be aligned on a flaah page boundary */
+    if ((size_t)(hwAttrs->regionBase) & (sectorSize - 1)) {
+        SemaphoreP_post(writeSem);
+        return (NULL);
+    }
+
+    /* The region cannot be smaller than a sector size */
+    if (hwAttrs->regionSize < sectorSize) {
+        SemaphoreP_post(writeSem);
+        return (NULL);
+    }
+
+    /* The region size must be a multiple of sector size */
+    if (hwAttrs->regionSize != (hwAttrs->regionSize & sectorBaseMask)) {
+        SemaphoreP_post(writeSem);
+        return (NULL);
+    }
+
+    object->opened = true;
+
+    SemaphoreP_post(writeSem);
+
+    return (handle);
+}
+
+/*
+ *  ======== NVSMSP432_read =======
+ */
+int_fast16_t NVSMSP432_read(NVS_Handle handle, size_t offset, void *buffer,
+        size_t bufferSize)
+{
+    NVSMSP432_HWAttrs const *hwAttrs;
+
+    hwAttrs = handle->hwAttrs;
+
+    /* Validate offset and bufferSize */
+    if (offset + bufferSize > hwAttrs->regionSize) {
+        return (NVS_STATUS_INV_OFFSET);
+    }
+
+    /*
+     *  Get exclusive access to the region.  We don't want someone
+     *  else to erase the region while we are reading it.
+     */
+    SemaphoreP_pend(writeSem, SemaphoreP_WAIT_FOREVER);
+
+    memcpy(buffer, (char *)(hwAttrs->regionBase) + offset, bufferSize);
+
+    SemaphoreP_post(writeSem);
+
+    return (NVS_STATUS_SUCCESS);
+}
+
+/*
+ *  ======== NVSMSP432_unlock =======
+ */
+void NVSMSP432_unlock(NVS_Handle handle)
+{
+    SemaphoreP_post(writeSem);
+}
+
+/*
+ *  ======== NVSMSP432_write =======
+ */
+int_fast16_t NVSMSP432_write(NVS_Handle handle, size_t offset, void *buffer,
+                      size_t bufferSize, uint_fast16_t flags)
+{
+    NVSMSP432_HWAttrs const *hwAttrs;
+    unsigned int size;
+    uint32_t status = 0;
+    int i;
+    uint8_t *srcBuf, *dstBuf;
+    int retval = NVS_STATUS_SUCCESS;
+
+    hwAttrs = handle->hwAttrs;
+
+    /* Validate offset and bufferSize */
+    if (offset + bufferSize > hwAttrs->regionSize) {
+        return (NVS_STATUS_INV_OFFSET);
+    }
+
+    /* Get exclusive access to the Flash region */
+    SemaphoreP_pend(writeSem, SemaphoreP_WAIT_FOREVER);
+
+    /* If erase is set, erase destination sector(s) first */
+    if (flags & NVS_WRITE_ERASE) {
+        retval = doErase(handle, offset & sectorBaseMask,
+                     (bufferSize + sectorSize) & sectorBaseMask);
+        if (retval != NVS_STATUS_SUCCESS) {
+            SemaphoreP_post(writeSem);
+            return (retval);
+        }
+    }
+    else if (flags & NVS_WRITE_PRE_VERIFY) {
+        /*
+         *  If pre-verify, each destination byte must be able to be changed to the
+         *  source byte (1s to 0s, not 0s to 1s).
+         *  this is satisfied by the following test:
+         *     src == (src & dst)
+         */
+        dstBuf = (uint8_t *)((uint32_t)(hwAttrs->regionBase) + offset);
+        srcBuf = buffer;
+        for (i = 0; i < bufferSize; i++) {
+            if (srcBuf[i] != (srcBuf[i] & dstBuf[i])) {
+                SemaphoreP_post(writeSem);
+                return (NVS_STATUS_INV_WRITE);
+            }
+        }
+    }
+
+    srcBuf = buffer;
+    size   = bufferSize;
+    dstBuf = (uint8_t *)((uint32_t)(hwAttrs->regionBase) + offset);
+
+    unprotectMemory((uint32_t)((uint8_t *)hwAttrs->regionBase + offset),
+                    (uint32_t)((uint8_t *)hwAttrs->regionBase + offset + bufferSize));
+
+    status = programMemory((void *)srcBuf, (void *)dstBuf, size);
+
+    protectMemory((uint32_t)((uint8_t *)hwAttrs->regionBase + offset),
+                  (uint32_t)((uint8_t *)hwAttrs->regionBase + offset + bufferSize));
+
+    if (status != true) {
+        retval = NVS_STATUS_ERROR;
+    }
+    else if (flags & NVS_WRITE_POST_VERIFY) {
+        /*
+         *  Note: This validates the entire region even on erase mode.
+         */
+        for (i = 0; i < size; i++) {
+            if (srcBuf[i] != dstBuf[i]) {
+                retval = NVS_STATUS_ERROR;
+                break;
+            }
+        }
+    }
+
+    SemaphoreP_post(writeSem);
+
+    return (retval);
+}
+
+/*
+ *  ======== checkEraseRange ========
+ */
+static int_fast16_t checkEraseRange(NVS_Handle handle, size_t offset, size_t size)
+{
+    NVSMSP432_HWAttrs const *hwAttrs = handle->hwAttrs;
+
+    if (offset != (offset & sectorBaseMask)) {
+        return (NVS_STATUS_INV_ALIGNMENT);    /* poorly aligned start address */
+    }
+
+    if (offset >= hwAttrs->regionSize) {
+        return (NVS_STATUS_INV_OFFSET);   /* offset is past end of region */
+    }
+
+    if (offset + size > hwAttrs->regionSize) {
+        return (NVS_STATUS_INV_SIZE);     /* size is too big */
+    }
+
+    if (size != (size & sectorBaseMask)) {
+        return (NVS_STATUS_INV_SIZE);     /* size is not a multiple of sector size */
+    }
+
+    return (NVS_STATUS_SUCCESS);
+}
+
+/*
+ *  ======== doErase ========
+ */
+static int_fast16_t doErase(NVS_Handle handle, size_t offset, size_t size)
+{
+    NVSMSP432_HWAttrs const *hwAttrs = handle->hwAttrs;
+    uint32_t status = 0;
+    uint32_t sectorBase;
+    int_fast16_t rangeStatus;
+
+    /* sanity test the erase args */
+    rangeStatus = checkEraseRange(handle, offset, size);
+
+    if (rangeStatus != NVS_STATUS_SUCCESS) {
+        return (rangeStatus);
+    }
+
+    sectorBase = (uint32_t)hwAttrs->regionBase + offset;
+
+    unprotectMemory(sectorBase, sectorBase + size);
+
+    while (size) {
+        status = eraseSector(sectorBase);
+
+        if (status != true) {
+            break;
+        }
+
+        sectorBase += sectorSize;
+        size -= sectorSize;
+    }
+
+    protectMemory(sectorBase, sectorBase + size);
+
+    if (status != true) {
+        return (NVS_STATUS_ERROR);
+    }
+
+    return (NVS_STATUS_SUCCESS);
+}
+
+#if defined(DeviceFamily_MSP432P401x)
+
+#define BANK0_END_ADDRESS (0x0001ffff)
+
+#define GET_BANK(address) ((address > BANK0_END_ADDRESS) ? \
+        FLASH_MAIN_MEMORY_SPACE_BANK1 : FLASH_MAIN_MEMORY_SPACE_BANK0)
 
 static uint32_t flashSector[32] = {
     FLASH_SECTOR0,
@@ -126,372 +488,6 @@ static uint32_t flashSector[32] = {
 };
 
 /*
- *  Semaphore to synchronize access to flash block.
- */
-static Semaphore_Struct  writeSem;
-static bool isInitialized = false;
-
-/*
- *  ======== NVSMSP432_close ========
- */
-void NVSMSP432_close(NVS_Handle handle)
-{
-}
-
-/*
- *  ======== NVSMSP432_control ========
- */
-int NVSMSP432_control(NVS_Handle handle, unsigned int cmd, uintptr_t arg)
-{
-    NVSMSP432_HWAttrs *hwAttrs = (NVSMSP432_HWAttrs *)(handle->hwAttrs);
-    NVSMSP432_CmdSetCopyBlockArgs *cmdArgs = (NVSMSP432_CmdSetCopyBlockArgs *)arg;
-    uint8_t *copyBlock = (uint8_t *)(cmdArgs->copyBlock);
-
-    if (cmd == NVSMSP432_CMD_SET_COPYBLOCK) {
-        if ((copyBlock == NULL) || ((uint32_t)copyBlock & 0x3)) {
-            return (NVSMSP432_STATUS_ECOPYBLOCK);
-        }
-        hwAttrs->copyBlock = cmdArgs->copyBlock;
-        hwAttrs->isRam = cmdArgs->isRam;
-
-        return (NVS_STATUS_SUCCESS);
-    }
-
-    return (NVS_STATUS_UNDEFINEDCMD);
-}
-
-/*
- *  ======== NVSMSP432_exit ========
- */
-void NVSMSP432_exit(NVS_Handle handle)
-{
-}
-
-/*
- *  ======== NVSMSP432_getAttrs ========
- */
-int NVSMSP432_getAttrs(NVS_Handle handle, NVS_Attrs *attrs)
-{
-    NVSMSP432_HWAttrs const  *hwAttrs = handle->hwAttrs;
-
-    attrs->pageSize   = FLASH_PAGE_SIZE;
-    attrs->blockSize  = hwAttrs->blockSize;
-
-    return (NVS_SOK);
-}
-
-/*
- *  ======== NVSMSP432_init ========
- */
-void NVSMSP432_init(NVS_Handle handle)
-{
-    if (!isInitialized) {
-        Semaphore_construct(&writeSem, 1, NULL);
-        isInitialized = true;
-    }
-}
-
-/*
- *  ======== NVSMSP432_open =======
- */
-NVS_Handle NVSMSP432_open(NVS_Handle handle, NVS_Params *params)
-{
-    NVSMSP432_Object         *object = handle->object;
-    NVSMSP432_HWAttrs const  *hwAttrs = handle->hwAttrs;
-    bool                      status;
-
-    Semaphore_pend(Semaphore_handle(&writeSem), BIOS_WAIT_FOREVER);
-
-    if (object->opened == true) {
-        Semaphore_post(Semaphore_handle(&writeSem));
-
-        Log_warning1("NVS:(%p) already in use.", (IArg)(hwAttrs->block));
-        return (NULL);
-    }
-
-    /* The block must lie in the main memory (0 - 0x40000) */
-    if ((uint32_t)(hwAttrs->block) > BANK1_END_ADDRESS) {
-        Semaphore_post(Semaphore_handle(&writeSem));
-
-        Log_warning1("NVS:(%p) Block is out of range (0 - 0x40000).",
-                (IArg)(hwAttrs->block));
-        return (NULL);
-    }
-
-    /* The block must be aligned on a flaah page boundary */
-    if ((uint32_t)(hwAttrs->block) & (FLASH_PAGE_SIZE - 1)) {
-        Semaphore_post(Semaphore_handle(&writeSem));
-
-        Log_warning1("NVS:(%p) block not aligned on flash page boundary.",
-                (IArg)(hwAttrs->block));
-        return (NULL);
-    }
-
-    /* The block cannot be larger than a flash page */
-    if ((uint32_t)(hwAttrs->blockSize) > FLASH_PAGE_SIZE) {
-        Semaphore_post(Semaphore_handle(&writeSem));
-
-        Log_warning1("NVS:(%p) blockSize must not be greater than page size.",
-                (IArg)(hwAttrs->block));
-        return (NULL);
-    }
-
-    /* Check flash copy block */
-    if (hwAttrs->copyBlock && !(hwAttrs->isRam)) {
-        /* Flash copy block must be aligned on a flaah page boundary */
-        if (((uint32_t)(hwAttrs->copyBlock) & (FLASH_PAGE_SIZE - 1))) {
-            Semaphore_post(Semaphore_handle(&writeSem));
-
-            Log_warning1("NVS:(%p) Flash copyBlock not page boundary aligned.",
-                    (IArg)(hwAttrs->block));
-            return (NULL);
-        }
-
-        /* Flash copy block must be in main memory */
-        if ((uint32_t)(hwAttrs->copyBlock) > BANK1_END_ADDRESS) {
-            Semaphore_post(Semaphore_handle(&writeSem));
-
-            Log_warning1("NVS:(%p) Copy block is out of range (0 - 0x40000).",
-                    (IArg)(hwAttrs->block));
-            return (NULL);
-        }
-
-        if ((uint32_t)(hwAttrs->copyBlock) == (uint32_t)(hwAttrs->block)) {
-            Semaphore_post(Semaphore_handle(&writeSem));
-
-            Log_warning1("NVS:(%p) Bad copy block address.",
-                    (IArg)(hwAttrs->block));
-            return (NULL);
-        }
-    }
-
-    /* Ram copy block must be 4-byte aligned */
-    if ((uint32_t)(hwAttrs->copyBlock) & 0x3) {
-        Semaphore_post(Semaphore_handle(&writeSem));
-
-        Log_warning1("NVS:(%p) copyBlock not 4-byte aligned.",
-                (IArg)(hwAttrs->block));
-        return (NULL);
-    }
-
-    object->opened = true;
-    object->bank = GET_BANK((uint32_t)(hwAttrs->block));
-    object->sector = getFlashSector((uint32_t)(hwAttrs->block));
-
-    if (!hwAttrs->isRam) {
-        object->copyBank = GET_BANK((uint32_t)(hwAttrs->copyBlock));
-        object->copySector = getFlashSector((uint32_t)(hwAttrs->copyBlock));
-    }
-    else {
-        object->copyBank = (uint32_t)(-1);
-        object->copySector = (uint32_t)(-1);
-    }
-
-    Semaphore_post(Semaphore_handle(&writeSem));
-
-    if (params->eraseOnOpen == true) {
-        MAP_FlashCtl_unprotectSector(object->bank, object->sector);
-        status = MAP_FlashCtl_eraseSector((uint32_t)hwAttrs->block);
-        MAP_FlashCtl_protectSector(object->bank, object->sector);
-
-        if (!status) {
-            Log_warning1("NVS:(%p) FlashCtl_eraseSector() failed.",
-                    (IArg)(hwAttrs->block));
-        }
-    }
-
-    return (handle);
-}
-
-/*
- *  ======== NVSMSP432_read =======
- */
-int NVSMSP432_read(NVS_Handle handle, size_t offset, void *buffer,
-        size_t bufferSize)
-{
-    NVSMSP432_HWAttrs const  *hwAttrs = handle->hwAttrs;
-    int retval = NVS_SOK;
-
-    /* Validate offset and bufferSize */
-    if (offset + bufferSize > hwAttrs->blockSize) {
-        return (NVS_EOFFSET);
-    }
-
-    /*
-     *  Get exclusive access to the block.  We don't want someone
-     *  else to erase the block while we are reading it.
-     */
-    Semaphore_pend(Semaphore_handle(&writeSem), BIOS_WAIT_FOREVER);
-
-    memcpy(buffer, (Char *)(hwAttrs->block) + offset, bufferSize);
-
-    Semaphore_post(Semaphore_handle(&writeSem));
-
-    return (retval);
-}
-
-/*
- *  ======== NVSMSP432_write =======
- */
-int NVSMSP432_write(NVS_Handle handle, size_t offset, void *buffer,
-                      size_t bufferSize, unsigned int flags)
-{
-    NVSMSP432_HWAttrs const  *hwAttrs = handle->hwAttrs;
-    NVSMSP432_Object         *object = handle->object;
-    unsigned int size;
-    bool status = true;
-    int i;
-    uint8_t *srcBuf, *dstBuf;
-    int retval = NVS_SOK;
-
-    /* Buffer to copy into flash must be 4-byte aligned */
-    if ((uint32_t)buffer & 0x3) {
-        Log_warning1("NVS:(%p) Buffer must be 4-byte aligned.",
-                (IArg)(hwAttrs->block));
-        return (NVS_EALIGN);
-    }
-
-    /* Error if bufferSize is not a multiple of 4 */
-    if (bufferSize & 0x3) {
-        Log_warning1("NVS:(%p) Buffer size must be 4-byte aligned.",
-                (IArg)(hwAttrs->block));
-        return (NVS_EALIGN);
-    }
-
-    /* Check if offset is not a multiple of 4 */
-    if (offset & 0x3) {
-        Log_warning1("NVS:(%p) offset size must be 4-byte aligned.",
-                (IArg)(hwAttrs->block));
-        return (NVS_EALIGN);
-    }
-
-    /* Validate offset and bufferSize */
-    if (offset + bufferSize > hwAttrs->blockSize) {
-        return (NVS_EOFFSET);
-    }
-
-    Semaphore_pend(Semaphore_handle(&writeSem), BIOS_WAIT_FOREVER);
-
-    if (buffer == NULL) {
-        /* NULL buffer ==> Erase the block */
-        MAP_FlashCtl_unprotectSector(object->bank, object->sector);
-        status = MAP_FlashCtl_eraseSector((uint32_t)hwAttrs->block);
-        MAP_FlashCtl_protectSector(object->bank, object->sector);
-
-        Semaphore_post(Semaphore_handle(&writeSem));
-
-        if (!status) {
-            Log_warning1("NVS:(%p) FlashCtl_eraseSector() failed.",
-                    (IArg)(hwAttrs->block));
-        }
-        return (status ? NVS_SOK : NVS_EFAIL);
-    }
-
-    /*
-     *  If exclusive write, check that the region has not been
-     *  written to since the last erase.  (Erasing leaves flash
-     *  set to 0xFF)
-     */
-    if (flags & NVS_WRITE_EXCLUSIVE) {
-        dstBuf = (uint8_t *)((uint32_t)(hwAttrs->block) + offset);
-        for (i = 0; i < bufferSize; i++) {
-            if (dstBuf[i] != 0xFF) {
-                Semaphore_post(Semaphore_handle(&writeSem));
-                return (NVS_EALREADYWRITTEN);
-            }
-        }
-    }
-
-    /* If erase is set, determine whether to use RAM or the flash copyBlock */
-    if (flags & NVS_WRITE_ERASE) {
-
-        /* Must have copy block for erase */
-        if (hwAttrs->copyBlock == NULL) {
-            Semaphore_post(Semaphore_handle(&writeSem));
-            Log_warning1("NVS:(%p) copyBlock must be non-NULL.",
-                    (IArg)(hwAttrs->block));
-            return (NVS_ECOPYBLOCK);
-        }
-
-        srcBuf = (uint8_t *)(hwAttrs->copyBlock);
-
-        if (hwAttrs->isRam) {
-            /* Copy flash contents up to the offset into temporary buffer */
-            memcpy(srcBuf, hwAttrs->block, offset);
-
-            /* Update the temporary buffer with the data to be written */
-            memcpy((void *)((uint32_t)srcBuf + offset), buffer, bufferSize);
-
-            /* Copy remaining flash contents into temporary buffer */
-            memcpy(srcBuf + offset + bufferSize,
-                    (void *)((uint32_t)hwAttrs->block + offset + bufferSize),
-                    hwAttrs->blockSize - bufferSize - offset);
-        }
-        else {
-            /* Using extra flash region to maintain copy - erase copy block */
-            MAP_FlashCtl_unprotectSector(object->copyBank, object->copySector);
-            status = MAP_FlashCtl_eraseSector((uint32_t)hwAttrs->copyBlock);
-
-            /*  Copy up to offset */
-            status &= MAP_FlashCtl_programMemory(
-                    hwAttrs->block,                 /* src  */
-                    hwAttrs->copyBlock,             /* dst  */
-                    (uint32_t)offset);              /* size */
-
-            /*  Copy buffer */
-            status &= MAP_FlashCtl_programMemory(buffer,
-                    (void *)((uint32_t)(hwAttrs->copyBlock) + offset),
-                    (uint32_t)bufferSize);
-
-            /*  Copy after offset + bufferSize */
-            status &= MAP_FlashCtl_programMemory(
-                (void *)((uint32_t)hwAttrs->block + offset + bufferSize),
-                (void *)((uint32_t)(hwAttrs->copyBlock) + offset + bufferSize),
-                hwAttrs->blockSize - bufferSize - offset);
-
-            MAP_FlashCtl_protectSector(object->copyBank, object->copySector);
-        }
-
-        /* Erase the block */
-        MAP_FlashCtl_unprotectSector(object->bank, object->sector);
-        status &= MAP_FlashCtl_eraseSector((uint32_t)hwAttrs->block);
-        MAP_FlashCtl_protectSector(object->bank, object->sector);
-
-        dstBuf = hwAttrs->block;
-        size = hwAttrs->blockSize;
-    }
-    else {
-        /* Not erasing the block before writing */
-        srcBuf = buffer;
-        size   = bufferSize;
-        dstBuf = (uint8_t *)((uint32_t)(hwAttrs->block) + offset);
-    }
-
-    MAP_FlashCtl_unprotectSector(object->bank, object->sector);
-    status &= MAP_FlashCtl_programMemory((void *)srcBuf, (void *)dstBuf, size);
-    MAP_FlashCtl_protectSector(object->bank, object->sector);
-
-    if (!status) {
-        retval = NVS_EFAIL;
-    }
-    else if ((flags & NVS_WRITE_VALIDATE)) {
-        /*
-         *  Note: This validates the entire block even on erase mode.
-         */
-        for (i = 0; i < size; i++) {
-            if (srcBuf[i] != dstBuf[i]) {
-                retval = NVS_EFAIL;
-                break;
-            }
-        }
-    }
-
-    Semaphore_post(Semaphore_handle(&writeSem));
-
-    return (retval);
-}
-
-/*
  *  ======== getFlashSector ========
  */
 static uint32_t getFlashSector(uint32_t address)
@@ -501,3 +497,48 @@ static uint32_t getFlashSector(uint32_t address)
     index = (address & 0x1FFFF) >> 12;
     return (flashSector[index]);
 }
+
+/*
+ *  ======== protectMemory ========
+ */
+static bool protectMemory(uint32_t startAddr, uint32_t endAddr)
+{
+    uint32_t sectorMask, bankNum;
+    int32_t size = endAddr - startAddr;
+
+    while (size > 0) {
+        /* get sector info */
+        sectorMask = getFlashSector(startAddr);
+        bankNum = GET_BANK(startAddr);
+
+        MAP_FlashCtl_protectSector(bankNum, sectorMask);
+
+        startAddr += sectorSize;
+        size -= sectorSize;
+    }
+
+    return (true);
+}
+
+/*
+ *  ======== unprotectMemory ========
+ */
+static bool unprotectMemory(uint32_t startAddr, uint32_t endAddr)
+{
+    uint32_t sectorMask, bankNum;
+    int32_t size = endAddr - startAddr;
+
+    while (size > 0) {
+        /* get sector info */
+        sectorMask = getFlashSector(startAddr);
+        bankNum = GET_BANK(startAddr);
+
+        MAP_FlashCtl_unprotectSector(bankNum, sectorMask);
+
+        startAddr += sectorSize;
+        size -= sectorSize;
+    }
+
+    return (true);
+}
+#endif /* defined (DeviceFamily_MSP432P401x) */

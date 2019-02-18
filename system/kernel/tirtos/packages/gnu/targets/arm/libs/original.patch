@@ -1,7 +1,7 @@
-diff -rupN newlib_orig/configure.ac newlib/configure.ac
---- newlib_orig/configure.ac	2015-06-01 23:45:54.000000000 -0700
-+++ newlib/configure.ac	2016-09-27 14:18:36.005243000 -0700
-@@ -318,7 +318,7 @@ case "${ENABLE_GOLD}" in
+diff -rupN newlib_original/configure.ac newlib/configure.ac
+--- newlib_original/configure.ac	2016-06-24 10:07:42.000000000 -0700
++++ newlib/configure.ac	2017-04-03 14:51:25.004917000 -0700
+@@ -337,7 +337,7 @@ case "${ENABLE_GOLD}" in
        *-*-elf* | *-*-sysv4* | *-*-unixware* | *-*-eabi* | hppa*64*-*-hpux* \
        | *-*-linux* | *-*-gnu* | frv-*-uclinux* | *-*-irix5* | *-*-irix6* \
        | *-*-netbsd* | *-*-openbsd* | *-*-freebsd* | *-*-dragonfly* \
@@ -10,10 +10,48 @@ diff -rupN newlib_orig/configure.ac newlib/configure.ac
          case "${target}" in
            *-*-linux*aout* | *-*-linux*oldld*)
              ;;
-diff -rupN newlib_orig/newlib/configure.host newlib/newlib/configure.host
---- newlib_orig/newlib/configure.host	2015-09-05 09:39:46.000000000 -0700
-+++ newlib/newlib/configure.host	2017-01-14 11:45:11.000389000 -0800
-@@ -609,6 +609,7 @@ case "${host}" in
+diff -rupN newlib_original/libgloss/arm/syscalls.c newlib/libgloss/arm/syscalls.c
+--- newlib_original/libgloss/arm/syscalls.c	2015-06-03 22:33:57.000000000 -0700
++++ newlib/libgloss/arm/syscalls.c	2017-04-26 21:24:14.006133000 -0700
+@@ -12,7 +12,6 @@
+ #include <sys/time.h>
+ #include <sys/times.h>
+ #include <errno.h>
+-#include <reent.h>
+ #include <unistd.h>
+ #include <sys/wait.h>
+ #include "swi.h"
+@@ -80,17 +79,6 @@ static int		newslot		_PARAMS ((void));
+ /* Register name faking - works in collusion with the linker.  */
+ register char * stack_ptr asm ("sp");
+ 
+-
+-/* following is copied from libc/stdio/local.h to check std streams */
+-extern void   _EXFUN(__sinit,(struct _reent *));
+-#define CHECK_INIT(ptr) \
+-  do						\
+-    {						\
+-      if ((ptr) && !(ptr)->__sdidinit)		\
+-	__sinit (ptr);				\
+-    }						\
+-  while (0)
+-
+ static int monitor_stdin;
+ static int monitor_stdout;
+ static int monitor_stderr;
+@@ -100,8 +88,6 @@ static int monitor_stderr;
+ static struct fdent*
+ findslot (int fd)
+ {
+-  CHECK_INIT(_REENT);
+-
+   /* User file descriptor is out of range. */
+   if ((unsigned int)fd >= MAX_OPEN_FILES)
+     return NULL;
+diff -rupN newlib_original/newlib/configure.host newlib/newlib/configure.host
+--- newlib_original/newlib/configure.host	2016-05-10 10:08:01.000000000 -0700
++++ newlib/newlib/configure.host	2017-04-03 16:19:20.001903000 -0700
+@@ -613,6 +613,7 @@ case "${host}" in
  # TIRTOS supplies its own version of malloc
    *-*-tirtos*)
  	newlib_cflags="${newlib_cflags} -D__DYNAMIC_REENT__ -DMALLOC_PROVIDED"
@@ -21,9 +59,9 @@ diff -rupN newlib_orig/newlib/configure.host newlib/newlib/configure.host
  	;;
  # UDI doesn't have exec, so system() should fail the right way
    a29k-amd-udi)
-diff -rupN newlib_orig/newlib/libc/sys/tirtos/aeabi_atexit.c newlib/newlib/libc/sys/tirtos/aeabi_atexit.c
---- newlib_orig/newlib/libc/sys/tirtos/aeabi_atexit.c	1969-12-31 16:00:00.000000000 -0800
-+++ newlib/newlib/libc/sys/tirtos/aeabi_atexit.c	2017-01-16 12:41:02.004112000 -0800
+diff -rupN newlib_original/newlib/libc/sys/tirtos/aeabi_atexit.c newlib/newlib/libc/sys/tirtos/aeabi_atexit.c
+--- newlib_original/newlib/libc/sys/tirtos/aeabi_atexit.c	1969-12-31 16:00:00.000000000 -0800
++++ newlib/newlib/libc/sys/tirtos/aeabi_atexit.c	2017-04-03 16:20:09.015071000 -0700
 @@ -0,0 +1,41 @@
 +/*
 + * Copyright (c) 2017, Texas Instruments Incorporated
@@ -66,9 +104,9 @@ diff -rupN newlib_orig/newlib/libc/sys/tirtos/aeabi_atexit.c newlib/newlib/libc/
 +{
 +    return __cxa_atexit (fn, arg, d);
 +}
-diff -rupN newlib_orig/newlib/libc/sys/tirtos/Makefile.am newlib/newlib/libc/sys/tirtos/Makefile.am
---- newlib_orig/newlib/libc/sys/tirtos/Makefile.am	2015-06-01 23:45:55.000000000 -0700
-+++ newlib/newlib/libc/sys/tirtos/Makefile.am	2017-01-16 12:46:13.000000000 -0800
+diff -rupN newlib_original/newlib/libc/sys/tirtos/Makefile.am newlib/newlib/libc/sys/tirtos/Makefile.am
+--- newlib_original/newlib/libc/sys/tirtos/Makefile.am	2015-06-03 22:33:58.000000000 -0700
++++ newlib/newlib/libc/sys/tirtos/Makefile.am	2017-04-03 16:21:40.004498000 -0700
 @@ -8,7 +8,7 @@ AM_CCASFLAGS = $(INCLUDES)
  
  noinst_LIBRARIES = lib.a
@@ -78,9 +116,9 @@ diff -rupN newlib_orig/newlib/libc/sys/tirtos/Makefile.am newlib/newlib/libc/sys
  lib_a_CCASFLAGS = $(AM_CCASFLAGS)
  lib_a_CFLAGS = $(AM_CFLAGS)
  
-diff -rupN newlib_orig/newlib/libc/sys/tirtos/Makefile.in newlib/newlib/libc/sys/tirtos/Makefile.in
---- newlib_orig/newlib/libc/sys/tirtos/Makefile.in	2015-06-01 23:45:55.000000000 -0700
-+++ newlib/newlib/libc/sys/tirtos/Makefile.in	2017-01-16 12:45:42.003425000 -0800
+diff -rupN newlib_original/newlib/libc/sys/tirtos/Makefile.in newlib/newlib/libc/sys/tirtos/Makefile.in
+--- newlib_original/newlib/libc/sys/tirtos/Makefile.in	2015-06-03 22:33:58.000000000 -0700
++++ newlib/newlib/libc/sys/tirtos/Makefile.in	2017-04-03 16:25:08.004113000 -0700
 @@ -69,7 +69,8 @@ LIBRARIES = $(noinst_LIBRARIES)
  ARFLAGS = cru
  lib_a_AR = $(AR) $(ARFLAGS)
@@ -119,9 +157,9 @@ diff -rupN newlib_orig/newlib/libc/sys/tirtos/Makefile.in newlib/newlib/libc/sys
  ID: $(HEADERS) $(SOURCES) $(LISP) $(TAGS_FILES)
  	list='$(SOURCES) $(HEADERS) $(LISP) $(TAGS_FILES)'; \
  	unique=`for i in $$list; do \
-diff -rupN newlib_orig/newlib/libc/sys/tirtos/tirtos_validate.c newlib/newlib/libc/sys/tirtos/tirtos_validate.c
---- newlib_orig/newlib/libc/sys/tirtos/tirtos_validate.c	1969-12-31 16:00:00.000000000 -0800
-+++ newlib/newlib/libc/sys/tirtos/tirtos_validate.c	2016-09-27 14:19:35.003735000 -0700
+diff -rupN newlib_original/newlib/libc/sys/tirtos/tirtos_validate.c newlib/newlib/libc/sys/tirtos/tirtos_validate.c
+--- newlib_original/newlib/libc/sys/tirtos/tirtos_validate.c	1969-12-31 16:00:00.000000000 -0800
++++ newlib/newlib/libc/sys/tirtos/tirtos_validate.c	2017-04-03 16:20:36.002798000 -0700
 @@ -0,0 +1,43 @@
 +/*
 + * Copyright (c) 2016, Texas Instruments Incorporated

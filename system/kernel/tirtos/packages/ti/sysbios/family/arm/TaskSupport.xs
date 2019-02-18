@@ -45,6 +45,7 @@ function getAsmFiles(targetName)
         case "ti.targets.arm.elf.Arm9":
         case "ti.targets.arm.elf.A8Fnv":
         case "ti.targets.arm.elf.R4F":
+        case "ti.targets.arm.elf.R4Ft":
         case "ti.targets.arm.elf.R5F":
             return (["TaskSupport_asm.asm"]);
             break;

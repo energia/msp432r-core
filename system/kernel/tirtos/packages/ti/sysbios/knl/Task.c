@@ -795,6 +795,8 @@ Int Task_postInit(Task_Object *tsk, Error_Block *eb)
     Queue_Handle readyQ;
 #ifndef ti_sysbios_knl_Task_DISABLE_ALL_HOOKS
     Int i;
+    Error_Block localEB;
+    Error_Block *leb;
 #endif
 
     tsk->context = Task_SupportProxy_start(tsk,
@@ -816,13 +818,10 @@ Int Task_postInit(Task_Object *tsk, Error_Block *eb)
     }
 
 #ifndef ti_sysbios_knl_Task_DISABLE_ALL_HOOKS
-    Error_Block *leb;
-
     if (eb != Error_IGNORE) {
         leb = eb;
     }
     else {
-        Error_Block localEB;
         Error_init(&localEB);
         leb = &localEB;
     }

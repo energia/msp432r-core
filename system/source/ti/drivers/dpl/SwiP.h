@@ -45,18 +45,30 @@ extern "C" {
 #endif
 
 #include <stdint.h>
-#include <stdbool.h>
-#include <stddef.h>
 
 /*!
  *  @brief    Number of bytes greater than or equal to the size of any RTOS
  *            SwiP object.
  *
- *  nortos:   0    - TODO: Update when SwiP_nortos is implemented.
- *  FreeRTOS: 0    - Not supported for FreeRTOS.
+ *  nortos:   40
  *  SysBIOS:  52
  */
 #define SwiP_STRUCT_SIZE   (52)
+
+/*!
+ *  @brief    SemaphoreP structure.
+ *
+ *  Opaque structure that should be large enough to hold any of the
+ *  RTOS specific SwiP objects.
+ */
+typedef union SwiP_Struct {
+    uint32_t dummy;  /*!< Align object */
+    char     data[SwiP_STRUCT_SIZE];
+} SwiP_Struct;
+
+#include <stdint.h>
+#include <stdbool.h>
+#include <stddef.h>
 
 /*!
  *  @brief    Opaque client reference to an instance of a SwiP
@@ -98,39 +110,11 @@ typedef void (*SwiP_Fxn)(uintptr_t arg0, uintptr_t arg1);
  *  sets bits, and SwiP_andn clears bits.
  */
 typedef struct SwiP_Params {
-    char      *name;      /*!< Name of the SwiP instance. Memory must
-                               persist for the life of the SwiP instance.
-                               This can be used for debugging purposes, or
-                               set to NULL if not needed. */
     uintptr_t  arg0;      /*!< Argument passed into the SwiP function. */
     uintptr_t  arg1;      /*!< Argument passed into the SwiP function. */
-    uint32_t   priority;  /*!< RTOS specific priority. */
+    uint32_t   priority;  /*!< priority, 0 is min, 1, 2, ..., ~0 for max */
     uint32_t   trigger;   /*!< Initial SwiP trigger value. */
 } SwiP_Params;
-
-/*!
- *  @brief    SwiP structure.
- *
- *  Opaque structure that should be large enough to hold any of the
- *  RTOS specific SwiP objects.
- */
-typedef struct SwiP_Struct {
-    union {
-        double d;  /*!< Align object */
-        char   data[SwiP_STRUCT_SIZE];
-    } swi;
-} SwiP_Struct;
-
-
-/*!
- *  @brief  Initialize params structure to default values.
- *
- *  The default parameters are:
- *   - name: NULL
- *
- *  @param params  Pointer to the instance configuration parameters.
- */
-extern void SwiP_Params_init(SwiP_Params *params);
 
 /*!
  *  @brief  Function to construct a software interrupt object.
@@ -146,6 +130,26 @@ extern void SwiP_Params_init(SwiP_Params *params);
  */
 extern SwiP_Handle SwiP_construct(SwiP_Struct *swiP, SwiP_Fxn swiFxn,
                                SwiP_Params *params);
+
+/*!
+ *  @brief  Function to destruct a software interrupt object
+ *
+ *  @param  swiP  Pointer to a SwiP_Struct object that was passed to
+ *                SwiP_construct().
+ *
+ *  @return
+ */
+extern void SwiP_destruct(SwiP_Struct *swiP);
+
+/*!
+ *  @brief  Initialize params structure to default values.
+ *
+ *  The default parameters are:
+ *   - name: NULL
+ *
+ *  @param params  Pointer to the instance configuration parameters.
+ */
+extern void SwiP_Params_init(SwiP_Params *params);
 
 /*!
  *  @brief  Function to create a software interrupt object.
@@ -166,19 +170,8 @@ extern SwiP_Handle SwiP_create(SwiP_Fxn swiFxn,
  *
  *  @param  handle returned from the SwiP_create call
  *
- *  @return
  */
-extern SwiP_Status SwiP_delete(SwiP_Handle handle);
-
-/*!
- *  @brief  Function to destruct a software interrupt object
- *
- *  @param  swiP  Pointer to a SwiP_Struct object that was passed to
- *                SwiP_construct().
- *
- *  @return
- */
-extern void SwiP_destruct(SwiP_Struct *swiP);
+extern void SwiP_delete(SwiP_Handle handle);
 
 /*!
  *  @brief  Function to disable software interrupts
@@ -200,7 +193,6 @@ extern uintptr_t SwiP_disable(void);
 /*!
  *  @brief  Function to get the trigger value of the currently running SwiP.
  *
- *  @param  interruptNum interrupt number to disable
  */
 extern uint32_t SwiP_getTrigger();
 
@@ -241,13 +233,20 @@ extern void SwiP_or(SwiP_Handle handle, uint32_t mask);
  */
 extern void SwiP_post(SwiP_Handle handle);
 
-
 /*!
  *  @brief  Function to restore software interrupts
  *
  *  @param  key return from SwiP_disable
  */
 extern void SwiP_restore(uintptr_t key);
+
+/*!
+ *  @brief  Function to set the priority of a software interrupt
+ *
+ *  @param  handle returned from the SwiP_create or SwiP_construct call
+ *  @param  priority new priority
+ */
+extern void SwiP_setPriority(SwiP_Handle handle, uint32_t priority);
 
 #ifdef __cplusplus
 }

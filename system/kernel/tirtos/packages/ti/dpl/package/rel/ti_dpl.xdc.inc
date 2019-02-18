@@ -15,3 +15,12 @@ package/package_ti.dpl.c
 ./PowerMSP432_tirtos.c
 lib/dpl_msp432p4xx.am4fg
 lib/dpl_msp432p4xx.arm4f
+lib/dpl_msp432p401x.aem4f
+lib/dpl_msp432p401x.am4fg
+lib/dpl_msp432p401x.arm4f
+lib/dpl_msp432p4x1xi.aem4f
+lib/dpl_msp432p4x1xi.am4fg
+lib/dpl_msp432p4x1xi.arm4f
+lib/dpl_msp432p4x1xt.aem4f
+lib/dpl_msp432p4x1xt.am4fg
+lib/dpl_msp432p4x1xt.arm4f

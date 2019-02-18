@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2015-2016, Texas Instruments Incorporated
+ * Copyright (c) 2015-2017, Texas Instruments Incorporated
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -29,7 +29,7 @@
  * OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE,
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- /** ===========================================================================
+/*!****************************************************************************
  *  @file       WatchdogMSP432.h
  *
  *  @brief      Watchdog driver implementation for MSP432
@@ -44,6 +44,7 @@
  *  Refer to @ref Watchdog.h for a complete description of APIs & example of
  *  use.
  *
+ *  ## Overview #
  *  The MSP432 Watchdog Timer will cause resets at an interval based on the
  *  count calculated from the clock source and clock divider specified in the
  *  WatchdogMSP432_HWAttrs. By default the Watchdog driver has resets turned on.
@@ -57,10 +58,13 @@
  *  interrupt.  The callback fxn provided in the params will be executed when
  *  the timer expires.
  *
- *  <b>Note:</b> The Watchdog_Params callbackFxn and debugStallMode are not used
- *  in this implementation nor is the Watchdog_setReload() API.
- *
- *  ============================================================================
+ *  ## Unsupported Functionality #
+ *  1.  Watchdog_Params debugStallMode is not supported by this implementation.
+ *  2.  Watchdog_Params callbackFxn is not supported when using
+ *  Watchdog_RESET_ON mode.
+ *  3.  Watchdog_setReload() and WatchdogMSP432_convertMsToTicks() APIs are not
+ *  supported by this implementation.
+ ******************************************************************************
  */
 
 #ifndef ti_drivers_watchdog_WatchdogMSP432__include
