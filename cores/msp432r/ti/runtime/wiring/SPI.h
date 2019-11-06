@@ -38,10 +38,10 @@
 #include <ti/drivers/SPI.h>
 #include <ti/sysbios/gates/GateMutex.h>
 
-#define SPI_MODE0 SPI_POL0_PHA1
-#define SPI_MODE1 SPI_POL0_PHA0
-#define SPI_MODE2 SPI_POL0_PHA1
-#define SPI_MODE3 SPI_POL0_PHA0
+#define SPI_MODE0 SPI_POL0_PHA0
+#define SPI_MODE1 SPI_POL0_PHA1
+#define SPI_MODE2 SPI_POL0_PHA0
+#define SPI_MODE3 SPI_POL0_PHA1
 
 #define MSBFIRST 1
 #define LSBFIRST 0
